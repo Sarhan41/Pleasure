@@ -21,7 +21,7 @@ export default auth((req) => {
     return; // Allow API authentication routes to pass through
   }
 
-  if (!isLoggedIn && !isPublicRoute && nextUrl.pathname !== '/login') {
+  if (!isLoggedIn && !isPublicRoute && nextUrl.pathname !== "/login") {
     let callbackUrl = nextUrl.pathname;
     if (nextUrl.search) {
       callbackUrl += nextUrl.search;
@@ -29,7 +29,8 @@ export default auth((req) => {
 
     const encodedCallbackUrl = encodeURIComponent(callbackUrl);
 
-    return Response.redirect( // Redirect to login if not logged in
+    return Response.redirect(
+      // Redirect to login if not logged in
       new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
     );
   }
