@@ -19,6 +19,12 @@ export const authRoutes = [
 ];
 
 /**
+ * An array of routes that are accessible to admins
+ * @type {string[]}
+ */
+export const adminRoutes = ["/dashboard"];
+
+/**
  * The prefix for API authentication routes
  * Routes that start with this prefix are used for API authentication purposes
  * @type {string}
@@ -29,4 +35,4 @@ export const apiAuthPrefix = "/api";
  * The default redirect path after logging in
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = "/dashboard";
+export const DEFAULT_LOGIN_REDIRECT = "/";

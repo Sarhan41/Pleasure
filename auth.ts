@@ -14,8 +14,8 @@ export const {
   signOut,
 } = NextAuth({
   pages: {
-    signIn: "/",
-    error: "/",
+    signIn: "/login",
+    error: "/error",
   },
   // events: {
   //   async linkAccount({ user }) {
@@ -64,19 +64,21 @@ export const {
         session.user.id = token.sub;
       }
 
-      // if (token.role && session.user) {
-      //   session.user.role = token.role as UserRole;
-      // }
+      if (token.role && session.user) {
+        session.user.role = token.role as UserRole;
+      }
+
 
       return session;
     },
     async jwt({ token }) {
       if (!token.sub) return token;
 
-      // const existingUser = await getUserById(token.sub);
-      // if (!existingUser) return token;
+      const existingUser = await getUserById(token.sub);
+      if (!existingUser) return token;
 
-      // token.role = existingUser.role;
+      // console.log(existingUser)
+      token.role = existingUser.role;
 
       return token;
     },

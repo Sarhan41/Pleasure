@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   description: "Buy Pleasure's Product from Pleasure's E-commerce Store ",
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -16,6 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+  
       <body className={inter.className}>{children}</body>
     </html>
   );
