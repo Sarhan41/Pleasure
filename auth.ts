@@ -4,7 +4,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "@/lib/db";
 import authConfig from "@/auth.config";
 import { UserRole } from "@prisma/client";
-// import { getUserById } from "@/data/user";
+import { getUserById } from "@/data/user";
 // import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 
 export const {
@@ -14,17 +14,17 @@ export const {
   signOut,
 } = NextAuth({
   pages: {
-    signIn: "/auth/login",
-    error: "/auth/error",
+    signIn: "/",
+    error: "/",
   },
-  events: {
-    async linkAccount({ user }) {
-      await db.user.update({
-        where: { id: user.id },
-        data: { emailVerified: new Date() },
-      });
-    },
-  },
+  // events: {
+  //   async linkAccount({ user }) {
+  //     await db.user.update({
+  //       where: { id: user.id },
+  //       data: { emailVerified: new Date() },
+  //     });
+  //   },
+  // },
   callbacks: {
     async signIn({ user, account }) {
       // Allow OAuth without email verification
@@ -32,7 +32,7 @@ export const {
 
       if (!user.id) return false;
 
-      // const existingUser = await getUserById(user.id);
+      const existingUser = await getUserById(user.id);
 
       // //? This is all for preventing user to signin without email verification
       // if (!existingUser?.emailVerified) {
