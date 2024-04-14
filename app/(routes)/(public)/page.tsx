@@ -14,7 +14,7 @@ const HomePage = async () => {
             action={async () => {
               "use server";
 
-              await signOut({ redirectTo: "/login" });
+              await signOut({ redirectTo: "/auth/login" });
             }}
           >
             <Button type="submit">Sign Out</Button>
@@ -23,7 +23,7 @@ const HomePage = async () => {
       ) : (
         <div>
           <h1>You are not logged in</h1>
-          <Link href="/login" className="bg-red-900">
+          <Link href="/auth/login" className="bg-red-900">
             Login Now
           </Link>
         </div>

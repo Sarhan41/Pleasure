@@ -45,7 +45,7 @@ export default auth(async (req) => {
     return; // Allow API authentication routes to pass through
   }
 
-  if (!isLoggedIn && !isPublicRoute && nextUrl.pathname !== "/login") {
+  if (!isLoggedIn && !isPublicRoute && nextUrl.pathname !== "/auth/login") {
     let callbackUrl = nextUrl.pathname;
     if (nextUrl.search) {
       callbackUrl += nextUrl.search;
@@ -55,7 +55,7 @@ export default auth(async (req) => {
 
     return Response.redirect(
       // Redirect to login if not logged in
-      new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
+      new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
     );
   }
 

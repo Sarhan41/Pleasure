@@ -15,13 +15,6 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
 
-    // const session = auth();
-    // if (!session) {
-    //   redirect("/login");
-    // }
-    // // console.log(session);
-
-    // // const isAdmin = session.user?.role === "ADMIN";
 
   return (
   <div>

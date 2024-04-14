@@ -49,7 +49,7 @@ export const RegisterForm = () => {
         setError(data.error);
         setSuccess(data.success);
       });
-      router.push("/login");
+      router.push("/auth/login");
     });
   };
 
