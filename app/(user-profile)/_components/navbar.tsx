@@ -10,7 +10,7 @@ export const Navbar = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="bg-secondary flex justify-between items-center p-4 rounded-xl w-[600px] shadow-sm">
+    <nav className="bg-secondary flex justify-between items-center p-4 rounded-xl w-[600px] max-sm:w-[400px] max-xs:w-[250px] mt-10 shadow-sm">
       <div className="flex gap-x-2">
         <Button
           asChild
@@ -19,14 +19,12 @@ export const Navbar = () => {
           <Link href="/my-profile">Info</Link>
         </Button>
      
-        <Button asChild variant={pathname === "/admin" ? "default" : "outline"}>
-          <Link href="/admin">Admin</Link>
-        </Button>
+     
         <Button
           asChild
-          variant={pathname === "/settings" ? "default" : "outline"}
+          variant={pathname === "/my-profile/settings" ? "default" : "outline"}
         >
-          <Link href="/settings">Settings</Link>
+          <Link href="/my-profile/settings">Settings</Link>
         </Button>
       </div>
       <UserButton />

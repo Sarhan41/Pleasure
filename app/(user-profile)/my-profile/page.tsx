@@ -6,7 +6,7 @@ const MyProfilePage = async () => {
 
   return ( 
     <UserInfo
-      label="💻 Server component"
+      label="My Profile"
       user={user}
     />
    );

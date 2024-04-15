@@ -28,6 +28,10 @@ import {
   FormSuccess,
 } from "@/components/Auth/AuthUi/Form-Error-Success/index";
 import { UserRole } from "@prisma/client";
+import Link from "next/link";
+import { LogoutButton } from "@/components/Auth/AuthUi/LogoutButton";
+import { ExitIcon } from "@radix-ui/react-icons";
+import { CheckCircledIcon } from "@radix-ui/react-icons";
 
 const SettingsPage = () => {
   const user = useCurrentUser();
@@ -67,7 +71,7 @@ const SettingsPage = () => {
   };
 
   return (
-    <Card className="w-[600px]">
+    <Card className="w-[600px] max-sm:w-[400px] max-xs:w-[250px]">
       <CardHeader>
         <p className="text-2xl font-semibold text-center">⚙️ Settings</p>
       </CardHeader>
@@ -144,7 +148,6 @@ const SettingsPage = () => {
                             type="password"
                             disabled={isPending}
                             showPasswordButton
-
                           />
                         </FormControl>
                         <FormMessage />
@@ -153,7 +156,7 @@ const SettingsPage = () => {
                   />
                 </>
               )}
-         
+
               {user?.isOAuth === false && (
                 <FormField
                   control={form.control}
@@ -181,9 +184,23 @@ const SettingsPage = () => {
             <FormError message={error} />
             <FormSuccess message={success} />
             <Button disabled={isPending} type="submit">
+              <CheckCircledIcon className="h-4 w-4 mr-2" />
               Save
             </Button>
           </form>
+          <div className="flex max-xs:flex-col gap-5 mt-5">
+            {user?.role === UserRole.ADMIN && (
+              <Button className="w-fit">
+                <Link href="/dashboard">Go To Dashboard</Link>
+              </Button>
+            )}
+            <LogoutButton>
+              <Button className="flex">
+                <ExitIcon className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
+            </LogoutButton>
+          </div>
         </Form>
       </CardContent>
     </Card>
