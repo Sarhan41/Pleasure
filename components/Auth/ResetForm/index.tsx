@@ -22,7 +22,7 @@ import {
   FormSuccess,
 } from "@/components/Auth/AuthUi/Form-Error-Success";
 
-import { reset } from "@/actions/reset";
+import { reset } from "@/actions/auth/reset";
 
 export const ResetForm = () => {
   const [error, setError] = useState<string | undefined>("");

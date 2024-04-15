@@ -1,6 +1,6 @@
 "use client";
 
-import { admin } from "@/actions/admin";
+import { admin } from "@/actions/auth/admin";
 import { RoleGate } from "@/components/Auth/AuthUi/RoleGate";
 import { FormSuccess } from "@/components/Auth/AuthUi/Form-Error-Success";
 import { Button } from "@/components/ui/button";

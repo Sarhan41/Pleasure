@@ -22,7 +22,7 @@ import {
   FormError,
   FormSuccess,
 } from "@/components/Auth/AuthUi/Form-Error-Success";
-import { newPassword } from "@/actions/new-password";
+import { newPassword } from "@/actions/auth/new-password";
 
 export const NewPasswordForm = () => {
   const searchParams = useSearchParams();

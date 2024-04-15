@@ -22,7 +22,7 @@ import {
   FormSuccess,
 } from "@/components/Auth/AuthUi/Form-Error-Success";
 
-import { register } from "@/actions/register";
+import { register } from "@/actions/auth/register";
 
 export const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>("");

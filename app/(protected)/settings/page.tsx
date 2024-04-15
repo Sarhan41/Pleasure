@@ -17,7 +17,7 @@ import {
 import { SettingsSchema } from "@/schemas";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { settings } from "@/actions/settings";
+import { settings } from "@/actions/auth/settings";
 import {
   Form,
   FormField,

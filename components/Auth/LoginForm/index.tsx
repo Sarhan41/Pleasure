@@ -23,7 +23,7 @@ import {
   FormError,
   FormSuccess,
 } from "@/components/Auth/AuthUi/Form-Error-Success";
-import { login } from "@/actions/login";
+import { login } from "@/actions/auth/login";
 
 export const LoginForm = () => {
   const searchParams = useSearchParams();
