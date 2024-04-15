@@ -1,7 +1,7 @@
 import { currentUser } from "@/lib/auth";
 import { UserInfo } from "@/components/Auth/AuthUi/UserInfo";
 
-const ServerPage = async () => {
+const MyProfilePage = async () => {
   const user = await currentUser();
 
   return ( 
@@ -12,4 +12,4 @@ const ServerPage = async () => {
    );
 }
  
-export default ServerPage;
+export default MyProfilePage;

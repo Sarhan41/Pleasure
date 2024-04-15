@@ -107,6 +107,7 @@ export const RegisterForm = () => {
                       disabled={isPending}
                       placeholder="******"
                       type="password"
+                      showPasswordButton
                     />
                   </FormControl>
                   <FormMessage />

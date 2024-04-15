@@ -12,30 +12,19 @@ export const SettingsSchema = z
   })
   .refine(
     (data) => {
-      if (data.password && !data.newPassword) {
-        return false;
-      }
-
-      return true;
-    },
-    {
-      message: "New password is required!",
-      path: ["newPassword"],
-    }
-  )
-  .refine(
-    (data) => {
+      // Check if newPassword is provided without changing the password
       if (data.newPassword && !data.password) {
-        return false;
+        return false; // Return false if newPassword is provided without password
       }
 
-      return true;
+      return true; // Otherwise, return true
     },
     {
-      message: "Password is required!",
+      message: "Password is required when providing a new password!",
       path: ["password"],
     }
   );
+
 
 export const NewPasswordSchema = z.object({
   password: z.string().min(6, {

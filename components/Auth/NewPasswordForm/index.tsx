@@ -72,6 +72,7 @@ export const NewPasswordForm = () => {
                       disabled={isPending}
                       placeholder="******"
                       type="password"
+                      showPasswordButton
                     />
                   </FormControl>
                   <FormMessage />
