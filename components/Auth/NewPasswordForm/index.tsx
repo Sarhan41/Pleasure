@@ -16,13 +16,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { CardWrapper } from "@/components/Auth/AuthUi/CardWrapper";
 import { Button } from "@/components/ui/button";
-import { newPassword } from "@/actions/new-password";
-import { CardWrapper } from "@/components/Auth/AuthUi/Card/index";
 import {
   FormError,
   FormSuccess,
-} from "@/components/Auth/AuthUi/Form-Error-Success/index";
+} from "@/components/Auth/AuthUi/Form-Error-Success";
+import { newPassword } from "@/actions/new-password";
 
 export const NewPasswordForm = () => {
   const searchParams = useSearchParams();

@@ -1,14 +1,12 @@
 "use client";
 
 import * as z from "zod";
-
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { RegisterSchema } from "@/schemas";
 import { Input } from "@/components/ui/input";
-
 import {
   Form,
   FormControl,
@@ -17,16 +15,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
-import { CardWrapper } from "@/components/Auth/AuthUi/Card/index";
+import { CardWrapper } from "@/components/Auth/AuthUi/CardWrapper";
 import { Button } from "@/components/ui/button";
-import { FormError } from "@/components/Auth/AuthUi/Form-Error-Success/index";
-import { FormSuccess } from "@/components/Auth/AuthUi/Form-Error-Success/index";
+import {
+  FormError,
+  FormSuccess,
+} from "@/components/Auth/AuthUi/Form-Error-Success";
+
 import { register } from "@/actions/register";
-import { useRouter } from "next/navigation";
 
 export const RegisterForm = () => {
-  const router = useRouter();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -49,13 +47,12 @@ export const RegisterForm = () => {
         setError(data.error);
         setSuccess(data.success);
       });
-      router.push("/auth/login");
     });
   };
 
   return (
     <CardWrapper
-      headerLabel="Create an acoount"
+      headerLabel="Create an account"
       backButtonLabel="Already have an account?"
       backButtonHref="/auth/login"
       showSocial
@@ -71,8 +68,8 @@ export const RegisterForm = () => {
                   <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
-                      disabled={isPending}
                       {...field}
+                      disabled={isPending}
                       placeholder="John Doe"
                     />
                   </FormControl>
@@ -88,8 +85,8 @@ export const RegisterForm = () => {
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
-                      disabled={isPending}
                       {...field}
+                      disabled={isPending}
                       placeholder="john.doe@example.com"
                       type="email"
                     />
@@ -98,7 +95,6 @@ export const RegisterForm = () => {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="password"
@@ -107,9 +103,9 @@ export const RegisterForm = () => {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input
-                      disabled={isPending}
                       {...field}
-                      placeholder="********"
+                      disabled={isPending}
+                      placeholder="******"
                       type="password"
                     />
                   </FormControl>
