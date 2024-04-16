@@ -38,7 +38,7 @@ export async function GET(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { storeId: string; sizeId: string } }
+  { params }: { params: { sizeId: string } }
 ) {
   try {
     const user = await currentUser();

@@ -1,12 +1,24 @@
-import auth from "@/auth";import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
+import { currentRole, currentUser } from "@/lib/auth";
 
 export async function GET(
   req: Request,
   { params }: { params: { colorId: string } }
 ) {
   try {
+    const user = await currentUser();
+    const role = await currentRole();
+
+    if (!user) {
+      return new NextResponse("Unauthenticated", { status: 401 });
+    }
+
+    if (role !== "ADMIN") {
+      return new NextResponse("Unauthorized", { status: 403 });
+    }
+
     if (!params.colorId) {
       return new NextResponse("Color id is required", { status: 400 });
     }
@@ -26,18 +38,24 @@ export async function GET(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { storeId: string; colorId: string } }
+  { params }: { params: { colorId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const user = await currentUser();
+    const role = await currentRole();
+
+    if (!user) {
+      return new NextResponse("Unauthenticated", { status: 401 });
+    }
+
+    if (role !== "ADMIN") {
+      return new NextResponse("Unauthorized", { status: 403 });
+    }
 
     const body = await req.json();
 
     const { name, value } = body;
 
-    if (!userId) {
-      return new NextResponse("Unauthenticated", { status: 401 });
-    }
     if (!name) {
       return new NextResponse("Name is required", { status: 400 });
     }
@@ -47,17 +65,6 @@ export async function PATCH(
 
     if (!params.colorId) {
       return new NextResponse("Color Id Is Required", { status: 400 });
-    }
-
-    const storeByUserId = await db.store.findFirst({
-      where: {
-        id: params.storeId,
-        userId,
-      },
-    });
-
-    if (!storeByUserId) {
-      return new NextResponse("Unauthorized", { status: 404 });
     }
 
     const color = await db.color.updateMany({
@@ -82,25 +89,19 @@ export async function DELETE(
   { params }: { params: { colorId: string; storeId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const user = await currentUser();
+    const role = await currentRole();
 
-    if (!userId) {
+    if (!user) {
       return new NextResponse("Unauthenticated", { status: 401 });
+    }
+
+    if (role !== "ADMIN") {
+      return new NextResponse("Unauthorized", { status: 403 });
     }
 
     if (!params.colorId) {
       return new NextResponse("Color Id is Required", { status: 400 });
-    }
-
-    const storeByUserId = await db.store.findFirst({
-      where: {
-        id: params.storeId,
-        userId,
-      },
-    });
-
-    if (!storeByUserId) {
-      return new NextResponse("Unauthorized", { status: 404 });
     }
 
     const color = await db.color.deleteMany({
@@ -108,7 +109,6 @@ export async function DELETE(
         id: params.colorId,
       },
     });
-
 
     return NextResponse.json(color);
   } catch (error) {

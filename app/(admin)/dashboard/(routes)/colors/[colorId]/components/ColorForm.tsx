@@ -69,7 +69,7 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
         await axios.post(`/api/dashboard/colors`, data);
       }
       router.refresh();
-      router.push(`/dashboard/colors`);
+      router.push(`/dashboard/colors?reload(${Date.now()}`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");

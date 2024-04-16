@@ -5,11 +5,8 @@ import { db } from "@/lib/db";
 import { ColorsClient } from "./components/client";
 import { ColorColumn } from "./components/columns";
 
-const ColorsPage = async ({ params }: { params: { storeId: string } }) => {
+const ColorsPage = async () => {
   const colors = await db.color.findMany({
-    where: {
-      storeId: params.storeId,
-    },
     orderBy: {
       createdAt: "desc",
     },
