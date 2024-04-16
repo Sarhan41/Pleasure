@@ -19,8 +19,8 @@ body,
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: #0f172a;
-    --primary-foreground: #f8fafc;
+    --primary: 222, 47%, 11%;
+    --primary-foreground: 210, 40%, 98%;
 
     --secondary: #f1f5f9;
     --secondary-foreground: #0f172a;

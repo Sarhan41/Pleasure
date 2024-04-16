@@ -8,6 +8,8 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// Authentication Schemas
+
 enum UserRole {
   ADMIN
   USER
@@ -79,4 +81,17 @@ model TwoFactorConfirmation {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId])
+}
+
+// dashboard schemas
+
+model Category {
+  id        String   @id @default(uuid())
+  // products    Product[] @relation("CategoryToProduct")
+  imageUrl   String
+  name      String
+  title     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
 }

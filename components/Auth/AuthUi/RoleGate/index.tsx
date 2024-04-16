@@ -2,7 +2,7 @@
 
 import { UserRole } from "@prisma/client";
 
-import { useCurrentRole } from "@/hooks/use-current-role";
+import { useCurrentRole } from "@/hooks/auth/use-current-role";
 import { FormError } from "@/components/Auth/AuthUi/Form-Error-Success/index";
 
 interface RoleGateProps {
