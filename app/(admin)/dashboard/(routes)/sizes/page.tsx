@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { SizesClient } from "./components/client";
 import { SizeColumn } from "./components/columns";
 
-const SizesPage = async ({ params }: { params: { storeId: string } }) => {
+const SizesPage = async () => {
   const sizes = await db.size.findMany({
     orderBy: {
       createdAt: "desc",

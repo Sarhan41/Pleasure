@@ -6,11 +6,9 @@ import { formatter } from "@/lib/utils";
 import { OrderClient } from "./components/client";
 import { OrderColumn } from "./components/columns";
 
-const OrdersPage = async ({ params }: { params: { storeId: string } }) => {
+const OrdersPage = async () => {
   const orders = await db.order.findMany({
-    where: {
-      storeId: params.storeId,
-    },
+   
     include: {
       orderItems: {
         include: {

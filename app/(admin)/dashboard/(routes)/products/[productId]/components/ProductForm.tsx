@@ -106,7 +106,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         await axios.post(`/api/dashboard/products`, data);
       }
       router.refresh();
-      router.push(`/dashboard/products`);
+      router.push(`/dashboard/products?reload(${Date.now()}`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");
@@ -336,7 +336,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   <FormControl >
                     <Checkbox
                       checked={field.value}
-                      // @ts-ignore
                       onCheckedChange={field.onChange}
                     />
                   </FormControl>
@@ -358,7 +357,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   <FormControl >
                     <Checkbox
                       checked={field.value}
-                      // @ts-ignore
                       onCheckedChange={field.onChange}
                     />
                   </FormControl>

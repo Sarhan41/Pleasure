@@ -4,7 +4,7 @@ import { CategoryForm } from "./components/CategoryForm";
 const CategoryPage = async ({
   params,
 }: {
-  params: { categoryId: string , storeId: string};
+  params: { categoryId: string };
 }) => {
 
     const category = await db.category.findUnique({

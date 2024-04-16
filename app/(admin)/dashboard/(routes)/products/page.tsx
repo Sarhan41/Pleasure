@@ -1,15 +1,12 @@
 import { format } from "date-fns";
 import { formatter } from "@/lib/utils";
 
-import {  ProductClient } from "./components/client";
+import { ProductClient } from "./components/client";
 import { db } from "@/lib/db";
 import { ProductColumn } from "./components/columns";
 
-const ProcutsPage = async ({ params }: { params: { storeId: string } }) => {
+const ProcutsPage = async () => {
   const products = await db.product.findMany({
-    where: {
-      storeId: params.storeId,
-    },
     include: {
       category: true,
       size: true,

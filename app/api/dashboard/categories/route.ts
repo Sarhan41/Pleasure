@@ -3,10 +3,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { currentRole, currentUser } from "@/lib/auth";
 
-export async function POST(
-  req: Request,
-  { params }: { params: { storeId: string } }
-) {
+export async function POST(req: Request) {
   try {
     const user = await currentUser();
     const role = await currentRole();
@@ -60,7 +57,7 @@ export async function GET(req: Request) {
     if (role !== "ADMIN") {
       return new NextResponse("Unauthorized", { status: 403 });
     }
-    
+
     const categories = await db.category.findMany({});
 
     return NextResponse.json(categories);

@@ -1,13 +1,21 @@
-import auth from "@/auth";import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
+import { currentRole, currentUser } from "@/lib/auth";
 
-export async function POST(
-  req: Request,
-  { params }: { params: { storeId: string } }
-) {
+export async function POST(req: Request) {
   try {
-    const { userId } = auth();
+    const user = await currentUser();
+    const role = await currentRole();
+
+    if (!user) {
+      return new NextResponse("Unauthenticated", { status: 401 });
+    }
+
+    if (role !== "ADMIN") {
+      return new NextResponse("Unauthorized", { status: 403 });
+    }
+
     const body = await req.json();
     const {
       name,
@@ -19,10 +27,6 @@ export async function POST(
       isFeatured,
       isArchived,
     } = body;
-
-    if (!userId) {
-      return new NextResponse("Unauthenticated", { status: 401 });
-    }
 
     if (!name) {
       return new NextResponse("Name is required ", { status: 400 });
@@ -48,21 +52,6 @@ export async function POST(
       return new NextResponse("images is required ", { status: 400 });
     }
 
-    if (!params.storeId) {
-      return new NextResponse("Store id is required", { status: 400 });
-    }
-
-    const storeByUserId = await db.store.findFirst({
-      where: {
-        id: params.storeId,
-        userId,
-      },
-    });
-
-    if (!storeByUserId) {
-      return new NextResponse("Unauthorized", { status: 403 });
-    }
-
     const product = await db.product.create({
       data: {
         name,
@@ -77,7 +66,6 @@ export async function POST(
         },
         isFeatured,
         isArchived,
-        storeId: params.storeId,
       },
     });
 
@@ -87,10 +75,7 @@ export async function POST(
     return new NextResponse("Internal error", { status: 500 });
   }
 }
-export async function GET(
-  req: Request,
-  { params }: { params: { storeId: string } }
-) {
+export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const categoryId = searchParams.get("categoryId") || undefined;
   const colorId = searchParams.get("colorId") || undefined;
@@ -98,13 +83,8 @@ export async function GET(
   const isFeatured = searchParams.get("isFeatured");
 
   try {
-    if (!params.storeId) {
-      return new NextResponse("Store id is required", { status: 400 });
-    }
-
     const product = await db.product.findMany({
       where: {
-        storeId: params.storeId,
         categoryId,
         colorId,
         sizeId,

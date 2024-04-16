@@ -86,7 +86,7 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { colorId: string; storeId: string } }
+  { params }: { params: { colorId: string } }
 ) {
   try {
     const user = await currentUser();

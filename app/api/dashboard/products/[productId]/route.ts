@@ -1,12 +1,24 @@
-import auth from "@/auth";import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
+import { currentRole, currentUser } from "@/lib/auth";
 
 export async function GET(
   req: Request,
   { params }: { params: { productId: string } }
 ) {
   try {
+    const user = await currentUser();
+    const role = await currentRole();
+
+    if (!user) {
+      return new NextResponse("Unauthenticated", { status: 401 });
+    }
+
+    if (role !== "ADMIN") {
+      return new NextResponse("Unauthorized", { status: 403 });
+    }
+
     if (!params.productId) {
       return new NextResponse("Product Id is required", { status: 400 });
     }
@@ -30,12 +42,18 @@ export async function GET(
   }
 }
 
-export async function PATCH(
-  req: Request,
-  { params }: { params: { storeId: string; productId: string } }
-) {
+export async function PATCH(req: Request) {
   try {
-    const { userId } = auth();
+    const user = await currentUser();
+    const role = await currentRole();
+
+    if (!user) {
+      return new NextResponse("Unauthenticated", { status: 401 });
+    }
+
+    if (role !== "ADMIN") {
+      return new NextResponse("Unauthorized", { status: 403 });
+    }
 
     const body = await req.json();
     const {
@@ -48,10 +66,6 @@ export async function PATCH(
       isFeatured,
       isArchived,
     } = body;
-
-    if (!userId) {
-      return new NextResponse("Unauthenticated", { status: 401 });
-    }
 
     if (!name) {
       return new NextResponse("Name is required ", { status: 400 });
@@ -81,17 +95,6 @@ export async function PATCH(
       return new NextResponse("Product Id Is Required", { status: 400 });
     }
 
-    const storeByUserId = await db.store.findFirst({
-      where: {
-        id: params.storeId,
-        userId,
-      },
-    });
-
-    if (!storeByUserId) {
-      return new NextResponse("Unauthorized", { status: 404 });
-    }
-
     await db.product.update({
       where: {
         id: params.productId,
@@ -117,9 +120,7 @@ export async function PATCH(
       data: {
         images: {
           createMany: {
-            data: [
-              ...images.map((image: { url: string }) => image)
-            ]
+            data: [...images.map((image: { url: string }) => image)],
           },
         },
       },
@@ -130,7 +131,6 @@ export async function PATCH(
         size: true,
       },
     });
-    
 
     return NextResponse.json(product);
   } catch (error) {
@@ -141,28 +141,21 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { productId: string; storeId: string } }
+  { params }: { params: { productId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const user = await currentUser();
+    const role = await currentRole();
 
-    if (!userId) {
+    if (!user) {
       return new NextResponse("Unauthenticated", { status: 401 });
     }
 
+    if (role !== "ADMIN") {
+      return new NextResponse("Unauthorized", { status: 403 });
+    }
     if (!params.productId) {
       return new NextResponse("Product Id Is Required", { status: 400 });
-    }
-
-    const storeByUserId = await db.store.findFirst({
-      where: {
-        id: params.storeId,
-        userId,
-      },
-    });
-
-    if (!storeByUserId) {
-      return new NextResponse("Unauthorized", { status: 404 });
     }
 
     const product = await db.product.deleteMany({

@@ -10,11 +10,8 @@ import { formatter } from "@/lib/utils";
 // import { getGraphRevenue } from "@/actions/GetGraphRevenue";
 import { FaCreditCard, FaRupeeSign } from "react-icons/fa";
 
-interface DashboardPageProps {
-  params: { storeId: string };
-}
 
-const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
+const DashboardPage = async () => {
   // const totalRevenue = await getTotalRevenue(params.storeId);
   // const salesCount = await getSalesCount(params.storeId);
   // const stockCount = await getStockCount(params.storeId);
