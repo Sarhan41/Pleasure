@@ -86,12 +86,96 @@ model TwoFactorConfirmation {
 // dashboard schemas
 
 model Category {
-  id        String   @id @default(uuid())
-  // products    Product[] @relation("CategoryToProduct")
-  imageUrl   String
+  id        String    @id @default(uuid())
+  products  Product[] @relation("CategoryToProduct")
+  imageUrl  String
   name      String
   title     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Color {
+  id        String    @id @default(uuid())
+  name      String
+  value     String
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+}
+
+model Size {
+  id           String        @id @default(uuid())
+  name         String
+  value        String
+  productSizes ProductSize[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Product {
+  id         String        @id @default(uuid())
+  categoryId String
+  category   Category      @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  name       String
+  price      Decimal
+  isFeatured Boolean       @default(false)
+  isArchived Boolean       @default(false)
+  sizes      ProductSize[] // Define a relation to the ProductSize model
+  colorId    String
+  color      Color         @relation(fields: [colorId], references: [id])
+  images     Image[]
+  orderItems orderItem[]
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@index([categoryId])
+  @@index([colorId])
+}
+
+// Define a new model to represent the quantity of each product available in different sizes
+model ProductSize {
+  id        String  @id @default(uuid())
+  productId String // Reference to the Product model
+  sizeId    String // Reference to the Size model
+  quantity  Int // Quantity available for the product in this size
+  product   Product @relation(fields: [productId], references: [id])
+  size      Size    @relation(fields: [sizeId], references: [id])
+
+  @@index([productId])
+  @@index([sizeId])
+}
+
+model Image {
+  id        String   @id @default(uuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@index([productId])
+}
+
+model Order {
+  id         String      @id @default(uuid())
+  orderItems orderItem[]
+  isPaid     Boolean     @default(false)
+  phone      String      @default("")
+  address    String      @default("")
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+}
+
+model orderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@index([productId])
 }

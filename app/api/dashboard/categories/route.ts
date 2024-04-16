@@ -13,7 +13,7 @@ export async function POST(
 
     const body = await req.json();
 
-    const { name, title , imageUrl} = body;
+    const { name, title, imageUrl } = body;
 
     if (!user) {
       return new NextResponse("Unauthenticated", { status: 401 });
@@ -37,7 +37,7 @@ export async function POST(
     const category = await db.category.create({
       data: {
         name,
-        imageUrl ,
+        imageUrl,
         title,
       },
     });
@@ -60,6 +60,7 @@ export async function GET(req: Request) {
     if (role !== "ADMIN") {
       return new NextResponse("Unauthorized", { status: 403 });
     }
+    
     const categories = await db.category.findMany({});
 
     return NextResponse.json(categories);

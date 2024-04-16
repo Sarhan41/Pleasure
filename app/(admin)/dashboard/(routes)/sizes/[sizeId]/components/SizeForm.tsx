@@ -22,7 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { AlertModal } from "@/components/modals/alert-modal";
+import { AlertModal } from "@/app/(admin)/_components/Alert-modal";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -67,7 +67,7 @@ export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
         await axios.post(`/api/dashboard/sizes`, data);
       }
       router.refresh();
-      router.push(`/dashboard/sizes`);
+      router.push(`/dashboard/sizes?reload=${Date.now()}`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");
@@ -87,7 +87,7 @@ export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
         `/api/dashboard/sizes/${params.sizeId}`
       );
       router.refresh();
-      router.push(`/dashboard/sizes`);
+      router.push(`/dashboard/sizes?reload=${Date.now()}`);
       toast.success("Size deleted.");
     } catch (error) {
       toast.error(

@@ -14,7 +14,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { AlertModal } from "@/components/modals/alert-modal";
+import { AlertModal } from "@/app/(admin)/_components/Alert-modal";
 
 import { ColorColumn } from "./columns";
 

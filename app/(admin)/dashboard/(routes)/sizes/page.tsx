@@ -7,9 +7,6 @@ import { SizeColumn } from "./components/columns";
 
 const SizesPage = async ({ params }: { params: { storeId: string } }) => {
   const sizes = await db.size.findMany({
-    where: {
-      storeId: params.storeId,
-    },
     orderBy: {
       createdAt: "desc",
     },

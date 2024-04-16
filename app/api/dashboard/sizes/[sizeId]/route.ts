@@ -5,7 +5,7 @@ import { currentRole, currentUser } from "@/lib/auth";
 
 export async function GET(
   req: Request,
-  { params }: { params: { categoryId: string } }
+  { params }: { params: { sizeId: string } }
 ) {
   try {
     const user = await currentUser();
@@ -19,26 +19,26 @@ export async function GET(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    if (!params.categoryId) {
-      return new NextResponse("Category Id is required", { status: 400 });
+    if (!params.sizeId) {
+      return new NextResponse("Size id is required", { status: 400 });
     }
 
-    const category = await db.category.findUnique({
+    const size = await db.size.findUnique({
       where: {
-        id: params.categoryId,
+        id: params.sizeId,
       },
     });
 
-    return NextResponse.json(category);
+    return NextResponse.json(size);
   } catch (error) {
-    console.log("[CATEGORY_GET]", error);
+    console.log("[SIZE_GET]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { categoryId: string } }
+  { params }: { params: { storeId: string; sizeId: string } }
 ) {
   try {
     const user = await currentUser();
@@ -54,45 +54,40 @@ export async function PATCH(
 
     const body = await req.json();
 
-    const { name, title, imageUrl } = body;
+    const { name, value } = body;
 
     if (!name) {
       return new NextResponse("Name is required", { status: 400 });
     }
 
-    if (!title) {
-      return new NextResponse("Title is required", { status: 400 });
+    if (!value) {
+      return new NextResponse("Value is required", { status: 400 });
     }
 
-    if (!imageUrl) {
-      return new NextResponse("Image is required", { status: 400 });
+    if (!params.sizeId) {
+      return new NextResponse("Size Id Is Required", { status: 400 });
     }
 
-    if (!params.categoryId) {
-      return new NextResponse("Category Id Is Required", { status: 400 });
-    }
-
-    const category = await db.category.updateMany({
+    const size = await db.size.updateMany({
       where: {
-        id: params.categoryId,
+        id: params.sizeId,
       },
       data: {
         name,
-        imageUrl,
-        title,
+        value,
       },
     });
 
-    return NextResponse.json(category);
+    return NextResponse.json(size);
   } catch (error) {
-    console.log("[CATEGORY_PATCH]", error);
+    console.log("[SIZE_PATCH]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { categoryId: string } }
+  { params }: { params: { sizeId: string } }
 ) {
   try {
     const user = await currentUser();
@@ -106,19 +101,19 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    if (!params.categoryId) {
-      return new NextResponse("Category Id Is Required", { status: 400 });
+    if (!params.sizeId) {
+      return new NextResponse("Size Id Is Required", { status: 400 });
     }
 
-    const category = await db.category.deleteMany({
+    const size = await db.size.deleteMany({
       where: {
-        id: params.categoryId,
+        id: params.sizeId,
       },
     });
 
-    return NextResponse.json(category);
+    return NextResponse.json(size);
   } catch (error) {
-    console.log("[CATEGORY_DELETE]", error);
+    console.log("[SIZE_DELETE]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
