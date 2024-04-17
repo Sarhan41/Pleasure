@@ -51,9 +51,9 @@ export function MainNav({
       active: pathname === `/dashboard/orders`,
     },
     {
-      href: `/dashboard/settings`,
-      label: "Settings",
-      active: pathname === `/dashboard/settings`,
+      href: `/dashboard/users`,
+      label: "Users",
+      active: pathname === `/dashboard/users`,
     },
   ];
 
