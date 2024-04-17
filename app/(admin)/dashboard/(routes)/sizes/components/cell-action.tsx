@@ -74,7 +74,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/dashboard/sizes/${data.id}`)
+              router.push(`/dashboard/sizes/${data.id}?reload(${Date.now()})`)
             }
           >
             <Edit className="mr-2 h-4 w-4" />
