@@ -1,27 +1,41 @@
+"use client";
+import { useState } from 'react';
+import { CarouselItem } from "@/components/ui/carousel";
 import Image from "next/image";
-import { Tab } from "@headlessui/react";
-
-import {cn} from "@/lib/utils";
-import {Image as ImageType} from "@/types";
 
 interface GalleryTabProps {
-    image: ImageType;
+  url: string;
 }
 
-const GalleryTab:React.FC<GalleryTabProps> = ({image}) => {
-    return (<Tab className="relative flex aspect-square cursor-pointer items-center justify-center rounded-md bg-white">
-{({selected}) => (
-    <div>
-        <span className="absolute h-full w-full aspect-square inset-0 overflow-hidden rounded-md  ">
+const GalleryTab: React.FC<GalleryTabProps> = ({ url }) => {
+  const [isActive, setIsActive] = useState(false);
 
-            <Image fill src={image.url} alt="" className="object-cover object-center" />
-        </span>
-        <span className={cn(
-            "absolute inset-0 rounded-md ring-2 ring-offset-2 ", selected? "ring-black":"ring-transparent"
-        )}  />
+  const handleMouseEnter = () => {
+    setIsActive(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsActive(false);
+  };
+
+  return (
+    <div 
+      className={`aspect-square cursor-pointer transition duration-300 ease-in-out transform hover:scale-110 ${isActive ? 'scale-110' : ''}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <CarouselItem>
+        <div className="relative h-full w-full overflow-hidden">
+          <Image
+            fill
+            src={url}
+            alt=""
+            className="object-cover object-center"
+          />
+        </div>
+      </CarouselItem>
     </div>
-)}
-    </Tab>  );
-}
- 
+  );
+};
+
 export default GalleryTab;

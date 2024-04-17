@@ -1,10 +1,7 @@
 
 
 interface BillboardProps {
-  data: {
-    imageUrl: string;
-    title: string;
-  };
+  data: any
 }
 
 const Billboard: React.FC<BillboardProps> = ({ data }) => {

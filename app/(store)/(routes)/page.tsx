@@ -1,6 +1,6 @@
 import Container from "@/components/Store/container";
-import Billboard from "./_components/Billboard/BIllboard";
-import ProductList from "./_components/ProductList/ProductList";
+import Billboard from "../_components/Billboard/BIllboard";
+import ProductList from "../_components/ProductList/ProductList";
 import { db } from "@/lib/db";
 
 const HomePage = async () => {
@@ -26,7 +26,6 @@ const HomePage = async () => {
     },
   });
 
-  console.log(billboard);
   return (
     <Container>
       {billboard && <Billboard data={billboard} />}

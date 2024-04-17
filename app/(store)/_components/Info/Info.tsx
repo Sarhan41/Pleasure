@@ -1,12 +1,12 @@
 "use client";
 
+import Currency from "@/components/Store/Currency";
+import { Button } from "@/components/ui/button";
+import useCart from "@/hooks/store/use-cart";
+import { Product } from "@prisma/client";
 import { ShoppingCart } from "lucide-react";
 
-import { Product } from "@/types";
-import Currency from "@/components/ui/Currency";
-import Button from "@/components/ui/Button";
 import { MouseEventHandler } from "react";
-import useCart from "@/hooks/use-cart";
 
 interface InfoProps {
   data: Product;

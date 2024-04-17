@@ -5,7 +5,6 @@ import Container from "@/components/Store/container";
 import MainNav from "./MainNav";
 import { db } from "@/lib/db";
 
-export const revalidate = 0;
 
 const Header = async () => {
 
