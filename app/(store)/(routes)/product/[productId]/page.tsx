@@ -9,7 +9,6 @@ interface ProductPageProps {
     productId: string;
   };
 }
-
 const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
   const product = await db.product.findUnique({
     where: {
@@ -22,6 +21,12 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
       color: true,
     },
   });
+
+  if (!product) {
+    return <div>Loading...</div>; // or display an error message
+  }
+
+  console.log(product); // Log the product object to inspect its structure
 
   const suggestedProducts = await db.product.findMany({
     where: {
@@ -44,8 +49,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
           <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8 ">
             <Gallery images={product?.images} />
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-            
-              <Info data={product} />
+              {product && <Info data={product} />}
             </div>
           </div>
           <hr className="my-10" />
@@ -55,5 +59,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
     </div>
   );
 };
+
+
 
 export default ProductPage;

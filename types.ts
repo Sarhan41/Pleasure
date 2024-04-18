@@ -1,20 +1,15 @@
-export interface Billboard {
-    id: string;
-    label: string;
-    imageUrl: string;
-  }
-  
+import { Decimal } from "@prisma/client/runtime/library";
+
   export interface Category {
     id: string;
     name: string;
-    billboard: Billboard;
   }
   
   export interface Product {
     id: string;
-    category: Category;
+    category?: Category;
     name: string;
-    price: number;
+    price: Decimal;
     isFeatured: boolean;
     size: Size;
     color: Color;
