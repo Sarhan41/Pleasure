@@ -26,7 +26,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
     return <div>Loading...</div>; // or display an error message
   }
 
-  console.log(product); // Log the product object to inspect its structure
+// Log the product object to inspect its structure
 
   const suggestedProducts = await db.product.findMany({
     where: {

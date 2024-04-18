@@ -4,12 +4,10 @@ import NavbarActions from "./NavbarActions";
 import Container from "@/components/Store/container";
 import MainNav from "./MainNav";
 import { db } from "@/lib/db";
-
+import UserLogin from "./UserLogin";
 
 const Header = async () => {
-
-
-  const categories = await  db.category.findMany({})
+  const categories = await db.category.findMany({});
 
   return (
     <div className="border-b">
@@ -20,6 +18,8 @@ const Header = async () => {
           </Link>
           <MainNav data={categories} />
           <NavbarActions />
+          <UserLogin />
+       
         </div>
       </Container>
     </div>

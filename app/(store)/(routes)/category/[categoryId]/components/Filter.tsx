@@ -15,7 +15,6 @@ interface FilterProps {
 
 const Filter: React.FC<FilterProps> = ({ data, valueKey, name }) => {
   const searchParams = useSearchParams();
-  console.log(searchParams);
   const router = useRouter();
 
   const selectedValue = searchParams.get(valueKey);

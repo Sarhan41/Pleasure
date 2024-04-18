@@ -30,13 +30,7 @@ const NavbarActions = () => {
           {cart.items.length}
         </span>
       </Button>
-      <div>
-        <LoginButton asChild>
-          <Button variant="default" size="lg">
-            Sign in
-          </Button>
-        </LoginButton>
-      </div>
+   
     </div>
   );
 };
