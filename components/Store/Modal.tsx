@@ -2,8 +2,9 @@
 
 import { Fragment } from "react";
 import { X } from "lucide-react";
+import { Dialog, Transition } from "@headlessui/react";
+import IconButton from "./IconButton";
 
-import IconButton from "@/components/ui/IconButton";
 
 interface ModalProps {
   open: boolean;

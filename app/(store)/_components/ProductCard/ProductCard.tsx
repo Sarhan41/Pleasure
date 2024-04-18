@@ -9,7 +9,7 @@ import useCart from "@/hooks/store/use-cart";
 import usePreviewModal from "@/hooks/store/use-preview-modal";
 import IconButton from "@/components/Store/IconButton";
 import Currency from "@/components/Store/Currency";
-import { ProductType } from "./ProductTypes";
+import { Product as ProductType } from "@/types";
 
 interface ProductCard {
   data: ProductType;
@@ -26,7 +26,7 @@ const ProductCard: React.FC<ProductCard> = ({ data }) => {
 
   const onPreview: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation();
-
+    //@ts-ignore
     previewModal.onOpen(data);
   };
 

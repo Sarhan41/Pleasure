@@ -9,7 +9,7 @@ import useCart from "@/hooks/store/use-cart";
 
 const CartPage = () => {
   const cart = useCart();
-
+console.log(cart)
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {

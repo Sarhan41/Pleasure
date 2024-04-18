@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
+import { Product } from "@/types";
 import toast from "react-hot-toast";
-import { Product } from "@prisma/client";
 
 interface CartStore {
   items: Product[];
@@ -19,10 +19,10 @@ const useCart = create(
         const currrentItems = get().items;
         const existingItem = currrentItems.find((item) => item.id === data.id);
 
-        if (existingItem) {
-          return toast("Item already exists in cart.");
-          
-        }
+        // if (existingItem) {
+        //   return toast("Item already exists in cart.");
+
+        // }
 
         set({ items: [...get().items, data] });
         toast.success("Item added to cart.");
