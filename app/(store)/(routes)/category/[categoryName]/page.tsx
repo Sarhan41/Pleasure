@@ -8,7 +8,7 @@ import ProductCard from "@/app/(store)/_components/ProductCard/ProductCard";
 
 interface CategoryPageProps {
   params: {
-    categoryId: string;
+    categoryName: string;
   };
   searchParams: {
     colorId: string;
@@ -20,9 +20,20 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
   params,
   searchParams,
 }) => {
+  const category = await db.category.findFirst({
+    where: {
+      name: params.categoryName,
+    },
+    select: {
+      id: true,
+      imageUrl: true,
+      title: true,
+    },
+  });
+
   const products = await db.product.findMany({
     where: {
-      categoryId: params.categoryId,
+      categoryId: category?.id,
       colorId: searchParams.colorId,
       sizeId: searchParams.sizeId,
     },
@@ -36,15 +47,6 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
 
   const sizes = await db.size.findMany();
   const colors = await db.color.findMany();
-  const category = await db.category.findUnique({
-    where: {
-      id: params.categoryId,
-    },
-    select: {
-      imageUrl: true,
-      title: true,
-    },
-  });
 
   return (
     <div className="bg-white">
@@ -67,8 +69,7 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
                 ))}
               </div>
             </div>
-            <div className="lg:hidden w-1/5">
-            </div>
+            <div className="lg:hidden w-1/5"></div>
           </div>
         </div>
       </Container>
