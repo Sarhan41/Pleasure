@@ -72,6 +72,8 @@ export const LoginForm = () => {
   };
 
   return (
+    <div className="w-full h-full flex justify-center items-center mx-auto ">
+
     <CardWrapper
       headerLabel="Welcome back"
       backButtonLabel="Don't have an account?"
@@ -158,5 +160,6 @@ export const LoginForm = () => {
         </form>
       </Form>
     </CardWrapper>
+    </div>
   );
 };

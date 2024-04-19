@@ -6,13 +6,15 @@ import { db } from "@/lib/db";
 
 interface ProductPageProps {
   params: {
-    productId: string;
+    productName: string;
   };
 }
 const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
-  const product = await db.product.findUnique({
+  const decodedProductName = decodeURIComponent(params.productName);
+
+  const product = await db.product.findFirst({
     where: {
-      id: params.productId,
+      name: decodedProductName,
     },
     include: {
       category: true,
@@ -23,10 +25,14 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
   });
 
   if (!product) {
-    return <div>Loading...</div>; // or display an error message
+    return (
+      <div className="h-full w-full flex justify-center items-center">
+        Loading...
+      </div>
+    ); // or display an error message
   }
 
-// Log the product object to inspect its structure
+  // Log the product object to inspect its structure
 
   const suggestedProducts = await db.product.findMany({
     where: {
@@ -59,7 +65,5 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
     </div>
   );
 };
-
-
 
 export default ProductPage;

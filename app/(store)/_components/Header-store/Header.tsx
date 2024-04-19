@@ -17,9 +17,10 @@ const Header = async () => {
             <p className="font-bold text-xl">STORE</p>
           </Link>
           <MainNav data={categories} />
-          <NavbarActions />
-          <UserLogin />
-       
+          <div className="ml-auto flex gap-4">
+            <UserLogin />
+            <NavbarActions />
+          </div>
         </div>
       </Container>
     </div>
