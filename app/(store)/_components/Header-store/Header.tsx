@@ -14,10 +14,11 @@ import Search from "./Search";
 interface HeaderProps {
   categories: Category[];
   allProducts: Product[];
+  wishlength: number;
+  UserId: string | undefined;
 }
 
-
-const Header = ({ categories, allProducts }: HeaderProps) => {
+const Header = ({ categories, allProducts, wishlength , UserId}: HeaderProps) => {
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
 
   useEffect(() => {
@@ -55,18 +56,14 @@ const Header = ({ categories, allProducts }: HeaderProps) => {
         <div className="flex items-center justify-center">
           {/* Your logo image */}
           <Link href="/" className="flex  items-center justify-center gap-4">
-            <Image
-              src="/logo.ico"
-              height={36}
-              width={36}
-              alt="Logo"
-            />
-            <span className="text-xl max-sm:text-base font-mono font-semibold">PLEASURE</span>
+            <Image src="/logo.ico" height={36} width={36} alt="Logo" />
+            <span className="text-xl max-sm:text-base font-mono font-semibold">
+              PLEASURE
+            </span>
           </Link>
         </div>
         {/* Search functionality */}
         <div className="flex items-center justify-end">
-           
           <Search allProducts={allProducts} />
         </div>
       </div>
@@ -80,11 +77,10 @@ const Header = ({ categories, allProducts }: HeaderProps) => {
         {/* User icon, cart, and wishlist */}
         <div className="flex items-center lg:pr-32  md:pr-24 lg:gap-4">
           {/* Your user icon */}
-          <UserLogin />
+          <UserLogin userId={UserId} />
           {/* Your cart icon */}
-          <NavbarActions />
+          <NavbarActions wishlength={wishlength} />
           {/* Your wishlist icon */}
-          <WishList />
         </div>
       </div>
     </header>
