@@ -1,14 +1,14 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineSearch } from "react-icons/ai";
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   showPasswordButton?: boolean;
+  showSearchIcon?: boolean; // New prop for displaying search icon
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, showPasswordButton, ...props }, ref) => {
+  ({ className, type, showPasswordButton, showSearchIcon, ...props }, ref) => {
     const [showPassword, setShowPassword] = React.useState(false);
 
     const togglePasswordVisibility = () => {
@@ -38,6 +38,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               <AiOutlineEye className="w-5 h-5" />
             )}
           </button>
+        )}
+        {showSearchIcon && ( // Conditionally render the search icon
+          <div className="absolute inset-y-0 right-0 px-3 py-2 text-gray-400 flex items-center">
+            <AiOutlineSearch className="w-5 h-5" />
+          </div>
         )}
       </div>
     );

@@ -9,20 +9,22 @@ import {
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
-import { User2 } from "lucide-react";
+import { User2Icon } from "lucide-react";
 import { LoginButton } from "@/components/Auth/AuthUi/LoginButton";
 import Link from "next/link";
 import { SignUpButton } from "@/components/Auth/SignUpButton";
+import { FaUser } from "react-icons/fa";
 
 const UserLogin = () => {
   return (
-    <div className=" w-fit mr-6 max-sm:mr-1 z-50 relative">
+    <div className=" w-fit  z-40 relative">
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>
+            {/*    */}
+            <NavigationMenuTrigger className=" bg-black data-[state=open]:bg-black data-[active]:bg-black  hover:bg-black   text-white ">
               <Link href="/my-profile">
-                <User2 className="h-7 w-7" />
+                <FaUser className="h-6 w-6 max-sm:h-4 max-sm:w-4  text-white bg-black" />
               </Link>
             </NavigationMenuTrigger>
             <div className="">

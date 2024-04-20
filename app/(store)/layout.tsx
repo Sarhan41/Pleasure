@@ -1,12 +1,11 @@
 import { Urbanist } from "next/font/google";
 
-import Header from "./_components/Header-store/Header";
+import Header from "./_components/Header-store";
 import Footer from "./_components/Footer/Footer";
 import { ToastProvider } from "./providers/toast-provider";
 import ModalProvider from "./providers/modal-provider";
 
 const font = Urbanist({ subsets: ["latin"] });
-
 
 export default function RootLayout({
   children,
@@ -15,13 +14,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={font.className}>
+      <body className={`${font.className} overflow-x-hidden`}>
         <ModalProvider />
         <ToastProvider />
         <Header />
-        {children}
-        {/* <Footer /> */}
-        </body>
+        <div className="mt-[104px] " >{children}</div>
+        <Footer />
+      </body>
     </html>
   );
 }
