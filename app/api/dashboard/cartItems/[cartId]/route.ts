@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { CartItemsId: string } }
+  { params }: { params: { cartId: string } }
 ) {
   try {
     const user = await currentUser();
@@ -15,31 +15,31 @@ export async function DELETE(
 
     const userId = user.id;
 
-    if (!params.CartItemsId) {
-      return new NextResponse("Wishlist id is required", { status: 400 });
+    if (!params.cartId) {
+      return new NextResponse("Cart item ID is required", { status: 400 });
     }
 
-    const cartItems = await db.cartItems.delete({
+    const cartItem = await db.cartItems.delete({
       where: {
         userId: userId,
-        id: params.CartItemsId,
+        id: params.cartId,
       },
     });
 
-    return NextResponse.json(cartItems);
+    return NextResponse.json(cartItem);
   } catch (error) {
-    console.log("[WISHLIST_DELETE]", error);
+    console.log("[CART_ITEM_DELETE]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
 
-
-export async function PUT(
+export async function PATCH(
   req: Request,
-  { params }: { params: { CartId: string } }
+  { params }: { params: { cartId: string } }
 ) {
   try {
     const user = await currentUser();
+    const body = await req.json();
 
     if (!user) {
       return new NextResponse("Unauthenticated", { status: 401 });
@@ -47,21 +47,19 @@ export async function PUT(
 
     const userId = user.id;
 
-    console.log(params.CartId)
-
-    if (!params.CartId) {
+    if (!params.cartId) {
       return new NextResponse("Cart item ID is required", { status: 400 });
     }
+
+    const { quantity } = body; // Assuming quantity is sent in the request body
 
     const updatedCartItem = await db.cartItems.update({
       where: {
         userId: userId,
-        id: params.CartId,
+        id: params.cartId,
       },
       data: {
-        quantity: {
-          increment: 1,
-        },
+        quantity: quantity, // Update quantity here
       },
     });
 

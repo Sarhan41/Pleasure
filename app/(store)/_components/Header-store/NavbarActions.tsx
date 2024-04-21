@@ -1,6 +1,5 @@
 import { LoginButton } from "@/components/Auth/AuthUi/LoginButton";
 import { Button } from "@/components/ui/button";
-import useCart from "@/hooks/store/use-cart";
 import axios from "axios";
 import { set } from "date-fns";
 import { Heart, ShoppingBag } from "lucide-react";
@@ -14,35 +13,43 @@ interface NavbarActionsProps {
 const NavbarActions = ({ userId }: NavbarActionsProps) => {
   const [isMounted, setIsMounted] = useState(false);
   const [wishlength, setWishLength] = useState(0);
-  const [response, setResponse] = useState(null);
+  const [cartlength, setCartLength] = useState(0);
+  const [responseCart, setResponseCart] = useState(null);
+  const [responseWish, setResponseWish] = useState(null);
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
   useEffect(() => {
-    const fetchWishListLength = async () => {
+    const fetchLength = async () => {
       if (!userId) return;
 
       try {
-        const response = await axios.get(
+        // Fetch wishlist length
+        const responseWish = await axios.get(
           `/api/dashboard/wishlist?reload=${Date.now()}`
         );
-        setResponse(response.data); 
-        setWishLength(response.data.length);
+        setResponseWish(responseWish.data);
+        setWishLength(responseWish.data.length);
+
+        // Fetch cart length
+        const responseCart = await axios.get(
+          `/api/dashboard/cartItems?reload=${Date.now()}`
+        );
+        setResponseCart(responseCart.data);
+        setCartLength(responseCart.data.length);
       } catch (error) {
         console.error("Error fetching wishlist length:", error);
       }
     };
 
-    const intervalId = setInterval(fetchWishListLength, 5000); // Run every 5 seconds
+    const intervalId = setInterval(fetchLength, 5000); // Run every 5 seconds
 
     return () => clearInterval(intervalId); // Cleanup interval on unmount
-  }, [userId, pathname]); 
-
-  const router = useRouter();
-  const cart = useCart();
+  }, [userId, pathname]);
 
   if (!isMounted) return null;
 
@@ -54,7 +61,7 @@ const NavbarActions = ({ userId }: NavbarActionsProps) => {
       >
         <ShoppingBag className="h-6 w-6 max-sm:h-4 max-sm:w-4" color="white" />
         <span className="ml-2 text-sm font-medium text-white ">
-          {cart.items.length}
+          {cartlength}
         </span>
       </Button>
 

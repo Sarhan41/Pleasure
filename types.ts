@@ -1,4 +1,3 @@
-import { Decimal } from "@prisma/client/runtime/library";
 
   export interface Category {
     id: string;
@@ -9,11 +8,12 @@ import { Decimal } from "@prisma/client/runtime/library";
     id: string;
     category?: Category;
     name: string;
-    price: Decimal;
+    price: number;
     isFeatured: boolean;
     size: Size;
     color: Color;
     images: Image[];
+    quantity?: number;
   }
   
   export interface Image {

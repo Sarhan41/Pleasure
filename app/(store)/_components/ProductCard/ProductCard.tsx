@@ -1,11 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, useState } from "react";
 import { Expand, Heart, ShoppingCart } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-import useCart from "@/hooks/store/use-cart";
 import usePreviewModal from "@/hooks/store/use-preview-modal";
 import IconButton from "@/components/Store/IconButton";
 import Currency from "@/components/Store/Currency";
@@ -19,6 +18,7 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
+  const [existingItem, setExistingItem] = useState(null);
   const previewModal = usePreviewModal();
   const router = useRouter();
 
@@ -36,22 +36,23 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
     try {
       const response = await axios.get("/api/dashboard/cartItems");
       const cartItems = response.data;
-      const existingItem = cartItems.find(
+      const foundItem = cartItems.find(
         (item: { productId: string; userId: string }) =>
           item.productId === data.id && item.userId === userId
       );
-      // console.log(existingItem.id);
-      if (existingItem) {
-        // If item already exists in the cart, update its quantity
-        await axios.put(`/api/dashboard/cartItems/${existingItem.id}`);
-        toast.success("Item's quantity increased in cart");
-      } else {
-        // If item doesn't exist in the cart, add it
+      const cartId = foundItem.id;
+      if (!foundItem) {
         await axios.post("/api/dashboard/cartItems", {
           id: data.id,
           userId,
         });
         toast.success("Added to cart");
+      } else {
+        setExistingItem(foundItem); // Update existingItem state
+        await axios.patch(`/api/dashboard/cartItems/${cartId}`, {
+          quantity: foundItem.quantity + 1, // Increase quantity by 1
+        });
+        toast.success("Item's quantity increased in cart");
       }
     } catch (error) {
       console.log(error);

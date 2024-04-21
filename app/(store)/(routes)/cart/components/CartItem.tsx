@@ -6,24 +6,32 @@ import { X } from "lucide-react";
 
 import { Product } from "@/types";
 import { useRouter } from "next/navigation";
-import useCart from "@/hooks/store/use-cart";
 import Currency from "@/components/Store/Currency";
 import IconButton from "@/components/Store/IconButton";
+import axios from "axios";
 
 interface CartItemProps {
   data: Product;
+  quantity: number;
+  cartId: string;
 }
 
-const CartItem: React.FC<CartItemProps> = ({ data }) => {
-  const cart = useCart();
+const CartItem: React.FC<CartItemProps> = ({ data, quantity, cartId }) => {
   const router = useRouter();
+  // console.log("CARTITEM.TSX 13", data);
 
-  const onRemove = () => {
-    cart.removeItem(data.id);
+  const removeItem = async (id: string) => {
+    try {
+      await axios.delete(`/api/dashboard/cartItems/${cartId}`);
+      toast.success("Item removed from wishlist");
+      router.refresh();
+      router.push(`/cart?reload=${Date.now()}`);
+    } catch (error) {
+      toast.error("Failed to remove item from Cart");
+    }
   };
-
   const onProductClick = () => {
-    router.push(`/product/${data.id}`);
+    router.push(`/product/${data.name}`);
   };
 
   return (
@@ -48,11 +56,20 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
             >
               {data.name}
             </p>
+            <p
+              onClick={onProductClick}
+              className="text-lg  cursor-pointer font-semibold text-black"
+            >
+              {quantity} piece
+            </p>
           </div>
 
           <div className="mt-1 flex text-sm ">
             {data.color && ( // Check if color exists before rendering
-              <p className="text-gray-500">{data.color.name}</p>
+              <p
+                className="rounded-full h-5 w-5 "
+                style={{ backgroundColor: data.color.name }}
+              ></p>
             )}
             {data.size && ( // Check if size exists before rendering
               <p className="text-gray-500 ml-4 border-l border-gray-200 pl-4 ">
@@ -63,7 +80,10 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
           <Currency value={data.price} />
         </div>
         <div className="absolute z-10 right-0 top-0">
-          <IconButton onClick={onRemove} icon={<X size={15} />} />
+          <IconButton
+            onClick={() => removeItem(cartId)}
+            icon={<X size={15} />}
+          />
         </div>
       </div>
     </li>

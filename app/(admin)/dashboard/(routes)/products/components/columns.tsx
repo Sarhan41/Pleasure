@@ -6,7 +6,7 @@ import { CellAction } from "./cell-action";
 export type ProductColumn = {
   id: string;
   name: string;
-  price: string;
+  price: number;
   size: string;
   category: string;
   color: string;

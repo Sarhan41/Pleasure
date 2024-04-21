@@ -42,6 +42,9 @@ export async function GET(req: Request) {
       where: {
         userId: user.id,
       },
+      include: {
+        product: true,
+      },
     });
 
     return NextResponse.json(cartItemsProducts);

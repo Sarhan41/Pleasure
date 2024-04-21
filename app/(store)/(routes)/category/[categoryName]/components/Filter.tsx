@@ -49,23 +49,33 @@ const Filter: React.FC<FilterProps> = ({ data, valueKey, name }) => {
       <hr className="my-4" />
       <div className="flex flex-wrap gap-2">
         {data.map((filter) => (
-          // @ts-ignore
           <div key={filter.id} className="flex items-center ">
-            <Button
-              className={cn(
-                "rounded-md text-sm text-gray-800 p-2 bg-white border border-gray-300",
-                selectedValue === filter.id && "bg-black text-white"
-              )}
-              onClick = {()=> onClick(filter.id)}
-            >
-              {filter.name}
-            </Button>
+            {name === "Colors" ? (
+              <Button
+                className={cn(
+                  "text-sm text-gray-800 p-2 bg-white border h-8 w-8 rounded-full border-gray-300",
+                  selectedValue === filter.id && "border-black"
+                )}
+                onClick={() => onClick(filter.id)}
+                style={{ backgroundColor: filter.value }}
+              />
+            ) : (
+              <Button
+                className={cn(
+                  "rounded-md text-sm text-gray-800 p-2 bg-white border border-gray-300",
+                  selectedValue === filter.id && "bg-black text-white"
+                )}
+                color="true"
+                onClick={() => onClick(filter.id)}
+              >
+                {filter.name}
+              </Button>
+            )}
           </div>
         ))}
       </div>
-      
     </div>
   );
-};
+}
 
 export default Filter;

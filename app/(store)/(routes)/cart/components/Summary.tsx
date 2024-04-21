@@ -1,43 +1,40 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 import { toast } from "react-hot-toast";
-import useCart from "@/hooks/store/use-cart";
 import Currency from "@/components/Store/Currency";
 import { Button } from "@/components/ui/button";
 
+interface SummaryProps {
+  prices: number[];
+  quantities: number[];
+}
 
-const Summary = () => {
-  const searchParams = useSearchParams();
-  const items = useCart((state) => state.items);
-  const removeAll = useCart((state) => state.removeAll);
+const Summary: React.FC<SummaryProps> = ({ prices, quantities }) => {
+  const [orderTotal, setOrderTotal] = useState<number>(0);
 
   useEffect(() => {
-    if (searchParams.get("success")) {
-      toast.success("Order placed successfully");
-      removeAll();
+    // Calculate order total based on prices and quantities
+    let total = 0;
+    for (let i = 0; i < prices.length; i++) {
+      total += prices[i] * quantities[i];
     }
-
-    if (searchParams.get("canceled")) {
-      toast.error("Something Went Wrong. Please try again.");
-    }
-  }, [searchParams, removeAll]);
-
-  const totalPrice = items.reduce((total, item) => {
-    return total + Number(item.price);
-  }, 0);
+    setOrderTotal(total);
+  }, [prices, quantities]);
 
   const onCheckout = async () => {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
-      {
-        productIds: items.map((item) => item.id),
-      }
-    );
-
-    window.location = response.data.url;
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
+        {
+          // productIds: items.map((item) => item.id),
+        }
+      );
+      window.location = response.data.url;
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -46,10 +43,14 @@ const Summary = () => {
       <div className="mt-6 space-y-4">
         <div className="flex items-center justify-between border-t border-gray-200 pt-4">
           <div className="text-base font-medium text-gray-900">Order Total</div>
-          <Currency value={totalPrice} />
+          <Currency value={orderTotal} />
         </div>
       </div>
-      <Button disabled={items.length === 0} onClick={onCheckout} className="w-full mt-6">
+      <Button
+        disabled={prices.length === 0}
+        onClick={onCheckout}
+        className="w-full mt-6"
+      >
         Checkout
       </Button>
     </div>

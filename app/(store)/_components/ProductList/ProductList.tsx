@@ -17,7 +17,6 @@ const ProductList: React.FC<ProductListProps> = async ({ title, items }) => {
     userId = User.id ?? "";
   }
 
-  console.log("User", userId);
 
   return (
     <div className="space-y-4">
