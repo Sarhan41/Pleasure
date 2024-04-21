@@ -19,7 +19,6 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
-  const cart = useCart();
   const previewModal = usePreviewModal();
   const router = useRouter();
 
@@ -32,9 +31,32 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
     previewModal.onOpen(data);
   };
 
-  const onAddToCart: MouseEventHandler<HTMLButtonElement> = (event) => {
+  const onAddToCart: MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.stopPropagation();
-    cart.addItem(data);
+    try {
+      const response = await axios.get("/api/dashboard/cartItems");
+      const cartItems = response.data;
+      const existingItem = cartItems.find(
+        (item: { productId: string; userId: string }) =>
+          item.productId === data.id && item.userId === userId
+      );
+      // console.log(existingItem.id);
+      if (existingItem) {
+        // If item already exists in the cart, update its quantity
+        await axios.put(`/api/dashboard/cartItems/${existingItem.id}`);
+        toast.success("Item's quantity increased in cart");
+      } else {
+        // If item doesn't exist in the cart, add it
+        await axios.post("/api/dashboard/cartItems", {
+          id: data.id,
+          userId,
+        });
+        toast.success("Added to cart");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error adding to cart");
+    }
   };
 
   const onAddToWishList: MouseEventHandler<HTMLButtonElement> = async (
@@ -42,8 +64,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
   ) => {
     event.stopPropagation();
     try {
-   
-
       const response = await axios.get("/api/dashboard/wishlist");
       const wishlistItems = response.data;
 

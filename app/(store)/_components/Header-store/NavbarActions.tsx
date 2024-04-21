@@ -1,12 +1,10 @@
-"use client";
-
 import { LoginButton } from "@/components/Auth/AuthUi/LoginButton";
 import { Button } from "@/components/ui/button";
 import useCart from "@/hooks/store/use-cart";
 import axios from "axios";
 import { set } from "date-fns";
 import { Heart, ShoppingBag } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface NavbarActionsProps {
@@ -17,6 +15,7 @@ const NavbarActions = ({ userId }: NavbarActionsProps) => {
   const [isMounted, setIsMounted] = useState(false);
   const [wishlength, setWishLength] = useState(0);
   const [response, setResponse] = useState(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     setIsMounted(true);
@@ -37,8 +36,10 @@ const NavbarActions = ({ userId }: NavbarActionsProps) => {
       }
     };
 
-    fetchWishListLength();
-  }, [userId, response]); 
+    const intervalId = setInterval(fetchWishListLength, 5000); // Run every 5 seconds
+
+    return () => clearInterval(intervalId); // Cleanup interval on unmount
+  }, [userId, pathname]); 
 
   const router = useRouter();
   const cart = useCart();

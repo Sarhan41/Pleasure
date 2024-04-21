@@ -27,6 +27,7 @@ model User {
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
   Wishlist              Wishlist[]
+  CartItems             CartItems[]
 }
 
 model Account {
@@ -132,6 +133,7 @@ model Product {
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   Wishlist   Wishlist[]
+  CartItems  CartItems[]
 
   @@index([categoryId])
   @@index([sizeId])
@@ -139,26 +141,34 @@ model Product {
 }
 
 model Image {
-  id        String     @id @default(uuid())
+  id        String   @id @default(uuid())
   productId String
-  product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   url       String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  Wishlist  Wishlist[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([productId])
 }
 
 model Wishlist {
-  id         String  @id @default(uuid())
-  userId     String
-  user       User    @relation(fields: [userId], references: [id])
-  productId  String
-  product    Product @relation(fields: [productId], references: [id])
-  productImg Image?  @relation(fields: [imageId], references: [id]) // New field to reference the product image
-  imageId    String?
+  id        String  @id @default(uuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
 
+  @@index([userId])
+  @@index([productId])
+}
+
+model CartItems {
+  id        String  @id @default(uuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int     @default(1)
   @@index([userId])
   @@index([productId])
 }

@@ -18,7 +18,6 @@ export async function DELETE(
     if (!params.wishlistId) {
       return new NextResponse("Wishlist id is required", { status: 400 });
     }
-    console.log(params.wishlistId);
 
     const wishlist = await db.wishlist.delete({
       where: {

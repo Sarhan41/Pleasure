@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
-import { currentRole, currentUser } from "@/lib/auth";
+import { currentUser } from "@/lib/auth";
 
 export async function POST(req: Request) {
   try {
@@ -17,16 +17,16 @@ export async function POST(req: Request) {
 
     const UserId: string = user.id || "";
 
-    const wishlist = await db.wishlist.create({
+    const cartItem = await db.cartItems.create({
       data: {
         userId: UserId,
         productId: id,
       },
     });
 
-    return NextResponse.json(wishlist);
+    return NextResponse.json(cartItem);
   } catch (error) {
-    console.log("[WISHLIST_POST]", error);
+    console.log("[CARTITEMS_POST]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
@@ -38,16 +38,15 @@ export async function GET(req: Request) {
       return new NextResponse("Unauthenticated", { status: 401 });
     }
 
-    const wishlistProducts = await db.wishlist.findMany({
+    const cartItemsProducts = await db.cartItems.findMany({
       where: {
         userId: user.id,
       },
-      
     });
 
-    return NextResponse.json(wishlistProducts);
+    return NextResponse.json(cartItemsProducts);
   } catch (error) {
-    console.log("[WISHLIST_GET]", error);
+    console.log("[CARTITEMS_GET]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
