@@ -39,7 +39,12 @@ export async function GET(req: Request) {
       return new NextResponse("Unauthenticated", { status: 401 });
     }
 
-    const wishlistProducts = await db.wishlist.findMany({});
+    const wishlistProducts = await db.wishlist.findMany({
+      where: {
+        userId: user.id,
+      },
+      
+    });
 
     return NextResponse.json(wishlistProducts);
   } catch (error) {

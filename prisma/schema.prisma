@@ -139,22 +139,25 @@ model Product {
 }
 
 model Image {
-  id        String   @id @default(uuid())
+  id        String     @id @default(uuid())
   productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
   url       String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  Wishlist  Wishlist[]
 
   @@index([productId])
 }
 
 model Wishlist {
-  id        String  @id @default(uuid())
-  userId    String
-  user      User    @relation(fields: [userId], references: [id])
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
+  id         String  @id @default(uuid())
+  userId     String
+  user       User    @relation(fields: [userId], references: [id])
+  productId  String
+  product    Product @relation(fields: [productId], references: [id])
+  productImg Image?  @relation(fields: [imageId], references: [id]) // New field to reference the product image
+  imageId    String?
 
   @@index([userId])
   @@index([productId])

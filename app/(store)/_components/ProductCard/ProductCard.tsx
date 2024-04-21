@@ -42,9 +42,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
   ) => {
     event.stopPropagation();
     try {
-      if (!userId) {
-        return toast.error("Please login to add to wishlist");
-      }
+   
 
       const response = await axios.get("/api/dashboard/wishlist");
       const wishlistItems = response.data;
@@ -75,8 +73,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
         <Image
           alt="Image"
           src={data?.images?.[0]?.url}
-          width={300}
-          height={300}
+          fill
           className="aspect-square object-cover rounded-md"
         />
         <div className="opacity-0 group-hover:opacity-100 transition absolute w-full px-6 bottom-5">

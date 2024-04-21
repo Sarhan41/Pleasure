@@ -14,11 +14,10 @@ import Search from "./Search";
 interface HeaderProps {
   categories: Category[];
   allProducts: Product[];
-  wishlength: number;
   UserId: string | undefined;
 }
 
-const Header = ({ categories, allProducts, wishlength , UserId}: HeaderProps) => {
+const Header = ({ categories, allProducts,  UserId}: HeaderProps) => {
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
 
   useEffect(() => {
@@ -79,7 +78,7 @@ const Header = ({ categories, allProducts, wishlength , UserId}: HeaderProps) =>
           {/* Your user icon */}
           <UserLogin userId={UserId} />
           {/* Your cart icon */}
-          <NavbarActions wishlength={wishlength} />
+          <NavbarActions userId={UserId} />
           {/* Your wishlist icon */}
         </div>
       </div>
