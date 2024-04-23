@@ -97,15 +97,6 @@ model Category {
   updatedAt DateTime  @updatedAt
 }
 
-model Color {
-  id        String    @id @default(uuid())
-  name      String
-  value     String
-  products  Product[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-}
-
 model Size {
   id        String    @id @default(uuid())
   name      String
@@ -122,12 +113,11 @@ model Product {
 
   name       String
   price      Int
+  colors     String[]
   isFeatured Boolean     @default(false)
   isArchived Boolean     @default(false)
   sizeId     String
   size       Size        @relation(fields: [sizeId], references: [id])
-  colorId    String
-  color      Color       @relation(fields: [colorId], references: [id])
   images     Image[]
   orderItems orderItem[]
   createdAt  DateTime    @default(now())
@@ -137,7 +127,6 @@ model Product {
 
   @@index([categoryId])
   @@index([sizeId])
-  @@index([colorId])
 }
 
 model Image {
