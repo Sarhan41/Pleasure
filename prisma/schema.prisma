@@ -110,15 +110,14 @@ model Product {
   id         String   @id @default(uuid())
   categoryId String
   category   Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
-
   name       String
   price      Int
-  colors     String[]
   isFeatured Boolean     @default(false)
   isArchived Boolean     @default(false)
   sizeId     String
   size       Size        @relation(fields: [sizeId], references: [id])
   images     Image[]
+  colors     Color[]
   orderItems orderItem[]
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
@@ -127,6 +126,18 @@ model Product {
 
   @@index([categoryId])
   @@index([sizeId])
+}
+
+model Color {
+  id String @id @default(uuid())
+  productId String
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  value String
+  name String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
 }
 
 model Image {
