@@ -6,7 +6,7 @@ import { db } from "@/lib/db";
 const HomePage = async () => {
   const billboard = await db.category.findUnique({
     where: {
-      id: "4d07a0fc-9ea4-4779-8b50-45dd2727c659"
+      id: "1685504f-db51-407f-bf79-69cb63448286"
     },
     select: {
       imageUrl: true,

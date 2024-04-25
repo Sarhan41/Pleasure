@@ -31,16 +31,6 @@ export function MainNav({
       active: pathname === `/dashboard/categories`,
     },
     {
-      href: `/dashboard/sizes`,
-      label: "Sizes",
-      active: pathname === `/dashboard/sizes`,
-    },
-    {
-      href: `/dashboard/colors`,
-      label: "Colors",
-      active: pathname === `/dashboard/colors`,
-    },
-    {
       href: `/dashboard/products`,
       label: "Products",
       active: pathname === `/dashboard/products`,
@@ -63,19 +53,18 @@ export function MainNav({
 
       <div className="sm:hidden">
         {/* Dropdown Menu */}
-        <DropdownMenu >
+        <DropdownMenu>
           <DropdownMenuTrigger>
             {/* This could be a hamburger icon */}
             <HamburgerMenuIcon className="w-6 h-6 text-primary" />
           </DropdownMenuTrigger>
           <DropdownMenuContent sideOffset={8}>
             <DropdownMenuLabel className="mb-4 border-b">
-              <div className="flex gap-2"  >
-
-              Menu <StoreIcon className="h-4 w-4"  />
+              <div className="flex gap-2">
+                Menu <StoreIcon className="h-4 w-4" />
               </div>
-              </DropdownMenuLabel>
-              
+            </DropdownMenuLabel>
+
             {NavLinks.map((route) => (
               <Link key={route.href} href={route.href}>
                 <DropdownMenuItem
@@ -94,8 +83,8 @@ export function MainNav({
         </DropdownMenu>
       </div>
 
-       {/* Navigation Links */}
-       <div className="hidden sm:flex space-x-2 md:space-x-4 lg:space-x-6 items-center">
+      {/* Navigation Links */}
+      <div className="hidden sm:flex space-x-2 md:space-x-4 lg:space-x-6 items-center">
         {NavLinks.map((route) => (
           <Link
             key={route.href}
