@@ -21,7 +21,7 @@ const HomePage = async () => {
     include: {
       images: {},
       category: { select: { name: true } },
-      color: { select: { name: true, value: true } },
+      colors: { select: { name: true, value: true } },
       size: { select: { name: true, value: true } },
     },
   });

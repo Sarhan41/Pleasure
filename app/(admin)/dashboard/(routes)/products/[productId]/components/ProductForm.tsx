@@ -39,7 +39,7 @@ const formSchema = z.object({
   images: z.object({ url: z.string() }).array(),
   price: z.coerce.number().min(1),
   categoryId: z.string().min(1),
-  colorId: z.string().min(1),
+  colorId: z.object({ name: z.string(), hex: z.string() }).array(),
   sizeId: z.string().min(1),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
@@ -51,10 +51,10 @@ interface ProductFormProps {
   initialData:
     | (Product & {
         images: Image[];
+        colors: Color[];
       })
     | null;
   categories: Category[];
-  colors: Color[];
   sizes: Size[];
 }
 
@@ -62,11 +62,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   initialData,
   categories,
   sizes,
-  colors,
 }) => {
   const params = useParams();
   const router = useRouter();
-
+console.log(initialData)
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -80,6 +79,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     defaultValues: initialData
       ? {
           ...initialData,
+          colorId: initialData.colors.map((color) => ({
+            name: color.name,
+            hex: color.value,
+          })),
           price: parseFloat(String(initialData?.price)),
         }
       : {
@@ -87,7 +90,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           images: [],
           price: 0,
           categoryId: "",
-          colorId: "",
+          colorId: [{ name: "", hex: "#000000" }],
           sizeId: "",
           isFeatured: false,
           isArchived: false,
@@ -98,10 +101,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(
-          `/api/dashboard/products/${params.productId}`,
-          data
-        );
+        await axios.patch(`/api/dashboard/products/${params.productId}`, data);
       } else {
         await axios.post(`/api/dashboard/products`, data);
       }
@@ -122,16 +122,12 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(
-        `/api/dashboard/products/${params.productId}`
-      );
+      await axios.delete(`/api/dashboard/products/${params.productId}`);
       router.refresh();
       router.push(`/dashboard/products`);
       toast.success("Product deleted.");
     } catch (error) {
-      toast.error(
-        "Something went wrong. "
-      );
+      toast.error("Something went wrong. ");
     } finally {
       setLoading(false);
       setOpen(false);
@@ -301,39 +297,72 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               name="colorId"
               render={({ field }) => (
                 <FormItem className="max-sm:w-[35vw] w-[22vw]">
-                  <FormLabel>Color</FormLabel>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="Select a color"
+                  <FormLabel>Colors</FormLabel>
+                  <div className="space-y-2">
+                    {field.value.map((colorId, index) => (
+                      <div key={index} className="flex items-center space-x-2">
+                        <Input
+                          className="w-[125px]"
+                          placeholder="Color Name"
+                          value={colorId.name}
+                          onChange={(e) =>
+                            field.onChange([
+                              ...field.value.slice(0, index),
+                              { ...colorId, name: e.target.value },
+                              ...field.value.slice(index + 1),
+                            ])
+                          }
                         />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {colors.map((color) => (
-                        <SelectItem key={color.id} value={color.id}>
-                          {color.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                        <Input
+                          className="w-[125px]"
+                          placeholder="Color Hex"
+                          value={colorId.hex}
+                          onChange={(e) =>
+                            field.onChange([
+                              ...field.value.slice(0, index),
+                              { ...colorId, hex: e.target.value },
+                              ...field.value.slice(index + 1),
+                            ])
+                          }
+                        />
+
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          onClick={() =>
+                            field.onChange([
+                              ...field.value.slice(0, index),
+                              ...field.value.slice(index + 1),
+                            ])
+                          }
+                        >
+                          X
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                  <Button
+                    type="button"
+                    onClick={() =>
+                      field.onChange([
+                        ...field.value,
+                        { name: "", hex: "#000000" },
+                      ])
+                    }
+                  >
+                    Add Color
+                  </Button>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="isArchived"
               render={({ field }) => (
                 <FormItem className=" flex flex-row space-x-3 space-y-0 rounded-md border p-4 items-start">
-                  <FormControl >
+                  <FormControl>
                     <Checkbox
                       checked={field.value}
                       onCheckedChange={field.onChange}
@@ -354,7 +383,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               name="isFeatured"
               render={({ field }) => (
                 <FormItem className=" flex flex-row space-x-3 space-y-0 rounded-md border p-4 items-start">
-                  <FormControl >
+                  <FormControl>
                     <Checkbox
                       checked={field.value}
                       onCheckedChange={field.onChange}

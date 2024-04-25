@@ -30,8 +30,9 @@ export async function GET(
       include: {
         images: true,
         category: true,
-        color: true,
+        colors: true,
         size: true,
+
       },
     });
 
@@ -103,7 +104,9 @@ export async function PATCH(req: Request, { params }: { params: { productId: str
         name,
         price,
         categoryId,
-        colorId,
+        colors: {
+          deleteMany: {},
+        },
         sizeId,
         images: {
           deleteMany: {},
@@ -123,11 +126,18 @@ export async function PATCH(req: Request, { params }: { params: { productId: str
             data: [...images.map((image: { url: string }) => image)],
           },
         },
+        colors: {
+          createMany: {
+            data: colorId.map((color: { name: string; hex: string }) => ({
+              name: color.name,
+              value: color.hex,
+            })),
+          },
+        },
       },
       include: {
         images: true,
         category: true,
-        color: true,
         size: true,
       },
     });

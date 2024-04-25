@@ -10,7 +10,7 @@ const ProcutsPage = async () => {
     include: {
       category: true,
       size: true,
-      color: true,
+      colors: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -25,9 +25,12 @@ const ProcutsPage = async () => {
     price: item.price,
     category: item.category.name,
     size: item.size.name,
-    color: item.color.value,
+    colorName: item.colors.map((color) => color.name).join(", "),
+    colorHex: item.colors.map((color) => color.value).join(", "),
     createdAt: format(item.createdAt, "MMM do, yyyy"),
   }));
+
+  console.log(formattedProducts)
 
   return (
     <div className="  flex-col">

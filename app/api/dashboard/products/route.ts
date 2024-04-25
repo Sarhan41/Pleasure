@@ -57,17 +57,25 @@ export async function POST(req: Request) {
         name,
         price,
         categoryId,
-        colorId,
+        colors: {
+          createMany: {
+            data: colorId.map((color: { name: string; hex: string }) => ({
+              name: color.name,
+              value: color.hex,
+            })),
+          },
+        },
         sizeId,
         images: {
           createMany: {
-            data: [...images.map((image: { url: string }) => image)],
+            data: images.map((image: { url: string }) => image),
           },
         },
         isFeatured,
         isArchived,
       },
     });
+    
 
     return NextResponse.json(product);
   } catch (error) {
@@ -86,7 +94,6 @@ export async function GET(req: Request) {
     const product = await db.product.findMany({
       where: {
         categoryId,
-        colorId,
         sizeId,
         isFeatured: isFeatured ? true : undefined,
         isArchived: false,
@@ -94,7 +101,7 @@ export async function GET(req: Request) {
       include: {
         images: true,
         category: true,
-        color: true,
+        colors: true,
         size: true,
       },
       orderBy: {
