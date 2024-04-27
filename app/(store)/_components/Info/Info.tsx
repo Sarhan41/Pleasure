@@ -1,9 +1,9 @@
 "use client";
 
-import React, { MouseEventHandler } from "react";
+import React, { MouseEventHandler, useState } from "react";
 import Currency from "@/components/Store/Currency";
 import { Button } from "@/components/ui/button";
-import { Product } from "@/types";
+import { Product, Size } from "@/types";
 import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 
@@ -12,8 +12,14 @@ interface InfoProps {
 }
 
 const Info: React.FC<InfoProps> = ({ data }) => {
+  const [selectedSize, setSelectedSize] = useState<Size | null>(null);
+
   const onAddToCart: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation();
+  };
+
+  const handleSizeSelection = (size: Size) => {
+    setSelectedSize(size);
   };
 
   return (
@@ -30,7 +36,13 @@ const Info: React.FC<InfoProps> = ({ data }) => {
           <h3 className="font-semibold text-black">Size:</h3>
           <div className="flex gap-4 ">
             {data?.sizes?.map((size) => (
-              <span key={size.name} className="text-black hover:bg-primary hover:text-white hover:cursor-pointer font-semibold border-2 border-gray-500 rounded-md p-2">
+              <span
+                key={size.name}
+                className={`text-black ${selectedSize != size && "hover:bg-primary"}  hover:text-white hover:cursor-pointer font-semibold border-2 border-gray-500 rounded-md p-2 ${
+                  selectedSize === size ? "bg-gray-600 text-white" : ""
+                }`}
+                onClick={() => handleSizeSelection(size)}
+              >
                 {size.value}
               </span>
             ))}
