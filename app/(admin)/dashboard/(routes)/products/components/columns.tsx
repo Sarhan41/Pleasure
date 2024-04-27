@@ -7,7 +7,7 @@ export type ProductColumn = {
   id: string;
   name: string;
   price: number;
-  size: string;
+  // size: string;
   category: string;
   colorName: string;
   colorHex: string;

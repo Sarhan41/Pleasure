@@ -10,7 +10,7 @@
     name: string;
     price: number;
     isFeatured: boolean;
-    size: Size;
+    sizes: Size[];
     colors: Color[];
     images: Image[];
     quantity?: number;
@@ -22,9 +22,9 @@
   }
   
   export interface Size {
-    id: string;
-    name: string;
-    value: string;
+    id?: string;
+    name?: string | null;
+    value?: string | number | null;
   }
   
   export interface Color {

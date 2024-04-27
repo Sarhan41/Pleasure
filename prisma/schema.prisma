@@ -97,14 +97,7 @@ model Category {
   updatedAt DateTime  @updatedAt
 }
 
-model Size {
-  id        String    @id @default(uuid())
-  name      String
-  value     String
-  products  Product[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-}
+
 
 model Product {
   id         String   @id @default(uuid())
@@ -114,10 +107,9 @@ model Product {
   price      Int
   isFeatured Boolean     @default(false)
   isArchived Boolean     @default(false)
-  sizeId     String
-  size       Size        @relation(fields: [sizeId], references: [id])
   images     Image[]
   colors     Color[]
+  sizes      Size[]
   orderItems orderItem[]
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
@@ -125,7 +117,6 @@ model Product {
   CartItems  CartItems[]
 
   @@index([categoryId])
-  @@index([sizeId])
 }
 
 model Color {
@@ -135,6 +126,18 @@ model Color {
   value String
   name String
   toLink  String? 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+}
+
+model Size {
+  id String @id @default(uuid())
+  productId String
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  value String?
+  name String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

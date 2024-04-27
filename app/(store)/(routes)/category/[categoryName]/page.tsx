@@ -34,14 +34,14 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
   const products = await db.product.findMany({
     where: {
       categoryId: category?.id,
-      colorId: searchParams.colorId,
-      sizeId: searchParams.sizeId,
+      // colorId: searchParams.colorId,
+      // sizeId: searchParams.sizeId,
     },
     include: {
       images: { select: { url: true } },
       category: { select: { name: true } },
-      color: { select: { name: true, value: true } },
-      size: { select: { name: true, value: true } },
+      colors: { select: { name: true, value: true } },
+      sizes: { select: { name: true, value: true } },
     },
   });
 

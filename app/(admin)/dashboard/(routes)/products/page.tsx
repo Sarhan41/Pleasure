@@ -9,8 +9,8 @@ const ProcutsPage = async () => {
   const products = await db.product.findMany({
     include: {
       category: true,
-      size: true,
       colors: true,
+      sizes: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -24,7 +24,7 @@ const ProcutsPage = async () => {
     isArchived: item.isArchived,
     price: item.price,
     category: item.category.name,
-    size: item.size.name,
+    size: item.sizes.map((size) => size.value).join(", "),
     colorName: item.colors.map((color) => color.name).join(", "),
     colorHex: item.colors.map((color) => color.value).join(", "),
     createdAt: format(item.createdAt, "MMM do, yyyy"),

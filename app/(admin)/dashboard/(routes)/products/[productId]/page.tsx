@@ -9,11 +9,11 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
     include: {
       images: true,
       colors: true,
+      sizes: true,
     },
   });
 
   const categories = await db.category.findMany({});
-  const sizes = await db.size.findMany({});
 
   return (
     <div className="flex-col">
@@ -21,7 +21,6 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
         <ProductForm
           initialData={product}
           categories={categories}
-          sizes={sizes}
           
         />
       </div>

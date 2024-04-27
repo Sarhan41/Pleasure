@@ -28,7 +28,13 @@ const Info: React.FC<InfoProps> = ({ data }) => {
       <div className="flex flex-col gap-y-6">
         <div className="flex items-center gap-x-4 ">
           <h3 className="font-semibold text-black">Size:</h3>
-          <div>{data?.size?.name}</div>
+          <div className="flex gap-4 ">
+            {data?.sizes?.map((size) => (
+              <span key={size.name} className="text-black hover:bg-primary hover:text-white hover:cursor-pointer font-semibold border-2 border-gray-500 rounded-md p-2">
+                {size.value}
+              </span>
+            ))}
+          </div>
         </div>
         <div className="flex items-center gap-x-4 ">
           <h3 className="font-semibold text-black">Color:</h3>

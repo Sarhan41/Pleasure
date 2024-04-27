@@ -68,7 +68,16 @@ export async function POST(req: Request) {
             ),
           },
         },
-        sizeId,
+        sizes: {
+          createMany: {
+            data: sizeId.map(
+              (size: { name: string; value: string | number }) => ({
+                name: size.name,
+                value: size.value,
+              })
+            ),
+          },
+        },
         images: {
           createMany: {
             data: images.map((image: { url: string }) => image),
@@ -96,7 +105,6 @@ export async function GET(req: Request) {
     const product = await db.product.findMany({
       where: {
         categoryId,
-        sizeId,
         isFeatured: isFeatured ? true : undefined,
         isArchived: false,
       },
@@ -104,7 +112,7 @@ export async function GET(req: Request) {
         images: true,
         category: true,
         colors: true,
-        size: true,
+        sizes: true,
       },
       orderBy: {
         createdAt: "desc",
