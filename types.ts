@@ -31,6 +31,6 @@
     id?: string;
     name: string;
     value: string;
-    toLink?: string;
+    toLink?: string | null;
   }
   

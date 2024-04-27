@@ -40,7 +40,7 @@ const formSchema = z.object({
   price: z.coerce.number().min(1),
   categoryId: z.string().min(1),
   colorId: z
-    .object({ name: z.string(), hex: z.string(), link: z.string() })
+    .object({ name: z.string(), hex: z.string(), link: z.string().optional() })
     .array(),
   sizeId: z.string().min(1),
   isFeatured: z.boolean().default(false).optional(),
@@ -84,7 +84,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           colorId: initialData.colors.map((color) => ({
             name: color.name,
             hex: color.value,
-            link: color.toLink,
+            link: color.toLink || "",
           })),
           price: parseFloat(String(initialData?.price)),
         }
