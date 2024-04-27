@@ -12,15 +12,17 @@ interface ProductPageProps {
 const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
   const decodedProductName = decodeURIComponent(params.productName);
 
+  const productNameWithSpaces = decodedProductName.replace(/-/g, " ");
+
   const product = await db.product.findFirst({
     where: {
-      name: decodedProductName,
+      name: productNameWithSpaces,
     },
     include: {
       category: true,
       images: { select: { url: true, id: true } },
       size: true,
-      color: true,
+      colors: { select: { name: true, value: true, toLink: true } },
     },
   });
 
@@ -41,6 +43,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
     include: {
       category: true,
       images: true,
+      colors: { select: { name: true, value: true, toLink: true } },
     },
   });
 

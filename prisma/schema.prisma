@@ -134,6 +134,7 @@ model Color {
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   value String
   name String
+  toLink String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

@@ -5,17 +5,15 @@ import Currency from "@/components/Store/Currency";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/types";
 import { ShoppingCart } from "lucide-react";
+import Link from "next/link";
 
 interface InfoProps {
   data: Product;
 }
 
 const Info: React.FC<InfoProps> = ({ data }) => {
-
   const onAddToCart: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation();
-    // @ts-ignore
-    cart.addItem(data);
   };
 
   return (
@@ -34,10 +32,26 @@ const Info: React.FC<InfoProps> = ({ data }) => {
         </div>
         <div className="flex items-center gap-x-4 ">
           <h3 className="font-semibold text-black">Color:</h3>
-          <div
-            className="h-6 w-6 rounded-full border border-gray-600"
-            style={{ backgroundColor: data?.color?.value || "transparent" }} 
-          ></div>
+
+          {data?.colors?.map((color) => (
+            <>
+              {color.toLink ? (
+                <Link href={color.toLink} key={color.name}>
+                  <div
+                    key={color.name}
+                    className="h-10 w-10 rounded-full border border-gray-600"
+                    style={{ backgroundColor: color.value }}
+                  ></div>
+                </Link>
+              ) : (
+                <div
+                  key={color.name}
+                  className="h-10 w-10 rounded-full border border-gray-600"
+                  style={{ backgroundColor: color.value }}
+                ></div>
+              )}
+            </>
+          ))}
         </div>
       </div>
       <div className="mt-10 flex items-center gap-x-3">

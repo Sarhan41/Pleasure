@@ -11,7 +11,7 @@
     price: number;
     isFeatured: boolean;
     size: Size;
-    color: Color;
+    colors: Color[];
     images: Image[];
     quantity?: number;
   }
@@ -28,8 +28,9 @@
   }
   
   export interface Color {
-    id: string;
+    id?: string;
     name: string;
     value: string;
+    toLink?: string;
   }
   

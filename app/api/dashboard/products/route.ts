@@ -59,10 +59,13 @@ export async function POST(req: Request) {
         categoryId,
         colors: {
           createMany: {
-            data: colorId.map((color: { name: string; hex: string }) => ({
-              name: color.name,
-              value: color.hex,
-            })),
+            data: colorId.map(
+              (color: { name: string; hex: string; link: string }) => ({
+                name: color.name,
+                value: color.hex,
+                toLink: color.link,
+              })
+            ),
           },
         },
         sizeId,
@@ -75,7 +78,6 @@ export async function POST(req: Request) {
         isArchived,
       },
     });
-    
 
     return NextResponse.json(product);
   } catch (error) {

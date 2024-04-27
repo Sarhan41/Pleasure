@@ -128,9 +128,10 @@ export async function PATCH(req: Request, { params }: { params: { productId: str
         },
         colors: {
           createMany: {
-            data: colorId.map((color: { name: string; hex: string }) => ({
+            data: colorId.map((color: { name: string; hex: string, link: string }) => ({
               name: color.name,
               value: color.hex,
+              toLink: color.link,
             })),
           },
         },

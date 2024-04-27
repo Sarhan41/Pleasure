@@ -39,7 +39,9 @@ const formSchema = z.object({
   images: z.object({ url: z.string() }).array(),
   price: z.coerce.number().min(1),
   categoryId: z.string().min(1),
-  colorId: z.object({ name: z.string(), hex: z.string() }).array(),
+  colorId: z
+    .object({ name: z.string(), hex: z.string(), link: z.string() })
+    .array(),
   sizeId: z.string().min(1),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
@@ -65,7 +67,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 }) => {
   const params = useParams();
   const router = useRouter();
-console.log(initialData)
+  console.log(initialData);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -82,6 +84,7 @@ console.log(initialData)
           colorId: initialData.colors.map((color) => ({
             name: color.name,
             hex: color.value,
+            link: color.toLink,
           })),
           price: parseFloat(String(initialData?.price)),
         }
@@ -90,7 +93,7 @@ console.log(initialData)
           images: [],
           price: 0,
           categoryId: "",
-          colorId: [{ name: "", hex: "#000000" }],
+          colorId: [{ name: "", hex: "#000000", link: "" }],
           sizeId: "",
           isFeatured: false,
           isArchived: false,
@@ -292,113 +295,134 @@ console.log(initialData)
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="colorId"
-              render={({ field }) => (
-                <FormItem className="max-sm:w-[35vw] w-[22vw]">
-                  <FormLabel>Colors</FormLabel>
-                  <div className="space-y-2">
-                    {field.value.map((colorId, index) => (
-                      <div key={index} className="flex items-center space-x-2">
-                        <Input
-                          className="w-[125px]"
-                          placeholder="Color Name"
-                          value={colorId.name}
-                          onChange={(e) =>
-                            field.onChange([
-                              ...field.value.slice(0, index),
-                              { ...colorId, name: e.target.value },
-                              ...field.value.slice(index + 1),
-                            ])
-                          }
-                        />
-                        <Input
-                          className="w-[125px]"
-                          placeholder="Color Hex"
-                          value={colorId.hex}
-                          onChange={(e) =>
-                            field.onChange([
-                              ...field.value.slice(0, index),
-                              { ...colorId, hex: e.target.value },
-                              ...field.value.slice(index + 1),
-                            ])
-                          }
-                        />
-
-                        <Button
-                          type="button"
-                          variant="destructive"
-                          onClick={() =>
-                            field.onChange([
-                              ...field.value.slice(0, index),
-                              ...field.value.slice(index + 1),
-                            ])
-                          }
+            <div className="flex flex-col gap-12">
+              <FormField
+                control={form.control}
+                name="colorId"
+                render={({ field }) => (
+                  <FormItem className="max-sm:w-[35vw] w-[22vw] ">
+                    <FormLabel>Colors</FormLabel>
+                    <div className="space-y-2">
+                      {field.value.map((colorId, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center space-x-2"
                         >
-                          X
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                  <Button
-                    type="button"
-                    onClick={() =>
-                      field.onChange([
-                        ...field.value,
-                        { name: "", hex: "#000000" },
-                      ])
-                    }
-                  >
-                    Add Color
-                  </Button>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                          <Input
+                            className="w-[125px]"
+                            placeholder="Color Name"
+                            value={colorId.name}
+                            onChange={(e) =>
+                              field.onChange([
+                                ...field.value.slice(0, index),
+                                { ...colorId, name: e.target.value },
+                                ...field.value.slice(index + 1),
+                              ])
+                            }
+                          />
+                          <Input
+                            className="w-[125px]"
+                            placeholder="Color Hex"
+                            value={colorId.hex}
+                            onChange={(e) =>
+                              field.onChange([
+                                ...field.value.slice(0, index),
+                                { ...colorId, hex: e.target.value },
+                                ...field.value.slice(index + 1),
+                              ])
+                            }
+                          />
+                          <Input
+                            className="w-[125px]"
+                            placeholder="To Link"
+                            value={colorId.link}
+                            onChange={(e) =>
+                              field.onChange([
+                                ...field.value.slice(0, index),
+                                { ...colorId, link: e.target.value },
+                                ...field.value.slice(index + 1),
+                              ])
+                            }
+                          />
 
-            <FormField
-              control={form.control}
-              name="isArchived"
-              render={({ field }) => (
-                <FormItem className=" flex flex-row space-x-3 space-y-0 rounded-md border p-4 items-start">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>Archived</FormLabel>
-                    <FormDescription>
-                      This product will not appear anywhere in the store.
-                    </FormDescription>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="isFeatured"
-              render={({ field }) => (
-                <FormItem className=" flex flex-row space-x-3 space-y-0 rounded-md border p-4 items-start">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>Featured</FormLabel>
-                    <FormDescription>
-                      This product will appear on the home page
-                    </FormDescription>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={() =>
+                              field.onChange([
+                                ...field.value.slice(0, index),
+                                ...field.value.slice(index + 1),
+                              ])
+                            }
+                          >
+                            X
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                    <Button
+                      type="button"
+                      onClick={() =>
+                        field.onChange([
+                          ...field.value,
+                          { name: "", hex: "#000000" },
+                        ])
+                      }
+                      className=""
+
+                    >
+                      Add Color
+                    </Button>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="flex gap-12  justify-between w-full ">
+                <FormField
+                  control={form.control}
+                  name="isArchived"
+                  render={({ field }) => (
+                    <FormItem className=" flex flex-row space-x-3 space-y-0 rounded-md border p-4 items-start">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>Archived</FormLabel>
+                        <FormDescription>
+                          This product will not appear anywhere in the store.
+                        </FormDescription>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="isFeatured"
+                  render={({ field }) => (
+                    <FormItem className=" flex flex-row space-x-3 space-y-0 rounded-md border p-4 items-start">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>Featured</FormLabel>
+                        <FormDescription>
+                          This product will appear on the home page
+                        </FormDescription>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}

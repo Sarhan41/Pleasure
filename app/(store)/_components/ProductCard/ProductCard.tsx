@@ -23,7 +23,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/product/${data?.name}`);
+    const productName = data?.name.replace(/\s+/g, "-");
+    router.push(`/product/${productName}`);
   };
 
   const onPreview: MouseEventHandler<HTMLButtonElement> = (event) => {
