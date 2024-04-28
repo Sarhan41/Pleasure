@@ -25,6 +25,7 @@
     id?: string;
     name?: string | null;
     value?: string | number | null;
+    quantity: number ;
   }
   
   export interface Color {

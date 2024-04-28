@@ -22,7 +22,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
       category: true,
       images: { select: { url: true, id: true } },
       colors: { select: { name: true, value: true, toLink: true } },
-      sizes: { select: { name: true, value: true }}
+      sizes: { select: { name: true, value: true , quantity: true}}
     },
   });
 

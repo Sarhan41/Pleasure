@@ -8,16 +8,7 @@ export async function GET(
   { params }: { params: { categoryId: string } }
 ) {
   try {
-    const user = await currentUser();
-    const role = await currentRole();
-
-    if (!user) {
-      return new NextResponse("Unauthenticated", { status: 401 });
-    }
-
-    if (role !== "ADMIN") {
-      return new NextResponse("Unauthorized", { status: 403 });
-    }
+ 
 
     if (!params.categoryId) {
       return new NextResponse("Category Id is required", { status: 400 });

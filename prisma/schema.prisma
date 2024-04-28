@@ -28,6 +28,23 @@ model User {
   twoFactorConfirmation TwoFactorConfirmation?
   Wishlist              Wishlist[]
   CartItems             CartItems[]
+  orders                Order[]
+  reviews               Review[]
+}
+
+model Review {
+  id        String  @id @default(cuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([productId])
 }
 
 model Account {
@@ -97,12 +114,10 @@ model Category {
   updatedAt DateTime  @updatedAt
 }
 
-
-
 model Product {
-  id         String   @id @default(uuid())
+  id         String      @id @default(uuid())
   categoryId String
-  category   Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  category   Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
   name       String
   price      Int
   isFeatured Boolean     @default(false)
@@ -115,17 +130,18 @@ model Product {
   updatedAt  DateTime    @updatedAt
   Wishlist   Wishlist[]
   CartItems  CartItems[]
+  reviews    Review[]
 
   @@index([categoryId])
 }
 
 model Color {
-  id String @id @default(uuid())
+  id        String   @id @default(uuid())
   productId String
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  value String
-  name String
-  toLink  String? 
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  value     String
+  name      String
+  toLink    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -133,11 +149,12 @@ model Color {
 }
 
 model Size {
-  id String @id @default(uuid())
+  id        String   @id @default(uuid())
   productId String
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  value String?
-  name String?
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  value     String?
+  name      String?
+  quantity  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -186,6 +203,8 @@ model Order {
   address    String      @default("")
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
+  userId     String
+  user       User        @relation(fields: [userId], references: [id])
 }
 
 model orderItem {

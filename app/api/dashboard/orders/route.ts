@@ -6,6 +6,10 @@ import { currentRole, currentUser } from "@/lib/auth";
 export async function GET(req: Request) {
   const user = await currentUser();
 
+  if (!user) {
+    return new NextResponse("Unauthenticated", { status: 401 });
+  }
+
   try {
     const MyOrders = await db.order.findMany({
       where: {

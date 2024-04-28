@@ -71,9 +71,14 @@ export async function POST(req: Request) {
         sizes: {
           createMany: {
             data: sizeId.map(
-              (size: { name: string; value: string | number }) => ({
+              (size: {
+                name: string;
+                value: string | number;
+                quantity: number;
+              }) => ({
                 name: size.name,
                 value: size.value,
+                quantity: size.quantity,
               })
             ),
           },

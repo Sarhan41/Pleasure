@@ -9,6 +9,8 @@ import ProductCard from "@/app/(store)/_components/ProductCard/ProductCard";
 interface CategoryPageProps {
   params: {
     categoryName: string;
+    colorId: string;
+    sizeId: string;
   };
   searchParams: {
     colorId: string;
@@ -16,10 +18,11 @@ interface CategoryPageProps {
   };
 }
 
-const CategoryPage: React.FC<CategoryPageProps> = async ({
-  params,
-  searchParams,
-}) => {
+const CategoryPage: React.FC<CategoryPageProps> = async ({ params }) => {
+
+  
+
+
   const category = await db.category.findFirst({
     where: {
       name: params.categoryName,
@@ -31,22 +34,36 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
     },
   });
 
+  
+  // console.log("Hello",{params});
+
   const products = await db.product.findMany({
     where: {
       categoryId: category?.id,
-      // colorId: searchParams.colorId,
-      // sizeId: searchParams.sizeId,
+      colors: { some: { name: params.colorId } },
+      sizes: { some: { id: params.sizeId } },
     },
     include: {
       images: { select: { url: true } },
       category: { select: { name: true } },
-      colors: { select: { name: true, value: true } },
-      sizes: { select: { name: true, value: true } },
+      colors: { select: { id: true, name: true, value: true } },
+      sizes: { select: { id: true, name: true, value: true, quantity: true } },
     },
   });
 
-  const sizes = await db.size.findMany();
-  const colors = await db.color.findMany();
+  const sizes = products
+    .flatMap((item) => item.sizes)
+    .filter(
+      (item, index, self) =>
+        self.findIndex((t) => t.name === item.name) === index
+    );
+
+  const colors = products
+    .flatMap((item) => item.colors)
+    .filter(
+      (item, index, self) =>
+        self.findIndex((t) => t.value === item.value) === index
+    );
 
   return (
     <div className="bg-white">
@@ -64,7 +81,6 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
               {products.length === 0 && <NoResults />}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {products.map((item) => (
-                  // @ts-ignore
                   <ProductCard key={item.id} data={item} />
                 ))}
               </div>

@@ -43,7 +43,11 @@ const formSchema = z.object({
     .object({ name: z.string(), hex: z.string(), link: z.string().optional() })
     .array(),
   sizeId: z
-    .object({ name: z.string(), value: z.union([z.string(), z.number()]) })
+    .object({
+      name: z.string(),
+      value: z.union([z.string(), z.number()]),
+      quantity: z.number(),
+    })
     .array(),
 
   isFeatured: z.boolean().default(false).optional(),
@@ -69,7 +73,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 }) => {
   const params = useParams();
   const router = useRouter();
-  console.log(initialData);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -89,8 +92,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             link: color.toLink || "",
           })),
           sizeId: initialData.sizes.map((size) => ({
-            name: size.name || undefined,
-            value: size.value || undefined,
+            name: size.name || "",
+            value: size.value || "",
+            quantity: size.quantity || 0,
           })),
           price: parseFloat(String(initialData?.price)),
         }
@@ -100,7 +104,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           price: 0,
           categoryId: "",
           colorId: [{ name: "", hex: "#000000", link: "" }],
-          sizeId: [{ name: "", value: "" }],
+          sizeId: [{ name: "", value: "", quantity: 0 }],
           isFeatured: false,
           isArchived: false,
         },
@@ -228,7 +232,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     <Input
                       type="number"
                       disabled={loading}
-                      placeholder="9.99"
+                      placeholder="999"
                       {...field}
                       className="w-full"
                     />
@@ -303,6 +307,21 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                               field.onChange([
                                 ...field.value.slice(0, index),
                                 { ...sizeId, value: e.target.value },
+                                ...field.value.slice(index + 1),
+                              ])
+                            }
+                          />
+                          <Input
+                            className="w-[125px]"
+                            placeholder="Size Quantity"
+                            value={sizeId.quantity}
+                            onChange={(e) =>
+                              field.onChange([
+                                ...field.value.slice(0, index),
+                                {
+                                  ...sizeId,
+                                  quantity: parseInt(e.target.value, 10),
+                                },
                                 ...field.value.slice(index + 1),
                               ])
                             }

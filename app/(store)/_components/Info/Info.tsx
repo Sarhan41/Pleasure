@@ -4,7 +4,7 @@ import React, { MouseEventHandler, useState } from "react";
 import Currency from "@/components/Store/Currency";
 import { Button } from "@/components/ui/button";
 import { Product, Size } from "@/types";
-import { ShoppingCart } from "lucide-react";
+import { Check, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 
 interface InfoProps {
@@ -36,15 +36,28 @@ const Info: React.FC<InfoProps> = ({ data }) => {
           <h3 className="font-semibold text-black">Size:</h3>
           <div className="flex gap-4 ">
             {data?.sizes?.map((size) => (
-              <span
-                key={size.name}
-                className={`text-black ${selectedSize != size && "hover:bg-primary"}  hover:text-white hover:cursor-pointer font-semibold border-2 border-gray-500 rounded-md p-2 ${
-                  selectedSize === size ? "bg-gray-600 text-white" : ""
-                }`}
-                onClick={() => handleSizeSelection(size)}
-              >
-                {size.value}
-              </span>
+              <div className="flex flex-col">
+                <span
+                  key={size.name}
+                  className={`text-black ${
+                    selectedSize != size && "hover:bg-primary"
+                  }  hover:text-white hover:cursor-pointer font-semibold border-2 border-gray-500 rounded-md p-2 ${
+                    selectedSize === size ? "bg-gray-600 text-white" : ""
+                  }`}
+                  onClick={() => handleSizeSelection(size)}
+                >
+                  {size.value}
+                </span>
+                {selectedSize === size && (
+                  <h3 className="text-gray-900">
+                    {size.quantity < 5
+                      ? `${size.quantity} left`
+                      : size.quantity < 10
+                      ? "Only a few left!"
+                      : null}
+                  </h3>
+                )}
+              </div>
             ))}
           </div>
         </div>
@@ -64,9 +77,13 @@ const Info: React.FC<InfoProps> = ({ data }) => {
               ) : (
                 <div
                   key={color.name}
-                  className="h-10 w-10 rounded-full border border-gray-600"
+                  className="h-10 w-10 rounded-full border border-gray-900 relative"
                   style={{ backgroundColor: color.value }}
-                ></div>
+                >
+                  <div className="absolute inset-0 flex items-center justify-center text-gray-600  bottom-0 left-0 h-3 w-3 bg-white border border-gray-900">
+                    <Check size={24} />
+                  </div>
+                </div>
               )}
             </>
           ))}

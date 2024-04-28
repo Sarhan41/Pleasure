@@ -47,17 +47,6 @@ export async function POST(req: Request) {
 }
 export async function GET(req: Request) {
   try {
-    const user = await currentUser();
-    const role = await currentRole();
-
-    if (!user) {
-      return new NextResponse("Unauthenticated", { status: 401 });
-    }
-
-    if (role !== "ADMIN") {
-      return new NextResponse("Unauthorized", { status: 403 });
-    }
-
     const categories = await db.category.findMany({});
 
     return NextResponse.json(categories);

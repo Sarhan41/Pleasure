@@ -59,11 +59,25 @@ const WishListItem: React.FC<WishListItemProps> = ({ data, wishlistId }) => {
             </p>
           </div>
           <div className="mt-1 flex text-sm ">
-            {data.color && <p className="text-gray-500">{data.color.name}</p>}
-            {data.size && (
-              <p className="text-gray-500 ml-4 border-l border-gray-200 pl-4 ">
-                {data.size.name}
-              </p>
+            {data.colors && ( // Check if color exists before rendering
+              <div>
+                {data.colors.map((color) => (
+                  <div
+                    key={color.name}
+                    className="w-4 h-4 rounded-full mr-1"
+                    style={{ backgroundColor: color.value }}
+                  ></div>
+                ))}
+              </div>
+            )}
+            {data.sizes && ( // Check if size exists before rendering
+              <div>
+                {data.sizes.map((size) => (
+                  <div key={size.name} className="ml-2">
+                    {size.name}
+                  </div>
+                ))}
+              </div>
             )}
           </div>
           <Currency value={data.price} />

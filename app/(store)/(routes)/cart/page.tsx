@@ -17,8 +17,8 @@ export default async function WishPage() {
         include: {
           images: { select: { url: true } },
           category: { select: { name: true } },
-          color: { select: { name: true, value: true } },
-          size: { select: { name: true, value: true } },
+          colors: { select: { name: true, value: true } },
+          sizes: { select: { name: true, value: true } },
 
         },
       },

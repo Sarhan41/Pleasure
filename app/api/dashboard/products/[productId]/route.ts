@@ -8,17 +8,6 @@ export async function GET(
   { params }: { params: { productId: string } }
 ) {
   try {
-    const user = await currentUser();
-    const role = await currentRole();
-
-    if (!user) {
-      return new NextResponse("Unauthenticated", { status: 401 });
-    }
-
-    if (role !== "ADMIN") {
-      return new NextResponse("Unauthorized", { status: 403 });
-    }
-
     if (!params.productId) {
       return new NextResponse("Product Id is required", { status: 400 });
     }
@@ -31,7 +20,6 @@ export async function GET(
         images: true,
         category: true,
         colors: true,
-
       },
     });
 
@@ -42,7 +30,10 @@ export async function GET(
   }
 }
 
-export async function PATCH(req: Request, { params }: { params: { productId: string } }) {
+export async function PATCH(
+  req: Request,
+  { params }: { params: { productId: string } }
+) {
   try {
     const user = await currentUser();
     const role = await currentRole();
@@ -129,19 +120,28 @@ export async function PATCH(req: Request, { params }: { params: { productId: str
         },
         colors: {
           createMany: {
-            data: colorId.map((color: { name: string; hex: string, link: string }) => ({
-              name: color.name,
-              value: color.hex,
-              toLink: color.link,
-            })),
+            data: colorId.map(
+              (color: { name: string; hex: string; link: string }) => ({
+                name: color.name,
+                value: color.hex,
+                toLink: color.link,
+              })
+            ),
           },
         },
         sizes: {
           createMany: {
-            data: sizeId.map((size: { name: string; value: string | number }) => ({
-              name: size.name,
-              value: size.value,
-            })),
+            data: sizeId.map(
+              (size: {
+                name: string;
+                value: string | number;
+                quantity: number;
+              }) => ({
+                name: size.name,
+                value: size.value,
+                quantity: size.quantity,
+              })
+            ),
           },
         },
       },
