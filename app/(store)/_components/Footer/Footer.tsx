@@ -6,9 +6,10 @@ const Footer: React.FC = () => {
   const Address = "123, ABC Street, XYZ City, Country - 123456";
   const footerLinks = {
     Bras: [
-      { text: "Link 1", route: "/link1" },
+      { text: "white suit", route: "/product/White-Suit" },
       { text: "Link 2", route: "/link2" },
       { text: "Link 3", route: "/link3" },
+      { text: "red", route: "/product/Red-Suit" },
     ],
     Panties: [
       { text: "Link A", route: "/linkA" },

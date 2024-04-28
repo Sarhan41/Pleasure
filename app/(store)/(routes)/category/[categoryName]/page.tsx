@@ -21,9 +21,12 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
   params,
   searchParams,
 }) => {
+
+  const categoryName = params.categoryName.replace(/-/g, " ");
+
   const category = await db.category.findFirst({
     where: {
-      name: params.categoryName,
+      name: categoryName,
     },
     select: {
       id: true,
@@ -51,7 +54,7 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
   
     const productFirstColor = product.colors.length > 0 ? product.colors[0].name : null;
 
-    
+
   
     if (!productFirstColor) return false; // If product has no color, discard it
   
