@@ -10,12 +10,10 @@ import GetProducts from "@/actions/Store/GetProducts";
 interface CategoryPageProps {
   params: {
     categoryName: string;
-    colorName: string;
-    sizeName: string;
   };
   searchParams: {
-    colorName: string;
-    sizeName: string;
+    colorId: string;
+    sizeId: string;
   };
 }
 
@@ -34,47 +32,42 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
     },
   });
 
-  const productsWithoutFilters = await db.product.findMany({
+  let products = await db.product.findMany({
     where: {
       categoryId: category?.id,
     },
     include: {
-      images: true,
-      colors: true,
       sizes: true,
+      colors: true,
+      images: true,
     },
   });
 
-  const productsWithFilters = await db.product.findMany({
-    where: {
-      categoryId: category?.id,
-      colors: {
-        some: {
-          name: searchParams.colorName,
-        },
-      },
-      sizes: {
-        some: {
-          name: searchParams.sizeName,
-        },
-      },
-    },
-    include: {
-      images: true,
-      colors: true,
-      sizes: true,
-    },
+  const colorForMatch = searchParams.colorId;
+  const sizeForMatch = searchParams.sizeId;
+
+  const filteredProducts = products.filter(product => {
+    if (!colorForMatch) return true; // If no colorForMatch provided, keep the product
+  
+    const productFirstColor = product.colors.length > 0 ? product.colors[0].name : null;
+
+    
+  
+    if (!productFirstColor) return false; // If product has no color, discard it
+  
+    // Check if the first color matches any of the colors in the array
+    return colorForMatch.includes(productFirstColor);
   });
+  
 
-
-  const sizes = productsWithoutFilters
+  const sizes = products
     .flatMap((item) => item.sizes)
     .filter(
       (item, index, self) =>
         self.findIndex((t) => t.name === item.name) === index
     );
 
-  const colors = productsWithoutFilters
+  const colors = products
     .flatMap((item) => item.colors)
     .filter(
       (item, index, self) =>
@@ -94,15 +87,12 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
             <MobileFilters sizes={sizes} colors={colors} />
 
             <div className="mt-6 lg:flex-1">
-              {productsWithFilters.length === 0 && <NoResults />}
+              {products.length === 0 && <NoResults />}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-
-                {productsWithoutFilters.map((item) => (
+                {filteredProducts.map((item) => (
                   // @ts-ignore
                   <ProductCard key={item.id} data={item} />
                 ))}
-
-                
               </div>
             </div>
             <div className="lg:hidden w-1/5"></div>

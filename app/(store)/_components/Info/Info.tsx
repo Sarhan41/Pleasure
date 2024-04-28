@@ -22,6 +22,8 @@ const Info: React.FC<InfoProps> = ({ data }) => {
     setSelectedSize(size);
   };
 
+  const url = process.env.NEXT_PUBLIC_APP_URL;
+
   return (
     <div>
       <h1 className="text-3xl font-bold text-gray-900 ">{data.name}</h1>
@@ -67,7 +69,7 @@ const Info: React.FC<InfoProps> = ({ data }) => {
           {data?.colors?.map((color) => (
             <>
               {color.toLink ? (
-                <Link href={color.toLink} key={color.name}>
+                <Link href={`${url}/product/${color.toLink.replace(/ /g, '-')}`} key={color.name}>
                   <div
                     key={color.name}
                     className="h-10 w-10 rounded-full border border-gray-600"
