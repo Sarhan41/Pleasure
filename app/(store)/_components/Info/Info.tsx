@@ -36,7 +36,7 @@ const Info: React.FC<InfoProps> = ({ data }) => {
           <h3 className="font-semibold text-black">Size:</h3>
           <div className="flex gap-4 ">
             {data?.sizes?.map((size) => (
-              <div className="flex flex-col">
+              <div key={size.id} className="flex flex-col">
                 <span
                   key={size.name}
                   className={`text-black ${

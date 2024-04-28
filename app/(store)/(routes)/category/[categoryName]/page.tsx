@@ -5,24 +5,24 @@ import Container from "@/components/Store/container";
 import Billboard from "@/app/(store)/_components/Billboard/BIllboard";
 import NoResults from "@/components/Store/NoResults";
 import ProductCard from "@/app/(store)/_components/ProductCard/ProductCard";
+import GetProducts from "@/actions/Store/GetProducts";
 
 interface CategoryPageProps {
   params: {
     categoryName: string;
-    colorId: string;
-    sizeId: string;
+    colorName: string;
+    sizeName: string;
   };
   searchParams: {
-    colorId: string;
-    sizeId: string;
+    colorName: string;
+    sizeName: string;
   };
 }
 
-const CategoryPage: React.FC<CategoryPageProps> = async ({ params }) => {
-
-  
-
-
+const CategoryPage: React.FC<CategoryPageProps> = async ({
+  params,
+  searchParams,
+}) => {
   const category = await db.category.findFirst({
     where: {
       name: params.categoryName,
@@ -34,31 +34,47 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({ params }) => {
     },
   });
 
-  
-  // console.log("Hello",{params});
-
-  const products = await db.product.findMany({
+  const productsWithoutFilters = await db.product.findMany({
     where: {
       categoryId: category?.id,
-      colors: { some: { name: params.colorId } },
-      sizes: { some: { id: params.sizeId } },
     },
     include: {
-      images: { select: { url: true } },
-      category: { select: { name: true } },
-      colors: { select: { id: true, name: true, value: true } },
-      sizes: { select: { id: true, name: true, value: true, quantity: true } },
+      images: true,
+      colors: true,
+      sizes: true,
     },
   });
 
-  const sizes = products
+  const productsWithFilters = await db.product.findMany({
+    where: {
+      categoryId: category?.id,
+      colors: {
+        some: {
+          name: searchParams.colorName,
+        },
+      },
+      sizes: {
+        some: {
+          name: searchParams.sizeName,
+        },
+      },
+    },
+    include: {
+      images: true,
+      colors: true,
+      sizes: true,
+    },
+  });
+
+
+  const sizes = productsWithoutFilters
     .flatMap((item) => item.sizes)
     .filter(
       (item, index, self) =>
         self.findIndex((t) => t.name === item.name) === index
     );
 
-  const colors = products
+  const colors = productsWithoutFilters
     .flatMap((item) => item.colors)
     .filter(
       (item, index, self) =>
@@ -78,11 +94,15 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({ params }) => {
             <MobileFilters sizes={sizes} colors={colors} />
 
             <div className="mt-6 lg:flex-1">
-              {products.length === 0 && <NoResults />}
+              {productsWithFilters.length === 0 && <NoResults />}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {products.map((item) => (
+
+                {productsWithoutFilters.map((item) => (
+                  // @ts-ignore
                   <ProductCard key={item.id} data={item} />
                 ))}
+
+                
               </div>
             </div>
             <div className="lg:hidden w-1/5"></div>

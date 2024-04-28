@@ -1,13 +1,13 @@
-import { Product } from "@prisma/client";
+import { Product } from "@/types";
 import qs from "query-string";
 
 
 const URL = `${process.env.NEXT_PUBLIC_API_URL}/products`;
 
 interface Query {
-  categoryId?: string;
-  colorId?: string;
-  sizeId?: string;
+  categoryName?: string;
+  colorName?: string;
+  sizeName?: string;
   isFeatured?: boolean;
 
 }
@@ -15,9 +15,9 @@ interface Query {
 const GetProducts = async (query: Query): Promise<Product[]> => {
 
   const url = qs.stringifyUrl({ url: URL, query: {
-    colorId: query.colorId,
-    sizeId: query.sizeId,
-    categoryId: query.categoryId,
+    colorName: query.colorName,
+    sizeName: query.sizeName,
+    categoryName: query.categoryName,
     isFeatured: query.isFeatured,
   } });
 

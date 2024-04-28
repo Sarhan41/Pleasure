@@ -63,7 +63,7 @@ const Search = ({ allProducts }: SearchProps) => {
             <div className="p-4">No results found</div>
           ) : (
             searchResults.map((product) => (
-              <Link href={`/product/${product.name}`}>
+              <Link key={product.id} href={`/product/${product.name}`}>
                 <div
                   key={product.id}
                   className="p-4  border-b hover:bg-gray-200 rounded-3xl  border-gray-300"
