@@ -21,7 +21,6 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
   params,
   searchParams,
 }) => {
-
   const categoryName = params.categoryName.replace(/-/g, " ");
 
   const category = await db.category.findFirst({
@@ -49,19 +48,36 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
   const colorForMatch = searchParams.colorId;
   const sizeForMatch = searchParams.sizeId;
 
-  const filteredProducts = products.filter(product => {
-    if (!colorForMatch) return true; // If no colorForMatch provided, keep the product
-  
-    const productFirstColor = product.colors.length > 0 ? product.colors[0].name : null;
-
-
-  
-    if (!productFirstColor) return false; // If product has no color, discard it
-  
-    // Check if the first color matches any of the colors in the array
-    return colorForMatch.includes(productFirstColor);
+  // Filter products by color
+  const filteredProductsByColor = products.filter((product) => {
+    if (!colorForMatch) return true;
+    if (colorForMatch) {
+      const productFirstColor =
+        product.colors.length > 0 ? product.colors[0].name : null;
+      if (!productFirstColor) return false;
+      return colorForMatch.includes(productFirstColor);
+    }
   });
-  
+
+  // Filter products by size based on filteredProductsByColor
+  const finalProducts = filteredProductsByColor.filter((product) => {
+    if (!sizeForMatch) return true;
+    if (sizeForMatch) {
+      const productSizes =
+        product.sizes.length > 0
+          ? product.sizes.map((size) => size.name).join(",") // Join sizes into a string
+          : null;
+      if (!productSizes) return false; // If product has no size, discard it
+
+      // Check if any of the sizes in the product are included in the sizeForMatch array
+      const productSizesArray = productSizes.split(","); // Convert product sizes string to an array
+      const matches = productSizesArray.some((size) =>
+        sizeForMatch.includes(size.trim())
+      );
+
+      return matches;
+    }
+  });
 
   const sizes = products
     .flatMap((item) => item.sizes)
@@ -90,9 +106,9 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
             <MobileFilters sizes={sizes} colors={colors} />
 
             <div className="mt-6 lg:flex-1">
-              {products.length === 0 && <NoResults />}
+              {finalProducts.length === 0 && <NoResults />}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {filteredProducts.map((item) => (
+                {finalProducts.map((item) => (
                   // @ts-ignore
                   <ProductCard key={item.id} data={item} />
                 ))}
