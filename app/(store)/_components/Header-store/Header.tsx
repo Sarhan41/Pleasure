@@ -74,12 +74,11 @@ const Header = ({ categories, allProducts,  UserId}: HeaderProps) => {
           <MainNav data={categories} />
         </div>
         {/* User icon, cart, and wishlist */}
-        <div className="flex items-center lg:pr-32  md:pr-24 lg:gap-4">
+        <div className="flex items-center ">
           {/* Your user icon */}
           <UserLogin userId={UserId} />
           {/* Your cart icon */}
           <NavbarActions userId={UserId} />
-          {/* Your wishlist icon */}
         </div>
       </div>
     </header>
