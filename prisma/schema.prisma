@@ -131,8 +131,21 @@ model Product {
   Wishlist   Wishlist[]
   CartItems  CartItems[]
   reviews    Review[]
+  description Description[]
 
   @@index([categoryId])
+}
+
+model Description {
+  id        String   @id @default(uuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  value     String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
 }
 
 model Color {
