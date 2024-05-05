@@ -20,6 +20,7 @@ const Info: React.FC<InfoProps> = ({ data }) => {
 
   const handleSizeSelection = (size: Size) => {
     setSelectedSize(size);
+    if (selectedSize === size) setSelectedSize(null);
   };
 
   const url = process.env.NEXT_PUBLIC_APP_URL;
@@ -69,7 +70,10 @@ const Info: React.FC<InfoProps> = ({ data }) => {
           {data?.colors?.map((color) => (
             <>
               {color.toLink ? (
-                <Link href={`${url}/product/${color.toLink.replace(/ /g, '-')}`} key={color.name}>
+                <Link
+                  href={`${url}/product/${color.toLink.replace(/ /g, "-")}`}
+                  key={color.name}
+                >
                   <div
                     key={color.name}
                     className="h-10 w-10 rounded-full border border-gray-600"

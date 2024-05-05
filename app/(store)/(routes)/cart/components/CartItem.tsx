@@ -23,7 +23,7 @@ const CartItem: React.FC<CartItemProps> = ({ data, quantity, cartId }) => {
   const removeItem = async (id: string) => {
     try {
       await axios.delete(`/api/dashboard/cartItems/${cartId}`);
-      toast.success("Item removed from wishlist");
+      toast.success("Item removed from Cart");
       router.refresh();
       router.push(`/cart?reload=${Date.now()}`);
     } catch (error) {
@@ -67,13 +67,11 @@ const CartItem: React.FC<CartItemProps> = ({ data, quantity, cartId }) => {
           <div className="mt-1 flex text-sm ">
             {data.colors && ( // Check if color exists before rendering
               <div>
-                {data.colors.map((color) => (
                   <div
-                    key={color.name}
-                    className="w-4 h-4 rounded-full mr-1"
-                    style={{ backgroundColor: color.value }}
+                    key={data.colors[0].name}
+                    className="w-4 h-4 rounded-full mr-1 border-2 border-black"
+                    style={{ backgroundColor: data.colors[0].value }}
                   ></div>
-                ))}
               </div>
             )}
             {data.sizes && ( // Check if size exists before rendering

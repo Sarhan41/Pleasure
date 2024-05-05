@@ -7,7 +7,15 @@ export default async function HeaderIndex() {
 
   const userId = User?.id;
 
-  const categories = await db.category.findMany({});
+  const categories = await db.category.findMany({
+    include: {
+      products: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
 
   const AllProducts = await db.product.findMany({});
 

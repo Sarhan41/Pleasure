@@ -41,7 +41,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
         (item: { productId: string; userId: string }) =>
           item.productId === data.id && item.userId === userId
       );
-      const cartId = foundItem.id;
+
       if (!foundItem) {
         await axios.post("/api/dashboard/cartItems", {
           id: data.id,
@@ -49,7 +49,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
         });
         toast.success("Added to cart");
       } else {
-        setExistingItem(foundItem); // Update existingItem state
+        setExistingItem(foundItem);
+        const cartId = foundItem.id; // Update existingItem state
         await axios.patch(`/api/dashboard/cartItems/${cartId}`, {
           quantity: foundItem.quantity + 1, // Increase quantity by 1
         });
@@ -86,6 +87,16 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
     }
   };
 
+  const [hovered, setHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setHovered(false);
+  };
+
   return (
     <div
       onClick={handleClick}
@@ -94,7 +105,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
       <div className="aspect-square rounded-xl bg-gray-100 relative">
         <Image
           alt="Image"
-          src={data?.images?.[0]?.url}
+          src={`${hovered ? data?.images[1]?.url : data?.images[0]?.url}`}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
           fill
           className="aspect-square object-cover rounded-md"
         />

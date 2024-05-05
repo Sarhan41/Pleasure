@@ -1,9 +1,8 @@
-"use client";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
 import { cn } from "@/lib/utils";
-import { Category } from "@prisma/client";
+import { Category } from "@/types";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,61 +11,97 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
-import { StoreIcon } from "lucide-react";
+import { ChevronRightIcon, StoreIcon } from "lucide-react";
+
 interface MainNavProps {
   data: Category[];
 }
 
 const MainNav: React.FC<MainNavProps> = ({ data }) => {
   const pathname = usePathname();
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
 
-  const routes = data.map((route) => ({
-    href: `/category/${route.name.replace(/\s+/g, "-")}`,
-    label: route.name,
-    active: pathname === `/category/${route.name}`,
-  }));
+  const handleCategoryHover = (categoryName: string) => {
+    setHoveredCategory(categoryName);
+  };
+
+  const isCategoryHovered = (categoryName: string) => {
+    return hoveredCategory === categoryName;
+  };
 
   return (
-    <nav>
-      <div className="mx-2 flex items-center lg:gap-6 gap-2  space-x-2 lg:space-x-4 max-sm:hidden ">
-        {routes.map((route) => (
-          <Link
-            key={route.href}
-            href={route.href}
-            className={cn(
-              " transition-colors hover:text-primary/50 font-bold text-xs sm:text-sm md:text-base  lg:text-lg uppercase",
-              route.active ? "text-primary" : "text-white"
-            )}
-          >
-            {route.label}
-          </Link>
-        ))}
+    <nav className="flex items-center justify-between px-4 py-2 text-white">
+      <div className="flex items-center space-x-4 lg:space-x-8">
+        <div className="hidden lg:flex space-x-4 ">
+          <div className="flex space-x-4">
+            {data.map((category, index) => (
+              <div
+                key={category.id}
+                className="relative group"
+                onMouseEnter={() => handleCategoryHover(category.name)}
+                onMouseLeave={() => handleCategoryHover("")}
+              >
+                <Link
+                  className={cn(
+                    "transition-colors duration-300 hover:text-primary font-medium uppercase ",
+                    pathname === `/category/${category.name}`
+                      ? "text-primary"
+                      : "text-white" , isCategoryHovered(category.name) && "text-primary"
+                  )}
+                  href={`/category/${category.name.replace(/\s+/g, "-")}`}
+                  passHref
+                >
+                  {category.name}
+                </Link>
+                {isCategoryHovered(category.name) && (
+                  <div className="absolute top-full w-[70vw] h-[50vh] z-50 left-0 right-0 bg-white text-gray-800 rounded-md shadow-2xl py-4 px-8">
+                    <div className="flex flex-col gap-8 flex-wrap ">
+                      {category?.products?.map((product) => (
+                        <Link
+                          key={product.id}
+                          href={`/product/${product.name.replace(/\s+/g, "-")}`}
+                          className="hover:text-primary transition-colors duration-300"
+                          passHref
+                          onClick={() => setHoveredCategory("")}
+                        >
+                          {product.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-      <div className="sm:hidden ml-4">
-        {/* Dropdown Menu */}
+      <div className="lg:hidden">
         <DropdownMenu>
           <DropdownMenuTrigger>
-            {/* This could be a hamburger icon */}
-            <HamburgerMenuIcon className="w-5 h-5 text-primary text-center" />
+            <HamburgerMenuIcon className="w-6 h-6 text-white" />
           </DropdownMenuTrigger>
           <DropdownMenuContent sideOffset={8}>
-            <DropdownMenuLabel className="mb-4 border-b">
-              <div className="flex gap-2">
-                Menu <StoreIcon className="h-4 w-4" />
+            <DropdownMenuLabel className="mb-4 border-b text-white">
+              <div className="flex items-center space-x-2">
+                <span className="text-black">Menu</span>
+                <StoreIcon className="w-4 h-4" />
               </div>
             </DropdownMenuLabel>
-
-            {routes.map((route) => (
-              <Link key={route.href} href={route.href}>
+            {data.map((category) => (
+              <Link
+                key={category.id}
+                href={`/category/${category.name.replace(/\s+/g, "-")}`}
+                passHref
+              >
                 <DropdownMenuItem
                   className={cn(
-                    "text-sm font-medium transition-colors ",
-                    route.active
-                      ? "text-black dark:text-white"
-                      : "text-muted-foreground"
+                    "text-sm font-medium transition-colors duration-300",
+                    pathname === `/category/${category.name}`
+                      ? "text-black"
+                      : "text-gray-800"
                   )}
                 >
-                  {route.label}
+                  {category.name}
                 </DropdownMenuItem>
               </Link>
             ))}

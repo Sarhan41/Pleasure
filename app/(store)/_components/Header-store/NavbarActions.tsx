@@ -56,7 +56,7 @@ const NavbarActions = ({ userId }: NavbarActionsProps) => {
   return (
     <div className="flex items-center gap-x-4">
       <Button
-        onClick={() => router.push("/cart")}
+        onClick={() => router.push(`/cart?reload=${Date.now()}`)}
         className="flex items-center rounded-full bg-black px-2 py-2"
       >
         <ShoppingBag className="h-6 w-6 max-sm:h-4 max-sm:w-4" color="white" />
