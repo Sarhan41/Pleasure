@@ -27,9 +27,9 @@ const UserLogin = ({ userId }: UserLoginProps) => {
         <NavigationMenuList>
           <NavigationMenuItem>
             {/*    */}
-            <NavigationMenuTrigger className=" bg-black data-[state=open]:bg-black data-[active]:bg-black  hover:bg-black   text-white ">
+            <NavigationMenuTrigger className=" bg-black data-[state=open]:bg-black data-[active]:bg-black  hover:bg-black pr-5  text-white ">
               <Link href="/my-profile">
-                <FaUser className="h-6 w-6 max-sm:h-4 max-sm:w-4  text-white bg-black" />
+                <FaUser className="h-6 w-6 max-sm:h-4 max-sm:w-4  text-white bg-black " />
               </Link>
             </NavigationMenuTrigger>
             <div className="">

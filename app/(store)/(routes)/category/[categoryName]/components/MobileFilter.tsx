@@ -7,8 +7,8 @@ import { Dialog } from "@headlessui/react";
 
 import Button from "./Button";
 import { Color, Size } from "@/types";
-// import Filter from "./Filter";
 import IconButton from "@/components/Store/IconButton";
+import Filter from "./Filter";
 
 interface MobileFiltersProps {
   sizes: Size[];
@@ -45,8 +45,8 @@ const MobileFilters: React.FC<MobileFiltersProps> = ({sizes,colors}) => {
             </div>
             {/* Render the filters */}
             <div className="p-4">
-            {/* <Filter valueKey="sizeId" name="Sizes" data={sizes} /> */}
-              {/* <Filter valueKey="colorId" name="Colors" data={colors}  /> */}
+            <Filter valueKey="sizeId" name="Sizes" data={sizes} />
+              <Filter valueKey="colorId" name="Colors" data={colors}  />
             <Button onClick={onClose} className="fixed bottom-4 ">
           Apply Filters
           </Button>
