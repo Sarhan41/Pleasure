@@ -120,6 +120,7 @@ model Product {
   category   Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
   name       String
   price      Int
+  discountedPrice   Int? 
   isFeatured Boolean     @default(false)
   isArchived Boolean     @default(false)
   images     Image[]
