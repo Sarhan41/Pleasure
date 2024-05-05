@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Product, Size } from "@/types";
 import { Check, ShoppingCart } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface InfoProps {
   data: Product;
@@ -24,6 +25,7 @@ const Info: React.FC<InfoProps> = ({ data }) => {
   };
 
   const url = process.env.NEXT_PUBLIC_APP_URL;
+  const router = useRouter();
 
   return (
     <div>
@@ -67,32 +69,35 @@ const Info: React.FC<InfoProps> = ({ data }) => {
         <div className="flex items-center gap-x-4 ">
           <h3 className="font-semibold text-black">Color:</h3>
 
-          {data?.colors?.map((color) => (
-            <>
-              {color.toLink ? (
-                <Link
-                  href={`${url}/product/${color.toLink.replace(/ /g, "-")}`}
-                  key={color.name}
-                >
+          {data?.colors?.map((color) => {
+            const handleClick = () => {
+              const productName = color.toLink?.replace(/ /g, "-");
+              router.push(`/product/${productName}`);
+            };
+            return (
+              <>
+                {color.toLink ? (
+                  <div onClick={handleClick} key={color.name}>
+                    <div
+                      key={color.name}
+                      className="h-10 w-10 rounded-full border border-gray-600"
+                      style={{ backgroundColor: color.value }}
+                    ></div>
+                  </div>
+                ) : (
                   <div
                     key={color.name}
-                    className="h-10 w-10 rounded-full border border-gray-600"
+                    className="h-10 w-10 rounded-full border border-gray-900 relative"
                     style={{ backgroundColor: color.value }}
-                  ></div>
-                </Link>
-              ) : (
-                <div
-                  key={color.name}
-                  className="h-10 w-10 rounded-full border border-gray-900 relative"
-                  style={{ backgroundColor: color.value }}
-                >
-                  <div className="absolute inset-0 flex items-center justify-center text-gray-600  bottom-0 left-0 h-3 w-3 bg-white border border-gray-900">
-                    <Check size={24} />
+                  >
+                    <div className="absolute inset-0 flex items-center justify-center text-gray-600  bottom-0 left-0 h-3 w-3 bg-white border border-gray-900">
+                      <Check size={24} />
+                    </div>
                   </div>
-                </div>
-              )}
-            </>
-          ))}
+                )}
+              </>
+            );
+          })}
         </div>
       </div>
       <div className="mt-10 flex items-center gap-x-3">
