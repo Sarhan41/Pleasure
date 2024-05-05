@@ -80,7 +80,7 @@ const Info: React.FC<InfoProps> = ({ data }) => {
                   <div onClick={handleClick} key={color.name}>
                     <div
                       key={color.name}
-                      className="h-10 w-10 rounded-full border border-gray-600"
+                      className="h-10 w-10 rounded-full border border-gray-600 cursor-pointer"
                       style={{ backgroundColor: color.value }}
                     ></div>
                   </div>
