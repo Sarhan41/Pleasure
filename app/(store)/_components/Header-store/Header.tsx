@@ -54,10 +54,16 @@ const Header = ({ categories, allProducts, UserId }: HeaderProps) => {
         <div className="hidden lg:block"></div>
         <div className="flex items-center justify-center">
           {/* Your logo image */}
-          <Link href="/" className="flex  items-center justify-center gap-4">
-            <Image src="/logo.jpg" height={48} width={48} alt="Logo" className="rounded-full" />
-            <Image src="/logo-text.jpg" height={48} width={48} alt="Pleasure" />
-            
+          <Link href="/" className="flex items-center justify-center gap-8 ">
+            <Image
+              src="/logo.jpg"
+              height={48}
+              width={58}
+              alt="Logo"
+              className="rounded-full"
+            />
+            <Image src="/logo-text.png" height={10} width={298} alt="Pleasure" className="object-cover" />
+     
           </Link>
         </div>
         {/* Search functionality */}
