@@ -49,21 +49,29 @@ const Header = ({ categories, allProducts, UserId }: HeaderProps) => {
       }`}
     >
       {/* First row */}
-      <div className="flex items-center border-b-3 gap-6 sm:justify-between py-2 px-4 ">
+      <div className="flex items-center border-b-3 gap-6 justify-between py-2 px-4 ">
         {/* Logo */}
         <div className="hidden lg:block"></div>
-        <div className="flex items-center justify-center">
+        <div className="flex items-center  justify-center">
           {/* Your logo image */}
-          <Link href="/" className="flex items-center justify-center gap-8 ">
+          <Link
+            href="/"
+            className="flex items-center  overflow-hidden justify-center gap-8 "
+          >
             <Image
               src="/logo.jpg"
               height={48}
               width={58}
               alt="Logo"
-              className="rounded-full"
+              className="rounded-full object-cover max-sm:hidden  "
             />
-            <Image src="/logo-text.png" height={10} width={298} alt="Pleasure" className="object-cover" />
-     
+            <Image
+              src="/logo-text.png"
+              height={10}
+              width={298}
+              alt="Pleasure"
+              className="  object-cover  "
+            />
           </Link>
         </div>
         {/* Search functionality */}
