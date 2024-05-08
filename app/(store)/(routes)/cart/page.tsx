@@ -37,7 +37,7 @@ export default async function WishPage() {
           <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start gap-x-12">
             <div className="lg:col-span-7">
               {CartProducts.length === 0 && (
-                <p className="text-neutral-500">No items added to WishList</p>
+                <p className="text-neutral-500">No items added to Cart</p>
               )}
               <ul>
                 {CartProducts.map((item) => (

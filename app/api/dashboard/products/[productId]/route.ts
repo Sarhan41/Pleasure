@@ -180,6 +180,18 @@ export async function DELETE(
       return new NextResponse("Product Id Is Required", { status: 400 });
     }
 
+    const cartproduct = await db.cartItems.deleteMany({
+      where: {
+        productId: params.productId,
+      },
+    });
+
+    const wishlistproduct = await db.wishlist.deleteMany({
+      where: {
+        productId: params.productId,
+      },
+    });
+
     const product = await db.product.deleteMany({
       where: {
         id: params.productId,

@@ -14,7 +14,7 @@ import toast from "react-hot-toast";
 
 interface ProductCardProps {
   data: ProductType;
-  userId: string;
+  userId?: string;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
@@ -41,6 +41,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
         (item: { productId: string; userId: string }) =>
           item.productId === data.id && item.userId === userId
       );
+
+      if (!userId) {
+        return toast.error("Please login to add to cart");
+      }
 
       if (!foundItem) {
         await axios.post("/api/dashboard/cartItems", {
@@ -69,6 +73,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
     try {
       const response = await axios.get("/api/dashboard/wishlist");
       const wishlistItems = response.data;
+
+      if (!userId) {
+        return toast.error("Please login to add to wishlist");
+      }
 
       const existing = wishlistItems.find(
         (item: { productId: string; userId: string }) =>

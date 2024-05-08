@@ -5,7 +5,7 @@ import Info from "../Info/Info";
 import Modal from "@/components/Store/Modal";
 import Gallery from "../Gallery";
 
-const PreviewModal = ({ userId }: { userId: string }) => {
+const PreviewModal = ({ userId }: { userId?: string }) => {
   const previewModal = usePreviewModal();
   const product = usePreviewModal((state) => state.data);
 

@@ -15,11 +15,12 @@ import {
   DialogContent,
   DialogOverlay,
 } from "@/components/ui/dialog";
-import { Check, MinusIcon, PlusIcon } from "lucide-react";
+import { Check, Heart, MinusIcon, PlusIcon } from "lucide-react";
+import IconButton from "@/components/Store/IconButton";
 
 interface InfoProps {
   data: Product;
-  userId: string;
+  userId?: string;
 }
 
 const Info: React.FC<InfoProps> = ({ data, userId }) => {
@@ -33,6 +34,11 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
     try {
       const response = await axios.get("/api/dashboard/cartItems");
       const cartItems = response.data;
+
+      if (!userId) {
+        return toast.error("Please login to add to cart");
+      }
+
       const foundItem = cartItems.find(
         (item: { productId: string; userId: string }) =>
           item.productId === data.id && item.userId === userId
@@ -78,6 +84,34 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
   const decrementQuantity = () => {
     if (quantity > 1) {
       setQuantity((prevQuantity) => prevQuantity - 1);
+    }
+  };
+  const onAddToWishList: MouseEventHandler<HTMLButtonElement> = async (
+    event
+  ) => {
+    event.stopPropagation();
+    try {
+      const response = await axios.get("/api/dashboard/wishlist");
+      const wishlistItems = response.data;
+
+      if (!userId) {
+        return toast.error("Please login to add to wishlist");
+      }
+
+      const existing = wishlistItems.find(
+        (item: { productId: string; userId: string }) =>
+          item.productId === data.id && item.userId === userId
+      );
+
+      if (existing) {
+        return toast.error("Item already exists in wishlist");
+      } else {
+        await axios.post("/api/dashboard/wishlist", { id: data.id, userId });
+        toast.success("Added to wishlist");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error adding to wishlist");
     }
   };
 
@@ -204,6 +238,12 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           Add To Cart
           {/* Shopping cart icon */}
         </Button>
+      </div>
+      <div>
+        <IconButton
+          onClick={onAddToWishList}
+          icon={<Heart size={20} className="text-gray-600" />}
+        />
       </div>
     </div>
   );
