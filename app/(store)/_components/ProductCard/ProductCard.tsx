@@ -29,7 +29,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
 
   const onPreview: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation();
-    previewModal.onOpen(data);
+    previewModal.onOpen(data, userId);
   };
 
   const onAddToCart: MouseEventHandler<HTMLButtonElement> = async (event) => {
@@ -105,7 +105,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
       <div className="aspect-square rounded-xl bg-gray-100 relative">
         <Image
           alt="Image"
-          src={`${hovered ? data?.images[1]?.url : data?.images[0]?.url}`}
+          src={`${
+            hovered && data?.images[1]?.url
+              ? data?.images[1]?.url
+              : data?.images[0]?.url
+          }`}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           fill

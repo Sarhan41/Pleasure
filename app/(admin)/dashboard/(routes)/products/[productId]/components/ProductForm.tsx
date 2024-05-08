@@ -39,6 +39,7 @@ const formSchema = z.object({
   images: z.object({ url: z.string() }).array(),
   price: z.coerce.number().min(1),
   categoryId: z.string().min(1),
+  description: z.string().min(1).optional(),
   colorId: z
     .object({ name: z.string(), hex: z.string(), link: z.string().optional() })
     .array(),
@@ -65,11 +66,13 @@ interface ProductFormProps {
       })
     | null;
   categories: Category[];
+  products: Product[];
 }
 
 export const ProductForm: React.FC<ProductFormProps> = ({
   initialData,
   categories,
+  products,
 }) => {
   const params = useParams();
   const router = useRouter();
@@ -97,6 +100,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             quantity: size.quantity || 0,
           })),
           price: parseFloat(String(initialData?.price)),
+          description: initialData.description || "",
         }
       : {
           name: "",
@@ -107,6 +111,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           sizeId: [{ name: "", value: "", quantity: 0 }],
           isFeatured: false,
           isArchived: false,
+          description: "",
         },
   });
 
@@ -222,6 +227,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="price"
@@ -273,7 +279,26 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
-            <div></div>
+            <div>
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem className="max-sm:w-[30vw]  w-[22vw] ">
+                    <FormLabel>Description</FormLabel>
+                    <FormControl className="w-full">
+                      <Input
+                        disabled={loading}
+                        placeholder="Product Description"
+                        {...field}
+                        className="w-full"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <div className="flex flex-col gap-12">
               <FormField
                 control={form.control}
@@ -394,9 +419,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                               ])
                             }
                           />
-                          <Input
-                            className="w-[125px]"
-                            placeholder="To Link"
+                          <select
+                            className="w-[200px] p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                             value={colorId.link}
                             onChange={(e) =>
                               field.onChange([
@@ -405,7 +429,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                                 ...field.value.slice(index + 1),
                               ])
                             }
-                          />
+                          >
+                            <option value="">Select a product</option>
+                            {products.map((product) => (
+                              <option key={product.id} value={product.name}>
+                                {product.name}
+                              </option>
+                            ))}
+                          </select>
 
                           <Button
                             type="button"

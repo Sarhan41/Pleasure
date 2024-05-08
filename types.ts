@@ -15,6 +15,7 @@
     colors: Color[];
     images: Image[];
     quantity?: number;
+    discountedPrice? : number | null;
   }
   
   export interface Image {

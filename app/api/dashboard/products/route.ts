@@ -26,6 +26,7 @@ export async function POST(req: Request) {
       images,
       isFeatured,
       isArchived,
+      description,
     } = body;
 
     if (!name) {
@@ -52,6 +53,10 @@ export async function POST(req: Request) {
       return new NextResponse("images is required ", { status: 400 });
     }
 
+    if (!description) {
+      return new NextResponse("Description is required ", { status: 400 });
+    }
+
     const product = await db.product.create({
       data: {
         name,
@@ -68,6 +73,7 @@ export async function POST(req: Request) {
             ),
           },
         },
+        description: description,
         sizes: {
           createMany: {
             data: sizeId.map(

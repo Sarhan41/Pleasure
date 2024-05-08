@@ -33,11 +33,11 @@ model User {
 }
 
 model Review {
-  id        String  @id @default(cuid())
+  id        String   @id @default(cuid())
   userId    String
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   productId String
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
   rating    Int
   comment   String
   createdAt DateTime @default(now())
@@ -115,38 +115,26 @@ model Category {
 }
 
 model Product {
-  id         String      @id @default(uuid())
-  categoryId String
-  category   Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  name       String
-  price      Int
-  discountedPrice   Int? 
-  isFeatured Boolean     @default(false)
-  isArchived Boolean     @default(false)
-  images     Image[]
-  colors     Color[]
-  sizes      Size[]
-  orderItems orderItem[]
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  Wishlist   Wishlist[]
-  CartItems  CartItems[]
-  reviews    Review[]
-  description Description[]
+  id              String      @id @default(uuid())
+  categoryId      String
+  category        Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  name            String
+  price           Int
+  discountedPrice Int?
+  isFeatured      Boolean     @default(false)
+  isArchived      Boolean     @default(false)
+  images          Image[]
+  colors          Color[]
+  sizes           Size[]
+  orderItems      orderItem[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  Wishlist        Wishlist[]
+  CartItems       CartItems[]
+  reviews         Review[]
+  description     String?
 
   @@index([categoryId])
-}
-
-model Description {
-  id        String   @id @default(uuid())
-  productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  value     String
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([productId])
 }
 
 model Color {

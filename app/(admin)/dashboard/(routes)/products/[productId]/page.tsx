@@ -10,8 +10,11 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
       images: true,
       colors: true,
       sizes: true,
+      description: true,
     },
   });
+
+  const products = await db.product.findMany({});
 
   const categories = await db.category.findMany({});
 
@@ -21,7 +24,7 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
         <ProductForm
           initialData={product}
           categories={categories}
-          
+          products={products}
         />
       </div>
     </div>

@@ -2,6 +2,7 @@ import Gallery from "@/app/(store)/_components/Gallery";
 import Info from "@/app/(store)/_components/Info/Info";
 import ProductList from "@/app/(store)/_components/ProductList/ProductList";
 import Container from "@/components/Store/container";
+import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 interface ProductPageProps {
@@ -10,6 +11,15 @@ interface ProductPageProps {
   };
 }
 const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
+
+  const User = await currentUser();
+
+  let userId = "";
+
+  if (User) {
+    userId = User.id ?? "";
+  }
+
   const decodedProductName = decodeURIComponent(params.productName);
 
   const productNameWithSpaces = decodedProductName.replace(/-/g, " ");
@@ -52,13 +62,13 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
   );
 
   return (
-    <div className="bg-white">
+    <div className="bg-white mt-14">
       <Container>
         <div className="px-4 py-10 sm:px-6 lg:px-8 ">
           <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8 ">
             <Gallery images={product?.images} />
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-              {product && <Info data={product} />}
+              {product && <Info data={product} userId = {userId} />}
             </div>
           </div>
           <hr className="my-10" />

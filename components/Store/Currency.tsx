@@ -1,17 +1,16 @@
-"use client";
-
-import { Decimal } from "@prisma/client/runtime/library";
 import { useEffect, useState } from "react";
 
 const formatter = new Intl.NumberFormat("en-US", {
   style: "currency",
-  currency: "USD",
+  currency: "INR",
 });
 
 interface CurrencyProps {
-  value?: string | number | Decimal;
+  value?: string | number;
+  discountedValue?: string | number | null;
 }
-const Currency: React.FC<CurrencyProps> = ({ value }) => {
+
+const Currency: React.FC<CurrencyProps> = ({ value, discountedValue }) => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -22,7 +21,20 @@ const Currency: React.FC<CurrencyProps> = ({ value }) => {
     return null;
   }
 
-  return <div className="font-semibold">{formatter.format(Number(value))}</div>;
+  return (
+    <div className="font-semibold">
+      {discountedValue ? (
+        <>
+          {formatter.format(Number(discountedValue))}
+          <span className="line-through ml-4 text-gray-500">
+            {formatter.format(Number(value))}
+          </span>
+        </>
+      ) : (
+        formatter.format(Number(value))
+      )}
+    </div>
+  );
 };
 
 export default Currency;

@@ -56,6 +56,7 @@ export async function PATCH(
       images,
       isFeatured,
       isArchived,
+      description,
     } = body;
 
     if (!name) {
@@ -103,6 +104,7 @@ export async function PATCH(
         images: {
           deleteMany: {},
         },
+        description,
         isFeatured,
         isArchived,
       },
@@ -118,6 +120,7 @@ export async function PATCH(
             data: [...images.map((image: { url: string }) => image)],
           },
         },
+        description: description,
         colors: {
           createMany: {
             data: colorId.map(
