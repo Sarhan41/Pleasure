@@ -241,7 +241,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           />
         </div>
         <div>
-          <Button onClick={onAddToCart} className="flex items-center gap-x-2">
+          <Button onClick={onAddToCart} className="flex items-center gap-x-2 w-60">
             Add To Cart
             {/* Shopping cart icon */}
           </Button>
@@ -264,7 +264,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           />
         </div>
         <div>
-          <Button onClick={onAddToCart} className="flex items-center gap-x-2">
+          <Button onClick={onAddToCart} className="flex items-center gap-x-2 w-60">
             Add To Cart
             {/* Shopping cart icon */}
           </Button>

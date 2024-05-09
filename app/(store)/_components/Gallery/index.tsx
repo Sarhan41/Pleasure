@@ -53,14 +53,14 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
               images.map((image, index) => (
                 <CarouselItem key={image.id}>
                   <div
-                    className="aspect-square border-4 relative h-full w-full sm:rounded-lg overflow-hidden"
+                    className=" border-4 relative h-[600px] w-[400px] sm:rounded-lg overflow-hidden"
                     onClick={() => openFullScreen(index)}
                   >
                     <Image
                       fill
                       src={image.url}
                       alt="Image"
-                      className="object-cover object-center"
+                      className="object-cover object-center h-full w-full"
                     />
                   </div>
                 </CarouselItem>
@@ -88,7 +88,7 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
                   >
                     <Image
                       fill
-                      src={images?.[selectedImageIndex]?.url ?? ''}
+                      src={images?.[selectedImageIndex]?.url ?? ""}
                       alt="Image"
                       objectFit="contain"
                       layout="fill"
@@ -96,7 +96,7 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
                   </div>
                 </CarouselItem>
               </CarouselContent>
-              <CarouselPrevious  className="absolute top-1/2 left-4 transform -translate-y-1/2" />
+              <CarouselPrevious className="absolute top-1/2 left-4 transform -translate-y-1/2" />
               <CarouselNext className="absolute top-1/2 right-4 transform -translate-y-1/2" />
             </Carousel>
           </div>
