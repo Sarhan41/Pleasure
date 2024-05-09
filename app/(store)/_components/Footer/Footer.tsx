@@ -87,7 +87,7 @@ const Footer: React.FC = () => {
           <h1 className="text-white border-b-2 mb-4 border-primary">
             REGISTERED OFFICE ADDRESS
           </h1>
-          <p className="text-gray-600">{Address}</p>
+          <p className="text-gray-200">{Address}</p>
         </div>
         {/* Details */}
         <div className="text-white flex gap-10 max-sm:border-t-2 border-primary max-sm:pt-4">
