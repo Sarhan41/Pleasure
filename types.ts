@@ -16,6 +16,7 @@
     images: Image[];
     quantity?: number;
     discountedPrice? : number | null;
+    description?: string | null;
   }
   
   export interface Image {

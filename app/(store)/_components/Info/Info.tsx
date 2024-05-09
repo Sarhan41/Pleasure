@@ -161,7 +161,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         <div>
           <h3
             onClick={handleSizeChartOpen}
-            className="font-semibold text-primary"
+            className="font-semibold text-primary cursor-pointer w-fit"
           >
             Size Chart
           </h3>
@@ -234,16 +234,41 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         </div>
       </div>
       <div className="mt-10 flex items-center gap-x-3">
-        <Button onClick={onAddToCart} className="flex items-center gap-x-2">
-          Add To Cart
-          {/* Shopping cart icon */}
-        </Button>
+        <div className="border-primary border-2 rounded-full">
+          <IconButton
+            onClick={onAddToWishList}
+            icon={<Heart size={20} className="text-gray-600 " />}
+          />
+        </div>
+        <div>
+          <Button onClick={onAddToCart} className="flex items-center gap-x-2">
+            Add To Cart
+            {/* Shopping cart icon */}
+          </Button>
+        </div>
       </div>
+
       <div>
-        <IconButton
-          onClick={onAddToWishList}
-          icon={<Heart size={20} className="text-gray-600" />}
-        />
+        <h3 className="font-bold text-black mt-8 border-b-2 border-primary w-fit p-2 mb-4 ">
+          Description
+        </h3>
+        <p className="text-gray-600">
+          {data.description?.split(".").join(".\n") || "No description"}
+        </p>
+      </div>
+      <div className="mt-10 flex items-center gap-x-6 shadow-2xl shadow-gray-600 w-full justify-center ">
+        <div className="border-primary border-2 rounded-full">
+          <IconButton
+            onClick={onAddToWishList}
+            icon={<Heart size={20} className="text-gray-600 " />}
+          />
+        </div>
+        <div>
+          <Button onClick={onAddToCart} className="flex items-center gap-x-2">
+            Add To Cart
+            {/* Shopping cart icon */}
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ export async function POST(req: Request) {
 
     const body = await req.json();
 
-    const { id, quantity } = body;
+    const { id } = body;
 
     if (!user) {
       return new NextResponse("Unauthenticated", { status: 401 });
@@ -20,7 +20,6 @@ export async function POST(req: Request) {
     const cartItem = await db.cartItems.create({
       data: {
         userId: UserId,
-        quantity: quantity,
         productId: id,
       },
     });
