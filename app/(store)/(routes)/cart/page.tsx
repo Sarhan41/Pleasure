@@ -42,7 +42,7 @@ export default async function WishPage() {
               <ul>
                 {CartProducts.map((item) => (
                   // @ts-ignore
-                  <CartItem key={item.id} quantity={item.quantity} data={item.product} cartId={item.id}/>
+                  <CartItem key={item.id} quantity={item.quantity} data={item.product} size={item.size} cartId={item.id}/>
                 ))}
               </ul>
             </div>

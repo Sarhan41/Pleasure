@@ -22,7 +22,7 @@ interface UserLoginProps {
 
 const UserLogin = ({ userId }: UserLoginProps) => {
   return (
-    <div className=" w-fit  z-40 relative">
+    <div className=" w-fit z-40 relative">
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
@@ -33,7 +33,7 @@ const UserLogin = ({ userId }: UserLoginProps) => {
               </Link>
             </NavigationMenuTrigger>
             <div className="">
-              <NavigationMenuContent className="w-full md:w-80 px-4 py-6 bg-white border border-gray-200 rounded-lg shadow-lg z-50 ">
+              <NavigationMenuContent className="w-full md:w-80 px-4  py-6 bg-white border border-gray-200 rounded-lg shadow-lg z-50 ">
                 {/* Welcome message */}
 
                 <h2 className="text-lg font-bold mb-1">Welcome to the store</h2>
@@ -85,7 +85,8 @@ const UserLogin = ({ userId }: UserLoginProps) => {
                     </div>
                   ) : (
                     <>
-                      <div className="z-50">
+                      <div className="flex flex-col justify-center gap-3">
+                        <div className="z-50"></div>
                         <LoginButton asChild mode="modal">
                           <Button
                             variant="outline"
@@ -95,8 +96,7 @@ const UserLogin = ({ userId }: UserLoginProps) => {
                             Sign in
                           </Button>
                         </LoginButton>
-                      </div>
-                      <div className="z-50">
+                        <div className="z-50"></div>
                         <SignUpButton asChild mode="modal">
                           <Button
                             size="lg"

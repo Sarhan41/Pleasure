@@ -107,7 +107,7 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
 
             <div className="mt-6 lg:flex-1">
               {finalProducts.length === 0 && <NoResults />}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="flex flex-wrap gap-4">
                 {finalProducts.map((item) => (
                   // @ts-ignore
                   <ProductCard key={item.id} data={item} />

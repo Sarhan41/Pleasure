@@ -25,7 +25,9 @@ interface InfoProps {
 
 const Info: React.FC<InfoProps> = ({ data, userId }) => {
   const [selectedSize, setSelectedSize] = useState<Size | null>(null);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
+  const [sizeError, setSizeError] = useState(false);
   const [isSizeChartOpen, setIsSizeChartOpen] = useState(false); // State to manage dialog open/close
   const router = useRouter();
 
@@ -40,15 +42,31 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
       }
 
       const foundItem = cartItems.find(
-        (item: { productId: string; userId: string }) =>
-          item.productId === data.id && item.userId === userId
+        (item: {
+          productId: string;
+          userId: string;
+          size: string;
+          color: string;
+        }) =>
+          item.productId === data.id &&
+          item.userId === userId &&
+          item.size === selectedSize?.value &&
+          item.color === selectedColor
       );
+
+      if (selectedSize === null) {
+        toast.error("Please select a size");
+        setSizeError(true);
+        return;
+      }
 
       if (!foundItem) {
         await axios.post("/api/dashboard/cartItems", {
           id: data.id,
           quantity: quantity,
           userId,
+          size: selectedSize?.value,
+          color: selectedColor,
         });
         toast.success("Added to cart");
       } else {
@@ -140,7 +158,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                     selectedSize != size && "hover:bg-primary"
                   }  hover:text-white hover:cursor-pointer font-semibold border-2 border-gray-500 rounded-md p-2 ${
                     selectedSize === size ? "bg-gray-600 text-white" : ""
-                  }`}
+                  } ${sizeError && "border-red-700"} `}
                   onClick={() => handleSizeSelection(size)}
                 >
                   {size.value}
@@ -157,6 +175,9 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
               </div>
             ))}
           </div>
+          {sizeError && (
+            <span className="text-red-900">Please select a size</span>
+          )}
         </div>
         <div>
           <h3
@@ -206,6 +227,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             const handleClick = () => {
               const productName = color.toLink?.replace(/ /g, "-");
               router.push(`/product/${productName}`);
+              setSelectedColor(color?.value);
             };
             return (
               <>
@@ -241,7 +263,10 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           />
         </div>
         <div>
-          <Button onClick={onAddToCart} className="flex items-center gap-x-2 w-60">
+          <Button
+            onClick={onAddToCart}
+            className="flex items-center gap-x-2 w-60"
+          >
             Add To Cart
             {/* Shopping cart icon */}
           </Button>
@@ -264,7 +289,10 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           />
         </div>
         <div>
-          <Button onClick={onAddToCart} className="flex items-center gap-x-2 w-60">
+          <Button
+            onClick={onAddToCart}
+            className="flex items-center gap-x-2 w-60"
+          >
             Add To Cart
             {/* Shopping cart icon */}
           </Button>
