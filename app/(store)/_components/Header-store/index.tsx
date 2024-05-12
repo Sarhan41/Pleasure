@@ -13,6 +13,10 @@ export default async function HeaderIndex() {
         select: {
           name: true,
         },
+
+        orderBy: {
+          name: "asc",
+        },
       },
     },
   });
