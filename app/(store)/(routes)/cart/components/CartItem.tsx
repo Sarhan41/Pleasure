@@ -87,10 +87,7 @@ const CartItem: React.FC<CartItemProps> = ({
             >
               {data.name}
             </p>
-            <p
-              onClick={onProductClick}
-              className="text-lg flex  gap-4 cursor-pointer font-semibold text-black h-fit w-fit z-10"
-            >
+            <p className="text-lg flex  gap-4 cursor-pointer font-semibold text-black h-fit w-fit z-10">
               {quantity === 1 ? (
                 ""
               ) : (
