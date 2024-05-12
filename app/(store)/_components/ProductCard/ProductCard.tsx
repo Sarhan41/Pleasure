@@ -141,7 +141,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
         </div>
       </div>
       <div className="w-[300px] flex flex-wrap flex-col ">
-        <p className="font-semibold text-base flex-wrap flex">{data?.name}</p>
+        <p className="font-semibold text-base flex-wrap flex">
+          {" "}
+          {data.name.includes("100")
+            ? `${data.name.split("100")[0]}100%${data.name.split("100")[1]}`
+            : data.name}
+        </p>
         <p className="text-sm text-gray-500"> {data.category?.name}</p>
       </div>
       <Currency value={data.price} />

@@ -136,8 +136,11 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
   return (
     <div>
       <h1 className="text-3xl font-bold text-gray-900 border-b-2 pb-4">
-        {data.name}
+        {data.name.includes("100")
+          ? `${data.name.split("100")[0]}100%${data.name.split("100")[1]}`
+          : data.name}
       </h1>
+
       <div className="mt-3 flex items-end justify-between">
         <p className="text-2xl text-gray-900">
           <Currency
