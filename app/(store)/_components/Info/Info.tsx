@@ -146,7 +146,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           />
         </p>
       </div>
-      <div className="flex flex-col my-8 gap-y-6">
+      <div className="flex flex-col my-4 gap-y-4">
         <div className="flex gap-4 flex-col">
           <h3 className="font-semibold text-black"> Available sizes:</h3>
           <div className="flex gap-4">
@@ -220,42 +220,42 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         </div>
 
         <div className="flex items-center gap-x-4">
-          <h3 className="font-semibold text-black">Color:</h3>
-          {/* Color handling */}
-
           {data?.colors?.map((color) => {
             const handleClick = () => {
               const productName = color.toLink?.replace(/ /g, "-");
               router.push(`/product/${productName}`);
               setSelectedColor(color?.value);
             };
-            return (
-              <>
-                {color.toLink ? (
-                  <div onClick={handleClick} key={color.name}>
+            if (color.value != "#111") {
+              return (
+                <>
+                  <h3 className="font-semibold text-black ">Colors:</h3>
+                  {color.toLink ? (
+                    <div onClick={handleClick} key={color.name}>
+                      <div
+                        key={color.name}
+                        className="h-10 w-10 rounded-full border border-gray-600 cursor-pointer"
+                        style={{ backgroundColor: color.value }}
+                      ></div>
+                    </div>
+                  ) : (
                     <div
                       key={color.name}
-                      className="h-10 w-10 rounded-full border border-gray-600 cursor-pointer"
+                      className="h-10 w-10 rounded-full border border-gray-900 relative"
                       style={{ backgroundColor: color.value }}
-                    ></div>
-                  </div>
-                ) : (
-                  <div
-                    key={color.name}
-                    className="h-10 w-10 rounded-full border border-gray-900 relative"
-                    style={{ backgroundColor: color.value }}
-                  >
-                    <div className="absolute inset-0 flex items-center justify-center text-gray-600  bottom-0 left-0 h-3 w-3 bg-white border border-gray-900">
-                      <Check size={24} />
+                    >
+                      <div className="absolute inset-0 flex items-center justify-center text-gray-600  bottom-0 left-0 h-3 w-3 bg-white border border-gray-900">
+                        <Check size={24} />
+                      </div>
                     </div>
-                  </div>
-                )}
-              </>
-            );
+                  )}
+                </>
+              );
+            }
           })}
         </div>
       </div>
-      <div className="mt-10 flex items-center gap-x-3">
+      <div className="mt-4 flex items-center gap-x-3">
         <div className="border-primary border-2 rounded-full">
           <IconButton
             onClick={onAddToWishList}
