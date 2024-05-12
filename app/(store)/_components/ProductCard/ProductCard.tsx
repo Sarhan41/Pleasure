@@ -108,7 +108,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
   return (
     <div
       onClick={handleClick}
-      className="bg-white h-fit w-fit group cursor-pointer rounded-xl border p-3 space-y-4"
+      className="bg-white h-[813px] w-fit group cursor-pointer rounded-xl border p-3 space-y-4"
     >
       <div className=" h-[600px] w-[400px] rounded-xl bg-gray-100 relative">
         <Image
@@ -140,8 +140,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
           </div>
         </div>
       </div>
-      <div>
-        <p className="font-semibold text-lg">{data?.name}</p>
+      <div className="w-[300px] flex flex-wrap flex-col ">
+        <p className="font-semibold text-base flex-wrap flex">{data?.name}</p>
         <p className="text-sm text-gray-500"> {data.category?.name}</p>
       </div>
       <Currency value={data.price} />
