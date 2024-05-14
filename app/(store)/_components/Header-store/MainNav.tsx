@@ -46,7 +46,8 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
                     "transition-colors duration-300 hover:text-primary font-medium uppercase ",
                     pathname === `/category/${category.name}`
                       ? "text-primary"
-                      : "text-white" , isCategoryHovered(category.name) && "text-primary"
+                      : "text-white",
+                    isCategoryHovered(category.name) && "text-primary"
                   )}
                   href={`/category/${category.name.replace(/\s+/g, "-")}`}
                   passHref
@@ -55,12 +56,12 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
                 </Link>
                 {isCategoryHovered(category.name) && (
                   <div className="absolute top-full w-[70vw] h-[50vh] z-50 left-0 right-0 bg-white text-gray-800 rounded-md shadow-2xl py-4 px-8">
-                    <div className="flex flex-col gap-8 flex-wrap ">
+                    <div className="grid grid-cols-3 gap-4">
                       {category?.products?.map((product) => (
                         <Link
                           key={product.id}
                           href={`/product/${product.name.replace(/\s+/g, "-")}`}
-                          className="hover:text-primary transition-colors duration-300"
+                          className="hover:text-primary transition-colors duration-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
                           passHref
                           onClick={() => setHoveredCategory("")}
                         >

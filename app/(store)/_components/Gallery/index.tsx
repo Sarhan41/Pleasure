@@ -22,6 +22,7 @@ export interface GalleryProps {
 const Gallery: React.FC<GalleryProps> = ({ images }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const [hoveredImageIndex, setHoveredImageIndex] = useState(-1);
 
   const openFullScreen = (index: number) => {
     setSelectedImageIndex(index);
@@ -45,30 +46,49 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
   };
 
   return (
-    <div className="flex flex-col-reverse">
-      <div className="lg:w-4/5">
-        <Carousel>
-          <CarouselContent>
-            {images &&
-              images.map((image, index) => (
-                <CarouselItem key={image.id}>
-                  <div
-                    className=" border-4 relative h-[600px] w-[400px] sm:rounded-lg overflow-hidden"
-                    onClick={() => openFullScreen(index)}
-                  >
-                    <Image
-                      fill
-                      src={image.url}
-                      alt="Image"
-                      className="object-cover object-center h-full w-full"
-                    />
-                  </div>
-                </CarouselItem>
-              ))}
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
+    <div>
+      <div className="lg:flex">
+        <div className="max-lg:hidden mr-8 flex flex-col">
+          {images &&
+            images.map((image, index) => (
+              <div
+                key={image.id}
+                className="border-4 relative h-20 w-20 sm:h-28 mb-1 sm:w-28 rounded-lg overflow-hidden cursor-pointer hover:border-primary"
+                onClick={() => openFullScreen(index)}
+                onMouseEnter={() => setHoveredImageIndex(index)}
+                onMouseLeave={() => setHoveredImageIndex(-1)}
+              >
+                <Image
+                  fill
+                  src={image.url}
+                  alt="Image"
+                  className="object-cover object-center h-full w-full"
+                />
+              </div>
+            ))}
+        </div>
+        <div className="lg:w-4/5">
+          <Carousel>
+            <CarouselContent>
+              {images &&
+                images.map((image, index) => (
+                  <CarouselItem key={image.id}>
+                    <div
+                      className="border-4 relative h-[600px] w-[400px] sm:rounded-lg overflow-hidden"
+                      onClick={() => openFullScreen(index)}
+                    >
+                      <Image
+                        fill
+                        src={images?.[hoveredImageIndex]?.url ?? image?.url}
+                        alt="Image"
+                        className="object-cover object-center h-full w-full"
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+            </CarouselContent>
+          </Carousel>
+        </div>
       </div>
       {isFullScreen && (
         <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-90">
