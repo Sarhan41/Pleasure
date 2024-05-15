@@ -11,8 +11,17 @@ export async function POST(req: Request) {
 
     const { id, size, color } = body;
 
+    let { price } = body;
+
+
+    
+
     if (!user) {
       return new NextResponse("Unauthenticated", { status: 401 });
+    }
+
+    if (size === "XXXl" || size === "XXL") {
+      price += 20;
     }
 
     const UserId: string = user.id || "";
@@ -23,6 +32,7 @@ export async function POST(req: Request) {
         productId: id,
         size: size,
         color: color,
+        price: price,
       },
     });
 

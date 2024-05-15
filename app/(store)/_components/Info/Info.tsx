@@ -67,6 +67,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           userId,
           size: selectedSize?.value,
           color: selectedColor,
+          price: data.price,
         });
         toast.success("Added to cart");
       } else {
@@ -133,6 +134,14 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
     }
   };
 
+  const priceUpdate = () => {
+    if(selectedSize?.value === "XXXL" || selectedSize?.value === "XXL") {
+      return data.price + 20;
+    } else {
+      return data.price;
+    }
+  }
+
   return (
     <div>
       <h1 className="text-3xl font-bold text-gray-900 border-b-2 pb-4">
@@ -144,7 +153,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
       <div className="mt-3 flex items-end justify-between">
         <p className="text-2xl text-gray-900">
           <Currency
-            value={data?.price || 0}
+            value={priceUpdate()}
             discountedValue={data?.discountedPrice}
           />
         </p>

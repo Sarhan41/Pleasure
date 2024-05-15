@@ -19,14 +19,14 @@ export default async function WishPage() {
           category: { select: { name: true } },
           colors: { select: { name: true, value: true } },
           sizes: { select: { name: true, value: true } },
-
         },
       },
     },
   });
 
   // Extract prices and quantities from CartProducts
-  const prices = CartProducts.map((item) => item.product.price);
+  const prices = CartProducts.map((item) => item.price);
+
   const quantities = CartProducts.map((item) => item.quantity);
 
   return (
@@ -41,8 +41,15 @@ export default async function WishPage() {
               )}
               <ul>
                 {CartProducts.map((item) => (
+                  <CartItem
+                    key={item.id}
+                    quantity={item.quantity}
                   // @ts-ignore
-                  <CartItem key={item.id} quantity={item.quantity} data={item.product} size={item.size} cartId={item.id}/>
+
+                    data={item.product}
+                    size={item.size}
+                    cartId={item.id}
+                  />
                 ))}
               </ul>
             </div>

@@ -67,6 +67,14 @@ const CartItem: React.FC<CartItemProps> = ({
     }
   };
 
+  const priceUpdate = () => {
+    if(size === "XXL" || size === "XXXL") {
+      return data.price + 20;
+    } else {
+      return data.price;
+    }
+  }
+
   return (
     <li className="flex py-6 border-b ">
       <div className="relative h-24 w-24 rounded-md overflow-hidden sm:h-48 sm:w-48 cursor-pointer">
@@ -114,7 +122,7 @@ const CartItem: React.FC<CartItemProps> = ({
             )}
             {size}
           </div>
-          <Currency value={data.price} />
+          <Currency value={priceUpdate()} discountedValue={data?.discountedPrice} />
         </div>
         <div className="absolute z-10 right-0 top-0">
           <IconButton

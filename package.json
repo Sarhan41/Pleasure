@@ -41,7 +41,7 @@
     "next-cloudinary": "^6.5.0",
     "next-themes": "^0.2.1",
     "query-string": "^9.0.0",
-    "razorpay": "^2.9.2",
+    "razorpay": "^2.9.3",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.49.2",

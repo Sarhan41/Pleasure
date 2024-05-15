@@ -1,6 +1,10 @@
 import Link from "next/link";
 import React from "react";
-import { FaFacebook as Facebook, FaInstagram as Instagram } from "react-icons/fa";
+import {
+  FaWhatsapp as Whatsapp,
+  FaFacebook as Facebook,
+  FaInstagram as Instagram,
+} from "react-icons/fa";
 
 const Footer: React.FC = () => {
   const Address = "123, ABC Street, XYZ City, Country - 123456";
@@ -38,9 +42,22 @@ const Footer: React.FC = () => {
   ];
 
   const SocialLinks = [
-    { text: "Facebook", route: "/facebook", icon: <Facebook className="h-10 w-10 hover:text-primary"/> },
-    { text: "Instagram", route: "/instagram", icon: <Instagram className="h-10 w-10 hover:text-primary" /> },
-  ]
+    {
+      text: "Whatsapp",
+      route: `https://wa.me/918155086856?text=Hello%20there!`,
+      icon: <Whatsapp className="h-10 w-10 hover:text-primary" />,
+    },
+    {
+      text: "Facebook",
+      route: "/facebook",
+      icon: <Facebook className="h-10 w-10 hover:text-primary" />,
+    },
+    {
+      text: "Instagram",
+      route: "/instagram",
+      icon: <Instagram className="h-10 w-10 hover:text-primary" />,
+    },
+  ];
 
   return (
     <footer className="bg-black py-8 mt-24">
@@ -72,9 +89,7 @@ const Footer: React.FC = () => {
             <ul className="text-gray-400">
               {QuickLinks.map((link, index) => (
                 <li key={index} className="mb-2 text-white hover:text-primary">
-                  <Link href={link.route} >
-                    {link.text}
-                  </Link>
+                  <Link href={link.route}>{link.text}</Link>
                 </li>
               ))}
             </ul>
@@ -96,10 +111,15 @@ const Footer: React.FC = () => {
           </div>
           <div>
             <p className="mb-2">Contact us: contact@pleasure.com</p>
-            <p className="mb-2">Phone: +1234567890</p>
+            <p className="mb-2">Phone: +91 8155086856</p>
             <div className="flex gap-4">
               {SocialLinks.map((link, index) => (
-                <Link key={index} href={link.route} className="text-white mt-4 flex gap-6">
+                <Link
+                  target="_blank"
+                  key={index}
+                  href={link.route}
+                  className="text-white mt-4 flex gap-6"
+                >
                   {link.icon} {/* Here, the icon is added */}
                 </Link>
               ))}

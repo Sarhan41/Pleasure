@@ -74,7 +74,7 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
                 images.map((image, index) => (
                   <CarouselItem key={image.id}>
                     <div
-                      className="border-4 relative h-[600px] w-[400px] sm:rounded-lg overflow-hidden"
+                      className="border-4 relative h-[600px] w-[400px] sm:rounded-lg overflow-hidden ml-24"
                       onClick={() => openFullScreen(index)}
                     >
                       <Image
