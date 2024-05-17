@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import CartItem from "./components/CartItem";
 import Summary from "./components/Summary";
 
-export default async function WishPage() {
+export default async function CartPage() {
   const user = await currentUser();
   const UserId = user?.id;
 
@@ -26,6 +26,7 @@ export default async function WishPage() {
 
   // Extract prices and quantities from CartProducts
   const prices = CartProducts.map((item) => item.price);
+  const products = CartProducts.map((item) => item);
 
   const quantities = CartProducts.map((item) => item.quantity);
 
@@ -53,7 +54,7 @@ export default async function WishPage() {
                 ))}
               </ul>
             </div>
-            <Summary prices={prices} quantities={quantities} />
+            <Summary prices={prices} products={products} quantities={quantities} />
           </div>
         </div>
       </Container>
