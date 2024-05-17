@@ -203,6 +203,7 @@ model CartItems {
 model Order {
   id         String      @id @default(uuid())
   orderItems orderItem[]
+  total     Int
   isPaid     Boolean     @default(false)
   phone      String      @default("")
   address    String      @default("")
@@ -214,6 +215,9 @@ model Order {
 
 model orderItem {
   id        String  @id @default(uuid())
+  name String
+  Price Int
+  quantity  Int
   orderId   String
   order     Order   @relation(fields: [orderId], references: [id])
   productId String

@@ -45,8 +45,8 @@ export default async function CartPage() {
                   <CartItem
                     key={item.id}
                     quantity={item.quantity}
-                  // @ts-ignore
-
+                    price={item.price}
+                    // @ts-ignore
                     data={item.product}
                     size={item.size}
                     cartId={item.id}

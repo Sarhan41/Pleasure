@@ -5,13 +5,17 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import Currency from "@/components/Store/Currency";
 import { Button } from "@/components/ui/button";
+import { CartItems } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 interface SummaryProps {
   prices: number[];
   quantities: number[];
+  products: CartItems[];
 }
 
-const Summary: React.FC<SummaryProps> = ({ prices, quantities }) => {
+const Summary: React.FC<SummaryProps> = ({ prices, quantities, products }) => {
+  const router = useRouter();
   const [orderTotal, setOrderTotal] = useState<number>(0);
 
   useEffect(() => {
@@ -24,17 +28,12 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities }) => {
   }, [prices, quantities]);
 
   const onCheckout = async () => {
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
-        {
-          // productIds: items.map((item) => item.id),
-        }
-      );
-      window.location = response.data.url;
-    } catch (error) {
-      toast.error("Something went wrong. Please try again.");
+    if (products.length === 0) {
+      toast.error("No items in cart");
+      return;
     }
+
+    router.push("/checkout/?amount=" + orderTotal);
   };
 
   return (

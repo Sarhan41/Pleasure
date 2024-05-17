@@ -16,6 +16,7 @@ interface CartItemProps {
   quantity: number;
   cartId: string;
   size: string;
+  price: number;
 }
 
 const CartItem: React.FC<CartItemProps> = ({
@@ -23,6 +24,7 @@ const CartItem: React.FC<CartItemProps> = ({
   quantity,
   cartId,
   size,
+  price,
 }) => {
   const router = useRouter();
   // console.log("CARTITEM.TSX 13", data);
@@ -67,13 +69,6 @@ const CartItem: React.FC<CartItemProps> = ({
     }
   };
 
-  const priceUpdate = () => {
-    if(size === "XXL" || size === "XXXL") {
-      return data.price + 20;
-    } else {
-      return data.price;
-    }
-  }
 
   return (
     <li className="flex py-6 border-b ">
@@ -122,7 +117,7 @@ const CartItem: React.FC<CartItemProps> = ({
             )}
             {size}
           </div>
-          <Currency value={priceUpdate()} discountedValue={data?.discountedPrice} />
+          <Currency value={price} discountedValue={data?.discountedPrice} />
         </div>
         <div className="absolute z-10 right-0 top-0">
           <IconButton
