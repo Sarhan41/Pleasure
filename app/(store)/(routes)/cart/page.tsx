@@ -61,11 +61,14 @@ export default async function CartPage() {
               ))}
             </ul>
           </div>
+          <div className="w-96" >
+
           <Summary
             prices={prices}
             products={products}
             quantities={quantities}
           />
+          </div>
         </div>
       </Container>
     </div>

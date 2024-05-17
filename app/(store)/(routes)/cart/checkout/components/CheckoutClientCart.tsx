@@ -40,9 +40,9 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
   }, [prices, quantities]);
 
   useEffect(() => {
-    if (!orderTotal) {
-      router.replace("/");
-    }
+    // if (!orderTotal) {
+    //   router.replace("/");
+    // }
     createOrderId();
   }, []);
 

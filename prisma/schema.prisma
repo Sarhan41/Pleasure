@@ -30,7 +30,28 @@ model User {
   CartItems             CartItems[]
   orders                Order[]
   reviews               Review[]
+  Address               Address[]
 }
+
+model Address {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  phone     String
+  AlternatePhone String?
+  addressLine1   String
+  addressLine2   String?
+  addressLine3   String?
+  city      String
+  state     String
+  AddressType String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+
+}
+
 
 model Review {
   id        String   @id @default(cuid())

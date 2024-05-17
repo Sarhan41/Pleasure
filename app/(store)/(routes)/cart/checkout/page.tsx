@@ -1,13 +1,15 @@
-"use client";
 import Container from "@/components/Store/container";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import CheckoutClientCart from "./componenets/CheckoutClientCart";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import CheckoutClientCart from "./components/CheckoutClientCart";
+
+import Summary from "../components/Summary";
+import ThreeAccordion from "./components/ThreeAccordion";
 
 export default async function CartCheckoutPage() {
   const user = await currentUser();
+  const isLoggedIn = !!user;
+
   const UserId = user?.id;
 
   const CartProducts = await db.cartItems.findMany({
@@ -27,67 +29,24 @@ export default async function CartCheckoutPage() {
   });
 
   const prices = CartProducts.map((item) => item.price);
+  const products = CartProducts.map((item) => item);
+
   const quantities = CartProducts.map((item) => item.quantity);
 
-  const [currentStep, setCurrentStep] = useState('login');
-
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  const onSubmit = data => {
+  const onSubmit = (data: any) => {
     console.log(data);
-    setCurrentStep('payment');
   };
 
   return (
-    <div className="bg-white">
-      <Container>
-        {currentStep === 'login' && (
-          <div>
-            <h2>Please login or register to place an order</h2>
-            {/* Add your login/register form here */}
-            <button onClick={() => setCurrentStep('address')}>Login/Register</button>
-          </div>
-        )}
-        
-        {currentStep === 'address' && (
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <h2>Address Form</h2>
-            <div>
-              <label>First Name</label>
-              <input {...register('firstName', { required: true })} />
-              {errors.firstName && <span>This field is required</span>}
-            </div>
-            <div>
-              <label>Last Name</label>
-              <input {...register('lastName', { required: true })} />
-              {errors.lastName && <span>This field is required</span>}
-            </div>
-            <div>
-              <label>Address</label>
-              <input {...register('address', { required: true })} />
-              {errors.address && <span>This field is required</span>}
-            </div>
-            <div>
-              <label>City</label>
-              <input {...register('city', { required: true })} />
-              {errors.city && <span>This field is required</span>}
-            </div>
-            <div>
-              <label>Postal Code</label>
-              <input {...register('postalCode', { required: true })} />
-              {errors.postalCode && <span>This field is required</span>}
-            </div>
-            <button type="submit">Submit</button>
-          </form>
-        )}
-
-        {currentStep === 'payment' && (
-          <div>
-            <h2>Payment</h2>
-            <CheckoutClientCart prices={prices} quantities={quantities} />
-            {/* Add your payment form here */}
-          </div>
-        )}
-      </Container>
+    <div className="bg-white mt-36 px-10 flex justify-between max-lg:flex-col">
+      <div className="flex-[0.75]">
+        <ThreeAccordion isLoggedin={isLoggedIn} user={user} />
+      </div>
+      <div className="w-96">
+        <Summary prices={prices} quantities={quantities} products={products} />
+      </div>
+      {/* 
+      <CheckoutClientCart prices={prices} quantities={quantities} /> */}
     </div>
   );
 }
