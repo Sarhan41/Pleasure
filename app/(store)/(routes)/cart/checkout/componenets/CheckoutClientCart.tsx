@@ -14,20 +14,37 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Script from "next/script";
 import { LoaderCircle } from "lucide-react";
 
-export default function Checkout() {
+interface CheckoutClientCartProps {
+  prices: number[];
+  quantities: number[];
+}
+
+const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
+  quantities,
+  prices,
+}) => {
   const router = useRouter();
   const params = useSearchParams();
-  const amount = params.get("amount");
-  const [loading1,setLoading1] = useState(true);
+  const [loading1, setLoading1] = useState(true);
   const [loading, setLoading] = useState(false);
-  const idRef = useRef()
+  const idRef = useRef();
+  const [orderTotal, setOrderTotal] = useState<number>(0);
 
-  useEffect(()=>{
-    if(!amount){
-        router.replace("/")
+  useEffect(() => {
+    // Calculate order total based on prices and quantities
+    let total = 0;
+    for (let i = 0; i < prices.length; i++) {
+      total += prices[i] * quantities[i];
+    }
+    setOrderTotal(total);
+  }, [prices, quantities]);
+
+  useEffect(() => {
+    if (!orderTotal) {
+      router.replace("/");
     }
     createOrderId();
-  },[])
+  }, []);
 
   const createOrderId = async () => {
     try {
@@ -37,7 +54,7 @@ export default function Checkout() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: parseFloat(amount!) * 100,
+          amount: orderTotal! * 100,
         }),
       });
 
@@ -46,9 +63,9 @@ export default function Checkout() {
       }
 
       const data = await response.json();
-      const id = data.orderId
+      const id = data.orderId;
       idRef.current = id;
-      setLoading1(false)
+      setLoading1(false);
       return;
     } catch (error) {
       console.error("There was a problem with your fetch operation:", error);
@@ -57,12 +74,12 @@ export default function Checkout() {
   const processPayment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    const orderId = idRef.current
-    console.log(orderId)
+    const orderId = idRef.current;
+    console.log(orderId);
     try {
       const options = {
         key: process.env.RAZORPAY_KEY_ID,
-        amount: parseFloat(amount!) * 100,
+        amount: orderTotal! * 100,
         currency: "INR",
         name: "Payment", //busniess name
         description: "Payment",
@@ -82,7 +99,7 @@ export default function Checkout() {
           });
           const res = await result.json();
           //process further request, whatever should happen after request fails
-          if (res.isOk) alert(res.message); //process further request after 
+          if (res.isOk) alert(res.message); //process further request after
           else {
             alert(res.message);
           }
@@ -101,9 +118,12 @@ export default function Checkout() {
       console.error(error);
     }
   };
-  if(loading1) return <div className="container h-screen flex justify-center items-center">
-    <LoaderCircle className=" animate-spin h-20 w-20 text-primary" />
-    </div>
+  if (loading1)
+    return (
+      <div className="container h-screen flex justify-center items-center">
+        <LoaderCircle className=" animate-spin h-20 w-20 text-primary" />
+      </div>
+    );
   return (
     <>
       <Script
@@ -120,12 +140,14 @@ export default function Checkout() {
             <CardTitle className="my-4">Continue</CardTitle>
             <CardDescription>
               By clicking on pay you'll purchase your plan subscription of Rs{" "}
-              {amount}/month
+              {orderTotal}/month
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={processPayment}>
-              <Button className="w-full" type="submit">{loading?"...loading":"Pay"}</Button>
+              <Button className="w-full" type="submit">
+                {loading ? "...loading" : "Pay"}
+              </Button>
             </form>
           </CardContent>
           <CardFooter className="flex">
@@ -137,4 +159,6 @@ export default function Checkout() {
       </section>
     </>
   );
-}
+};
+
+export default CheckoutClientCart;

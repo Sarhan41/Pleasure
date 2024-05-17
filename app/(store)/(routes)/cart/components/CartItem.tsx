@@ -27,7 +27,6 @@ const CartItem: React.FC<CartItemProps> = ({
   price,
 }) => {
   const router = useRouter();
-  // console.log("CARTITEM.TSX 13", data);
 
   const removeItem = async (id: string) => {
     try {
@@ -39,6 +38,7 @@ const CartItem: React.FC<CartItemProps> = ({
       toast.error("Failed to remove item from Cart");
     }
   };
+
   const onProductClick = () => {
     router.push(`/product/${data.name}`);
   };
@@ -46,12 +46,12 @@ const CartItem: React.FC<CartItemProps> = ({
   const onPlusClick = async () => {
     try {
       await axios.patch(`/api/dashboard/cartItems/${cartId}`, {
-        quantity: quantity + 1, // Increase quantity by by local quantity state
+        quantity: quantity + 1, // Increase quantity by local quantity state
       });
       router.refresh();
       router.push(`/cart?reload=${Date.now()}`);
     } catch (error) {
-      toast.error("Failed to Increase Quantity in your Cart");
+      toast.error("Failed to increase quantity in your Cart");
     }
   };
 
@@ -69,62 +69,50 @@ const CartItem: React.FC<CartItemProps> = ({
     }
   };
 
-
   return (
-    <li className="flex py-6 border-b ">
-      <div className="relative h-24 w-24 rounded-md overflow-hidden sm:h-48 sm:w-48 cursor-pointer">
+    <li className="relative flex py-4 border rounded-lg my-4 justify-between items-center border-primary px-4">
+      <div className="absolute top-2 right-2">
+        <IconButton onClick={() => removeItem(cartId)} icon={<X size={15} />} />
+      </div>
+      <div className="relative h-24 w-24 rounded-md overflow-hidden sm:h-32 sm:w-32 cursor-pointer">
         <Image
           onClick={onProductClick}
           fill
           src={data.images[0].url}
-          alt=""
+          alt={data.name}
           className="object-cover object-center"
         />
       </div>
-      <div className="relative ml-4 flex flex-1 flex-col justify-between sm:ml-6">
-        <div className="relative pr-9  sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-8">
-          <div className="flex justify-between">
-            <p
-              onClick={onProductClick}
-              className="text-lg  cursor-pointer font-semibold text-black"
-            >
-              {data.name}
-            </p>
-            <p className="text-lg flex  gap-4 cursor-pointer font-semibold text-black h-fit w-fit z-10">
-              {quantity === 1 ? (
-                ""
-              ) : (
-                <IconButton
-                  onClick={onMinusClick}
-                  icon={<MinusIcon size={15} />}
-                />
-              )}
-
-              {quantity}
-              <IconButton onClick={onPlusClick} icon={<PlusIcon size={15} />} />
-            </p>
-          </div>
-
-          <div className="mt-1 flex text-sm ">
-            {data.colors && ( // Check if color exists before rendering
-              <div>
-                <div
-                  key={data?.colors[0]?.name}
-                  className="w-4 h-4 rounded-full mr-1 border-2 border-black"
-                  style={{ backgroundColor: data.colors[0].value }}
-                ></div>
-              </div>
-            )}
-            {size}
-          </div>
-          <Currency value={price} discountedValue={data?.discountedPrice} />
+      <div className="flex flex-1 flex-col ml-4 sm:ml-6">
+        <p
+          onClick={onProductClick}
+          className="text-lg cursor-pointer font-semibold text-black hover:text-primary"
+        >
+          {data.name}
+        </p>
+        <div className="flex items-center mt-2">
+          {data.colors && data.colors[0].value != "#111" && (
+            <div
+              key={data?.colors[0]?.name}
+              className="w-4 h-4 rounded-full mr-2 border-2 border-black"
+              style={{ backgroundColor: data.colors[0].value }}
+            ></div>
+          )}
+          <h1 className="border font-bold px-4 py-2 mt-2">
+            {" "}
+            <span className="font-medium">Size :</span> {size}
+          </h1>
         </div>
-        <div className="absolute z-10 right-0 top-0">
-          <IconButton
-            onClick={() => removeItem(cartId)}
-            icon={<X size={15} />}
-          />
+      </div>
+      <div className="flex items-center space-x-4">
+        <div className="flex items-center">
+          {quantity > 1 && (
+            <IconButton onClick={onMinusClick} icon={<MinusIcon size={15} />} />
+          )}
+          <span className="mx-2">{quantity}</span>
+          <IconButton onClick={onPlusClick} icon={<PlusIcon size={15} />} />
         </div>
+        <Currency value={price} discountedValue={data?.discountedPrice} />
       </div>
     </li>
   );
