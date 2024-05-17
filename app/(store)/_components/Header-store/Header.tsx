@@ -10,6 +10,8 @@ import { Category, Product } from "@prisma/client";
 import Image from "next/image";
 import WishList from "./WishList";
 import Search from "./Search";
+import { usePathname } from "next/navigation";
+import CheckoutHeader from "./CheckoutHeader";
 
 interface HeaderProps {
   categories: Category[];
@@ -18,6 +20,7 @@ interface HeaderProps {
 }
 
 const Header = ({ categories, allProducts, UserId }: HeaderProps) => {
+  const pathname = usePathname();
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
 
   useEffect(() => {
@@ -41,6 +44,11 @@ const Header = ({ categories, allProducts, UserId }: HeaderProps) => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const isCheckOutPage = pathname.includes("/checkout");
+  if(isCheckOutPage) return (
+    <CheckoutHeader userId={UserId} />
+  );
 
   return (
     <header
