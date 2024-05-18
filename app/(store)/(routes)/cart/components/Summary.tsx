@@ -32,7 +32,7 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, products }) => {
       return;
     }
 
-    router.push("/cart/checkout");
+    router.push(`/cart/checkout?reload=${Date.now()}`);
   };
 
   const isCheckoutPage = pathname.includes("checkout");

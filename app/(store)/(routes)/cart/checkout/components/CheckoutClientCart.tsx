@@ -12,21 +12,33 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import Script from "next/script";
 import { LoaderCircle } from "lucide-react";
-import axios from 'axios';
+import axios from "axios";
+import { ExtendedUser } from "@/next-auth";
+import toast from "react-hot-toast";
+import { CartItems } from "@prisma/client";
 
 interface CheckoutClientCartProps {
+  user?: ExtendedUser;
   prices: number[];
   quantities: number[];
+  AddressId: string;
+  products: CartItems[];
 }
 
 const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
+  user,
   quantities,
   prices,
+  AddressId,
+  products,
 }) => {
   const router = useRouter();
   const params = useSearchParams();
   const [loading1, setLoading1] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<"razorpay" | "cod">(
+    "razorpay"
+  );
   const idRef = useRef<string | null>(null);
   const [orderTotal, setOrderTotal] = useState<number>(0);
 
@@ -58,61 +70,92 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
 
   const processPayment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
-    const orderId = idRef.current;
-    console.log(orderId);
-    try {
-      const options = {
-        key: process.env.RAZORPAY_KEY_ID,
-        amount: orderTotal * 100,
-        currency: "INR",
-        name: "Payment",
-        description: "Payment",
-        order_id: orderId,
-        handler: async function (response: any) {
-          const data = {
-            orderCreationId: orderId,
-            razorpayPaymentId: response.razorpay_payment_id,
-            razorpayOrderId: response.razorpay_order_id,
-            razorpaySignature: response.razorpay_signature,
-          };
+    if (paymentMethod === "razorpay") {
+      setLoading(true);
+      const orderId = idRef.current;
+      console.log(orderId);
+      try {
+        const options = {
+          key: process.env.RAZORPAY_KEY_ID,
+          amount: orderTotal * 100,
+          currency: "INR",
+          name: "Payment",
+          description: "Payment",
+          order_id: orderId,
+          handler: async function (response: any) {
+            const data = {
+              orderCreationId: orderId,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpayOrderId: response.razorpay_order_id,
+              razorpaySignature: response.razorpay_signature,
+            };
 
-          const result = await axios.post("/api/dashboard/verify", data);
-          const res = result.data;
-          if (res.isOk) {
-            alert(res.message);
-            await axios.post("/api/dashboard/create-order", {
-              orderId,
-              total: orderTotal,
-              status: "Pending",
-              isPaid: true,
-              // Add other necessary order details here
-            });
-          } else {
-            alert(res.message);
-          }
-        },
-        theme: {
-          color: "#3399cc",
-        },
-      };
-      const paymentObject = new window.Razorpay(options);
-      paymentObject.on("payment.failed", function (response: any) {
-        alert(response.error.description);
-      });
-      setLoading(false);
-      paymentObject.open();
-    } catch (error) {
-      console.error(error);
+            const result = await axios.post("/api/dashboard/verify", data);
+            const res = result.data;
+            if (res.isOk) {
+              toast.success(res.message);
+              await axios.post("/api/dashboard/create-order", {
+                orderId,
+                userId: user?.id,
+                total: orderTotal,
+                status: "Pending",
+                isPaid: true,
+                addressId: AddressId,
+                products: products.map((product) => ({
+                  productId: product.productId,
+                  price: product.price,
+                  quantity: product.quantity,
+                })),
+              });
+              router.push("/orders/success");
+            } else {
+              toast.error(res.message);
+            }
+          },
+          theme: {
+            color: "#3399cc",
+          },
+        };
+        const paymentObject = new window.Razorpay(options);
+        paymentObject.on("payment.failed", function (response: any) {
+          toast.error(response.error.description);
+        });
+        setLoading(false);
+        paymentObject.open();
+      } catch (error) {
+        console.error(error);
+        toast.error("Payment processing failed");
+      }
+    } else if (paymentMethod === "cod") {
+      try {
+        await axios.post("/api/dashboard/create-order", {
+          orderId: idRef.current,
+          total: orderTotal,
+          status: "Pending",
+          isPaid: false,
+          userId: user?.id,
+          addressId: AddressId,
+          products: products.map((product) => ({
+            productId: product.productId,
+            price: product.price,
+            quantity: product.quantity,
+          })),
+        });
+        toast.success("Order placed successfully. Pay cash on delivery.");
+        router.push("/orders/success");
+      } catch (error) {
+        console.error("Error placing order for COD:", error);
+        toast.error("Order placement failed");
+      }
     }
   };
 
-  if (loading1)
-    return (
-      <div className="container h-screen flex justify-center items-center">
-        <LoaderCircle className=" animate-spin h-20 w-20 text-primary" />
-      </div>
-    );
+  // if (loading1)
+  //   return (
+  //     <div className="container h-screen flex justify-center items-center">
+  //       <LoaderCircle className="animate-spin h-20 w-20 text-primary" />
+  //     </div>
+  //   );
 
   return (
     <>
@@ -121,30 +164,46 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
         src="https://checkout.razorpay.com/v1/checkout.js"
       />
 
-      <section className="container h-screen flex flex-col justify-center items-center gap-10">
-        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight">
-          Checkout
-        </h1>
-        <Card className="max-w-[25rem] space-y-8">
+      <section className="container flex flex-col justify-center items-center gap-10 py-12">
+        <Card className="max-w-[25rem] w-full">
           <CardHeader>
-            <CardTitle className="my-4">Continue</CardTitle>
+            <CardTitle className="text-2xl font-bold my-4">Checkout</CardTitle>
             <CardDescription>
-              By clicking on pay you&apos;ll purchase your products for a total of Rs{" "}
-              {orderTotal}
+              Please choose a payment method to complete your purchase of Rs{" "}
+              {orderTotal}.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={processPayment}>
+              <div className="mb-4">
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="razorpay"
+                    checked={paymentMethod === "razorpay"}
+                    onChange={() => setPaymentMethod("razorpay")}
+                    className="mr-2"
+                  />
+                  Pay with Razorpay
+                </label>
+                <label className="flex items-center mt-2">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="cod"
+                    checked={paymentMethod === "cod"}
+                    onChange={() => setPaymentMethod("cod")}
+                    className="mr-2"
+                  />
+                  Cash on Delivery
+                </label>
+              </div>
               <Button className="w-full" type="submit">
-                {loading ? "...loading" : "Pay"}
+                {loading ? "...loading" : "Proceed to Pay"}
               </Button>
             </form>
           </CardContent>
-          <CardFooter className="flex">
-            <p className="text-sm text-muted-foreground underline underline-offset-4">
-              Please read the terms and conditions.
-            </p>
-          </CardFooter>
         </Card>
       </section>
     </>

@@ -34,26 +34,24 @@ model User {
 }
 
 model Address {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  orderId     Order[] 
-  phone     String
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderId        Order[]
+  phone          String
   AlternatePhone String?
   addressLine1   String
   addressLine2   String?
   addressLine3   String?
-  pincode   String
-  city      String
-  state     String
-  AddressType String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  pincode        String
+  city           String
+  state          String
+  AddressType    String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([userId])
-
 }
-
 
 model Review {
   id        String   @id @default(cuid())
@@ -217,7 +215,7 @@ model CartItems {
   quantity  Int     @default(1)
   size      String
   color     String?
-  price    Int
+  price     Int
 
   @@index([userId])
   @@index([productId])
@@ -225,11 +223,11 @@ model CartItems {
 
 model Order {
   id         String      @id @default(uuid())
-  orderItems orderItem[]
-  total     Int
-  status    String
+  orderItems orderItem[] 
+  total      Int
+  status     String
   isPaid     Boolean     @default(false)
-  AddressId String
+  AddressId  String
   Address    Address     @relation(fields: [AddressId], references: [id])
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
@@ -239,11 +237,11 @@ model Order {
 
 model orderItem {
   id        String  @id @default(uuid())
-  name String
-  Price Int
+  name      String
+  Price     Int
   quantity  Int
   orderId   String
-  order     Order   @relation(fields: [orderId], references: [id])
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   productId String
   product   Product @relation(fields: [productId], references: [id])
 

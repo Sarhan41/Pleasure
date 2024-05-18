@@ -48,3 +48,25 @@ export async function GET(req: Request) {
     return new NextResponse("Internal error", { status: 500 });
   }
 }
+
+
+export async function DELETE(req: Request) {
+  const user = await currentUser();
+
+  if (!user) {
+    return new NextResponse("Unauthenticated", { status: 401 });
+  }
+
+  try {
+    await db.order.deleteMany({
+      where: {
+        userId: user.id,
+      },
+    });
+
+    return new NextResponse("Deleted", { status: 200 });
+  } catch (error) {
+    console.log("[ORDER_DELETE]", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}

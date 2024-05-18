@@ -12,20 +12,27 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { ExtendedUser } from "@/next-auth";
-import { Address } from "@prisma/client";
 import { FaCheck } from "react-icons/fa";
 import { FaCheckCircle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import CheckoutClientCart from "./CheckoutClientCart";
+import { Address, CartItems } from "@prisma/client";
 
 interface ThreeAccordionProps {
   user?: ExtendedUser;
   addresses: Address[];
   prices: number[];
   quantities: number[];
+  products: CartItems[];
 }
 
-const ThreeAccordion: React.FC<ThreeAccordionProps> = ({ user, addresses , prices , quantities}) => {
+const ThreeAccordion: React.FC<ThreeAccordionProps> = ({
+  user,
+  addresses,
+  prices,
+  quantities,
+  products,
+}) => {
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
   const [openItem, setOpenItem] = useState<string>(
     user ? "item-2" : selectedAddress ? "item-3" : "item-1"
@@ -101,6 +108,10 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({ user, addresses , price
         className="rounded-xl overflow-hidden mx-4 md:mx-12 my-4 shadow-lg"
       >
         <AccordionTrigger className="flex justify-between px-4 md:px-8 py-4 items-center bg-white text-gray-900 transition-colors duration-300">
+          {selectedAddress && (
+            <FaCheckCircle size={24} className="text-green-600" />
+          )}
+
           <h1 className="font-bold text-xl md:text-3xl">2. Shipping Address</h1>
           {selectedAddress ? (
             <p className="text-gray-600">{selectedAddress?.phone}</p>
@@ -157,7 +168,21 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({ user, addresses , price
         </AccordionTrigger>
         <AccordionContent>
           <div className="p-4 md:p-8 bg-gray-50 rounded-b-xl">
-            <CheckoutClientCart prices={prices} quantities={quantities} />
+            {!selectedAddress ? (
+              <div className="flex flex-col justify-center items-center w-full gap-3">
+                <p className="text-center  text-base text-gray-700">
+                  Please select a shipping address to proceed to payment.
+                </p>
+              </div>
+            ) : (
+              <CheckoutClientCart
+                user={user}
+                prices={prices}
+                AddressId={selectedAddress.id}
+                quantities={quantities}
+                products={products}
+              />
+            )}
           </div>
         </AccordionContent>
       </AccordionItem>

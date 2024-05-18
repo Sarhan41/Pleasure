@@ -11,11 +11,12 @@ const ClearIcon = () => {
 
   const onClick = async () => {
     try {
-      await axios.delete("/api/dashboard/cartItems");
+      await axios.delete("/api/dashboard/order");
       toast.success("Cart cleared successfully!");
       router.refresh(); // Refresh the page or navigate as needed
       router.push(`/cart?reload=${Date.now()}`);
     } catch (error) {
+      console.error("[CLEAR_CART]", error);
       toast.error("Failed to clear the cart. Please try again.");
     }
   };
