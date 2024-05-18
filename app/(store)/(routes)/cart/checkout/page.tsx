@@ -2,6 +2,7 @@ import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import ThreeAccordion from "./components/ThreeAccordion";
 import Summary from "../components/Summary";
+import CheckoutClientCart from "./components/CheckoutClientCart";
 
 export default async function CartCheckoutPage() {
   const user = await currentUser();
@@ -49,8 +50,8 @@ export default async function CartCheckoutPage() {
       <div className="w-96">
         <Summary prices={prices} quantities={quantities} products={products} />
       </div>
-      {/* 
-      <CheckoutClientCart prices={prices} quantities={quantities} /> */}
+      
+      <CheckoutClientCart prices={prices} quantities={quantities} /> 
     </div>
   );
 }

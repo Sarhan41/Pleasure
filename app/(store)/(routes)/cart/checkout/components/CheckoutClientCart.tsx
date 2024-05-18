@@ -1,6 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -27,7 +26,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
   const params = useSearchParams();
   const [loading1, setLoading1] = useState(true);
   const [loading, setLoading] = useState(false);
-  const idRef = useRef();
+  const idRef = useRef<string | null>(null);
   const [orderTotal, setOrderTotal] = useState<number>(0);
 
   useEffect(() => {
@@ -39,14 +38,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
     setOrderTotal(total);
   }, [prices, quantities]);
 
-  useEffect(() => {
-    // if (!orderTotal) {
-    //   router.replace("/");
-    // }
-    createOrderId();
-  }, []);
-
-  const createOrderId = async () => {
+  const createOrderId = useCallback(async () => {
     try {
       const response = await fetch("/api/dashboard/order", {
         method: "POST",
@@ -54,7 +46,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: orderTotal! * 100,
+          amount: orderTotal * 100,
         }),
       });
 
@@ -66,11 +58,15 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
       const id = data.orderId;
       idRef.current = id;
       setLoading1(false);
-      return;
     } catch (error) {
       console.error("There was a problem with your fetch operation:", error);
     }
-  };
+  }, [orderTotal]);
+
+  useEffect(() => {
+    createOrderId();
+  }, [createOrderId]);
+
   const processPayment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -79,9 +75,9 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
     try {
       const options = {
         key: process.env.RAZORPAY_KEY_ID,
-        amount: orderTotal! * 100,
+        amount: orderTotal * 100,
         currency: "INR",
-        name: "Payment", //busniess name
+        name: "Payment",
         description: "Payment",
         order_id: orderId,
         handler: async function (response: any) {
@@ -98,11 +94,8 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
             headers: { "Content-Type": "application/json" },
           });
           const res = await result.json();
-          //process further request, whatever should happen after request fails
-          if (res.isOk) alert(res.message); //process further request after
-          else {
-            alert(res.message);
-          }
+          if (res.isOk) alert(res.message);
+          else alert(res.message);
         },
         theme: {
           color: "#3399cc",
@@ -118,12 +111,14 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
       console.error(error);
     }
   };
+
   if (loading1)
     return (
       <div className="container h-screen flex justify-center items-center">
         <LoaderCircle className=" animate-spin h-20 w-20 text-primary" />
       </div>
     );
+
   return (
     <>
       <Script
@@ -139,7 +134,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
           <CardHeader>
             <CardTitle className="my-4">Continue</CardTitle>
             <CardDescription>
-              By clicking on pay you'll purchase your plan subscription of Rs{" "}
+              By clicking on pay you&apos;ll purchase your plan subscription of Rs{" "}
               {orderTotal}/month
             </CardDescription>
           </CardHeader>
