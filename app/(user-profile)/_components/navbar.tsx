@@ -16,17 +16,24 @@ export const Navbar = () => {
         >
           <Link href="/my-profile">Info</Link>
         </Button>
-        <Button
-          asChild
-          variant={pathname === "/my-profile/settings" ? "default" : "outline"}
-        >
-          <Link href="/my-profile/settings">Settings</Link>
-        </Button>
+
         <Button
           asChild
           variant={pathname.includes("/address") ? "default" : "outline"}
         >
           <Link href={`/my-profile/address?reload=${Date.now()}`}>Address</Link>
+        </Button>
+        <Button
+          asChild
+          variant={pathname.includes("/orders") ? "default" : "outline"}
+        >
+          <Link href={`/my-profile/orders?reload=${Date.now()}`}>Orders</Link>
+        </Button>
+        <Button
+          asChild
+          variant={pathname === "/my-profile/settings" ? "default" : "outline"}
+        >
+          <Link href="/my-profile/settings">Settings</Link>
         </Button>
       </div>
       <UserButton />

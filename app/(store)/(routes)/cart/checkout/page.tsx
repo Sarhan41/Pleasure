@@ -4,6 +4,7 @@ import ThreeAccordion from "./components/ThreeAccordion";
 import Summary from "../components/Summary";
 import CheckoutClientCart from "./components/CheckoutClientCart";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default async function CartCheckoutPage() {
   const user = await currentUser();
@@ -38,6 +39,23 @@ export default async function CartCheckoutPage() {
   const onSubmit = (data: any) => {
     console.log(data);
   };
+  if (products.length === 0) {
+    return (
+      <div className="h-full w-full flex justify-center items-center flex-col gap-6">
+        <h1 className="text-2xl font-bold text-center my-6">
+          Your cart is empty, Please Add Some Products.
+        </h1>
+        <Button>
+          <Link href={`/cart?reload=${Date.now()}`}>Go to Cart Page</Link>
+        </Button>
+        <Button>
+          <Link className="text-white font-semibold" href="/">
+            Go to Home
+          </Link>
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white  px-10 flex justify-between max-lg:flex-col">
@@ -47,14 +65,21 @@ export default async function CartCheckoutPage() {
           className="text-end w-full flex justify-end
         "
         >
-          <h3 className="w-fit hover:border-b border-black text-primary">View Cart</h3>
+          <h3 className="w-fit hover:border-b border-black text-primary">
+            View Cart
+          </h3>
         </Link>
-        <ThreeAccordion addresses={Address} user={user} prices={prices} quantities={quantities} products={products}  />
+        <ThreeAccordion
+          addresses={Address}
+          user={user}
+          prices={prices}
+          quantities={quantities}
+          products={products}
+        />
       </div>
       <div className="w-96">
         <Summary prices={prices} quantities={quantities} products={products} />
       </div>
-
     </div>
   );
 }

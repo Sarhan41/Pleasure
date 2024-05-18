@@ -1,4 +1,3 @@
-"use client";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +15,7 @@ import axios from "axios";
 import { ExtendedUser } from "@/next-auth";
 import toast from "react-hot-toast";
 import { CartItems } from "@prisma/client";
+import Link from "next/link";
 
 interface CheckoutClientCartProps {
   user?: ExtendedUser;
@@ -36,9 +36,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
   const params = useSearchParams();
   const [loading1, setLoading1] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<"razorpay" | "cod">(
-    "razorpay"
-  );
+  const [paymentMethod, setPaymentMethod] = useState<"razorpay" | "cod">("razorpay");
   const idRef = useRef<string | null>(null);
   const [orderTotal, setOrderTotal] = useState<number>(0);
 
@@ -105,6 +103,8 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
                   productId: product.productId,
                   price: product.price,
                   quantity: product.quantity,
+                  size: product.size,
+                  color: product.color,
                 })),
               });
               router.push("/orders/success");
@@ -139,6 +139,8 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
             productId: product.productId,
             price: product.price,
             quantity: product.quantity,
+            size: product.size,
+            color: product.color,
           })),
         });
         toast.success("Order placed successfully. Pay cash on delivery.");
@@ -149,13 +151,6 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
       }
     }
   };
-
-  // if (loading1)
-  //   return (
-  //     <div className="container h-screen flex justify-center items-center">
-  //       <LoaderCircle className="animate-spin h-20 w-20 text-primary" />
-  //     </div>
-  //   );
 
   return (
     <>

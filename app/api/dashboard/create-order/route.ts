@@ -10,7 +10,9 @@ export async function POST(request: NextRequest) {
     const productDetails = await db.product.findMany({
       where: {
         id: {
-          in: products.map((product: { productId: string }) => product.productId),
+          in: products.map(
+            (product: { productId: string }) => product.productId
+          ),
         },
       },
       select: {
@@ -21,17 +23,27 @@ export async function POST(request: NextRequest) {
     });
 
     // Map products to include additional details
-    const orderItemsData = products.map((product: { productId: string, price: number, quantity: number }) => {
-      const productDetail = productDetails.find(
-        (p) => p.id === product.productId
-      );
-      return {
-        name: productDetail?.name,
-        Price: product.price,  // Ensure correct capitalization here
-        quantity: product.quantity,
-        productId: product.productId,
-      };
-    });
+    const orderItemsData = products.map(
+      (product: {
+        productId: string;
+        price: number;
+        quantity: number;
+        size: string;
+        color: string;
+      }) => {
+        const productDetail = productDetails.find(
+          (p) => p.id === product.productId
+        );
+        return {
+          name: productDetail?.name,
+          Price: product.price,
+          quantity: product.quantity,
+          size: product.size,
+          color: product.color,
+          productId: product.productId,
+        };
+      }
+    );
 
     // Create the order
     const order = await db.order.create({
