@@ -15,8 +15,9 @@ import {
   DialogContent,
   DialogOverlay,
 } from "@/components/ui/dialog";
-import { Check, Heart, MinusIcon, PlusIcon, Share2Icon } from "lucide-react";
+import { Check, Heart, MinusIcon, PlusIcon, Share2Icon, Link } from "lucide-react";
 import IconButton from "@/components/Store/IconButton";
+import { FaWhatsapp } from "react-icons/fa";
 
 interface InfoProps {
   data: Product;
@@ -28,7 +29,9 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [sizeError, setSizeError] = useState(false);
-  const [isSizeChartOpen, setIsSizeChartOpen] = useState(false); // State to manage dialog open/close
+  const [isSizeChartOpen, setIsSizeChartOpen] = useState(false);
+  const [isSharePopupOpen1, setIsSharePopupOpen1] = useState(false);
+  const [isSharePopupOpen2, setIsSharePopupOpen2] = useState(false);
   const router = useRouter();
 
   const onAddToCart: MouseEventHandler<HTMLButtonElement> = async (event) => {
@@ -71,9 +74,9 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         });
         toast.success("Added to cart");
       } else {
-        const cartId = foundItem.id; // Update existingItem state
+        const cartId = foundItem.id;
         await axios.patch(`/api/dashboard/cartItems/${cartId}`, {
-          quantity: foundItem.quantity + quantity, // Increase quantity by by local quantity state
+          quantity: foundItem.quantity + quantity,
         });
         toast.success("Item's quantity increased in cart");
       }
@@ -105,6 +108,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
       setQuantity((prevQuantity) => prevQuantity - 1);
     }
   };
+
   const onAddToWishList: MouseEventHandler<HTMLButtonElement> = async (
     event
   ) => {
@@ -140,6 +144,38 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
     } else {
       return data.price;
     }
+  };
+
+  const handleShareButtonClick1 = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    setIsSharePopupOpen1(!isSharePopupOpen1);
+    setIsSharePopupOpen2(false);
+  };
+
+  const handleShareButtonClick2 = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    setIsSharePopupOpen2(!isSharePopupOpen2);
+    setIsSharePopupOpen1(false);
+  };
+
+  const handleShareViaWhatsApp = () => {
+    const url = window.location.href;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(url)}`;
+    window.open(whatsappUrl, "_blank");
+  };
+
+  const handleCopyLink = () => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(
+      () => {
+        toast.success("Link copied to clipboard");
+      },
+      () => {
+        toast.error("Failed to copy link");
+      }
+    );
+    setIsSharePopupOpen1(false);
+    setIsSharePopupOpen2(false);
   };
 
   return (
@@ -207,7 +243,6 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                     <Cross2Icon className="h-4 w-4" />
                   </button>
                 </DialogClose>
-                {/* Your size chart content goes here */}
               </DialogContent>
             </DialogOverlay>
           </Dialog>
@@ -219,9 +254,9 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
               onClick={decrementQuantity}
               className="flex justify-center items-center w-8 h-8 rounded-md bg-gray-100 hover:bg-gray-200 focus:outline-none"
             >
-              {quantity === 1 ? "" : <MinusIcon className="h-4 w-4" />}
+              <MinusIcon className="h-4 w-4" />
             </button>
-            <span className="text-gray-900 font-semibold mx-4">{quantity}</span>
+            <span className="mx-4">{quantity}</span>
             <button
               onClick={incrementQuantity}
               className="flex justify-center items-center w-8 h-8 rounded-md bg-gray-100 hover:bg-gray-200 focus:outline-none"
@@ -240,10 +275,10 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             };
             if (color.value != "#111") {
               return (
-                <>
+                <div key={color.name}>
                   <h3 className="font-semibold text-black ">Colors:</h3>
                   {color.toLink ? (
-                    <div onClick={handleClick} key={color.name}>
+                    <div onClick={handleClick}>
                       <div
                         key={color.name}
                         className="h-10 w-10 rounded-full border border-gray-600 cursor-pointer"
@@ -256,69 +291,98 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                       className="h-10 w-10 rounded-full border border-gray-900 relative"
                       style={{ backgroundColor: color.value }}
                     >
-                      <div className="absolute inset-0 flex items-center justify-center text-gray-600  bottom-0 left-0 h-3 w-3 bg-white border border-gray-900">
+                      <div className="absolute inset-0 flex items-center justify-center text-gray-600 bottom-0 left-0 h-3 w-3 bg-white border border-gray-900">
                         <Check size={24} />
                       </div>
                     </div>
                   )}
-                </>
+                </div>
               );
             }
+            return null;
           })}
         </div>
       </div>
-      <div className="mt-4 flex items-center gap-x-3">
+      <div className="mt-4 flex items-center gap-x-3 relative">
         <div className="border-primary border-2 rounded-full">
           <IconButton
-            onClick={onAddToWishList}
-            icon={<Share2Icon size={20} className="text-gray-600 " />}
+            onClick={handleShareButtonClick1}
+            icon={<Share2Icon size={20} className="text-gray-600" />}
           />
         </div>
+        {isSharePopupOpen1 && (
+          <div className="absolute bg-white border border-gray-300 rounded-md p-2 mt-2 shadow-lg z-50">
+            <button
+              onClick={handleShareViaWhatsApp}
+              className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md w-full"
+            >
+              <FaWhatsapp size={20} className="text-green-500" />
+              <span>Share via WhatsApp</span>
+            </button>
+            <button
+              onClick={handleCopyLink}
+              className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md w-full"
+            >
+              <Link size={20} className="text-gray-600" />
+              <span>Copy Link</span>
+            </button>
+          </div>
+        )}
         <div className="border-primary border-2 rounded-full">
           <IconButton
             onClick={onAddToWishList}
-            icon={<Heart size={20} className="text-gray-600 " />}
+            icon={<Heart size={20} className="text-gray-600" />}
           />
         </div>
         <div>
-          <Button
-            onClick={onAddToCart}
-            className="flex items-center gap-x-2 w-60"
-          >
+          <Button onClick={onAddToCart} className="flex items-center gap-x-2 w-60">
             Add To Cart
-            {/* Shopping cart icon */}
           </Button>
         </div>
       </div>
 
-      <div>
-        <h3 className="font-bold text-black mt-8 border-b-2 border-primary w-fit p-2 mb-4 ">
+      <div className="mt-8">
+        <h3 className="font-bold text-black border-b-2 border-primary w-fit p-2 mb-4">
           Description
         </h3>
         <p className="text-gray-600">
           {data.description?.split(".").join(".\n") || "No description"}
         </p>
       </div>
-      <div className="mt-10 flex items-center gap-x-6 shadow-2xl shadow-gray-600 w-full justify-center ">
+      <div className="mt-10 flex items-center gap-x-6  py-7shadow-2xl shadow-gray-600 w-full justify-center relative">
         <div className="border-primary border-2 rounded-full">
           <IconButton
-            onClick={() => console.log("share")}
-            icon={<Share2Icon size={20} className="text-gray-600 " />}
+            onClick={handleShareButtonClick2}
+            icon={<Share2Icon size={20} className="text-gray-600" />}
           />
         </div>
+        {isSharePopupOpen2 && (
+          <div className="absolute bg-white border border-gray-300 rounded-md p-2 mt-2 shadow-lg z-50">
+            <button
+              onClick={handleShareViaWhatsApp}
+              className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md w-full"
+            >
+              <FaWhatsapp size={20} className="text-green-500" />
+              <span>Share via WhatsApp</span>
+            </button>
+            <button
+              onClick={handleCopyLink}
+              className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md w-full"
+            >
+              <Link size={20} className="text-gray-600" />
+              <span>Copy Link</span>
+            </button>
+          </div>
+        )}
         <div className="border-primary border-2 rounded-full">
           <IconButton
             onClick={onAddToWishList}
-            icon={<Heart size={20} className="text-gray-600 " />}
+            icon={<Heart size={20} className="text-gray-600" />}
           />
         </div>
         <div>
-          <Button
-            onClick={onAddToCart}
-            className="flex items-center gap-x-2 w-60"
-          >
+          <Button onClick={onAddToCart} className="flex items-center gap-x-2 w-60">
             Add To Cart
-            {/* Shopping cart icon */}
           </Button>
         </div>
       </div>
