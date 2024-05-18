@@ -24,7 +24,7 @@ export const AddressInfo = ({ addresses, label }: AddressInfoProps) => {
           <Link href="/my-profile/address/new">
             <Button>Add Address</Button>
           </Link>
-          <Link href="/cart/checkout">
+          <Link href={`/cart/checkout?reload=${Date.now()}`}>
             <Button>Go to Checkout Page</Button>
           </Link>
         </div>
