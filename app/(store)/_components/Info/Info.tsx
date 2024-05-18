@@ -15,7 +15,7 @@ import {
   DialogContent,
   DialogOverlay,
 } from "@/components/ui/dialog";
-import { Check, Heart, MinusIcon, PlusIcon } from "lucide-react";
+import { Check, Heart, MinusIcon, PlusIcon, Share2Icon } from "lucide-react";
 import IconButton from "@/components/Store/IconButton";
 
 interface InfoProps {
@@ -135,12 +135,12 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
   };
 
   const priceUpdate = () => {
-    if(selectedSize?.value === "XXXL" || selectedSize?.value === "XXL") {
+    if (selectedSize?.value === "XXXL" || selectedSize?.value === "XXL") {
       return data.price + 20;
     } else {
       return data.price;
     }
-  }
+  };
 
   return (
     <div>
@@ -271,6 +271,12 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         <div className="border-primary border-2 rounded-full">
           <IconButton
             onClick={onAddToWishList}
+            icon={<Share2Icon size={20} className="text-gray-600 " />}
+          />
+        </div>
+        <div className="border-primary border-2 rounded-full">
+          <IconButton
+            onClick={onAddToWishList}
             icon={<Heart size={20} className="text-gray-600 " />}
           />
         </div>
@@ -294,6 +300,12 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         </p>
       </div>
       <div className="mt-10 flex items-center gap-x-6 shadow-2xl shadow-gray-600 w-full justify-center ">
+        <div className="border-primary border-2 rounded-full">
+          <IconButton
+            onClick={() => console.log("share")}
+            icon={<Share2Icon size={20} className="text-gray-600 " />}
+          />
+        </div>
         <div className="border-primary border-2 rounded-full">
           <IconButton
             onClick={onAddToWishList}

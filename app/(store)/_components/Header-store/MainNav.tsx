@@ -18,6 +18,16 @@ interface MainNavProps {
 }
 
 const MainNav: React.FC<MainNavProps> = ({ data }) => {
+  console.log("MAIN NAV 21", data);
+
+  // Define the order of categories
+  const categoryOrder = ["Panties", "Sport Bra", "Sleep", "Shorts", "Pyjama"];
+
+  // Sort the categories based on the defined order
+  const sortedData = data.sort((a, b) => {
+    return categoryOrder.indexOf(a.name) - categoryOrder.indexOf(b.name);
+  });
+
   const pathname = usePathname();
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
 
@@ -34,7 +44,7 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
       <div className="flex items-center space-x-4 lg:space-x-8">
         <div className="hidden lg:flex space-x-4 ">
           <div className="flex space-x-4">
-            {data.map((category, index) => (
+            {sortedData.map((category, index) => (
               <div
                 key={category.id}
                 className="relative group"
@@ -65,6 +75,7 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
                           passHref
                           onClick={() => setHoveredCategory("")}
                         >
+                          {/* {product.name.split(" ").pop()} */}
                           {product.name}
                         </Link>
                       ))}
@@ -88,7 +99,7 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
                 <StoreIcon className="w-4 h-4" />
               </div>
             </DropdownMenuLabel>
-            {data.map((category) => (
+            {sortedData.map((category) => (
               <Link
                 key={category.id}
                 href={`/category/${category.name.replace(/\s+/g, "-")}`}

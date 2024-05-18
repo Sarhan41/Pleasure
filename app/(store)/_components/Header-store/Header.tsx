@@ -46,7 +46,7 @@ const Header = ({ categories, allProducts, UserId }: HeaderProps) => {
   }, []);
 
   const isCheckOutPage = pathname.includes("/checkout");
-  if (isCheckOutPage) return <CheckoutHeader />;
+  if (isCheckOutPage) return <CheckoutHeader userId={UserId}/>;
 
   return (
     <header

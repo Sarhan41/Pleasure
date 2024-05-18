@@ -37,6 +37,37 @@ export async function GET(req: Request) {
       where: {
         id: user?.id,
       },
+      include: {
+        orderItems: {
+          include: {
+            product: {
+              include: {
+                images: {
+                  select: {
+                    url: true,
+                  },
+                },
+                category: {
+                  select: {
+                    name: true,
+                  },
+                },
+                sizes: {
+                  select: {
+                    name: true,
+                  },
+                },
+                colors: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+
       orderBy: {
         createdAt: "desc",
       },
@@ -48,7 +79,6 @@ export async function GET(req: Request) {
     return new NextResponse("Internal error", { status: 500 });
   }
 }
-
 
 export async function DELETE(req: Request) {
   const user = await currentUser();
