@@ -22,12 +22,12 @@ export default function Checkout() {
   const [loading, setLoading] = useState(false);
   const idRef = useRef()
 
-  useEffect(()=>{
-    if(!amount){
-        router.replace("/")
-    }
-    createOrderId();
-  },[])
+  // useEffect(()=>{
+  //   if(!amount){
+  //       router.replace("/")
+  //   }
+  //   createOrderId();
+  // },[])
 
   const createOrderId = async () => {
     try {
