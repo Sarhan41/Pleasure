@@ -51,7 +51,7 @@ export default async function CartCheckoutPage() {
         <Summary prices={prices} quantities={quantities} products={products} />
       </div>
       
-      <CheckoutClientCart prices={prices} quantities={quantities} /> 
+      {/* <CheckoutClientCart prices={prices} quantities={quantities} />  */}
     </div>
   );
 }

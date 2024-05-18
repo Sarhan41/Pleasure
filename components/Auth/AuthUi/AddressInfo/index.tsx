@@ -20,9 +20,14 @@ export const AddressInfo = ({ addresses, label }: AddressInfoProps) => {
     <div className="flex flex-col w-full mt-6 space-y-4 px-4">
       <div className="flex justify-between   mb-4">
         <h2 className="text-3xl font-semibold">{label}</h2>
-        <Link href="/my-profile/address/new">
-          <Button>Add Address</Button>
-        </Link>
+        <div className="flex gap-4 max-sm:flex-col">
+          <Link href="/my-profile/address/new">
+            <Button>Add Address</Button>
+          </Link>
+          <Link href="/cart/checkout">
+            <Button>Go to Checkout Page</Button>
+          </Link>
+        </div>
       </div>
 
       {addresses.length === 0 && (
