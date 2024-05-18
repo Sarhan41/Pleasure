@@ -18,13 +18,18 @@ export const Navbar = () => {
         >
           <Link href="/my-profile">Info</Link>
         </Button>
-     
-     
+
         <Button
           asChild
           variant={pathname === "/my-profile/settings" ? "default" : "outline"}
         >
           <Link href="/my-profile/settings">Settings</Link>
+        </Button>
+        <Button
+          asChild
+          variant={pathname.includes("/address") ? "default" : "outline"}
+        >
+          <Link href="/my-profile/address">Address</Link>
         </Button>
       </div>
       <UserButton />

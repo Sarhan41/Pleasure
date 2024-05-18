@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import Currency from "@/components/Store/Currency";
 import IconButton from "@/components/Store/IconButton";
 import axios from "axios";
+import { Button } from "@/components/ui/button";
 
 interface WishListItemProps {
   wishlistId: string;
@@ -34,8 +35,10 @@ const WishListItem: React.FC<WishListItemProps> = ({ data, wishlistId }) => {
     }
   };
 
+
   return (
     <li className="flex py-6 border-b ">
+     
       <div
         onClick={onProductClick}
         className="relative h-24 w-24 rounded-md overflow-hidden sm:h-48 sm:w-48 cursor-pointer"

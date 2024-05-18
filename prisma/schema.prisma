@@ -37,6 +37,7 @@ model Address {
   id        String   @id @default(cuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderId     Order[] 
   phone     String
   AlternatePhone String?
   addressLine1   String
@@ -226,8 +227,8 @@ model Order {
   orderItems orderItem[]
   total     Int
   isPaid     Boolean     @default(false)
-  phone      String      @default("")
-  address    String      @default("")
+  AddressId String
+  Address    Address     @relation(fields: [AddressId], references: [id])
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   userId     String

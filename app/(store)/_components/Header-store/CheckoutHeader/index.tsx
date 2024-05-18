@@ -3,11 +3,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-interface CheckoutHeaderProps {
-  userId: string | undefined;
-}
-
-const CheckoutHeader: React.FC<CheckoutHeaderProps> = ({ userId }) => {
+const CheckoutHeader = () => {
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
 
   useEffect(() => {
@@ -34,12 +30,12 @@ const CheckoutHeader: React.FC<CheckoutHeaderProps> = ({ userId }) => {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-screen px-8 md:px-16 lg:px-36 bg-white shadow-md z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 w-screen px-4 md:px-10 lg:px-16 bg-white shadow-md z-50 transition-all duration-300 ${
         isHeaderVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
       {/* First row */}
-      <div className="flex items-center max-sm:flex-col border-b-3 gap-6 justify-between py-2 px-4">
+      <div className="flex items-center max-lg:flex-col border-b-3 gap-6 justify-between py-2 px-4">
         {/* Logo */}
         <div className="flex items-center justify-center">
           <Link
