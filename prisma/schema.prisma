@@ -43,6 +43,7 @@ model Address {
   addressLine1   String
   addressLine2   String?
   addressLine3   String?
+  pincode   String
   city      String
   state     String
   AddressType String
@@ -226,6 +227,7 @@ model Order {
   id         String      @id @default(uuid())
   orderItems orderItem[]
   total     Int
+  status    String
   isPaid     Boolean     @default(false)
   AddressId String
   Address    Address     @relation(fields: [AddressId], references: [id])

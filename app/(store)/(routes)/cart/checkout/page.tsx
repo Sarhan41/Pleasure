@@ -49,13 +49,12 @@ export default async function CartCheckoutPage() {
         >
           <h3 className="w-fit hover:border-b border-black text-primary">View Cart</h3>
         </Link>
-        <ThreeAccordion addresses={Address} user={user} />
+        <ThreeAccordion addresses={Address} user={user} prices={prices} quantities={quantities}  />
       </div>
       <div className="w-96">
         <Summary prices={prices} quantities={quantities} products={products} />
       </div>
 
-      {/* <CheckoutClientCart prices={prices} quantities={quantities} />  */}
     </div>
   );
 }

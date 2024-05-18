@@ -16,24 +16,33 @@ import { Address } from "@prisma/client";
 import { FaCheck } from "react-icons/fa";
 import { FaCheckCircle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import CheckoutClientCart from "./CheckoutClientCart";
 
 interface ThreeAccordionProps {
   user?: ExtendedUser;
   addresses: Address[];
+  prices: number[];
+  quantities: number[];
 }
 
-const ThreeAccordion: React.FC<ThreeAccordionProps> = ({ user, addresses }) => {
+const ThreeAccordion: React.FC<ThreeAccordionProps> = ({ user, addresses , prices , quantities}) => {
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
+  const [openItem, setOpenItem] = useState<string>(
+    user ? "item-2" : selectedAddress ? "item-3" : "item-1"
+  );
   const router = useRouter();
-  
-  const defaultValue = user
-  ? "item-2"
-  : selectedAddress
-  ? "item-3"
-  : "item-1";
+
+  const handleAddressSelect = (address: Address) => {
+    setSelectedAddress(address);
+    setOpenItem("item-3");
+  };
 
   return (
-    <Accordion type="single" defaultValue={defaultValue}>
+    <Accordion
+      type="single"
+      value={openItem}
+      onValueChange={(value) => setOpenItem(value)}
+    >
       <AccordionItem
         value="item-1"
         className="rounded-xl overflow-hidden mx-4 md:mx-12 my-4 shadow-lg"
@@ -43,10 +52,10 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({ user, addresses }) => {
             user ? "bg-gray-200 text-gray-700" : "bg-white text-gray-900"
           } transition-colors duration-300`}
         >
-          <div className="flex items-center  space-x-2">
+          <div className="flex items-center space-x-2">
             {user && <FaCheckCircle size={24} className="text-green-600" />}
             <h1 className="font-bold text-xl md:text-3xl sm:text-2xl xs:text-xl">
-              1.Login
+              1. Login
             </h1>
             {user ? <p className="text-gray-600">{user.email}</p> : ""}
           </div>
@@ -63,28 +72,26 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({ user, addresses }) => {
               </LogoutButton>
             </div>
           ) : (
-            <>
-              <div className="flex flex-col justify-center items-center w-full gap-3">
-                <LoginButton asChild mode="modal">
-                  <Button
-                    variant="outline"
-                    className="border-primary w-fit hover:bg-primary z-50 hover:text-white"
-                    size="lg"
-                  >
-                    Sign in
-                  </Button>
-                </LoginButton>
-                <SignUpButton asChild mode="modal">
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="border-primary w-fit hover:bg-primary z-50 hover:text-white"
-                  >
-                    Sign up
-                  </Button>
-                </SignUpButton>
-              </div>
-            </>
+            <div className="flex flex-col justify-center items-center w-full gap-3">
+              <LoginButton asChild mode="modal">
+                <Button
+                  variant="outline"
+                  className="border-primary w-fit hover:bg-primary z-50 hover:text-white"
+                  size="lg"
+                >
+                  Sign in
+                </Button>
+              </LoginButton>
+              <SignUpButton asChild mode="modal">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-primary w-fit hover:bg-primary z-50 hover:text-white"
+                >
+                  Sign up
+                </Button>
+              </SignUpButton>
+            </div>
           )}
         </AccordionContent>
       </AccordionItem>
@@ -95,7 +102,11 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({ user, addresses }) => {
       >
         <AccordionTrigger className="flex justify-between px-4 md:px-8 py-4 items-center bg-white text-gray-900 transition-colors duration-300">
           <h1 className="font-bold text-xl md:text-3xl">2. Shipping Address</h1>
-          {selectedAddress ? <p className="text-gray-600">{selectedAddress?.phone}</p> : ""}
+          {selectedAddress ? (
+            <p className="text-gray-600">{selectedAddress?.phone}</p>
+          ) : (
+            ""
+          )}
         </AccordionTrigger>
         <AccordionContent>
           <div className="p-4 md:p-8 bg-gray-50 rounded-b-xl">
@@ -108,9 +119,7 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({ user, addresses }) => {
                       ? "border-primary"
                       : "border-gray-300"
                   }`}
-                  onClick={() =>( setSelectedAddress(address)
-                    
-                  )}
+                  onClick={() => handleAddressSelect(address)}
                 >
                   {selectedAddress?.id === address.id && (
                     <div className="absolute top-2 right-2 text-primary">
@@ -122,6 +131,7 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({ user, addresses }) => {
                   <p>
                     {address.city}, {address.state}
                   </p>
+                  <p>{address.pincode}</p>
                   <p>{address.phone}</p>
                 </div>
               ))}
@@ -147,7 +157,7 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({ user, addresses }) => {
         </AccordionTrigger>
         <AccordionContent>
           <div className="p-4 md:p-8 bg-gray-50 rounded-b-xl">
-            <p>Checkout and payment information</p>
+            <CheckoutClientCart prices={prices} quantities={quantities} />
           </div>
         </AccordionContent>
       </AccordionItem>

@@ -12,6 +12,7 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import Script from "next/script";
 import { LoaderCircle } from "lucide-react";
+import axios from 'axios';
 
 interface CheckoutClientCartProps {
   prices: number[];
@@ -30,36 +31,24 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
   const [orderTotal, setOrderTotal] = useState<number>(0);
 
   useEffect(() => {
-    // Calculate order total based on prices and quantities
     let total = 0;
     for (let i = 0; i < prices.length; i++) {
       total += prices[i] * quantities[i];
     }
-    setOrderTotal(total);
+    setOrderTotal(total + total * 0.05 + 29);
   }, [prices, quantities]);
 
   const createOrderId = useCallback(async () => {
     try {
-      const response = await fetch("/api/dashboard/order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount: orderTotal * 100,
-        }),
+      const response = await axios.post("/api/dashboard/order", {
+        amount: orderTotal * 100,
       });
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const data = await response.json();
-      const id = data.orderId;
+      const id = response.data.orderId;
       idRef.current = id;
       setLoading1(false);
     } catch (error) {
-      console.error("There was a problem with your fetch operation:", error);
+      console.error("There was a problem with your axios operation:", error);
     }
   }, [orderTotal]);
 
@@ -88,14 +77,20 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
             razorpaySignature: response.razorpay_signature,
           };
 
-          const result = await fetch("/api/dashboard/verify", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: { "Content-Type": "application/json" },
-          });
-          const res = await result.json();
-          if (res.isOk) alert(res.message);
-          else alert(res.message);
+          const result = await axios.post("/api/dashboard/verify", data);
+          const res = result.data;
+          if (res.isOk) {
+            alert(res.message);
+            await axios.post("/api/dashboard/create-order", {
+              orderId,
+              total: orderTotal,
+              status: "Pending",
+              isPaid: true,
+              // Add other necessary order details here
+            });
+          } else {
+            alert(res.message);
+          }
         },
         theme: {
           color: "#3399cc",
@@ -134,8 +129,8 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
           <CardHeader>
             <CardTitle className="my-4">Continue</CardTitle>
             <CardDescription>
-              By clicking on pay you&apos;ll purchase your plan subscription of Rs{" "}
-              {orderTotal}/month
+              By clicking on pay you&apos;ll purchase your products for a total of Rs{" "}
+              {orderTotal}
             </CardDescription>
           </CardHeader>
           <CardContent>

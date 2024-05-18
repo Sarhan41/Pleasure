@@ -26,7 +26,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { TrashIcon } from "@radix-ui/react-icons";
-import { AlertModal } from "@/app/(admin)/_components/Alert-modal";
 
 const formSchema = z.object({
   phone: z.string().min(1, "Phone number is required"),
@@ -36,6 +35,7 @@ const formSchema = z.object({
   addressLine3: z.string().optional(),
   city: z.string().min(1, "City is required"),
   state: z.string().min(1, "State is required"),
+  pincode: z.string().min(1, "Pincode is required"),
   addressType: z.string().min(1, "Address type is required"),
 });
 
@@ -58,6 +58,7 @@ const normalizeInitialData = (
       city: "",
       state: "",
       addressType: "",
+      pincode: "",
     };
   }
 
@@ -67,6 +68,7 @@ const normalizeInitialData = (
     addressLine1: data.addressLine1,
     addressLine2: data.addressLine2 ?? undefined,
     addressLine3: data.addressLine3 ?? undefined,
+    pincode: data.pincode,
     city: data.city,
     state: data.state,
     addressType: data.AddressType,
@@ -129,10 +131,8 @@ export const AddressForm: React.FC<AddressFormProps> = ({ initialData }) => {
     }
   };
 
-
-
   return (
-    <>
+    <section className="border border-gray-200 p-8 rounded-lg">
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
 
@@ -284,6 +284,24 @@ export const AddressForm: React.FC<AddressFormProps> = ({ initialData }) => {
             />
             <FormField
               control={form.control}
+              name="pincode"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>PinCode</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="PinCode"
+                      {...field}
+                      className="w-full"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="addressType"
               render={({ field }) => (
                 <FormItem>
@@ -306,6 +324,6 @@ export const AddressForm: React.FC<AddressFormProps> = ({ initialData }) => {
           </Button>
         </form>
       </Form>
-    </>
+    </section>
   );
 };

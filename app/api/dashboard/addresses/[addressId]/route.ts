@@ -39,10 +39,14 @@ export async function PATCH(
 
     const body = await req.json();
 
-    const { phone, alternatePhone, addressLine1, addressLine2, addressLine3, city, state, addressType } = body;
+    const { phone, alternatePhone, addressLine1, addressLine2, addressLine3, city, state, addressType, pincode } = body;
 
     if (!phone) {
       return new NextResponse("Phone is required", { status: 400 });
+    }
+
+    if(!pincode) {
+      return new NextResponse("Pincode is required", { status: 400 });
     }
 
     if (!addressLine1) {
@@ -71,6 +75,7 @@ export async function PATCH(
       },
       data: {
         phone,
+        pincode,
         AlternatePhone: alternatePhone,
         addressLine1,
         addressLine2,

@@ -17,7 +17,7 @@ interface AddressInfoProps {
 
 export const AddressInfo = ({ addresses, label }: AddressInfoProps) => {
   return (
-    <div className="flex flex-col w-full mt-6 space-y-4 px-4">
+    <div className="flex flex-col w-full mt-2 space-y-4 px-4">
       <div className="flex justify-between   mb-4">
         <h2 className="text-3xl font-semibold">{label}</h2>
         <div className="flex gap-4 max-sm:flex-col">
@@ -85,6 +85,12 @@ export const AddressInfo = ({ addresses, label }: AddressInfoProps) => {
                 <p className="text-sm font-medium">State</p>
                 <p className="truncate text-xs font-mono bg-slate-100 rounded-md p-1 dark:text-black">
                   {address.state}
+                </p>
+              </div>
+              <div className="flex flex-col space-y-1">
+                <p className="text-sm font-medium">PinCode</p>
+                <p className="truncate text-xs font-mono bg-slate-100 rounded-md p-1 dark:text-black">
+                  {address.pincode}
                 </p>
               </div>
               <div className="flex flex-col space-y-1">

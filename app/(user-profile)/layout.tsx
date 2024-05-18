@@ -11,12 +11,12 @@ const ProtectedLayout = async ({ children }: ProtectedLayoutProps) => {
   const userId = user?.id;
 
   return (
-    <div className="h-screen w-screen flex flex-col items-center justify-center mb-20">
+    <div className="h-fit w-screen flex flex-col items-center justify-center mb-20">
       <CheckoutHeader userId={userId} />
-      <div className="w-full px-4 sm:px-10 md:px-16 lg:px-24 xl:px-40">
+      <div className="w-full px-4 sm:px-10 md:px-16 mt-4 lg:px-24 xl:px-40">
         <Navbar />
       </div>
-      <div className="flex-grow w-full flex justify-center items-center">
+      <div className="flex-grow w-full mt-4 flex justify-center items-center">
         {children}
       </div>
     </div>

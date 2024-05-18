@@ -18,6 +18,7 @@ export async function POST(req: Request) {
       city,
       state,
       addressType,
+      pincode,
     } = body;
 
     if (!user) {
@@ -27,6 +28,10 @@ export async function POST(req: Request) {
       return new NextResponse("You must login for creating Address", {
         status: 404,
       });
+    }
+
+    if(!pincode) {
+      return new NextResponse("Pincode is required", { status: 400 });
     }
 
     if (!phone) {
@@ -59,6 +64,7 @@ export async function POST(req: Request) {
         addressLine3,
         city,
         state,
+        pincode,
         AddressType: addressType,
       },
     });
