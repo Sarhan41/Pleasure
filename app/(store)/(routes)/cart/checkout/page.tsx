@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import ThreeAccordion from "./components/ThreeAccordion";
 import Summary from "../components/Summary";
 import CheckoutClientCart from "./components/CheckoutClientCart";
+import Link from "next/link";
 
 export default async function CartCheckoutPage() {
   const user = await currentUser();
@@ -13,7 +14,6 @@ export default async function CartCheckoutPage() {
       userId: UserId,
     },
   });
-
 
   const CartProducts = await db.cartItems.findMany({
     where: {
@@ -40,17 +40,21 @@ export default async function CartCheckoutPage() {
   };
 
   return (
-    <div className="bg-white mt-36 px-10 flex justify-between max-lg:flex-col">
+    <div className="bg-white  px-10 flex justify-between max-lg:flex-col">
       <div className="flex-[0.75]">
-        {/* //
-        // @ts-ignore
-        */}
-        <ThreeAccordion addresses={Address}  user={user} />
+        <Link
+          href="/cart"
+          className="text-end w-full flex justify-end
+        "
+        >
+          <h3 className="w-fit hover:border-b border-black text-primary">View Cart</h3>
+        </Link>
+        <ThreeAccordion addresses={Address} user={user} />
       </div>
       <div className="w-96">
         <Summary prices={prices} quantities={quantities} products={products} />
       </div>
-      
+
       {/* <CheckoutClientCart prices={prices} quantities={quantities} />  */}
     </div>
   );

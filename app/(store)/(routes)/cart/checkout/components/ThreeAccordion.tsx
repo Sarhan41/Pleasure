@@ -13,8 +13,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { ExtendedUser } from "@/next-auth";
 import { Address } from "@prisma/client";
+import { FaCheck } from "react-icons/fa";
 import { FaCheckCircle } from "react-icons/fa";
-import AddressForm from "./AddressForm";
 import { useRouter } from "next/navigation";
 
 interface ThreeAccordionProps {
@@ -23,9 +23,14 @@ interface ThreeAccordionProps {
 }
 
 const ThreeAccordion: React.FC<ThreeAccordionProps> = ({ user, addresses }) => {
-  const defaultValue = user ? "item-2" : "item-1";
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
   const router = useRouter();
+  
+  const defaultValue = user
+  ? "item-2"
+  : selectedAddress
+  ? "item-3"
+  : "item-1";
 
   return (
     <Accordion type="single" defaultValue={defaultValue}>
@@ -90,6 +95,7 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({ user, addresses }) => {
       >
         <AccordionTrigger className="flex justify-between px-4 md:px-8 py-4 items-center bg-white text-gray-900 transition-colors duration-300">
           <h1 className="font-bold text-xl md:text-3xl">2. Shipping Address</h1>
+          {selectedAddress ? <p className="text-gray-600">{selectedAddress?.phone}</p> : ""}
         </AccordionTrigger>
         <AccordionContent>
           <div className="p-4 md:p-8 bg-gray-50 rounded-b-xl">
@@ -97,13 +103,20 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({ user, addresses }) => {
               {addresses.map((address) => (
                 <div
                   key={address.id}
-                  className={`p-4 border rounded-lg cursor-pointer ${
+                  className={`relative p-4 border rounded-lg cursor-pointer ${
                     selectedAddress?.id === address.id
                       ? "border-primary"
                       : "border-gray-300"
                   }`}
-                  onClick={() => setSelectedAddress(address)}
+                  onClick={() =>( setSelectedAddress(address)
+                    
+                  )}
                 >
+                  {selectedAddress?.id === address.id && (
+                    <div className="absolute top-2 right-2 text-primary">
+                      <FaCheck />
+                    </div>
+                  )}
                   <p>{address.addressLine1}</p>
                   <p>{address.addressLine2}</p>
                   <p>
