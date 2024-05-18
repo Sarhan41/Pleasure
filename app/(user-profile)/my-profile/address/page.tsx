@@ -12,11 +12,7 @@ const MyProfileAddressPage = async () => {
     },
   });
 
-  return (
+  return <AddressInfo label="My Addresses" addresses={addresses} />;
+};
 
-<AddressInfo label="My Addresses" addresses={addresses} />
-
-   );
-}
- 
 export default MyProfileAddressPage;

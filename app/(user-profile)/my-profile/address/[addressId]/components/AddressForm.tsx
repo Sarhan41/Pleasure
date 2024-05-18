@@ -45,7 +45,9 @@ interface AddressFormProps {
   initialData: Address | null;
 }
 
-const normalizeInitialData = (data: Address | null): Partial<AddressFormValues> => {
+const normalizeInitialData = (
+  data: Address | null
+): Partial<AddressFormValues> => {
   if (!data) {
     return {
       phone: "",
@@ -92,16 +94,13 @@ export const AddressForm: React.FC<AddressFormProps> = ({ initialData }) => {
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(
-          `/api/dashboard/addresses/${params.addressId}`,
-          data
-        );
+        await axios.patch(`/api/dashboard/addresses/${params.addressId}`, data);
       } else {
         await axios.post(`/api/dashboard/addresses`, data);
       }
       router.refresh();
-      router.push(`/my-profile/address?reload=${Date.now()}`);
       toast.success(toastMessage);
+      router.push(`/my-profile/address?reload=${Date.now()}`);
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
@@ -116,13 +115,13 @@ export const AddressForm: React.FC<AddressFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/my-profile/address/${params.addressId}`);
+      await axios.delete(`/api/dashboard/addresses/${params.addressId}`);
       router.refresh();
-      router.push(`/my-profile/address?reload=${Date.now()}`);
       toast.success("Address deleted.");
+      router.push(`/my-profile/address?reload=${Date.now()}`);
     } catch (error) {
       toast.error(
-        "Make sure you removed all Orders using this Address first. "
+        "Make sure you cleared your all Orders using this Address first. "
       );
     } finally {
       setLoading(false);
@@ -130,16 +129,10 @@ export const AddressForm: React.FC<AddressFormProps> = ({ initialData }) => {
     }
   };
 
+
+
   return (
     <>
-      <AlertModal
-        isOpen={open}
-        onClose={onClose}
-        onConfirm={onDelete}
-        loading={loading}
-        name={initialData?.addressLine1 || ""}
-        menu="Address"
-      />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
 
@@ -148,7 +141,7 @@ export const AddressForm: React.FC<AddressFormProps> = ({ initialData }) => {
             disabled={loading}
             variant="destructive"
             size="sm"
-            onClick={() => setOpen(true)}
+            onClick={onDelete}
           >
             <TrashIcon className="h-4 w-4" />
           </Button>

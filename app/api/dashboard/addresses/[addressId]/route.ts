@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { currentRole, currentUser } from "@/lib/auth";
+import {  currentUser } from "@/lib/auth";
 
 export async function GET(
   req: Request,
@@ -30,15 +30,12 @@ export async function PATCH(
 ) {
   try {
     const user = await currentUser();
-    const role = await currentRole();
 
     if (!user) {
       return new NextResponse("Unauthenticated", { status: 401 });
     }
 
-    if (role !== "ADMIN") {
-      return new NextResponse("Unauthorized", { status: 403 });
-    }
+  
 
     const body = await req.json();
 
@@ -97,16 +94,12 @@ export async function DELETE(
 ) {
   try {
     const user = await currentUser();
-    const role = await currentRole();
 
     if (!user) {
       return new NextResponse("Unauthenticated", { status: 401 });
     }
 
-    if (role !== "ADMIN") {
-      return new NextResponse("Unauthorized", { status: 403 });
-    }
-
+   
     if (!params.addressId) {
       return new NextResponse("Address ID is required", { status: 400 });
     }
