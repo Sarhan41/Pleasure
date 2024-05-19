@@ -6,6 +6,7 @@ import Billboard from "@/app/(store)/_components/Billboard/BIllboard";
 import NoResults from "@/components/Store/NoResults";
 import ProductCard from "@/app/(store)/_components/ProductCard/ProductCard";
 import GetProducts from "@/actions/Store/GetProducts";
+import { currentUser } from "@/lib/auth";
 
 interface CategoryPageProps {
   params: {
@@ -22,6 +23,9 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
   searchParams,
 }) => {
   const categoryName = params.categoryName.replace(/-/g, " ");
+
+  const user = await currentUser();
+  const userId = user?.id;
 
   const category = await db.category.findFirst({
     where: {
@@ -110,7 +114,7 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
               <div className="flex flex-wrap gap-4">
                 {finalProducts.map((item) => (
                   // @ts-ignore
-                  <ProductCard key={item.id} data={item} />
+                  <ProductCard key={item.id} data={item} userId={userId} />
                 ))}
               </div>
             </div>

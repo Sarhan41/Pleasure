@@ -10,15 +10,23 @@ const Footer: React.FC = () => {
   const Address = "123, ABC Street, XYZ City, Country - 123456";
   const footerLinks = {
     Bras: [
-      { text: "white suit", route: "/product/White-Suit" },
+      { text: "white ", route: "/product/White" },
       { text: "Link 2", route: "/link2" },
       { text: "Link 3", route: "/link3" },
       { text: "red", route: "/product/Red-Suit" },
     ],
     Panties: [
-      { text: "Link A", route: "/linkA" },
-      { text: "Link B", route: "/linkB" },
-      { text: "Link C", route: "/linkC" },
+      { text: "Ananta", route: "/product/ANANTA" },
+      {
+        text: "Berly",
+        route:
+          "/product/Hipster-Midrise-Modal-Stretch-Stripe-Panties-In-Red-Black-Rani-Pink-(Pack-of-3)-BERLY",
+      },
+      {
+        text: "Pearl",
+        route:
+          "product/High-Waist-Full-Coverage-Printed-in-Dark-Grey-Navy-Blue-Maroon-Panties-(pack-of-3)-100-Cotton-PEARL",
+      },
     ],
     NightSuit: [
       { text: "Link X", route: "/linkX" },
@@ -44,7 +52,7 @@ const Footer: React.FC = () => {
   const SocialLinks = [
     {
       text: "Whatsapp",
-      route: `https://wa.me/918155086856?text=Hello%20there!`,
+      route: `https://wa.me/918155085865?text=Hello%20there!`,
       icon: <Whatsapp className="h-10 w-10 hover:text-primary" />,
     },
     {
