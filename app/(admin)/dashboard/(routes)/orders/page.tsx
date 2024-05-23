@@ -1,4 +1,3 @@
-// OrdersPage.tsx
 import { format } from "date-fns";
 import { db } from "@/lib/db";
 import { formatter } from "@/lib/utils";
