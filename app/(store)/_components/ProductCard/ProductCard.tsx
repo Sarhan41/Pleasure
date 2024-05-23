@@ -108,7 +108,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
   return (
     <div
       onClick={handleClick}
-      className="bg-white h-[813px] w-fit group cursor-pointer rounded-xl border p-3 space-y-4"
+      className="bg-white h-[813px] w-fit group cursor-pointer rounded-xl border-2 border-primary  p-3 space-y-4"
     >
       <div className=" h-[600px] w-[400px] rounded-xl bg-gray-100 relative">
         <Image
