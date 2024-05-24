@@ -96,6 +96,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
   const handleSizeSelection = (size: Size) => {
     setSelectedSize(size);
     if (selectedSize === size) setSelectedSize(null);
+    setSizeError(false);
   };
 
   const handleSizeChartOpen = () => {

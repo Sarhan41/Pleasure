@@ -4,25 +4,31 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Script from "next/script";
-import { LoaderCircle } from "lucide-react";
 import axios from "axios";
 import { ExtendedUser } from "@/next-auth";
 import toast from "react-hot-toast";
 import { CartItems } from "@prisma/client";
-import Link from "next/link";
+
+interface Size {
+  name: string;
+  value: string;
+}
+
+interface ProductWithSize extends CartItems {
+  size: Size; // Fix: Change the type of 'size' property from 'string' to 'Size'
+}
 
 interface CheckoutClientCartProps {
   user?: ExtendedUser;
   prices: number[];
   quantities: number[];
   AddressId: string;
-  products: CartItems[];
+  products: ProductWithSize[];
 }
 
 const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
@@ -33,8 +39,6 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
   products,
 }) => {
   const router = useRouter();
-  const params = useSearchParams();
-  const [loading1, setLoading1] = useState(true);
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<"razorpay" | "cod">("razorpay");
   const idRef = useRef<string | null>(null);
@@ -56,7 +60,6 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
 
       const id = response.data.orderId;
       idRef.current = id;
-      setLoading1(false);
     } catch (error) {
       console.error("There was a problem with your axios operation:", error);
     }
@@ -74,7 +77,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
       console.log(orderId);
       try {
         const options = {
-          key: process.env.RAZORPAY_KEY_ID,
+          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
           amount: orderTotal * 100,
           currency: "INR",
           name: "Payment",
@@ -103,7 +106,8 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
                   productId: product.productId,
                   price: product.price,
                   quantity: product.quantity,
-                  size: product.size,
+                  size: product.size.name,
+                  sizeSUK: product.size.value,
                   color: product.color,
                 })),
               });
@@ -139,7 +143,8 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
             productId: product.productId,
             price: product.price,
             quantity: product.quantity,
-            size: product.size,
+            size: product.size.name,
+            sizeSUK: product.size.value,
             color: product.color,
           })),
         });

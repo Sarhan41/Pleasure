@@ -241,6 +241,7 @@ model orderItem {
   Price     Int
   quantity  Int
   size      String
+  sizeSUK   String
   color     String?
   orderId   String
   order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)

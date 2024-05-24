@@ -26,9 +26,9 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { OrderColumn } from "./order-types";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 interface DataTableProps<TData> {
   data: TData[];
@@ -40,14 +40,7 @@ export function DataTable<TData extends OrderColumn>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [selectedOrder, setSelectedOrder] = useState<TData | null>(null);
 
-  const columns: ColumnDef<OrderColumn>[] = [
-    {
-      accessorKey: "imageUrl",
-      header: "Image",
-      cell: (info) => (
-        <img src={info.getValue() as string} alt="Product" width="50" />
-      ),
-    },
+  const columns: ColumnDef<TData>[] = [
     {
       accessorKey: "productName",
       header: "Product Name",
@@ -56,6 +49,16 @@ export function DataTable<TData extends OrderColumn>({
     {
       accessorKey: "size",
       header: "Size",
+      cell: (info) => info.getValue(),
+    },
+    {
+      accessorKey: "quantity",
+      header: "Quantity",
+      cell: (info) => info.getValue(),
+    },
+    {
+      accessorKey: "price",
+      header: "Price",
       cell: (info) => info.getValue(),
     },
     {
@@ -83,16 +86,21 @@ export function DataTable<TData extends OrderColumn>({
       header: "Date",
       cell: (info) => info.getValue(),
     },
-
     {
-      accessorKey: "quantity",
-      header: "Quantity",
-      cell: (info) => info.getValue(),
+      accessorKey: "imageUrl",
+      header: "Image",
+      cell: (info) => (
+        <img
+          src={info.getValue() as string}
+          alt="Product"
+          style={{ width: "50px", height: "50px" }}
+        />
+      ),
     },
     {
       accessorKey: "totalPayment",
       header: "Total Payment",
-      cell: (info) => `$${info.getValue()}`,
+      cell: (info) => info.getValue(),
     },
   ];
 
@@ -112,18 +120,16 @@ export function DataTable<TData extends OrderColumn>({
     <div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter by product name..."
-          value={
-            (table.getColumn("productName")?.getFilterValue() as string) ?? ""
-          }
+          placeholder="Filter emails..."
+          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("productName")?.setFilterValue(event.target.value)
+            table.getColumn("email")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
         <Button
           onClick={() => {
-            table.getColumn("productName")?.setFilterValue("");
+            table.getColumn("email")?.setFilterValue("");
           }}
           variant="outline"
           className="ml-2"
@@ -167,7 +173,7 @@ export function DataTable<TData extends OrderColumn>({
                   <TableCell>
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button onClick={() => setSelectedOrder(row.original as TData)}>
+                        <Button onClick={() => setSelectedOrder(row.original)}>
                           Details
                         </Button>
                       </DialogTrigger>
@@ -184,6 +190,13 @@ export function DataTable<TData extends OrderColumn>({
                                 <strong>Size:</strong> {selectedOrder.size}
                               </p>
                               <p>
+                                <strong>Quantity:</strong>{" "}
+                                {selectedOrder.quantity}
+                              </p>
+                              <p>
+                                <strong>Price:</strong> {selectedOrder.price}
+                              </p>
+                              <p>
                                 <strong>Phone:</strong> {selectedOrder.phone}
                               </p>
                               <p>
@@ -191,8 +204,7 @@ export function DataTable<TData extends OrderColumn>({
                                 {selectedOrder.address}
                               </p>
                               <p>
-                                <strong>Email:</strong>{" "}
-                                {selectedOrder.email ?? "N/A"}
+                                <strong>Email:</strong> {selectedOrder.email}
                               </p>
                               <p>
                                 <strong>Paid:</strong>{" "}
@@ -201,22 +213,11 @@ export function DataTable<TData extends OrderColumn>({
                               <p>
                                 <strong>Date:</strong> {selectedOrder.createdAt}
                               </p>
-                              <p>
-                                <strong>Image:</strong>{" "}
-                                <img
-                                  src={selectedOrder.imageUrl}
-                                  alt="Product"
-                                  width="50"
-                                />
-                              </p>
-                              <p>
-                                <strong>Quantity:</strong>{" "}
-                                {selectedOrder.quantity}
-                              </p>
-                              <p>
-                                <strong>Total Payment:</strong>{" "}
-                                {selectedOrder.totalPayment}
-                              </p>
+                              <img
+                                src={selectedOrder.imageUrl}
+                                alt="Product"
+                                style={{ width: "100px", height: "100px" }}
+                              />
                             </div>
                           )}
                         </DialogDescription>

@@ -1,10 +1,10 @@
-import { format } from "date-fns";
+// OrdersPage.tsx
 import { db } from "@/lib/db";
-import { formatter } from "@/lib/utils";
-import { DataTable } from "./_components/DataTable";
+import { format } from "date-fns";
 import { OrderColumn } from "./_components/order-types";
+import { DataTable } from "./_components/DataTable";
 
-const OrdersPage = async () => {
+const fetchOrders = async () => {
   const orders = await db.order.findMany({
     include: {
       Address: true,
@@ -14,7 +14,7 @@ const OrdersPage = async () => {
           product: {
             select: {
               name: true,
-              images: true, // Assuming 'images' is the field that holds the product image URLs
+              images: true,
             },
           },
         },
@@ -25,24 +25,37 @@ const OrdersPage = async () => {
     },
   });
 
-  const formattedOrders: OrderColumn[] = orders.map((order) => ({
-    id: order.id,
-    productName: order.orderItems.map(item => item.product.name).join(", "),
-    size: order.orderItems.map(item => item.size).join(", "),
-    phone: order.Address.phone,
-    address: `${order.Address.addressLine1}, ${order.Address.addressLine2 || ""}, ${order.Address.addressLine3 || ""}, ${order.Address.city}, ${order.Address.state}, ${order.Address.pincode}`,
-    email: order.user.email,
-    isPaid: order.isPaid,
-    createdAt: format(order.createdAt, "MMM do, yyyy"),
-    imageUrl: order.orderItems[0]?.product.images[0]?.url || "", // Taking the first image URL
-    quantity: order.orderItems.reduce((total, item) => total + item.quantity, 0), // Summing up quantities
-    totalPayment: order.total // Total payment
-  }));
+  const formattedOrders: OrderColumn[] = orders.flatMap((order) =>
+    order.orderItems.map((item) => ({
+      id: order.id,
+      productName: item.product.name,
+      size: item.size,
+      quantity: item.quantity,
+      price: item.Price,
+      phone: order.Address.phone,
+      address: `${order.Address.addressLine1}, ${
+        order.Address.addressLine2 || ""
+      }, ${order.Address.addressLine3 || ""}, ${order.Address.city}, ${
+        order.Address.state
+      }, ${order.Address.pincode}`,
+      email: order.user.email || "", // Make email property non-nullable
+      isPaid: order.isPaid,
+      createdAt: format(order.createdAt, "MMM do, yyyy"),
+      imageUrl: item.product.images[0]?.url || "",
+      totalPayment: item.quantity * item.Price,
+    }))
+  );
+
+  return formattedOrders;
+};
+
+const OrdersPage = async () => {
+  const orders = await fetchOrders();
 
   return (
     <div>
       <h1>Orders</h1>
-      <DataTable<OrderColumn> data={formattedOrders} />
+      <DataTable<OrderColumn> data={orders} />
     </div>
   );
 };
