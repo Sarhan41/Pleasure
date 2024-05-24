@@ -15,7 +15,14 @@ import {
   DialogContent,
   DialogOverlay,
 } from "@/components/ui/dialog";
-import { Check, Heart, MinusIcon, PlusIcon, Share2Icon, Link } from "lucide-react";
+import {
+  Check,
+  Heart,
+  MinusIcon,
+  PlusIcon,
+  Share2Icon,
+  Link,
+} from "lucide-react";
 import IconButton from "@/components/Store/IconButton";
 import { FaWhatsapp } from "react-icons/fa";
 
@@ -186,13 +193,19 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           : data.name}
       </h1>
 
-      <div className="mt-3 flex items-end justify-between">
+      <div className="mt-3 flex items-end gap-4 justify-between">
         <p className="text-2xl text-gray-900">
           <Currency
             value={priceUpdate()}
             discountedValue={data?.discountedPrice}
           />
         </p>
+        {selectedSize && (
+          <span className="text-base text-gray-900 flex gap-2">
+            SKU:
+            <h4>{selectedSize?.value}</h4>
+          </span>
+        )}
       </div>
       <div className="flex flex-col my-4 gap-y-4">
         <div className="flex gap-4 flex-col">
@@ -335,7 +348,10 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           />
         </div>
         <div>
-          <Button onClick={onAddToCart} className="flex items-center gap-x-2 w-60">
+          <Button
+            onClick={onAddToCart}
+            className="flex items-center gap-x-2 w-60"
+          >
             Add To Cart
           </Button>
         </div>
@@ -381,7 +397,10 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           />
         </div>
         <div>
-          <Button onClick={onAddToCart} className="flex items-center gap-x-2 w-60">
+          <Button
+            onClick={onAddToCart}
+            className="flex items-center gap-x-2 w-60"
+          >
             Add To Cart
           </Button>
         </div>

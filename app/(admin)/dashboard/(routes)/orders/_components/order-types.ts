@@ -3,12 +3,13 @@ export interface OrderColumn {
   id: string;
   productName: string;
   size: string;
+  quantity: number;
+  price: number;
   phone: string;
   address: string;
-  email: string | null;
+  email: string;
   isPaid: boolean;
   createdAt: string;
-  imageUrl: string; // New field for product image URL
-  quantity: number; // New field for product quantity
-  totalPayment: number; // New field for total payment
+  imageUrl: string;
+  totalPayment: number;
 }
