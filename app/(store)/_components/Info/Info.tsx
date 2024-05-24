@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import IconButton from "@/components/Store/IconButton";
 import { FaWhatsapp } from "react-icons/fa";
+import SizeChart from "./SizeChart";
 
 interface InfoProps {
   data: Product;
@@ -251,7 +252,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           <Dialog open={isSizeChartOpen} onOpenChange={handleSizeChartClose}>
             <DialogOverlay className="fixed inset-0 flex items-center justify-center bg-black opacity-50">
               <DialogContent className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg">
-                <div>hello</div>
+                <SizeChart />
                 <DialogClose asChild>
                   <button className="absolute top-4 right-4">
                     <Cross2Icon className="h-4 w-4" />
