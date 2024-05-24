@@ -29,6 +29,7 @@ import {
 import { OrderColumn } from "./order-types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 interface DataTableProps<TData> {
   data: TData[];
@@ -90,7 +91,7 @@ export function DataTable<TData extends OrderColumn>({
       accessorKey: "imageUrl",
       header: "Image",
       cell: (info) => (
-        <img
+        <Image
           src={info.getValue() as string}
           alt="Product"
           style={{ width: "50px", height: "50px" }}
@@ -213,7 +214,7 @@ export function DataTable<TData extends OrderColumn>({
                               <p>
                                 <strong>Date:</strong> {selectedOrder.createdAt}
                               </p>
-                              <img
+                              <Image
                                 src={selectedOrder.imageUrl}
                                 alt="Product"
                                 style={{ width: "100px", height: "100px" }}

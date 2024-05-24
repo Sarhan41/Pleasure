@@ -64,7 +64,7 @@ const MyProfileOrdersPage = async () => {
               {order.orderItems.map((item) => {
                 const productName = item.product.name.replace(/\s+/g, "-");
                 return (
-                  <Link href={`/product/${productName}`}>
+                  <Link href={`/product/${productName}`} key={item.id}>
                     <li key={item.id} className="py-4 w-fit flex items-center">
                       <Image
                         src={item.product.images[0].url}
