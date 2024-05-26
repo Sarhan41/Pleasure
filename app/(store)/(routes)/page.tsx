@@ -1,5 +1,5 @@
 import Container from "@/components/Store/container";
-import Billboard from "../_components/Billboard/BIllboard";
+import Billboard from "../_components/Billboard/Billboard";
 import ProductList from "../_components/ProductList/ProductList";
 import { db } from "@/lib/db";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,7 @@ const HomePage = async () => {
       images: {},
       category: { select: { name: true } },
       colors: { select: { name: true, value: true } },
+      sizes: { select: { name: true, value: true } },
     },
   });
 

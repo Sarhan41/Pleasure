@@ -26,7 +26,7 @@
   
   export interface Size {
     id?: string;
-    name?: string | null;
+    name: string;
     value?: string | number | null;
     quantity: number ;
   }

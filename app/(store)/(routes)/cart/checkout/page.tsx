@@ -2,6 +2,7 @@ import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import ThreeAccordion from "./components/ThreeAccordion";
 import Summary from "../components/Summary";
+import CheckoutClientCart from "./components/CheckoutClientCart";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -31,12 +32,11 @@ export default async function CartCheckoutPage() {
     },
   });
 
-
   const prices = CartProducts.map((item) => item.price);
   const products = CartProducts.map((item) => item);
   const quantities = CartProducts.map((item) => item.quantity);
 
- 
+  
   if (products.length === 0) {
     return (
       <div className="h-full w-full flex justify-center items-center flex-col gap-6">

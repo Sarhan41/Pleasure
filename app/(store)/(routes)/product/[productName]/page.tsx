@@ -53,7 +53,9 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
     include: {
       category: true,
       images: true,
-      colors: { select: { name: true, value: true, toLink: true } },
+      colors: { select: { name: true, value: true, toLink: true } }
+      ,
+      sizes: { select: { name: true, value: true , quantity: true}}
     },
   });
 

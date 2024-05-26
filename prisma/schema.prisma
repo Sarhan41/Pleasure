@@ -136,24 +136,22 @@ model Category {
 }
 
 model Product {
-  id              String      @id @default(uuid())
-  categoryId      String
-  category        Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  name            String
-  price           Int
-  discountedPrice Int?
-  isFeatured      Boolean     @default(false)
-  isArchived      Boolean     @default(false)
-  images          Image[]
-  colors          Color[]
-  sizes           Size[]
-  orderItems      orderItem[]
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
-  Wishlist        Wishlist[]
-  CartItems       CartItems[]
-  reviews         Review[]
-  description     String?
+  id          String      @id @default(uuid())
+  categoryId  String
+  category    Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  name        String
+  isFeatured  Boolean     @default(false)
+  isArchived  Boolean     @default(false)
+  images      Image[]
+  colors      Color[]
+  sizes       Size[]
+  orderItems  orderItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  Wishlist    Wishlist[]
+  CartItems   CartItems[]
+  reviews     Review[]
+  description String?
 
   @@index([categoryId])
 }
@@ -175,8 +173,10 @@ model Size {
   id        String   @id @default(uuid())
   productId String
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  value     String?
-  name      String?
+  SKUvalue  String
+  name      String
+  price     Int
+  discountedprice  Int?
   quantity  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -213,9 +213,10 @@ model CartItems {
   productId String
   product   Product @relation(fields: [productId], references: [id])
   quantity  Int     @default(1)
-  size      String
+  sizeName      String
+  Price     Int
   color     String?
-  price     Int
+  
 
   @@index([userId])
   @@index([productId])
@@ -223,7 +224,7 @@ model CartItems {
 
 model Order {
   id         String      @id @default(uuid())
-  orderItems orderItem[] 
+  orderItems orderItem[]
   total      Int
   status     String
   isPaid     Boolean     @default(false)
@@ -241,7 +242,7 @@ model orderItem {
   Price     Int
   quantity  Int
   size      String
-  sizeSUK   String
+  sizeSKU   String
   color     String?
   orderId   String
   order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
