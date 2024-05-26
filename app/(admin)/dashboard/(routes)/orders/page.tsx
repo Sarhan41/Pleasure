@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { format } from "date-fns";
 import { OrderColumn } from "./_components/order-types";
 import { DataTable } from "./_components/DataTable";
+import { Heading } from "@/components/ui/Heading";
 
 const fetchOrders = async () => {
   const orders = await db.order.findMany({
@@ -54,8 +55,13 @@ const OrdersPage = async () => {
 
   return (
     <div>
-      <h1>Orders</h1>
-      <DataTable<OrderColumn> data={orders} />
+      <div className="flex-1 space-y-4 p-8 pt-6">
+        <Heading
+          title="Orders"
+          description="See details of your store orders"
+        />
+        <DataTable<OrderColumn> data={orders} />
+      </div>
     </div>
   );
 };

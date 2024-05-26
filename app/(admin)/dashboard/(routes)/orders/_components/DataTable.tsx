@@ -30,6 +30,8 @@ import { OrderColumn } from "./order-types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface DataTableProps<TData> {
   data: TData[];
@@ -40,6 +42,7 @@ export function DataTable<TData extends OrderColumn>({
 }: DataTableProps<TData>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [selectedOrder, setSelectedOrder] = useState<TData | null>(null);
+  const router = useRouter();
 
   const columns: ColumnDef<TData>[] = [
     {
@@ -94,7 +97,8 @@ export function DataTable<TData extends OrderColumn>({
         <Image
           src={info.getValue() as string}
           alt="Product"
-          style={{ width: "50px", height: "50px" }}
+          height={50}
+          width={50}
         />
       ),
     },
@@ -121,16 +125,18 @@ export function DataTable<TData extends OrderColumn>({
     <div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          placeholder="Filter Products..."
+          value={
+            (table.getColumn("productName")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("productName")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
         <Button
           onClick={() => {
-            table.getColumn("email")?.setFilterValue("");
+            table.getColumn("productName")?.setFilterValue("");
           }}
           variant="outline"
           className="ml-2"
@@ -214,11 +220,18 @@ export function DataTable<TData extends OrderColumn>({
                               <p>
                                 <strong>Date:</strong> {selectedOrder.createdAt}
                               </p>
-                              <Image
-                                src={selectedOrder.imageUrl}
-                                alt="Product"
-                                style={{ width: "100px", height: "100px" }}
-                              />
+                              <Link
+                                href={`/product/${selectedOrder.productName}`}
+                                target="_blank"
+                              >
+                                <Image
+                                  src={selectedOrder.imageUrl}
+                                  alt="Product"
+                                  width={100}
+                                  height={100}
+                                  className="cursor-pointer"
+                                />
+                              </Link>
                             </div>
                           )}
                         </DialogDescription>
