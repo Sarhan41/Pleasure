@@ -175,9 +175,9 @@ model Size {
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   SKUvalue  String
   name      String
-  price     Int
-  discountedprice  Int?
-  quantity  Int
+  price     String
+  discountedprice  String?
+  quantity  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

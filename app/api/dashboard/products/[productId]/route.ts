@@ -49,7 +49,6 @@ export async function PATCH(
     const body = await req.json();
     const {
       name,
-      price,
       categoryId,
       colorId,
       sizeId,
@@ -61,10 +60,6 @@ export async function PATCH(
 
     if (!name) {
       return new NextResponse("Name is required ", { status: 400 });
-    }
-
-    if (!price) {
-      return new NextResponse("Price is required ", { status: 400 });
     }
 
     if (!categoryId) {
@@ -93,7 +88,6 @@ export async function PATCH(
       },
       data: {
         name,
-        price,
         categoryId,
         colors: {
           deleteMany: {},
@@ -137,12 +131,16 @@ export async function PATCH(
             data: sizeId.map(
               (size: {
                 name: string;
-                value: string | number;
-                quantity: number;
+                SKUvalue: string;
+                quantity: string;
+                price: string;
+                discountedPrice: string;
               }) => ({
                 name: size.name,
-                value: size.value,
+                SKUvalue: size.SKUvalue,
                 quantity: size.quantity,
+                price: size.price,
+                discountedPrice: size.discountedPrice,
               })
             ),
           },

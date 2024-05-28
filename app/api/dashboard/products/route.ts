@@ -19,7 +19,6 @@ export async function POST(req: Request) {
     const body = await req.json();
     const {
       name,
-      price,
       categoryId,
       colorId,
       sizeId,
@@ -33,9 +32,7 @@ export async function POST(req: Request) {
       return new NextResponse("Name is required ", { status: 400 });
     }
 
-    if (!price) {
-      return new NextResponse("Price is required ", { status: 400 });
-    }
+   
 
     if (!categoryId) {
       return new NextResponse("Category id is required ", { status: 400 });
@@ -60,7 +57,6 @@ export async function POST(req: Request) {
     const product = await db.product.create({
       data: {
         name,
-        price,
         categoryId,
         colors: {
           createMany: {
@@ -79,12 +75,18 @@ export async function POST(req: Request) {
             data: sizeId.map(
               (size: {
                 name: string;
-                value: string | number;
-                quantity: number;
+                SKUvalue: string ;
+                quantity: string;
+                price: string;
+                discountedPrice: string;
+
               }) => ({
                 name: size.name,
-                value: size.value,
+                SKUvalue: size.SKUvalue,
                 quantity: size.quantity,
+                price: size.price,
+                discountedPrice: size.discountedPrice,
+                
               })
             ),
           },

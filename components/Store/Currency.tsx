@@ -6,7 +6,7 @@ const formatter = new Intl.NumberFormat("en-US", {
 });
 
 interface CurrencyProps {
-  value?: string | number;
+  value: string | number;
   discountedValue?: string | number | null;
 }
 
@@ -21,17 +21,21 @@ const Currency: React.FC<CurrencyProps> = ({ value, discountedValue }) => {
     return null;
   }
 
+  const formatValue = (val: string | number) => {
+    return formatter.format(Number(val));
+  };
+
   return (
     <div className="font-semibold">
       {discountedValue ? (
         <>
-          {formatter.format(Number(discountedValue))}
+          {formatValue(discountedValue)}
           <span className="line-through ml-4 text-gray-500">
-            {formatter.format(Number(value))}
+            {formatValue(value)}
           </span>
         </>
       ) : (
-        formatter.format(Number(value))
+        formatValue(value)
       )}
     </div>
   );

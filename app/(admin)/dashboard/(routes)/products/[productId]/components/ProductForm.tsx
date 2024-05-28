@@ -37,7 +37,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 const formSchema = z.object({
   name: z.string().min(1),
   images: z.object({ url: z.string() }).array(),
-  price: z.coerce.number().min(1),
   categoryId: z.string().min(1),
   description: z.string().min(1).optional(),
   colorId: z
@@ -46,8 +45,10 @@ const formSchema = z.object({
   sizeId: z
     .object({
       name: z.string(),
-      value: z.union([z.string(), z.number()]),
-      quantity: z.number(),
+      SKUvalue: z.string(),
+      quantity: z.string(),
+      price: z.string(),
+      discountedprice: z.string().optional(),
     })
     .array(),
 
@@ -96,19 +97,27 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           })),
           sizeId: initialData.sizes.map((size) => ({
             name: size.name || "",
-            value: size.value || "",
-            quantity: size.quantity || 0,
+            SKUvalue: size.SKUvalue || "",
+            quantity: size.quantity || "",
+            price: size.price || "",
+            discountedprice: size.discountedprice || "",
           })),
-          price: parseFloat(String(initialData?.price)),
           description: initialData.description || "",
         }
       : {
           name: "",
           images: [],
-          price: 0,
           categoryId: "",
           colorId: [{ name: "", hex: "#000000", link: "" }],
-          sizeId: [{ name: "", value: "", quantity: 0 }],
+          sizeId: [
+            {
+              name: "",
+              SKUvalue: "",
+              quantity: "",
+              price: "",
+              discountedprice: "",
+            },
+          ],
           isFeatured: false,
           isArchived: false,
           description: "",
@@ -230,25 +239,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
             <FormField
               control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem className="max-sm:w-[30vw]  w-[22vw] ">
-                  <FormLabel>Price</FormLabel>
-                  <FormControl className="w-full">
-                    <Input
-                      type="number"
-                      disabled={loading}
-                      placeholder="999"
-                      {...field}
-                      className="w-full"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name="categoryId"
               render={({ field }) => (
                 <FormItem className="max-sm:w-[35vw] w-[22vw]">
@@ -299,6 +289,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 )}
               />
             </div>
+            <div></div>
             <div className="flex flex-col gap-12">
               <FormField
                 control={form.control}
@@ -326,12 +317,12 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                           />
                           <Input
                             className="w-[125px]"
-                            placeholder="Size Value"
-                            value={sizeId.value}
+                            placeholder="Size SKUValue"
+                            value={sizeId.SKUvalue}
                             onChange={(e) =>
                               field.onChange([
                                 ...field.value.slice(0, index),
-                                { ...sizeId, value: e.target.value },
+                                { ...sizeId, SKUvalue: e.target.value },
                                 ...field.value.slice(index + 1),
                               ])
                             }
@@ -345,7 +336,37 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                                 ...field.value.slice(0, index),
                                 {
                                   ...sizeId,
-                                  quantity: parseInt(e.target.value, 10),
+                                  quantity: e.target.value,
+                                },
+                                ...field.value.slice(index + 1),
+                              ])
+                            }
+                          />
+                          <Input
+                            className="w-[125px]"
+                            placeholder="Size Price"
+                            value={sizeId.price}
+                            onChange={(e) =>
+                              field.onChange([
+                                ...field.value.slice(0, index),
+                                {
+                                  ...sizeId,
+                                  price: e.target.value,
+                                },
+                                ...field.value.slice(index + 1),
+                              ])
+                            }
+                          />
+                          <Input
+                            className="w-[125px]"
+                            placeholder="Size Discounted Price"
+                            value={sizeId.discountedprice}
+                            onChange={(e) =>
+                              field.onChange([
+                                ...field.value.slice(0, index),
+                                {
+                                  ...sizeId,
+                                  discountedprice: e.target.value,
                                 },
                                 ...field.value.slice(index + 1),
                               ])

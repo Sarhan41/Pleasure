@@ -5,7 +5,7 @@ import { ProductClient } from "./components/client";
 import { db } from "@/lib/db";
 import { ProductColumn } from "./components/columns";
 
-const ProcutsPage = async () => {
+const ProductsPage = async () => {
   const products = await db.product.findMany({
     include: {
       category: true,
@@ -22,9 +22,9 @@ const ProcutsPage = async () => {
     name: item.name,
     isFeatured: item.isFeatured,
     isArchived: item.isArchived,
-    price: item.price,
     category: item.category.name,
-    size: item.sizes.map((size) => size.value).join(", "),
+    price:item.sizes.map((size) => size.price).join(", "),
+    size: item.sizes.map((size) => size.name).join(", "),
     colorName: item.colors.map((color) => color.name).join(", "),
     colorHex: item.colors.map((color) => color.value).join(", "),
     createdAt: format(item.createdAt, "MMM do, yyyy"),
@@ -42,4 +42,4 @@ const ProcutsPage = async () => {
   );
 };
 
-export default ProcutsPage;
+export default ProductsPage;

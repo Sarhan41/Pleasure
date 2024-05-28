@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 const HomePage = async () => {
   const billboard = await db.category.findUnique({
     where: {
-      id: "7d8b0280-3a24-4665-81cb-052ce8cff81e"
+      id: "3085b9ae-59ef-4a7f-99f1-03b89796fad8"
     },
     select: {
       imageUrl: true,
@@ -21,9 +21,14 @@ const HomePage = async () => {
     },
     include: {
       images: {},
-      category: { select: { name: true } },
-      colors: { select: { name: true, value: true } },
-      sizes: { select: { name: true, value: true } },
+      category: {
+        select: {
+          name: true,
+        },
+      },
+      sizes: true,
+      colors: true,
+
     },
   });
 
