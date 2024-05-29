@@ -38,6 +38,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
     previewModal.onOpen(data, userId);
   };
 
+  const onAddToCart: MouseEventHandler<HTMLButtonElement> = async (event) => {};
+
   // @ts-ignore
   const handleSizeSelect = async (size) => {
     setSelectedSize(size);
@@ -46,35 +48,55 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
     try {
       const response = await axios.get("/api/dashboard/cartItems");
       const cartItems = response.data;
-      const foundItem = cartItems.find(
-        (item: { productId: string; sizeId: string; userId: string }) =>
-          item.productId === data.id &&
-          item.sizeId === size.id &&
-          item.userId === userId
-      );
 
       if (!userId) {
         return toast.error("Please login to add to cart");
       }
 
+      const foundItem = cartItems.find(
+        (item: {
+          productId: string;
+          userId: string;
+          sizeName: string;
+          color: string;
+        }) =>
+          item.productId === data.id &&
+          item.userId === userId &&
+          item.sizeName === selectedSize?.name
+        // &&
+        // item.color === selectedColor
+      );
+
+      if (selectedSize === null) {
+        toast.error("Please select a size");
+        return;
+      }
+
       if (!foundItem) {
         await axios.post("/api/dashboard/cartItems", {
-          productId: data.id,
-          sizeId: size.id,
+          id: data.id,
+          quantity: 1,
           userId,
+          sizeName: selectedSize?.name,
+          price: selectedSize?.price,
+          SKUvalue: selectedSize?.SKUvalue,
+          discountedPrice: selectedSize?.discountedprice,
+          category: data.category?.name,
+          // color: selectedColor,
         });
         toast.success("Added to cart");
       } else {
-        setExistingItem(foundItem);
-        const cartId = foundItem.id; // Update existingItem state
+        const cartId = foundItem.id;
         await axios.patch(`/api/dashboard/cartItems/${cartId}`, {
-          quantity: foundItem.quantity + 1, // Increase quantity by 1
+          quantity: foundItem.quantity + 1,
         });
         toast.success("Item's quantity increased in cart");
       }
     } catch (error) {
       console.log(error);
       toast.error("Error adding to cart");
+    } finally {
+      setIsModalOpen(false);
     }
   };
 
@@ -122,9 +144,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
 
   return (
     <>
-      <div
-        className="relative overflow-hidden bg-white h-[813px] w-fit group cursor-pointer rounded-xl border-2 border-primary p-3 space-y-4"
-      >
+      <div className="relative overflow-hidden bg-white h-[813px] w-fit group cursor-pointer rounded-xl border-2 border-primary p-3 space-y-4">
         <div className="h-[600px] w-[400px] rounded-xl bg-gray-100 relative">
           <Image
             alt="Image"
@@ -175,7 +195,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
             )}
           </div>
 
-          <Button onClick={()=>(setIsModalOpen(true))}>Add To Cart</Button>
+          <Button onClick={() => setIsModalOpen(true)}>Add To Cart</Button>
         </div>
         {isModalOpen && (
           <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-end transition-opacity duration-300">

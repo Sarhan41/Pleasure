@@ -82,6 +82,9 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           sizeName: selectedSize?.name,
           price: selectedSize?.price,
           color: selectedColor,
+          SKUvalue: selectedSize?.SKUvalue,
+          discountedPrice: selectedSize?.discountedprice,
+          category: data.category?.name,
         });
         toast.success("Added to cart");
       } else {

@@ -9,7 +9,16 @@ export async function POST(req: Request) {
 
     const body = await req.json();
 
-    const { id, sizeName, color, price, quantity } = body;
+    const {
+      id,
+      sizeName,
+      color,
+      price,
+      quantity,
+      SKUvalue,
+      discountedPrice,
+      category,
+    } = body;
 
     if (!user) {
       return new NextResponse("Unauthenticated", { status: 401 });
@@ -25,6 +34,9 @@ export async function POST(req: Request) {
         color: color,
         Price: price,
         quantity: quantity,
+        SKUvalue: SKUvalue,
+        discountedPrice: discountedPrice,
+        category: category,
       },
     });
 

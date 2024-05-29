@@ -14,20 +14,11 @@ import axios from "axios";
 import { CartItems } from "@prisma/client";
 
 interface CartItemProps {
-  data: Product;
-  quantity: number;
+  data: CartItems & { product: Product };
   cartId: string;
-  size: string;
-  price: number;
 }
 
-const CartItem: React.FC<CartItemProps> = ({
-  data,
-  quantity,
-  cartId,
-  size,
-  price,
-}) => {
+const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -46,14 +37,14 @@ const CartItem: React.FC<CartItemProps> = ({
   };
 
   const onProductClick = () => {
-    router.push(`/product/${data.name}`);
+    router.push(`/product/${data.product.name}`);
   };
 
   const onPlusClick = async () => {
     setLoading(true);
     try {
       await axios.patch(`/api/dashboard/cartItems/${cartId}`, {
-        quantity: quantity + 1,
+        quantity: data.quantity + 1,
       });
       router.refresh();
       router.push(`/cart?reload=${Date.now()}`);
@@ -65,11 +56,11 @@ const CartItem: React.FC<CartItemProps> = ({
   };
 
   const onMinusClick = async () => {
-    if (quantity <= 1) return;
+    if (data.quantity <= 1) return;
     setLoading(true);
     try {
       await axios.patch(`/api/dashboard/cartItems/${cartId}`, {
-        quantity: quantity - 1,
+        quantity: data.quantity - 1,
       });
       router.refresh();
       router.push(`/cart?reload=${Date.now()}`);
@@ -84,7 +75,7 @@ const CartItem: React.FC<CartItemProps> = ({
   return (
     <>
       {loading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-15 z-50">
           <ClipLoader size={50} color={"#FFC0CB"} loading={loading} />
         </div>
       )}
@@ -100,8 +91,8 @@ const CartItem: React.FC<CartItemProps> = ({
           <Image
             onClick={onProductClick}
             fill
-            src={data.images[0].url}
-            alt={data.name}
+            src={data.product.images[0].url}
+            alt={data.product.name}
             className="object-cover object-center"
           />
         </div>
@@ -110,33 +101,47 @@ const CartItem: React.FC<CartItemProps> = ({
             onClick={onProductClick}
             className="text-lg cursor-pointer font-semibold text-black hover:text-primary"
           >
-            {data.name}
+            {data.product.name}
           </p>
           <div className="flex items-center mt-2">
-            {data.colors && data.colors[0].value !== "#111" && (
+            {data?.color && data?.color !== "#111" && (
               <div
-                key={data.colors[0].name}
+                // @ts-ignore
+                key={data?.color?.name}
                 className="w-4 h-4 rounded-full mr-2 border-2 border-black"
-                style={{ backgroundColor: data.colors[0].value }}
+                style={{ backgroundColor: data?.color }}
               ></div>
             )}
             <h1 className="border font-bold px-4 py-2 mt-2">
-              <span className="font-medium">Size :</span> {size}
+              <span className="font-medium">Size :</span> {data.sizeName}
             </h1>
           </div>
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center">
-            {quantity > 1 && (
+            {data.quantity > 1 && (
               <IconButton
                 onClick={onMinusClick}
                 icon={<MinusIcon size={15} />}
               />
             )}
-            <span className="mx-2">{quantity}</span>
+            <span className="mx-2">{data.quantity}</span>
             <IconButton onClick={onPlusClick} icon={<PlusIcon size={15} />} />
           </div>
-          <Currency value={price} discountedValue={data?.discountedPrice} />
+          {/* <Currency value={price} discountedValue={data?.discountedPrice} /> */}
+          <div className="font-semibold">
+            ₹
+            {data.discountedPrice ? (
+              <>
+                {data.discountedPrice}
+                <span className="line-through ml-4 text-gray-500">
+                  {data.Price}
+                </span>
+              </>
+            ) : (
+              data.Price
+            )}
+          </div>
         </div>
       </li>
     </>

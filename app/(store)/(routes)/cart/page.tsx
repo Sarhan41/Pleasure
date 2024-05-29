@@ -5,6 +5,8 @@ import CartItem from "./components/CartItem";
 import Summary from "./components/Summary";
 import toast from "react-hot-toast";
 import ClearIcon from "./components/ClearIcon";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default async function CartPage() {
   const user = await currentUser();
@@ -17,19 +19,43 @@ export default async function CartPage() {
     include: {
       product: {
         include: {
-          images: { select: { url: true } },
-          category: { select: { name: true } },
-          colors: { select: { name: true, value: true } },
-          sizes: { select: { name: true, value: true } },
+          category: true,
+          images: { select: { url: true, id: true, productId: true } },
+          colors: { select: { name: true, value: true, toLink: true } },
+          sizes: {
+            select: {
+              name: true,
+              SKUvalue: true,
+              price: true,
+              quantity: true,
+              discountedprice: true,
+              id: true,
+            },
+          },
         },
       },
     },
   });
 
-  const prices = CartProducts.map((item) => item.price);
-  const products = CartProducts.map((item) => item);
-  const quantities = CartProducts.map((item) => item.quantity);
+  if (!CartProducts || CartProducts.length === 0) {
+    return (
+      <div className="h-screen w-screen flex justify-center items-center flex-col gap-6">
+        <h1 className="text-2xl font-bold text-center my-6">
+          Your cart is empty, Please Add Some Products.
+        </h1>
+        <Button>
+          <Link className="text-white font-semibold" href="/">
+            Go to Home
+          </Link>
+        </Button>
+      </div>
+    );
+  }
 
+  // const products = CartProducts.map((item) => item);
+  // const quantities = CartProducts.map((item) => item.quantity);
+
+ 
   return (
     <div className="bg-white w-full mt-36 px-10">
       <Container>
@@ -39,35 +65,23 @@ export default async function CartPage() {
         </div>
         <div className="mt-4 lg:grid gap-4 lg:grid-cols-12 lg:items-start gap-x-12">
           <div className="lg:col-span-7">
-            {CartProducts.length === 0 && (
-              <>
-                <div className="relative flex py-4 border rounded-lg my-4 justify-between items-center border-primary flex-1 px-4">
-                  <p className="text-neutral-500">No items added to Cart</p>
-                </div>
-                <div></div>
-              </>
-            )}
             <ul className="">
               {CartProducts.map((item) => (
                 <CartItem
                   key={item.id}
-                  quantity={item.quantity}
-                  price={item.price}
                   // @ts-ignore
-                  data={item.product}
-                  size={item.size}
+                  data={item}
                   cartId={item.id}
                 />
               ))}
             </ul>
           </div>
-          <div className="w-96" >
-
-          <Summary
-            prices={prices}
-            products={products}
-            quantities={quantities}
-          />
+          <div className="w-96">
+            {/* <Summary
+              prices={prices}
+              products={products}
+              quantities={quantities}
+            /> */}
           </div>
         </div>
       </Container>
