@@ -5,20 +5,25 @@ export interface Category {
 }
 
 export interface Size {
-  productId: string;
+  id: string;
   name: string;
   SKUvalue: string;
   price: string;
+  discountedprice: string | null;
   quantity: string;
-  discountedprice?: string | null;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface Image {
   id: string;
   productId: string;
   url: string;
+}
+
+export interface Color {
+  id?: string;
+  name: string;
+  value: string;
+  toLink?: string | null;
 }
 
 export interface Product {
@@ -34,16 +39,4 @@ export interface Product {
   images: Image[];
   sizes: Size[];
   colors: Color[];
-}
-
-export interface Image {
-  id: string;
-  url: string;
-}
-
-export interface Color {
-  id?: string;
-  name: string;
-  value: string;
-  toLink?: string | null;
 }

@@ -9,16 +9,10 @@ export async function POST(req: Request) {
 
     const body = await req.json();
 
-    const { id, size, color } = body;
-
-    let { price } = body;
+    const { id, sizeName, color, price, quantity } = body;
 
     if (!user) {
       return new NextResponse("Unauthenticated", { status: 401 });
-    }
-
-    if (size === "XXXl" || size === "XXL") {
-      price += 20;
     }
 
     const UserId: string = user.id || "";
@@ -27,9 +21,10 @@ export async function POST(req: Request) {
       data: {
         userId: UserId,
         productId: id,
-        size: size,
+        sizeName: sizeName,
         color: color,
-        price: price,
+        Price: price,
+        quantity: quantity,
       },
     });
 

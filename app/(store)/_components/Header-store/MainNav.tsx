@@ -18,7 +18,7 @@ interface MainNavProps {
 }
 
 const MainNav: React.FC<MainNavProps> = ({ data }) => {
-  console.log("MAIN NAV 21", data);
+  // console.log("MAIN NAV 21", data);
 
   // Define the order of categories
   const categoryOrder = ["Panties", "Sport Bra", "Sleep", "Shorts", "Pyjama"];

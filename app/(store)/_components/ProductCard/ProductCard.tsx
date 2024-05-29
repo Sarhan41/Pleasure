@@ -12,6 +12,7 @@ import { Product as ProductType } from "@/types";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Size } from "@prisma/client";
+import { Button } from "@/components/ui/button";
 
 interface ProductCardProps {
   data: ProductType;
@@ -27,7 +28,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
 
   const handleClick = () => {
     const productName = data?.name.replace(/\s+/g, "-");
-    router.push(`/product/${productName}`);
+    if (!isModalOpen) {
+      router.push(`/product/${productName}`);
+    }
   };
 
   const onPreview: MouseEventHandler<HTMLButtonElement> = (event) => {
@@ -35,10 +38,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
     previewModal.onOpen(data, userId);
   };
 
-  const onAddToCart: MouseEventHandler<HTMLButtonElement> = async (event) => {
-    event.stopPropagation();
-    setIsModalOpen(true);
-  };
   // @ts-ignore
   const handleSizeSelect = async (size) => {
     setSelectedSize(size);
@@ -124,8 +123,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
   return (
     <>
       <div
-        onClick={handleClick}
-        className="relative bg-white h-[813px] w-fit group cursor-pointer rounded-xl border-2 border-primary p-3 space-y-4"
+        className="relative overflow-hidden bg-white h-[813px] w-fit group cursor-pointer rounded-xl border-2 border-primary p-3 space-y-4"
       >
         <div className="h-[600px] w-[400px] rounded-xl bg-gray-100 relative">
           <Image
@@ -146,10 +144,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
                 onClick={onPreview}
                 icon={<Expand size={20} className="text-gray-600" />}
               />
-              <IconButton
-                onClick={onAddToCart}
-                icon={<ShoppingCart size={20} className="text-gray-600" />}
-              />
+
               <IconButton
                 onClick={onAddToWishList}
                 icon={<Heart size={20} className="text-gray-600" />}
@@ -165,7 +160,23 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
           </p>
           <p className="text-sm text-gray-500"> {data.category?.name}</p>
         </div>
-        <Currency value={selectedSize.price} />
+        <div className="flex justify-between">
+          <div className="font-semibold">
+            ₹
+            {selectedSize.discountedprice ? (
+              <>
+                {selectedSize.discountedprice}
+                <span className="line-through ml-4 text-gray-500">
+                  {selectedSize.price}
+                </span>
+              </>
+            ) : (
+              selectedSize.price
+            )}
+          </div>
+
+          <Button onClick={()=>(setIsModalOpen(true))}>Add To Cart</Button>
+        </div>
         {isModalOpen && (
           <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-end transition-opacity duration-300">
             <div className="bg-white rounded-t-lg p-4 w-full max-w-md">

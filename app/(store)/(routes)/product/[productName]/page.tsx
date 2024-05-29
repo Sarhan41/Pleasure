@@ -10,18 +10,15 @@ interface ProductPageProps {
     productName: string;
   };
 }
+
 const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
-
   const User = await currentUser();
-
   let userId = "";
-
   if (User) {
     userId = User.id ?? "";
   }
 
   const decodedProductName = decodeURIComponent(params.productName);
-
   const productNameWithSpaces = decodedProductName.replace(/-/g, " ");
 
   const product = await db.product.findFirst({
@@ -30,9 +27,18 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
     },
     include: {
       category: true,
-      images: { select: { url: true, id: true } },
+      images: { select: { url: true, id: true, productId: true } },
       colors: { select: { name: true, value: true, toLink: true } },
-      sizes: { select: { name: true, value: true , quantity: true}}
+      sizes: {
+        select: {
+          name: true,
+          SKUvalue: true,
+          price: true,
+          quantity: true,
+          discountedprice: true,
+          id: true,
+        },
+      },
     },
   });
 
@@ -41,10 +47,8 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
       <div className="h-full w-full flex justify-center items-center">
         Loading...
       </div>
-    ); // or display an error message
+    );
   }
-
-  // Log the product object to inspect its structure
 
   const suggestedProducts = await db.product.findMany({
     where: {
@@ -52,10 +56,9 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
     },
     include: {
       category: true,
-      images: true,
-      colors: { select: { name: true, value: true, toLink: true } }
-      ,
-      sizes: { select: { name: true, value: true , quantity: true}}
+      images: { select: { url: true, id: true, productId: true } },
+      colors: { select: { name: true, value: true, toLink: true } },
+      sizes: true,
     },
   });
 
@@ -71,7 +74,6 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
             <Gallery images={product?.images} />
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0 lg:overflow-y-scroll lg:max-h-[calc(100vh-200px)]">
               {product && <Info data={product} userId={userId} />}
-              
             </div>
           </div>
           <hr className="my-10" />

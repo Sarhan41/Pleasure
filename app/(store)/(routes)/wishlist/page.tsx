@@ -12,19 +12,25 @@ export default async function WishPage() {
       userId: UserId,
     },
     include: {
-
       product: {
         include: {
-          images: { select: { url: true } },
-          category: { select: { name: true } },
-          colors: { select: { name: true, value: true } },
-          sizes: { select: { name: true, value: true } },
+          category: true,
+          images: { select: { url: true, id: true, productId: true } },
+          colors: { select: { name: true, value: true, toLink: true } },
+          sizes: {
+            select: {
+              name: true,
+              SKUvalue: true,
+              price: true,
+              quantity: true,
+              discountedprice: true,
+              id: true,
+            },
+          },
         },
       },
     },
   });
-
-
 
   return (
     <div className="bg-white">
@@ -39,7 +45,11 @@ export default async function WishPage() {
               <ul>
                 {wishlistProducts.map((item) => (
                   // @ts-ignore
-                  <WishListItem key={item.id} data={item.product} wishlistId={item.id} />
+                  <WishListItem
+                    key={item.id}
+                    data={item.product}
+                    wishlistId={item.id}
+                  />
                 ))}
               </ul>
             </div>

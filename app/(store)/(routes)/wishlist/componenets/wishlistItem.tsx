@@ -35,10 +35,8 @@ const WishListItem: React.FC<WishListItemProps> = ({ data, wishlistId }) => {
     }
   };
 
-
   return (
     <li className="flex py-6 border-b ">
-     
       <div
         onClick={onProductClick}
         className="relative h-24 w-24 rounded-md overflow-hidden sm:h-48 sm:w-48 cursor-pointer"
@@ -62,7 +60,7 @@ const WishListItem: React.FC<WishListItemProps> = ({ data, wishlistId }) => {
             </p>
           </div>
           <div className="mt-1 flex text-sm ">
-            {data.colors && ( // Check if color exists before rendering
+            {data.colors && data.colors[0].value !== "#111" && ( // Check if color exists before rendering
               <div>
                 {data.colors.map((color) => (
                   <div
@@ -74,16 +72,30 @@ const WishListItem: React.FC<WishListItemProps> = ({ data, wishlistId }) => {
               </div>
             )}
             {data.sizes && ( // Check if size exists before rendering
-              <div>
+              <div className="flex">
                 {data.sizes.map((size) => (
-                  <div key={size.name} className="ml-2">
+                  <div key={size.name} className="ml-2 flex">
                     {size.name}
                   </div>
                 ))}
               </div>
             )}
           </div>
-          <Currency value={data.price} />
+          <div className="font-semibold">
+            <p className="text-2xl text-gray-900">
+              ₹
+              {data.sizes[0].discountedprice ? (
+                <>
+                  {data.sizes[0].discountedprice}
+                  <span className="line-through ml-4 text-gray-500">
+                    {data.sizes[0].price}
+                  </span>
+                </>
+              ) : (
+                data.sizes[0].price
+              )}
+            </p>
+          </div>
         </div>
         <div className="absolute z-10 right-0 top-0">
           <IconButton

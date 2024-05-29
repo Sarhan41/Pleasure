@@ -4,7 +4,7 @@ import { MouseEventHandler, useState } from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import Currency from "@/components/Store/Currency";
-import { Product, Size } from "@/types";
+import { Size } from "@/types";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -26,15 +26,18 @@ import {
 import IconButton from "@/components/Store/IconButton";
 import { FaWhatsapp } from "react-icons/fa";
 import SizeChart from "./SizeChart";
+import { Product as ProductType } from "@/types";
 
 interface InfoProps {
-  data: Product;
+  data: ProductType;
   userId?: string;
 }
 
 const Info: React.FC<InfoProps> = ({ data, userId }) => {
   const [selectedSize, setSelectedSize] = useState<Size | null>(null);
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [selectedColor, setSelectedColor] = useState<string | null>(
+    data.colors[0].name
+  );
   const [quantity, setQuantity] = useState(1);
   const [sizeError, setSizeError] = useState(false);
   const [isSizeChartOpen, setIsSizeChartOpen] = useState(false);
@@ -56,12 +59,12 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         (item: {
           productId: string;
           userId: string;
-          size: string;
+          sizeName: string;
           color: string;
         }) =>
           item.productId === data.id &&
           item.userId === userId &&
-          item.size === selectedSize?.value &&
+          item.sizeName === selectedSize?.name &&
           item.color === selectedColor
       );
 
@@ -76,9 +79,9 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           id: data.id,
           quantity: quantity,
           userId,
-          size: selectedSize?.value,
+          sizeName: selectedSize?.name,
+          price: selectedSize?.price,
           color: selectedColor,
-          price: data.price,
         });
         toast.success("Added to cart");
       } else {
@@ -147,14 +150,6 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
     }
   };
 
-  const priceUpdate = () => {
-    if (selectedSize?.value === "XXXL" || selectedSize?.value === "XXL") {
-      return data.price + 20;
-    } else {
-      return data.price;
-    }
-  };
-
   const handleShareButtonClick1 = (event: React.MouseEvent) => {
     event.stopPropagation();
     setIsSharePopupOpen1(!isSharePopupOpen1);
@@ -196,16 +191,27 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
       </h1>
 
       <div className="mt-3 flex items-end gap-4 justify-between">
-        <p className="text-2xl text-gray-900">
-          <Currency
-            value={priceUpdate()}
-            discountedValue={data?.discountedPrice}
-          />
-        </p>
+        <div className="font-semibold">
+          <p className="text-2xl text-gray-900">
+            ₹
+            {!selectedSize ? (
+              data.sizes[0].price
+            ) : selectedSize.discountedprice ? (
+              <>
+                {selectedSize.discountedprice}
+                <span className="line-through ml-4 text-gray-500">
+                  {selectedSize.price}
+                </span>
+              </>
+            ) : (
+              selectedSize.price
+            )}
+          </p>
+        </div>
         {selectedSize && (
           <span className="text-base text-gray-900 flex gap-2">
             SKU:
-            <h4>{selectedSize?.value}</h4>
+            <h4>{selectedSize?.SKUvalue}</h4>
           </span>
         )}
       </div>
@@ -214,7 +220,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           <h3 className="font-semibold text-black"> Available sizes:</h3>
           <div className="flex gap-4">
             {data?.sizes?.map((size) => (
-              <div key={size.id} className="flex flex-col">
+              <div key={size.name} className="flex flex-col">
                 <span
                   key={size.name}
                   className={`text-black ${
@@ -224,13 +230,13 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                   } ${sizeError && "border-red-700"} `}
                   onClick={() => handleSizeSelection(size)}
                 >
-                  {size.value}
+                  {size.name}
                 </span>
                 {selectedSize === size && (
                   <h3 className="text-gray-900">
-                    {size.quantity < 5
+                    {Number(size.quantity) < 5
                       ? `${size.quantity} left`
-                      : size.quantity < 10
+                      : Number(size.quantity) < 10
                       ? "Only a few left!"
                       : null}
                   </h3>
