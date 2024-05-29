@@ -10,7 +10,6 @@ import { usePathname, useRouter } from "next/navigation";
 interface SummaryProps {
   prices: number[];
   quantities: number[];
-  // products: CartItems[];
 }
 
 const Summary: React.FC<SummaryProps> = ({ prices, quantities }) => {
@@ -27,8 +26,6 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities }) => {
   }, [prices, quantities]);
 
   const onCheckout = async () => {
-  
-
     router.push(`/cart/checkout?reload=${Date.now()}`);
   };
 

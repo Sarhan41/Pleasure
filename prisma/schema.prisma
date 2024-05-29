@@ -37,7 +37,7 @@ model Address {
   id             String   @id @default(cuid())
   userId         String
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  orderId        Order[]
+  orders        Order[]
   phone          String
   AlternatePhone String?
   addressLine1   String

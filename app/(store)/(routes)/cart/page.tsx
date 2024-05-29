@@ -78,7 +78,6 @@ export default async function CartPage() {
           <div className="w-96">
             <Summary
               prices={pricesForSummary}
-              // products={products}
               quantities={quantitiesForSummary}
             />
           </div>

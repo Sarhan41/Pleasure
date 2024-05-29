@@ -177,6 +177,7 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({
                 </p>
               </div>
             ) : (
+              // <div>hello please checkout</div>
               <CheckoutClientCart
                 user={user}
                 prices={prices}

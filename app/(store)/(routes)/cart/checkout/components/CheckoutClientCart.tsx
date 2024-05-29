@@ -9,8 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useRouter, useSearchParams } from "next/navigation";
-import Script from "next/script";
-import { LoaderCircle } from "lucide-react";
 import axios from "axios";
 import { ExtendedUser } from "@/next-auth";
 import toast from "react-hot-toast";
@@ -36,16 +34,22 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
   const params = useSearchParams();
   const [loading1, setLoading1] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<"razorpay" | "cod">("razorpay");
+  const [verifying, setVerifying] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<"razorpay" | "cod">(
+    "razorpay"
+  );
   const idRef = useRef<string | null>(null);
   const [orderTotal, setOrderTotal] = useState<number>(0);
+  const [razorpayReady, setRazorpayReady] = useState(false);
 
   useEffect(() => {
     let total = 0;
     for (let i = 0; i < prices.length; i++) {
       total += prices[i] * quantities[i];
     }
-    setOrderTotal(total + total * 0.05 + 29);
+    const calculatedOrderTotal = total + total * 0.05 + 29;
+    setOrderTotal(calculatedOrderTotal);
+    console.log(`Order Total Calculated: ${calculatedOrderTotal}`);
   }, [prices, quantities]);
 
   const createOrderId = useCallback(async () => {
@@ -62,25 +66,49 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
     }
   }, [orderTotal]);
 
+  const loadRazorpayScript = useCallback(() => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    script.onload = () => setRazorpayReady(true);
+    script.onerror = () => {
+      console.error("Failed to load Razorpay script");
+      setRazorpayReady(false);
+    };
+    document.body.appendChild(script);
+  }, []);
+
   useEffect(() => {
-    createOrderId();
-  }, [createOrderId]);
+    loadRazorpayScript();
+  }, [loadRazorpayScript]);
+
+  useEffect(() => {
+    if (paymentMethod === "cod" || razorpayReady) {
+      setLoading(false);
+    }
+  }, [paymentMethod, razorpayReady]);
 
   const processPayment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     if (paymentMethod === "razorpay") {
+      if (!idRef.current) {
+        await createOrderId();
+      }
+
       setLoading(true);
       const orderId = idRef.current;
       console.log(orderId);
       try {
         const options = {
-          key: process.env.RAZORPAY_KEY_ID,
+          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
           amount: orderTotal * 100,
           currency: "INR",
           name: "Payment",
           description: "Payment",
           order_id: orderId,
           handler: async function (response: any) {
+            setVerifying(true);
             const data = {
               orderCreationId: orderId,
               razorpayPaymentId: response.razorpay_payment_id,
@@ -90,21 +118,23 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
 
             const result = await axios.post("/api/dashboard/verify", data);
             const res = result.data;
+            setVerifying(false);
             if (res.isOk) {
               toast.success(res.message);
               await axios.post("/api/dashboard/create-order", {
-                orderId,
-                userId: user?.id,
+                orderId: idRef.current,
                 total: orderTotal,
                 status: "Pending",
                 isPaid: true,
+                userId: user?.id,
                 addressId: AddressId,
                 products: products.map((product) => ({
                   productId: product.productId,
-                  price: product.price,
+                  price: product.Price,
                   quantity: product.quantity,
-                  size: product.size,
+                  size: product.sizeName,
                   color: product.color,
+                  sizeSKU: product.SKUvalue,
                 })),
               });
               router.push("/orders/success");
@@ -137,10 +167,11 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
           addressId: AddressId,
           products: products.map((product) => ({
             productId: product.productId,
-            price: product.price,
+            price: product.Price,
             quantity: product.quantity,
-            size: product.size,
+            size: product.sizeName,
             color: product.color,
+            sizeSKU: product.SKUvalue,
           })),
         });
         toast.success("Order placed successfully. Pay cash on delivery.");
@@ -148,17 +179,14 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
       } catch (error) {
         console.error("Error placing order for COD:", error);
         toast.error("Order placement failed");
+      } finally {
+        setLoading(false);
       }
     }
   };
 
   return (
     <>
-      <Script
-        id="razorpay-checkout-js"
-        src="https://checkout.razorpay.com/v1/checkout.js"
-      />
-
       <section className="container flex flex-col justify-center items-center gap-10 py-12">
         <Card className="max-w-[25rem] w-full">
           <CardHeader>
@@ -194,8 +222,24 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
                   Cash on Delivery
                 </label>
               </div>
-              <Button className="w-full" type="submit">
-                {loading ? "...loading" : "Proceed to Pay"}
+              <Button
+                className="w-full"
+                type="submit"
+                disabled={
+                  (paymentMethod === "razorpay" && !razorpayReady) ||
+                  loading ||
+                  verifying
+                }
+              >
+                {loading
+                  ? "Loading..."
+                  : verifying
+                  ? "Please wait, payment getting verified..."
+                  : !razorpayReady && paymentMethod === "razorpay"
+                  ? "Loading Razorpay..."
+                  : paymentMethod === "razorpay"
+                  ? "Pay Now"
+                  : "Place Order"}
               </Button>
             </form>
           </CardContent>

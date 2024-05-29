@@ -26,43 +26,23 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { OrderColumn } from "./order-types";
+import { OrderColumn, OrderItem } from "./order-types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 interface DataTableProps<TData> {
   data: TData[];
 }
 
-export function DataTable<TData extends OrderColumn>({
-  data,
-}: DataTableProps<TData>) {
+export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TData>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [selectedOrder, setSelectedOrder] = useState<TData | null>(null);
-  const router = useRouter();
 
   const columns: ColumnDef<TData>[] = [
     {
-      accessorKey: "productName",
-      header: "Product Name",
-      cell: (info) => info.getValue(),
-    },
-    {
-      accessorKey: "size",
-      header: "Size",
-      cell: (info) => info.getValue(),
-    },
-    {
-      accessorKey: "quantity",
-      header: "Quantity",
-      cell: (info) => info.getValue(),
-    },
-    {
-      accessorKey: "price",
-      header: "Price",
+      accessorKey: "id",
+      header: "Order ID",
       cell: (info) => info.getValue(),
     },
     {
@@ -91,21 +71,64 @@ export function DataTable<TData extends OrderColumn>({
       cell: (info) => info.getValue(),
     },
     {
-      accessorKey: "imageUrl",
-      header: "Image",
-      cell: (info) => (
-        <Image
-          src={info.getValue() as string}
-          alt="Product"
-          height={50}
-          width={50}
-        />
-      ),
-    },
-    {
       accessorKey: "totalPayment",
       header: "Total Payment",
       cell: (info) => info.getValue(),
+    },
+    {
+      id: "details",
+      header: "Details",
+      cell: ({ row }) => (
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button onClick={() => setSelectedOrder(row.original)}>Details</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogTitle>Order Details</DialogTitle>
+            <DialogDescription>
+              {selectedOrder && (
+                <div>
+                  <p>
+                    <strong>Order ID:</strong> {selectedOrder.id}
+                  </p>
+                  <p>
+                    <strong>Phone:</strong> {selectedOrder.phone}
+                  </p>
+                  <p>
+                    <strong>Address:</strong> {selectedOrder.address}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {selectedOrder.email}
+                  </p>
+                  <p>
+                    <strong>Paid:</strong> {selectedOrder.isPaid ? "Yes" : "No"}
+                  </p>
+                  <p>
+                    <strong>Date:</strong> {selectedOrder.createdAt}
+                  </p>
+                  <p>
+                    <strong>Total Payment:</strong> ${selectedOrder.totalPayment}
+                  </p>
+                  <h3 className="text-xl font-bold mb-4">Products:</h3>
+                  <ul className="divide-y divide-gray-200">
+                    {selectedOrder.items.map((item, index) => (
+                      <li key={index} className="py-4 w-fit flex items-center">
+                        <Image src={item.imageUrl} alt="" width={80} height={80} className="rounded-md" />
+                        <div className="ml-4">
+                          <p className="text-lg font-medium">{item.productName}</p>
+                          <p className="text-sm text-gray-500">Size: {item.size}</p>
+                          <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
+                          <p className="text-sm text-gray-500">Price: ${item.price}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </DialogDescription>
+          </DialogContent>
+        </Dialog>
+      ),
     },
   ];
 
@@ -125,18 +148,14 @@ export function DataTable<TData extends OrderColumn>({
     <div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter Products..."
-          value={
-            (table.getColumn("productName")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event) =>
-            table.getColumn("productName")?.setFilterValue(event.target.value)
-          }
+          placeholder="Filter Orders..."
+          value={(table.getColumn("id")?.getFilterValue() as string) ?? ""}
+          onChange={(event) => table.getColumn("id")?.setFilterValue(event.target.value)}
           className="max-w-sm"
         />
         <Button
           onClick={() => {
-            table.getColumn("productName")?.setFilterValue("");
+            table.getColumn("id")?.setFilterValue("");
           }}
           variant="outline"
           className="ml-2"
@@ -153,10 +172,7 @@ export function DataTable<TData extends OrderColumn>({
                   <TableHead key={header.id}>
                     {header.isPlaceholder
                       ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                      : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 ))}
               </TableRow>
@@ -165,19 +181,17 @@ export function DataTable<TData extends OrderColumn>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
                   <TableCell>
+                     {/* 
+                     //! here form the data got changes line 192
+                     */}
+
                     <Dialog>
                       <DialogTrigger asChild>
                         <Button onClick={() => setSelectedOrder(row.original)}>

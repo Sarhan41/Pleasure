@@ -21,23 +21,18 @@ export default async function CartCheckoutPage() {
       userId: UserId,
     },
     include: {
-      product: {
-        include: {
-          images: { select: { url: true } },
-          category: { select: { name: true } },
-          colors: { select: { name: true, value: true } },
-          sizes: { select: { name: true, value: true } },
-        },
-      },
+      product: true,
     },
   });
 
-  const prices = CartProducts.map((item) => item.price);
-  const products = CartProducts.map((item) => item);
-  const quantities = CartProducts.map((item) => item.quantity);
+  const quantitiesForSummaryAndAccordion = CartProducts.map(
+    (item) => item.quantity
+  );
+  const pricesForSummaryAndAccordion = CartProducts.map((item) =>
+    parseFloat(item.Price)
+  );
 
-  
-  if (products.length === 0) {
+  if (CartProducts.length === 0) {
     return (
       <div className="h-full w-full flex justify-center items-center flex-col gap-6">
         <h1 className="text-2xl font-bold text-center my-6">
@@ -56,7 +51,7 @@ export default async function CartCheckoutPage() {
   }
 
   return (
-    <div className="bg-white  px-10 flex justify-between max-lg:flex-col">
+    <div className="bg-white w-full  px-10 flex justify-between max-lg:flex-col max-lg:justify-center">
       <div className="flex-[0.75]">
         <Link
           href="/cart"
@@ -70,13 +65,18 @@ export default async function CartCheckoutPage() {
         <ThreeAccordion
           addresses={Address}
           user={user}
-          prices={prices}
-          quantities={quantities}
-          products={products}
+          prices={pricesForSummaryAndAccordion}
+          quantities={quantitiesForSummaryAndAccordion}
+          products={CartProducts}
         />
       </div>
-      <div className="w-96">
-        <Summary prices={prices} quantities={quantities} products={products} />
+      <div className="max-lg:w-full flex justify-center items-center">
+        <div className="w-96 ">
+          <Summary
+            prices={pricesForSummaryAndAccordion}
+            quantities={quantitiesForSummaryAndAccordion}
+          />
+        </div>
       </div>
     </div>
   );
