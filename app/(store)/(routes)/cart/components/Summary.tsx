@@ -10,10 +10,10 @@ import { usePathname, useRouter } from "next/navigation";
 interface SummaryProps {
   prices: number[];
   quantities: number[];
-  products: CartItems[];
+  // products: CartItems[];
 }
 
-const Summary: React.FC<SummaryProps> = ({ prices, quantities, products }) => {
+const Summary: React.FC<SummaryProps> = ({ prices, quantities }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [orderTotal, setOrderTotal] = useState<number>(0);
@@ -27,10 +27,7 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, products }) => {
   }, [prices, quantities]);
 
   const onCheckout = async () => {
-    if (products.length === 0) {
-      toast.error("No items in cart");
-      return;
-    }
+  
 
     router.push(`/cart/checkout?reload=${Date.now()}`);
   };

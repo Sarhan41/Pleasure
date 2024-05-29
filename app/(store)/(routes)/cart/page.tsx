@@ -52,10 +52,9 @@ export default async function CartPage() {
     );
   }
 
-  // const products = CartProducts.map((item) => item);
-  // const quantities = CartProducts.map((item) => item.quantity);
+  const quantitiesForSummary = CartProducts.map((item) => item.quantity);
+  const pricesForSummary = CartProducts.map((item) => parseFloat(item.Price));
 
- 
   return (
     <div className="bg-white w-full mt-36 px-10">
       <Container>
@@ -77,11 +76,11 @@ export default async function CartPage() {
             </ul>
           </div>
           <div className="w-96">
-            {/* <Summary
-              prices={prices}
-              products={products}
-              quantities={quantities}
-            /> */}
+            <Summary
+              prices={pricesForSummary}
+              // products={products}
+              quantities={quantitiesForSummary}
+            />
           </div>
         </div>
       </Container>

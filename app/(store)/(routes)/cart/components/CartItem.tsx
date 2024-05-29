@@ -112,9 +112,14 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
                 style={{ backgroundColor: data?.color }}
               ></div>
             )}
-            <h1 className="border font-bold px-4 py-2 mt-2">
-              <span className="font-medium">Size :</span> {data.sizeName}
-            </h1>
+            <div className="flex">
+              <h1 className="border font-bold px-4 py-2 mt-2">
+                <span className="font-medium">Size :</span> {data.sizeName}
+              </h1>
+              <h1 className=" font-light px-4 py-2 mt-2">
+                <span className="font-normal">Category :</span> {data.category}
+              </h1>
+            </div>
           </div>
         </div>
         <div className="flex items-center space-x-4">
