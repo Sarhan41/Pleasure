@@ -1,7 +1,5 @@
-
-
 interface BillboardProps {
-  data: any
+  data: any;
 }
 
 const Billboard: React.FC<BillboardProps> = ({ data }) => {

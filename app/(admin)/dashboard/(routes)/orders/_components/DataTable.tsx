@@ -1,6 +1,4 @@
-// DataTable.tsx
 "use client";
-
 import React, { useState } from "react";
 import {
   useReactTable,
@@ -43,22 +41,18 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
     {
       accessorKey: "id",
       header: "Order ID",
-      cell: (info) => info.getValue(),
     },
     {
       accessorKey: "phone",
       header: "Phone",
-      cell: (info) => info.getValue(),
     },
     {
       accessorKey: "address",
       header: "Address",
-      cell: (info) => info.getValue(),
     },
     {
       accessorKey: "email",
       header: "Email",
-      cell: (info) => info.getValue(),
     },
     {
       accessorKey: "isPaid",
@@ -68,12 +62,10 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
     {
       accessorKey: "createdAt",
       header: "Date",
-      cell: (info) => info.getValue(),
     },
     {
       accessorKey: "totalPayment",
       header: "Total Payment",
-      cell: (info) => info.getValue(),
     },
     {
       id: "details",
@@ -83,54 +75,49 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
           <DialogTrigger asChild>
             <Button onClick={() => setSelectedOrder(row.original)}>Details</Button>
           </DialogTrigger>
-          <DialogContent>
-            <DialogTitle>Order Details</DialogTitle>
+          <DialogContent className="w-full max-w-4xl p-6  rounded-lg shadow-lg">
+            <DialogTitle className="text-2xl font-semibold text-gray-900">Order Details</DialogTitle>
             <DialogDescription>
-              {selectedOrder && (
-                <div>
-                  <p>
-                    <strong>Order ID:</strong> {selectedOrder.id}
-                  </p>
-                  <p>
-                    <strong>Phone:</strong> {selectedOrder.phone}
-                  </p>
-                  <p>
-                    <strong>Address:</strong> {selectedOrder.address}
-                  </p>
-                  <p>
-                    <strong>Email:</strong> {selectedOrder.email}
-                  </p>
-                  <p>
-                    <strong>Paid:</strong> {selectedOrder.isPaid ? "Yes" : "No"}
-                  </p>
-                  <p>
-                    <strong>Date:</strong> {selectedOrder.createdAt}
-                  </p>
-                  <p>
-                    <strong>Total Payment:</strong> ${selectedOrder.totalPayment}
-                  </p>
-                  <h3 className="text-xl font-bold mb-4">Products:</h3>
-                  <ul className="divide-y divide-gray-200">
-                    {selectedOrder.items.map((item, index) => (
-                      <li key={index} className="py-4 w-fit flex items-center">
-                        <Image src={item.imageUrl} alt="" width={80} height={80} className="rounded-md" />
-                        <div className="ml-4">
-                          <p className="text-lg font-medium">{item.productName}</p>
-                          <p className="text-sm text-gray-500">Size: {item.size}</p>
-                          <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
-                          <p className="text-sm text-gray-500">Price: ${item.price}</p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              <OrderDetails selectedOrder={selectedOrder} />
             </DialogDescription>
           </DialogContent>
         </Dialog>
       ),
     },
   ];
+
+  const OrderDetails: React.FC<{ selectedOrder: TData | null }> = ({ selectedOrder }) => {
+    if (!selectedOrder) return null;
+    return (
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col lg:flex-row justify-between gap-6">
+          <div className="flex flex-col gap-4">
+            <p><strong>Order ID:</strong> {selectedOrder.id}</p>
+            <p><strong>Phone:</strong> {selectedOrder.phone}</p>
+            <p><strong>Address:</strong> {selectedOrder.address}</p>
+            <p><strong>Email:</strong> {selectedOrder.email}</p>
+            <p><strong>Paid:</strong> {selectedOrder.isPaid ? "Yes" : "No"}</p>
+            <p><strong>Date:</strong> {selectedOrder.createdAt}</p>
+            <p><strong>Total Payment:</strong> ₹{selectedOrder.totalPayment}</p>
+          </div>
+          <div className="flex flex-col gap-6">
+            <h3 className="text-xl font-bold mb-4">Products:</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto max-h-60">
+              {selectedOrder.items.map((item, index) => (
+                <div key={index} className="flex flex-col items-center p-4 border border-gray-300 rounded-lg">
+                  <Image src={item.imageUrl} alt="" width={80} height={80} className="rounded-md" />
+                  <p className="text-lg font-medium mt-2">{item.productName}</p>
+                  <p className="text-sm text-gray-500">Size: {item.size}</p>
+                  <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
+                  <p className="text-sm text-gray-500">Price: ₹{item.price}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   const table = useReactTable({
     data,
@@ -148,14 +135,18 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
     <div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter Orders..."
-          value={(table.getColumn("id")?.getFilterValue() as string) ?? ""}
-          onChange={(event) => table.getColumn("id")?.setFilterValue(event.target.value)}
+          placeholder="Filter Products..."
+          value={
+            (table.getColumn("productName")?.getFilterValue() as string) ?? ""
+          }
+          onChange={(event) =>
+            table.getColumn("productName")?.setFilterValue(event.target.value)
+          }
           className="max-w-sm"
         />
         <Button
           onClick={() => {
-            table.getColumn("id")?.setFilterValue("");
+            table.getColumn("productName")?.setFilterValue("");
           }}
           variant="outline"
           className="ml-2"
@@ -172,7 +163,10 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
                   <TableHead key={header.id}>
                     {header.isPlaceholder
                       ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                   </TableHead>
                 ))}
               </TableRow>
@@ -181,77 +175,18 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
-                  <TableCell>
-                     {/* 
-                     //! here form the data got changes line 192
-                     */}
-
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button onClick={() => setSelectedOrder(row.original)}>
-                          Details
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogTitle>Order Details</DialogTitle>
-                        <DialogDescription>
-                          {selectedOrder && (
-                            <div>
-                              <p>
-                                <strong>Product Name:</strong>{" "}
-                                {selectedOrder.productName}
-                              </p>
-                              <p>
-                                <strong>Size:</strong> {selectedOrder.size}
-                              </p>
-                              <p>
-                                <strong>Quantity:</strong>{" "}
-                                {selectedOrder.quantity}
-                              </p>
-                              <p>
-                                <strong>Price:</strong> {selectedOrder.price}
-                              </p>
-                              <p>
-                                <strong>Phone:</strong> {selectedOrder.phone}
-                              </p>
-                              <p>
-                                <strong>Address:</strong>{" "}
-                                {selectedOrder.address}
-                              </p>
-                              <p>
-                                <strong>Email:</strong> {selectedOrder.email}
-                              </p>
-                              <p>
-                                <strong>Paid:</strong>{" "}
-                                {selectedOrder.isPaid ? "Yes" : "No"}
-                              </p>
-                              <p>
-                                <strong>Date:</strong> {selectedOrder.createdAt}
-                              </p>
-                              <Link
-                                href={`/product/${selectedOrder.productName}`}
-                                target="_blank"
-                              >
-                                <Image
-                                  src={selectedOrder.imageUrl}
-                                  alt="Product"
-                                  width={100}
-                                  height={100}
-                                  className="cursor-pointer"
-                                />
-                              </Link>
-                            </div>
-                          )}
-                        </DialogDescription>
-                      </DialogContent>
-                    </Dialog>
-                  </TableCell>
                 </TableRow>
               ))
             ) : (

@@ -31,6 +31,7 @@ const fetchOrders = async () => {
     items: order.orderItems.map((item) => ({
       productName: item.product.name,
       size: item.size,
+      SUK:item.sizeSKU,
       quantity: item.quantity,
       price: item.Price,
       imageUrl: item.product.images[0]?.url || "",
