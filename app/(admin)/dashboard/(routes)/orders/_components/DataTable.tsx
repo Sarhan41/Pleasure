@@ -1,4 +1,6 @@
+// _components/DataTable.tsx
 "use client";
+
 import React, { useState } from "react";
 import {
   useReactTable,
@@ -28,12 +30,15 @@ import { OrderColumn, OrderItem } from "./order-types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import DownloadPdfButtonForAdmin from "./DownloadPDFButtonForAdmin";
 
 interface DataTableProps<TData> {
   data: TData[];
 }
 
-export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TData>) {
+export function DataTable<TData extends OrderColumn>({
+  data,
+}: DataTableProps<TData>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [selectedOrder, setSelectedOrder] = useState<TData | null>(null);
 
@@ -68,91 +73,126 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
       header: "Total Payment",
     },
     {
+      accessorKey: "status", // Ensure status column is included
+      header: "Status",
+    },
+    {
       id: "details",
       header: "Details",
       cell: ({ row }) => (
         <Dialog>
           <DialogTrigger asChild>
-            <Button onClick={() => setSelectedOrder(row.original)}>Details</Button>
+            <Button onClick={() => setSelectedOrder(row.original)}>
+              Details
+            </Button>
           </DialogTrigger>
-          <DialogContent className="w-full max-w-4xl p-6  rounded-lg shadow-lg">
-            <DialogTitle className="text-2xl font-semibold text-gray-900">Order Details</DialogTitle>
+          <DialogContent className="w-full max-w-4xl p-6 rounded-lg shadow-lg">
+            <DialogTitle className="text-2xl font-semibold text-gray-900">
+              Order Details
+            </DialogTitle>
             <DialogDescription>
-              <OrderDetails selectedOrder={selectedOrder} />
+              <div className="space-y-4">
+                <div>
+                  <span className="font-semibold">Phone:</span>{" "}
+                  {row.original.phone}
+                </div>
+                <div>
+                  <span className="font-semibold">Address:</span>{" "}
+                  {row.original.address}
+                </div>
+                <div>
+                  <span className="font-semibold">Email:</span>{" "}
+                  {row.original.email}
+                </div>
+                <div>
+                  <span className="font-semibold">Total Payment:</span> ₹
+                  {row.original.totalPayment}
+                </div>
+                <div>
+                  <span className="font-semibold">Paid:</span>{" "}
+                  {row.original.isPaid ? "Yes" : "No"}
+                </div>
+                <div>
+                  <span className="font-semibold">Status:</span>{" "}
+                  {row.original.status} {/* Display status */}
+                </div>
+                <div>
+                  <span className="font-semibold">Products:</span>
+                  <ul className="space-y-2 mt-2">
+                    {row.original.items.map((item, index) => (
+                      <li key={index} className="flex items-center">
+                        <Image
+                          src={item.imageUrl}
+                          alt={item.productName}
+                          width={50}
+                          height={50}
+                          className="rounded-md mr-4"
+                        />
+                        <div>
+                          <p className="font-medium">{item.productName}</p>
+                          <p className="text-sm text-gray-500">
+                            Size: {item.size}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            Quantity: {item.quantity}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            Price: ₹{item.price}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <DownloadPdfButtonForAdmin
+                    order={row.original}
+                    userName={row.original.userName}
+                  />
+                </div>
+              </div>
             </DialogDescription>
           </DialogContent>
         </Dialog>
       ),
     },
-  ];
-
-  const OrderDetails: React.FC<{ selectedOrder: TData | null }> = ({ selectedOrder }) => {
-    if (!selectedOrder) return null;
-    return (
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col lg:flex-row justify-between gap-6">
-          <div className="flex flex-col gap-4">
-            <p><strong>Order ID:</strong> {selectedOrder.id}</p>
-            <p><strong>Phone:</strong> {selectedOrder.phone}</p>
-            <p><strong>Address:</strong> {selectedOrder.address}</p>
-            <p><strong>Email:</strong> {selectedOrder.email}</p>
-            <p><strong>Paid:</strong> {selectedOrder.isPaid ? "Yes" : "No"}</p>
-            <p><strong>Date:</strong> {selectedOrder.createdAt}</p>
-            <p><strong>Total Payment:</strong> ₹{selectedOrder.totalPayment}</p>
-          </div>
-          <div className="flex flex-col gap-6">
-            <h3 className="text-xl font-bold mb-4">Products:</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto max-h-60">
-              {selectedOrder.items.map((item, index) => (
-                <div key={index} className="flex flex-col items-center p-4 border border-gray-300 rounded-lg">
-                  <Image src={item.imageUrl} alt="" width={80} height={80} className="rounded-md" />
-                  <p className="text-lg font-medium mt-2">{item.productName}</p>
-                  <p className="text-sm text-gray-500">Size: {item.size}</p>
-                  <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
-                  <p className="text-sm text-gray-500">Price: ₹{item.price}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+    {
+      id: "Download",
+      header: "Download Invoice",
+      cell: ({ row }) => (
+        <div>
+          <DownloadPdfButtonForAdmin
+            order={row.original}
+            userName={row.original.userName}
+          />
         </div>
-      </div>
-    );
-  };
+      ),
+    },
+  ];
 
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onColumnFiltersChange: setColumnFilters,
     state: {
       columnFilters,
     },
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
     <div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter Products..."
-          value={
-            (table.getColumn("productName")?.getFilterValue() as string) ?? ""
-          }
+          placeholder="Filter order..."
+          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("productName")?.setFilterValue(event.target.value)
+            table.getColumn("email")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
-        <Button
-          onClick={() => {
-            table.getColumn("productName")?.setFilterValue("");
-          }}
-          variant="outline"
-          className="ml-2"
-        >
-          Reset
-        </Button>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -192,7 +232,7 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length + 1}
+                  colSpan={columns.length}
                   className="h-24 text-center"
                 >
                   No results.

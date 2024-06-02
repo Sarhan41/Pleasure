@@ -1,4 +1,4 @@
-// OrdersPage.tsx
+// pages/admin/orders.tsx
 import { db } from "@/lib/db";
 import { format } from "date-fns";
 import { OrderColumn } from "./_components/order-types";
@@ -26,12 +26,12 @@ const fetchOrders = async () => {
     },
   });
 
-  const formattedOrders: OrderColumn[] = orders.map((order) => ({
+  const formattedOrders = orders.map((order) => ({
     id: order.id,
     items: order.orderItems.map((item) => ({
       productName: item.product.name,
       size: item.size,
-      SUK:item.sizeSKU,
+      SUK: item.sizeSKU,
       quantity: item.quantity,
       price: item.price,
       imageUrl: item.product.images[0]?.url || "",
@@ -42,13 +42,16 @@ const fetchOrders = async () => {
     }, ${order.address.addressLine3 || ""}, ${order.address.city}, ${
       order.address.state
     }, ${order.address.pincode}`,
-    email: order.user.email || "", // Make email property non-nullable
+    email: order.user.email || "",
+    userName: order.user.name || "",
     isPaid: order.isPaid,
     createdAt: format(order.createdAt, "MMM do, yyyy"),
     totalPayment: order.orderItems.reduce(
       (sum, item) => sum + item.quantity * item.price,
       0
     ),
+    status: order.status, // Ensure status is included
+    orderItems: order.orderItems,
   }));
 
   return formattedOrders;
@@ -60,7 +63,10 @@ const OrdersPage = async () => {
   return (
     <div>
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <Heading title="Orders" description="See details of your store orders" />
+        <Heading
+          title="Orders"
+          description="See details of your store orders"
+        />
         <DataTable<OrderColumn> data={orders} />
       </div>
     </div>

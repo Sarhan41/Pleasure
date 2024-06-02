@@ -1,7 +1,9 @@
+// pages/profile/orders.tsx
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import Image from "next/image";
 import Link from "next/link";
+import DownloadPdfButton from "./DownloadPDFButton";
 
 const MyProfileOrdersPage = async () => {
   const user = await currentUser();
@@ -25,16 +27,6 @@ const MyProfileOrdersPage = async () => {
                   name: true,
                 },
               },
-              sizes: {
-                select: {
-                  name: true,
-                },
-              },
-              colors: {
-                select: {
-                  name: true,
-                },
-              },
             },
           },
         },
@@ -43,7 +35,7 @@ const MyProfileOrdersPage = async () => {
   });
 
   return (
-    <div className="min-h-fit w-screen  p-6 bg-gray-100">
+    <div className="min-h-fit w-screen p-6 bg-gray-100">
       <h1 className="text-4xl font-bold text-center my-6">My Orders</h1>
       {orders.length === 0 ? (
         <p className="text-center text-lg">You have no orders yet.</p>
@@ -65,7 +57,7 @@ const MyProfileOrdersPage = async () => {
                 const productName = item.product.name.replace(/\s+/g, "-");
                 return (
                   <Link href={`/product/${productName}`} key={item.id}>
-                    <li key={item.id} className="py-4 w-fit flex items-center">
+                    <li className="py-4 w-fit flex items-center">
                       <Image
                         src={item.product.images[0].url}
                         alt=""
@@ -102,11 +94,7 @@ const MyProfileOrdersPage = async () => {
               {order.status === "Delivered" ? "Arrived on: " : "Arriving on: "}
               {new Date(order.updatedAt).toLocaleDateString()}
             </p>
-            {order.pdfUrl && (
-              <Link href={order.pdfUrl} download>
-                Download Invoice
-              </Link>
-            )}
+            <DownloadPdfButton order={order} userName={user?.name} />
           </div>
         ))
       )}
