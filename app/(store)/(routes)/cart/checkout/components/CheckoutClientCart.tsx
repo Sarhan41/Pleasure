@@ -59,7 +59,11 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
       });
 
       const id = response.data.orderId;
+      if (!id) {
+        throw new Error("Order ID not generated");
+      }
       idRef.current = id;
+      console.log("Generated Order ID:", id); // Debugging log
       setLoading1(false);
     } catch (error) {
       console.error("There was a problem with your axios operation:", error);
@@ -91,6 +95,15 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
   const processPayment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    if (!idRef.current) {
+      await createOrderId();
+      if (!idRef.current) {
+        toast.error("Order ID generation failed");
+        setLoading(false);
+        return;
+      }
+    }
+
     if (paymentMethod === "razorpay") {
       if (!idRef.current) {
         await createOrderId();
