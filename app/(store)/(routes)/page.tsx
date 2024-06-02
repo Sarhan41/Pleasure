@@ -2,7 +2,7 @@ import Container from "@/components/Store/container";
 import ProductList from "../_components/ProductList/ProductList";
 import { db } from "@/lib/db";
 import { Button } from "@/components/ui/button";
-import Billboard from "../_components/Billboard/";
+import Billboard from "../_components/Billboard/index";
 
 const HomePage = async () => {
   const billboard = await db.category.findUnique({
