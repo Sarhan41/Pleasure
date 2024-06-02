@@ -145,7 +145,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
   return (
     <>
       <div className="relative overflow-hidden bg-white h-[813px] w-fit group cursor-pointer rounded-xl border-2 border-primary p-3 space-y-4">
-        <div className="h-[600px] w-[400px] rounded-xl bg-gray-100 relative">
+        <div className="h-[600px] w-[400px] rounded-xl bg-gray-100 relative"  onClick={handleClick}>
           <Image
             alt="Image"
             src={`${
@@ -173,7 +173,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
           </div>
         </div>
         <div className="w-[300px] flex flex-wrap flex-col ">
-          <p className="font-semibold text-base flex-wrap flex">
+          <p className="font-semibold text-base flex-wrap flex"  onClick={handleClick}>
             {data.name.includes("100")
               ? `${data.name.split("100")[0]}100%${data.name.split("100")[1]}`
               : data.name}
@@ -181,7 +181,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
           <p className="text-sm text-gray-500"> {data.category?.name}</p>
         </div>
         <div className="flex justify-between">
-          <div className="font-semibold">
+          <div className="font-semibold"  onClick={handleClick}>
             ₹
             {selectedSize.discountedprice ? (
               <>

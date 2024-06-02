@@ -259,8 +259,8 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             Size Chart
           </h3>
           <Dialog open={isSizeChartOpen} onOpenChange={handleSizeChartClose}>
-            <DialogOverlay className="fixed inset-0 flex items-center justify-center bg-black opacity-50">
-              <DialogContent className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg">
+            <DialogOverlay className="absolute inset-0 flex items-center min-h-screen min-w-screen justify-center bg-black opacity-50">
+              <DialogContent className="absolute transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg">
                 <SizeChart />
                 <DialogClose asChild>
                   <button className="absolute top-4 right-4">

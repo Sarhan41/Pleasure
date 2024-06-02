@@ -1,93 +1,69 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { PDFDocument, rgb } from "pdf-lib";
-import { v4 as uuidv4 } from "uuid";
-import { promises as fs } from "fs";
-import path from "path";
+import { connect } from "http2";
 
-export async function POST(req: NextRequest) {
+export async function POST(request: NextRequest) {
+  const { orderId, total, status, isPaid, userId, addressId, products } =
+    await request.json();
+
   try {
-    const body = await req.json();
-
-    const { userId, orderItems, total, addressId } = body;
-
-    const newOrder = await db.order.create({
-      data: {
-        id: uuidv4(),
-        total,
-        status: "pending",
-        isPaid: false,
-        addressId,
-        userId,
-        orderItems: {
-          create: orderItems.map((item: any) => ({
-            id: uuidv4(),
-            name: item.name,
-            price: item.price,
-            quantity: item.quantity,
-            size: item.size,
-            color: item.color,
-            productId: item.productId,
-            sizeSKU: item.sizeSKU,
-          })),
+    // Fetch product details
+    const productDetails = await db.product.findMany({
+      where: {
+        id: {
+          in: products.map(
+            (product: { productId: string }) => product.productId
+          ),
         },
       },
-      include: {
-        orderItems: true,
-        user: true,
-        address: true,
+      select: {
+        id: true,
+        name: true,
+        sizes: true,
       },
     });
 
-    const pdf = await createInvoicePdf(newOrder);
-    const pdfFileName = `${newOrder.id}.pdf`;
-    const pdfFilePath = path.join(process.cwd(), "public", "pdfs", pdfFileName);
-    await fs.writeFile(pdfFilePath, pdf);
-
-    const pdfUrl = `/pdfs/${pdfFileName}`;
-
-    const updatedOrder = await db.order.update({
-      where: { id: newOrder.id },
-      data: { pdfUrl },
+    // Map products to include additional details
+    const orderItemsData = products.map((product: any) => {
+      const productDetail = productDetails.find(
+        (p) => p.id === product.productId
+      );
+      return {
+        name: productDetail?.name,
+        Price: parseInt(product.price, 10), // Convert price to integer
+        quantity: product.quantity,
+        size: product.size,
+        color: product.color,
+        productId: product.productId,
+        sizeSKU: product.sizeSKU,
+      };
     });
 
-    return NextResponse.json(updatedOrder, { status: 201 });
+    // Create the order
+    const order = await db.order.create({
+      data: {
+        id: orderId,
+        total: parseInt(total, 10), // Convert total to integer
+        status: status,
+        isPaid: isPaid,
+        userId: userId,
+        addressId: addressId,
+        orderItems: {
+          create: orderItemsData,
+        },
+      },
+    });
+
+    // Empty the cart
+    await db.cartItems.deleteMany({
+      where: {
+        userId: userId,
+      },
+    });
+
+    return NextResponse.json(order);
   } catch (error) {
-    console.error(error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    console.log("[ORDER_CREATE]", error);
+    return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
-}
-
-async function createInvoicePdf(order: any) {
-  const pdfDoc = await PDFDocument.create();
-  const page = pdfDoc.addPage([600, 400]);
-  const { orderItems, user, address } = order;
-
-  page.drawText("Order Invoice", {
-    x: 50,
-    y: 350,
-    size: 25,
-    color: rgb(0, 0, 0),
-  });
-  page.drawText(`Order ID: ${order.id}`, { x: 50, y: 330, size: 12 });
-  page.drawText(`Total: $${order.total}`, { x: 50, y: 310, size: 12 });
-  page.drawText(`User: ${user.name}`, { x: 50, y: 290, size: 12 });
-  page.drawText(`Address: ${address.addressLine1}, ${address.city}`, {
-    x: 50,
-    y: 270,
-    size: 12,
-  });
-
-  orderItems.forEach((item: any, index: number) => {
-    page.drawText(
-      `${item.name} - ${item.size} - $${item.price} x${item.quantity}`,
-      { x: 50, y: 250 - index * 20, size: 12 }
-    );
-  });
-
-  const pdfBytes = await pdfDoc.save();
-  return pdfBytes;
 }
