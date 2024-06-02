@@ -2,11 +2,11 @@ import { db } from "@/lib/db";
 import Filter from "./components/Filter";
 import MobileFilters from "./components/MobileFilter";
 import Container from "@/components/Store/container";
-import Billboard from "@/app/(store)/_components/Billboard/Billboard";
 import NoResults from "@/components/Store/NoResults";
 import ProductCard from "@/app/(store)/_components/ProductCard/ProductCard";
 import GetProducts from "@/actions/Store/GetProducts";
 import { currentUser } from "@/lib/auth";
+import Billboard from "@/app/(store)/_components/Billboard/Billboard";
 
 interface CategoryPageProps {
   params: {
