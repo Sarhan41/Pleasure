@@ -8,7 +8,7 @@ import { Heading } from "@/components/ui/Heading";
 const fetchOrders = async () => {
   const orders = await db.order.findMany({
     include: {
-      Address: true,
+      address: true,
       user: true,
       orderItems: {
         include: {
@@ -36,12 +36,12 @@ const fetchOrders = async () => {
       price: item.Price,
       imageUrl: item.product.images[0]?.url || "",
     })),
-    phone: order.Address.phone,
-    address: `${order.Address.addressLine1}, ${
-      order.Address.addressLine2 || ""
-    }, ${order.Address.addressLine3 || ""}, ${order.Address.city}, ${
-      order.Address.state
-    }, ${order.Address.pincode}`,
+    phone: order.address.phone,
+    address: `${order.address.addressLine1}, ${
+      order.address.addressLine2 || ""
+    }, ${order.address.addressLine3 || ""}, ${order.address.city}, ${
+      order.address.state
+    }, ${order.address.pincode}`,
     email: order.user.email || "", // Make email property non-nullable
     isPaid: order.isPaid,
     createdAt: format(order.createdAt, "MMM do, yyyy"),

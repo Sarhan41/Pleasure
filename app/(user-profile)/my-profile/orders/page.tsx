@@ -102,6 +102,11 @@ const MyProfileOrdersPage = async () => {
               {order.status === "Delivered" ? "Arrived on: " : "Arriving on: "}
               {new Date(order.updatedAt).toLocaleDateString()}
             </p>
+            {order.pdfUrl && (
+              <Link href={order.pdfUrl} download>
+                Download Invoice
+              </Link>
+            )}
           </div>
         ))
       )}

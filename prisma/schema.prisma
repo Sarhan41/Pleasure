@@ -229,9 +229,10 @@ model Order {
   orderItems orderItem[]
   total      Int
   status     String
+  pdfUrl     String?
   isPaid     Boolean     @default(false)
-  AddressId  String
-  Address    Address     @relation(fields: [AddressId], references: [id])
+  addressId  String
+  address    Address     @relation(fields: [addressId], references: [id])
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   userId     String
