@@ -32,7 +32,7 @@ export async function POST(req: Request) {
         productId: id,
         sizeName: sizeName,
         color: color,
-        Price: price,
+        price: price,
         quantity: quantity,
         SKUvalue: SKUvalue,
         discountedPrice: discountedPrice,

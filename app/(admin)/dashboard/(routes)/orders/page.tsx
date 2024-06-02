@@ -33,7 +33,7 @@ const fetchOrders = async () => {
       size: item.size,
       SUK:item.sizeSKU,
       quantity: item.quantity,
-      price: item.Price,
+      price: item.price,
       imageUrl: item.product.images[0]?.url || "",
     })),
     phone: order.address.phone,
@@ -46,7 +46,7 @@ const fetchOrders = async () => {
     isPaid: order.isPaid,
     createdAt: format(order.createdAt, "MMM do, yyyy"),
     totalPayment: order.orderItems.reduce(
-      (sum, item) => sum + item.quantity * item.Price,
+      (sum, item) => sum + item.quantity * item.price,
       0
     ),
   }));

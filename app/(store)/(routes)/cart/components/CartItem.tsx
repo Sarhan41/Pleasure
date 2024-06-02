@@ -140,11 +140,11 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
               <>
                 {data.discountedPrice}
                 <span className="line-through ml-4 text-gray-500">
-                  {data.Price}
+                  {data.price}
                 </span>
               </>
             ) : (
-              data.Price
+              data.price
             )}
           </div>
         </div>

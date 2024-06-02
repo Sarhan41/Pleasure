@@ -90,7 +90,7 @@ const MyProfileOrdersPage = async () => {
                           Quantity: {item.quantity}
                         </p>
                         <p className="text-sm text-gray-500">
-                          Price: ${item.Price}
+                          Price: ${item.price}
                         </p>
                       </div>
                     </li>

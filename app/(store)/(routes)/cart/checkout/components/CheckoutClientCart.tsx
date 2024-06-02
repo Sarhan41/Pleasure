@@ -130,7 +130,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
                 addressId: AddressId,
                 products: products.map((product) => ({
                   productId: product.productId,
-                  price: product.Price,
+                  price: product.price,
                   quantity: product.quantity,
                   size: product.sizeName,
                   color: product.color,
@@ -167,7 +167,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
           addressId: AddressId,
           products: products.map((product) => ({
             productId: product.productId,
-            price: product.Price,
+            price: product.price,
             quantity: product.quantity,
             size: product.sizeName,
             color: product.color,

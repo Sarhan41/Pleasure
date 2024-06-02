@@ -1,4 +1,5 @@
-// prisma/schema.prisma
+// schema.prisma
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -7,8 +8,6 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
-
-// Authentication Schemas
 
 enum UserRole {
   ADMIN
@@ -37,7 +36,7 @@ model Address {
   id             String   @id @default(cuid())
   userId         String
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  orders        Order[]
+  orders         Order[]
   phone          String
   AlternatePhone String?
   addressLine1   String
@@ -123,8 +122,6 @@ model TwoFactorConfirmation {
   @@unique([userId])
 }
 
-// dashboard schemas
-
 model Category {
   id        String    @id @default(uuid())
   products  Product[] @relation("CategoryToProduct")
@@ -145,7 +142,7 @@ model Product {
   images      Image[]
   colors      Color[]
   sizes       Size[]
-  orderItems  orderItem[]
+  orderItems  OrderItem[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   Wishlist    Wishlist[]
@@ -207,18 +204,18 @@ model Wishlist {
 }
 
 model CartItems {
-  id        String  @id @default(uuid())
-  userId    String
-  user      User    @relation(fields: [userId], references: [id])
-  category String
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
-  quantity  Int     @default(1)
-  sizeName  String
-  Price     String
-  discountedPrice  String?
-  color     String?
-  SKUvalue String
+  id              String  @id @default(uuid())
+  userId          String
+  user            User    @relation(fields: [userId], references: [id])
+  category        String
+  productId       String
+  product         Product @relation(fields: [productId], references: [id])
+  quantity        Int     @default(1)
+  sizeName        String
+  price           String
+  discountedPrice String?
+  color           String?
+  SKUvalue        String
 
   @@index([userId])
   @@index([productId])
@@ -226,7 +223,7 @@ model CartItems {
 
 model Order {
   id         String      @id @default(uuid())
-  orderItems orderItem[]
+  orderItems OrderItem[]
   total      Int
   status     String
   pdfUrl     String?
@@ -239,10 +236,10 @@ model Order {
   user       User        @relation(fields: [userId], references: [id])
 }
 
-model orderItem {
+model OrderItem {
   id        String  @id @default(uuid())
   name      String
-  Price     Int
+  price     Int
   quantity  Int
   size      String
   sizeSKU   String

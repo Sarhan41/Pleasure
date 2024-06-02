@@ -53,7 +53,7 @@ export default async function CartPage() {
   }
 
   const quantitiesForSummary = CartProducts.map((item) => item.quantity);
-  const pricesForSummary = CartProducts.map((item) => parseFloat(item.Price));
+  const pricesForSummary = CartProducts.map((item) => parseFloat(item.price));
 
   return (
     <div className="bg-white w-full mt-36 px-10">

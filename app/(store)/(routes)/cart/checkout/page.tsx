@@ -29,7 +29,7 @@ export default async function CartCheckoutPage() {
     (item) => item.quantity
   );
   const pricesForSummaryAndAccordion = CartProducts.map((item) =>
-    parseFloat(item.Price)
+    parseFloat(item.price)
   );
 
   if (CartProducts.length === 0) {
