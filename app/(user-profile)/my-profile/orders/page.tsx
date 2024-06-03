@@ -1,14 +1,14 @@
-// pages/profile/orders.tsx
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import Image from "next/image";
 import Link from "next/link";
 import DownloadPdfButton from "./DownloadPDFButton";
+import { Order, Product, OrderItem, Category, Image as ImageType } from "@/types";
 
 const MyProfileOrdersPage = async () => {
   const user = await currentUser();
 
-  const orders = await db.order.findMany({
+  const orders: Order[] = await db.order.findMany({
     where: {
       userId: user?.id,
     },
@@ -70,7 +70,7 @@ const MyProfileOrdersPage = async () => {
                           {item.product.name}
                         </p>
                         <p className="text-sm text-gray-500">
-                          Category: {item.product.category.name}
+                          Category: {item.product?.category?.name ?? ""}
                         </p>
                         <p className="text-sm text-gray-500">
                           Size: {item.size}
@@ -94,7 +94,7 @@ const MyProfileOrdersPage = async () => {
               {order.status === "Delivered" ? "Arrived on: " : "Arriving on: "}
               {new Date(order.updatedAt).toLocaleDateString()}
             </p>
-            <DownloadPdfButton order={order} userName={user?.name} />
+            <DownloadPdfButton order={order} userName={user?.name ?? ''} />
           </div>
         ))
       )}

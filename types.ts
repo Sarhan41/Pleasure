@@ -1,5 +1,3 @@
-// types.ts
-
 export interface Category {
   id: string;
   name: string;
@@ -44,21 +42,22 @@ export interface Product {
 }
 
 export interface OrderItem {
-  id?: string;
+  id: string;
   name: string;
   price: number;
   quantity: number;
   size: string;
-  color: string;
+  color?: string | null;
   productId: string;
   sizeSKU: string;
+  product: Product;
 }
 
 export interface Order {
   id: string;
   total: number;
   status: string;
-  pdfUrl: string;
+  pdfUrl?: string | null;
   isPaid: boolean;
   addressId: string;
   createdAt: Date;

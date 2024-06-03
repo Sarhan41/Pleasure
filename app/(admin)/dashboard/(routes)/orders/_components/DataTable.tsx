@@ -30,15 +30,13 @@ import { OrderColumn, OrderItem } from "./order-types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import DownloadPdfButtonForAdmin from "./DownloadPDFButtonForAdmin";
+import DownloadPdfButtonAdmin from "./DownloadPDFButtonForAdmin";
 
 interface DataTableProps<TData> {
   data: TData[];
 }
 
-export function DataTable<TData extends OrderColumn>({
-  data,
-}: DataTableProps<TData>) {
+export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TData>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [selectedOrder, setSelectedOrder] = useState<TData | null>(null);
 
@@ -145,10 +143,7 @@ export function DataTable<TData extends OrderColumn>({
                   </ul>
                 </div>
                 <div>
-                  <DownloadPdfButtonForAdmin
-                    order={row.original}
-                    userName={row.original.userName}
-                  />
+                  <DownloadPdfButtonAdmin order={row.original} />
                 </div>
               </div>
             </DialogDescription>
@@ -161,10 +156,7 @@ export function DataTable<TData extends OrderColumn>({
       header: "Download Invoice",
       cell: ({ row }) => (
         <div>
-          <DownloadPdfButtonForAdmin
-            order={row.original}
-            userName={row.original.userName}
-          />
+          <DownloadPdfButtonAdmin order={row.original} />
         </div>
       ),
     },
