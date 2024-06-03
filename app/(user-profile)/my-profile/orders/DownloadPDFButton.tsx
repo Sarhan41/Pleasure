@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 
 const DownloadPdfButton = ({ order, userName }: any) => {
   const handleDownloadPdf = async () => {
-    const pdfBytes = await generatePdf(order);
+    const pdfBytes = await generatePdf(order, userName);
     const blob = new Blob([pdfBytes], { type: "application/pdf" });
     saveAs(blob, `Order_${userName}.pdf`);
   };
