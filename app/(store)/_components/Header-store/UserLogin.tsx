@@ -64,7 +64,7 @@ const UserLogin = ({ userId }: UserLoginProps) => {
                           Wishlist
                         </Button>
                       </Link>
-                      <Link href="/my-orders">
+                      <Link href="/my-profile/orders">
                         <Button
                           size="lg"
                           variant="outline"
