@@ -1,66 +1,103 @@
-// utils/generatePdf.js
 import { Order } from "@/types";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 
-export async function generatePdf(order: Order) {
+export async function generatePdf(order: any) {
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([600, 800]);
   const { width, height } = page.getSize();
 
-  const fontSize = 24;
-  const title = `Order ID: ${order.id}`;
-  const total = `Total: ₹${order.total}`;
-  const status = `Status: ${order.status}`;
-  const paid = `Paid: ${order.isPaid ? "Yes" : "No"}`;
-
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-  const textColor = rgb(0, 0, 0);
+  const fontSize = 12;
+  const titleFontSize = 20;
+  const headerFontSize = 14;
+  const margin = 20;
 
-  page.drawText(title, {
-    x: 50,
-    y: height - 4 * fontSize,
-    size: fontSize,
+  // Title
+  page.drawText("Invoice", {
+    x: width / 2 - 40,
+    y: height - margin - titleFontSize,
+    size: titleFontSize,
     font,
-    color: textColor,
+    color: rgb(0, 0, 0),
   });
 
-  page.drawText(total, {
-    x: 50,
-    y: height - 6 * fontSize,
-    size: fontSize,
-    font,
-    color: textColor,
-  });
+  // Order Information
+  let yPosition = height - margin - 2 * titleFontSize - 20;
+  const orderInfo = [
+    `Order ID: ${order.id}`,
+    `Total: ${order.total}`,
+    `Status: ${order.status}`,
+    `Paid: ${order.isPaid ? "Yes" : "No"}`,
+  ];
 
-  page.drawText(status, {
-    x: 50,
-    y: height - 8 * fontSize,
-    size: fontSize,
-    font,
-    color: textColor,
-  });
-
-  page.drawText(paid, {
-    x: 50,
-    y: height - 10 * fontSize,
-    size: fontSize,
-    font,
-    color: textColor,
-  });
-
-  // Add products details
-  let yOffset = height - 12 * fontSize;
-  for (const item of order.orderItems) {
-    const productDetails = `Product: ${item.name}, Size: ${item.size}, Color: ${item.color}, Quantity: ${item.quantity}, Price: ₹${item.price}`;
-    page.drawText(productDetails, {
-      x: 50,
-      y: yOffset,
-      size: fontSize / 1.5,
+  orderInfo.forEach((info) => {
+    page.drawText(info, {
+      x: margin,
+      y: yPosition,
+      size: fontSize,
       font,
-      color: textColor,
+      color: rgb(0, 0, 0),
     });
-    yOffset -= fontSize;
-  }
+    yPosition -= 20;
+  });
+
+  // Shipping Address
+  page.drawText("Shipping Address:", {
+    x: margin,
+    y: yPosition - 10,
+    size: headerFontSize,
+    font,
+    color: rgb(0, 0, 0),
+  });
+  yPosition -= 30;
+  page.drawText(order.address, {
+    x: margin,
+    y: yPosition,
+    size: fontSize,
+    font,
+    color: rgb(0, 0, 0),
+  });
+
+  // Billing Address (Assuming it's the same as shipping for this example)
+  yPosition -= 40;
+  page.drawText("Billing Address:", {
+    x: margin,
+    y: yPosition - 10,
+    size: headerFontSize,
+    font,
+    color: rgb(0, 0, 0),
+  });
+  yPosition -= 30;
+  page.drawText(order.address, {
+    x: margin,
+    y: yPosition,
+    size: fontSize,
+    font,
+    color: rgb(0, 0, 0),
+  });
+
+  // Product List
+  yPosition -= 50;
+  page.drawText("Products:", {
+    x: margin,
+    y: yPosition - 10,
+    size: headerFontSize,
+    font,
+    color: rgb(0, 0, 0),
+  });
+
+  yPosition -= 30;
+  order.orderItems.forEach((item : any, index : any) => {
+    const itemInfo = `${index + 1}. ${item.name} (Size: ${item.size}, Color: ${item.color}, Quantity: ${item.quantity}, Price: ${item.price})`;
+    page.drawText(itemInfo, {
+      x: margin,
+      y: yPosition,
+      size: fontSize,
+      font,
+      color: rgb(0, 0, 0),
+    });
+    yPosition -= 20;
+  });
 
   const pdfBytes = await pdfDoc.save();
   return pdfBytes;
