@@ -1,125 +1,55 @@
-// DownloadPdfButtonAdmin.tsx
 import { Button } from "@/components/ui/button";
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
-import { OrderColumn, OrderItem } from "./order-types"; // Import types
+import html2pdf from "html2pdf.js";
+import { OrderColumn } from "./order-types";
 
-async function generatePdfAdmin(order: OrderColumn) {
-  const pdfDoc = await PDFDocument.create();
-  const page = pdfDoc.addPage([600, 800]);
-  const { width, height } = page.getSize();
+const generatePdf = (order: OrderColumn) => {
+  const element = document.createElement("div");
+  element.innerHTML = `
+    <div style="padding: 20px; font-family: Arial, sans-serif;">
+      <h1 style="text-align: center;">Order Details</h1>
+      <div>
+        <p><strong>Phone:</strong> ${order.phone}</p>
+        <p><strong>Address:</strong> ${order.address}</p>
+        <p><strong>Email:</strong> ${order.email}</p>
+        <p><strong>Total Payment:</strong> ₹${order.totalPayment}</p>
+        <p><strong>Paid:</strong> ${order.isPaid ? "Yes" : "No"}</p>
+        <p><strong>Status:</strong> ${order.status}</p>
+      </div>
+      <h2>Products:</h2>
+      <div>
+        ${order.items
+          .map(
+            (item) => `
+          <div style="display: flex; margin-bottom: 10px; align-items: center;">
+            <img src="${item.imageUrl}" alt="${item.productName}" style="width: 50px; height: 50px; margin-right: 10px;">
+            <div>
+              <p><strong>${item.productName}</strong></p>
+              <p>Size: ${item.size}</p>
+              <p>Quantity: ${item.quantity}</p>
+              <p>Price: ₹${item.price}</p>
+            </div>
+          </div>
+        `
+          )
+          .join("")}
+      </div>
+    </div>
+  `;
 
-  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-  const fontSize = 12;
-  const titleFontSize = 20;
-  const headerFontSize = 14;
-  const margin = 20;
-
-  // Title
-  page.drawText("Invoice", {
-    x: width / 2 - 40,
-    y: height - margin - titleFontSize,
-    size: titleFontSize,
-    font,
-    color: rgb(0, 0, 0),
-  });
-
-  // Order Information
-  let yPosition = height - margin - 2 * titleFontSize - 20;
-  const orderInfo = [
-    `Order ID: ${order.id}`,
-    `User Name: ${order.userName}`,
-    `Email: ${order.email}`,
-    `Phone: ${order.phone}`,
-    `Total: $${order.totalPayment}`,
-    `Status: ${order.status}`,
-    `Paid: ${order.isPaid ? "Yes" : "No"}`,
-  ];
-
-  orderInfo.forEach((info) => {
-    page.drawText(info, {
-      x: margin,
-      y: yPosition,
-      size: fontSize,
-      font,
-      color: rgb(0, 0, 0),
-    });
-    yPosition -= 20;
-  });
-
-  // Shipping Address
-  page.drawText("Shipping Address:", {
-    x: margin,
-    y: yPosition - 10,
-    size: headerFontSize,
-    font,
-    color: rgb(0, 0, 0),
-  });
-  yPosition -= 30;
-  page.drawText(order.address, {
-    x: margin,
-    y: yPosition,
-    size: fontSize,
-    font,
-    color: rgb(0, 0, 0),
-  });
-
-  // Billing Address
-  yPosition -= 40;
-  page.drawText("Billing Address:", {
-    x: margin,
-    y: yPosition - 10,
-    size: headerFontSize,
-    font,
-    color: rgb(0, 0, 0),
-  });
-  yPosition -= 30;
-  page.drawText(order.address, {
-    x: margin,
-    y: yPosition,
-    size: fontSize,
-    font,
-    color: rgb(0, 0, 0),
-  });
-
-  // Product List
-  yPosition -= 50;
-  page.drawText("Products:", {
-    x: margin,
-    y: yPosition - 10,
-    size: headerFontSize,
-    font,
-    color: rgb(0, 0, 0),
-  });
-
-  yPosition -= 30;
-  order.items.forEach((item: OrderItem, index: number) => {
-    const itemInfo = `${index + 1}. ${item.productName} (Size: ${
-      item.size
-    }, Quantity: ${item.quantity}, Price: $${item.price})`;
-    page.drawText(itemInfo, {
-      x: margin,
-      y: yPosition,
-      size: fontSize,
-      font,
-      color: rgb(0, 0, 0),
-    });
-    yPosition -= 20;
-  });
-
-  const pdfBytes = await pdfDoc.save();
-  const blob = new Blob([pdfBytes], { type: "application/pdf" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `invoice_${order.id}.pdf`;
-  link.click();
-}
+  html2pdf()
+    .from(element)
+    .set({
+      margin: 1,
+      filename: `order-details_${order.id}.pdf`,
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+    })
+    .save();
+};
 
 const DownloadPdfButtonAdmin = ({ order }: { order: OrderColumn }) => (
   <Button
-    onClick={() => {
-      generatePdfAdmin(order);
-    }}
+    onClick={() => generatePdf(order)}
     size="lg"
     variant="outline"
     className="border-primary hover:bg-primary hover:text-white z-50 w-full"
