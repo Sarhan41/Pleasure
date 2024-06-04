@@ -21,7 +21,7 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
   // console.log("MAIN NAV 21", data);
 
   // Define the order of categories
-  const categoryOrder = ["Panties", "Sport Bra", "Sleep", "Shorts", "Pyjama"];
+  const categoryOrder = ["Panties", "Sport Bra", "Camisole", "Shorts", "Pyjama"];
 
   // Sort the categories based on the defined order
   const sortedData = data.sort((a, b) => {
