@@ -46,7 +46,7 @@ const MyProfileOrdersPage = async () => {
             className="bg-white shadow-lg rounded-lg p-6 mb-6"
           >
             <h2 className="text-2xl font-bold mb-4">Order ID: {order.id}</h2>
-            <p className="text-xl font-semibold mb-2">Total: ${order.total}</p>
+            <p className="text-xl font-semibold mb-2">Total: ₹{order.total}</p>
             <p className="text-xl font-semibold mb-2">Status: {order.status}</p>
             <p className="text-xl font-semibold mb-4">
               Paid: {order.isPaid ? "Yes" : "No"}
@@ -82,7 +82,7 @@ const MyProfileOrdersPage = async () => {
                           Quantity: {item.quantity}
                         </p>
                         <p className="text-sm text-gray-500">
-                          Price: ${item.price}
+                          Price: ₹{item.price}
                         </p>
                       </div>
                     </li>

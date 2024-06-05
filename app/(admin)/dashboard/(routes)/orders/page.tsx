@@ -46,10 +46,8 @@ const fetchOrders = async () => {
     userName: order.user.name || "",
     isPaid: order.isPaid,
     createdAt: format(order.createdAt, "MMM do, yyyy"),
-    totalPayment: order.orderItems.reduce(
-      (sum, item) => sum + item.quantity * item.price,
-      0
-    ),
+    totalPayment: order.total,
+
     status: order.status, // Ensure status is included
     orderItems: order.orderItems,
   }));
