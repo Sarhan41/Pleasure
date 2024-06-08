@@ -36,7 +36,9 @@ interface DataTableProps<TData> {
   data: TData[];
 }
 
-export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TData>) {
+export function DataTable<TData extends OrderColumn>({
+  data,
+}: DataTableProps<TData>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [selectedOrder, setSelectedOrder] = useState<TData | null>(null);
 
@@ -143,7 +145,10 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
                   </ul>
                 </div>
                 <div>
-                  <DownloadPdfButtonAdmin order={row.original} />
+                  <DownloadPdfButtonAdmin
+                    order={row.original}
+                    userName={row.original.userName}
+                  />
                 </div>
               </div>
             </DialogDescription>
@@ -156,7 +161,10 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
       header: "Download Invoice",
       cell: ({ row }) => (
         <div>
-          <DownloadPdfButtonAdmin order={row.original} />
+          <DownloadPdfButtonAdmin
+            order={row.original}
+            userName={row.original.userName}
+          />
         </div>
       ),
     },
