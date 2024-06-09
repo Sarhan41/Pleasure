@@ -6,7 +6,7 @@ const generatePdf = (order: OrderColumn, userName: string) => {
   const element = document.createElement("div");
   element.innerHTML = `
     <div style="padding: 20px; font-family: Arial, sans-serif;">
-      <h1 style="text-align: center;">Inoice</h1>
+      <h1 style="text-align: center;">Invoice</h1>
       <div>
         <p><strong>Phone:</strong> ${order.phone}</p>
         <p><strong>Ship To:</strong> ${order.address}</p>
