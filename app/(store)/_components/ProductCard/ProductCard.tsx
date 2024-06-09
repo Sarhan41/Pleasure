@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 
 import usePreviewModal from "@/hooks/store/use-preview-modal";
 import IconButton from "@/components/Store/IconButton";
-import Currency from "@/components/Store/Currency";
 import { Product as ProductType } from "@/types";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -38,7 +37,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
     previewModal.onOpen(data, userId);
   };
 
-  const onAddToCart: MouseEventHandler<HTMLButtonElement> = async (event) => {};
 
   // @ts-ignore
   const handleSizeSelect = async (size) => {

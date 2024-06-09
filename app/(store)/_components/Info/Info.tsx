@@ -27,6 +27,7 @@ import IconButton from "@/components/Store/IconButton";
 import { FaWhatsapp } from "react-icons/fa";
 import SizeChart from "./SizeChart";
 import { Product as ProductType } from "@/types";
+import Description from "./Description";
 
 interface InfoProps {
   data: ProductType;
@@ -189,6 +190,10 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
 
   return (
     <div>
+      {/* =============================================
+            Div For Closing Share Popup
+          =============================================
+      */}
       {(isSharePopupOpen1 || isSharePopupOpen2) && (
         <div
           className="fixed inset-0 bg-transparent bg-opacity-50 z-40"
@@ -198,12 +203,20 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           }}
         />
       )}
+
+      {/* =============================================
+        Name Of The Product
+         =============================================
+      */}
       <h1 className="text-3xl font-bold text-gray-900 border-b-2 pb-4">
         {data.name.includes("100")
           ? `${data.name.split("100")[0]}100%${data.name.split("100")[1]}`
           : data.name}
       </h1>
-
+      {/* =============================================
+           Div For Price And SKU
+          =============================================
+      */}
       <div className="mt-3 flex items-end gap-4 justify-between">
         <div className="font-semibold">
           <p className="text-2xl text-gray-900">
@@ -229,7 +242,14 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           </span>
         )}
       </div>
+
       <div className="flex flex-col my-4 gap-y-4">
+        {/* =============================================
+             Div For Available Sizes
+             =============================================
+
+        */}
+
         <div className="flex gap-4 flex-col">
           <h3 className="font-semibold text-black"> Available sizes:</h3>
           <div className="flex gap-4">
@@ -288,6 +308,13 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             <span className="text-red-900">Please select a size</span>
           )}
         </div>
+
+        {/*   =============================================
+              Div For Size Chart
+              ============================================= 
+        
+        */}
+
         <div>
           <h3
             onClick={handleSizeChartOpen}
@@ -308,6 +335,13 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             </DialogOverlay>
           </Dialog>
         </div>
+
+        {/* =============================================
+            Div For Quantity 
+            =============================================
+
+        */}
+
         <div className="flex flex-col gap-x-4">
           <h3 className="font-semibold text-black">Qty:</h3>
           <div className="flex items-center border border-gray-300 rounded-md w-fit p-2">
@@ -326,6 +360,11 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             </button>
           </div>
         </div>
+
+        {/* =============================================
+            Div For Colors
+            =============================================
+        */}
 
         <div className="flex items-center gap-x-4">
           {data?.colors?.map((color) => {
@@ -364,6 +403,11 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           })}
         </div>
       </div>
+
+      {/* =============================================
+          Div For Add To Cart And Add To Wishlist and Share 1
+          =============================================
+       */}
       <div className="mt-4 flex items-center gap-x-3 relative">
         <div className="border-primary border-2 rounded-full">
           <IconButton
@@ -405,14 +449,26 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         </div>
       </div>
 
+      {/* =============================================
+           Div For Description
+         =============================================
+      */}
+
       <div className="mt-8">
         <h3 className="font-bold text-black border-b-2 border-primary w-fit p-2 mb-4">
           Description
         </h3>
-        <p className="text-gray-600">
-          {data.description?.split(".").join(".\n") || "No description"}
-        </p>
+        <Description data={data.description} />
       </div>
+      {/* 
+          // ! Reviews Divs Will Be Added Here
+*/}
+
+      {/* =============================================
+          Div For Add To Cart And Add To Wishlist and Share 2
+          =============================================
+      */}
+
       <div className="mt-10 flex items-center gap-x-6  py-7shadow-2xl shadow-gray-600 w-full justify-center relative">
         <div className="border-primary border-2 rounded-full">
           <IconButton
