@@ -28,7 +28,7 @@ export interface Color {
 
 export interface Product {
   id: string;
-  category?: Category;
+  category: Category;
   categoryId: string;
   name: string;
   isFeatured: boolean;

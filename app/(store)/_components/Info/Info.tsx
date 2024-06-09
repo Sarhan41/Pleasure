@@ -45,6 +45,8 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
   const [isSharePopupOpen2, setIsSharePopupOpen2] = useState(false);
   const router = useRouter();
 
+  const categoryName = data.category.name;
+
   const onAddToCart: MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.stopPropagation();
     try {
@@ -187,7 +189,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
 
   return (
     <div>
-          {(isSharePopupOpen1 || isSharePopupOpen2) && (
+      {(isSharePopupOpen1 || isSharePopupOpen2) && (
         <div
           className="fixed inset-0 bg-transparent bg-opacity-50 z-40"
           onClick={() => {
@@ -231,54 +233,56 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         <div className="flex gap-4 flex-col">
           <h3 className="font-semibold text-black"> Available sizes:</h3>
           <div className="flex gap-4">
-          {data?.sizes
-  ?.sort((a, b) => (Number(a.quantity) === 0 ? 1 : Number(b.quantity) === 0 ? -1 : 0))
-  .map((size) => (
-    <div key={size.name} className="flex flex-col relative">
-      <span
-        key={size.name}
-        className={`text-black ${
-          selectedSize !== size && "hover:bg-primary"
-        } hover:text-white hover:cursor-pointer font-semibold border-2 border-gray-500 rounded-md p-2 ${
-          selectedSize === size ? "bg-gray-600 text-white" : ""
-        } ${sizeError && "border-red-700"} ${
-          Number(size.quantity) === 0
-            ? "border-gray-400 text-gray-400 cursor-not-allowed relative"
-            : ""
-        }`}
-        onClick={() => Number(size.quantity) > 0 && handleSizeSelection(size)}
-      >
-        {size.name}
-      </span>
-      {Number(size.quantity) === 0 && (
-        <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
-          <svg
-            className="absolute w-full h-full text-gray-400"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="1" y1="1" x2="23" y2="23" />
-          </svg>
-        </div>
-      )}
-      {selectedSize === size && Number(size.quantity) > 0 && (
-        <h3 className="text-gray-900">
-          {Number(size.quantity) < 5
-            ? `${size.quantity} left`
-            : Number(size.quantity) < 10
-            ? "Only a few left!"
-            : null}
-        </h3>
-      )}
-    </div>
-  ))}
-
-</div>
-
+            {data?.sizes
+              ?.sort((a, b) =>
+                Number(a.quantity) === 0 ? 1 : Number(b.quantity) === 0 ? -1 : 0
+              )
+              .map((size) => (
+                <div key={size.name} className="flex flex-col relative">
+                  <span
+                    key={size.name}
+                    className={`text-black ${
+                      selectedSize !== size && "hover:bg-primary"
+                    } hover:text-white hover:cursor-pointer font-semibold border-2 border-gray-500 rounded-md p-2 ${
+                      selectedSize === size ? "bg-gray-600 text-white" : ""
+                    } ${sizeError && "border-red-700"} ${
+                      Number(size.quantity) === 0
+                        ? "border-gray-400 text-gray-400 cursor-not-allowed relative"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      Number(size.quantity) > 0 && handleSizeSelection(size)
+                    }
+                  >
+                    {size.name}
+                  </span>
+                  {Number(size.quantity) === 0 && (
+                    <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+                      <svg
+                        className="absolute w-full h-full text-gray-400"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <line x1="1" y1="1" x2="23" y2="23" />
+                      </svg>
+                    </div>
+                  )}
+                  {selectedSize === size && Number(size.quantity) > 0 && (
+                    <h3 className="text-gray-900">
+                      {Number(size.quantity) < 5
+                        ? `${size.quantity} left`
+                        : Number(size.quantity) < 10
+                        ? "Only a few left!"
+                        : null}
+                    </h3>
+                  )}
+                </div>
+              ))}
+          </div>
 
           {sizeError && (
             <span className="text-red-900">Please select a size</span>
@@ -287,14 +291,14 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         <div>
           <h3
             onClick={handleSizeChartOpen}
-            className="font-semibold text-primary cursor-pointer w-fit"
+            className="font-semibold text-primary cursor-pointer w-fit hover:underline"
           >
             Size Chart
           </h3>
           <Dialog open={isSizeChartOpen} onOpenChange={handleSizeChartClose}>
             <DialogOverlay className="absolute inset-0 flex items-center min-h-screen min-w-screen justify-center bg-black opacity-50">
               <DialogContent className="absolute transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg">
-                <SizeChart />
+                <SizeChart categoryName={data.category.name} />
                 <DialogClose asChild>
                   <button className="absolute top-4 right-4">
                     <Cross2Icon className="h-4 w-4" />
