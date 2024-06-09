@@ -187,6 +187,15 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
 
   return (
     <div>
+          {(isSharePopupOpen1 || isSharePopupOpen2) && (
+        <div
+          className="fixed inset-0 bg-transparent bg-opacity-50 z-40"
+          onClick={() => {
+            setIsSharePopupOpen1(false);
+            setIsSharePopupOpen2(false);
+          }}
+        />
+      )}
       <h1 className="text-3xl font-bold text-gray-900 border-b-2 pb-4">
         {data.name.includes("100")
           ? `${data.name.split("100")[0]}100%${data.name.split("100")[1]}`
@@ -359,7 +368,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           />
         </div>
         {isSharePopupOpen1 && (
-          <div className="absolute bg-white border border-gray-300 rounded-md p-2 mt-2 shadow-lg z-50">
+          <div className="absolute bg-white border border-gray-300 rounded-md p-2 mt-2 bottom-12 shadow-lg z-50">
             <button
               onClick={handleShareViaWhatsApp}
               className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md w-full"
@@ -408,7 +417,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           />
         </div>
         {isSharePopupOpen2 && (
-          <div className="absolute bg-white border border-gray-300 rounded-md p-2 mt-2 shadow-lg z-50">
+          <div className="absolute bg-white border border-gray-300 rounded-md bottom-12 p-2 mt-2 shadow-lg z-50">
             <button
               onClick={handleShareViaWhatsApp}
               className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md w-full"
