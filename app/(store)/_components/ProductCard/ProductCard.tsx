@@ -1,16 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { MouseEventHandler, useState, useEffect } from "react";
-import { Expand, Heart, ShoppingCart } from "lucide-react";
+import { MouseEventHandler, useState } from "react";
+import { Expand, Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
-
 import usePreviewModal from "@/hooks/store/use-preview-modal";
 import IconButton from "@/components/Store/IconButton";
 import { Product as ProductType } from "@/types";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { Size } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 
 interface ProductCardProps {
@@ -36,7 +34,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
     event.stopPropagation();
     previewModal.onOpen(data, userId);
   };
-
 
   // @ts-ignore
   const handleSizeSelect = async (size) => {
@@ -141,90 +138,104 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
   };
 
   return (
-    <>
-      <div className="relative overflow-hidden bg-white h-[813px] w-fit group cursor-pointer rounded-xl border-2 border-primary p-3 space-y-4">
-        <div className="h-[600px] w-[400px] rounded-xl bg-gray-100 relative"  onClick={handleClick}>
-          <Image
-            alt="Image"
-            src={`${
-              hovered && data?.images[1]?.url
-                ? data?.images[1]?.url
-                : data?.images[0]?.url
-            }`}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            fill
-            className="aspect-square object-cover rounded-md"
-          />
-          <div className="opacity-0 group-hover:opacity-100 transition absolute w-full px-6 bottom-5">
-            <div className="flex gap-x-6 justify-center">
-              <IconButton
-                onClick={onPreview}
-                icon={<Expand size={20} className="text-gray-600" />}
-              />
-
-              <IconButton
-                onClick={onAddToWishList}
-                icon={<Heart size={20} className="text-gray-600" />}
-              />
-            </div>
+    <div className="relative overflow-hidden bg-white h-auto w-[260px] sm:w-[320px] group cursor-pointer rounded-2xl border border-gray-200 shadow-md p-3 space-y-2 transition-transform transform hover:scale-105">
+      <div
+        className="h-[280px] sm:h-[320px] w-full rounded-lg bg-gray-100 relative overflow-hidden"
+        onClick={handleClick}
+      >
+        <Image
+          alt="Product Image"
+          src={`${
+            hovered && data?.images[1]?.url
+              ? data?.images[1]?.url
+              : data?.images[0]?.url
+          }`}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          fill
+          className="object-cover rounded-lg transition-transform transform group-hover:scale-105"
+        />
+        <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute w-full px-4 bottom-4">
+          <div className="flex gap-4 justify-center">
+            <button
+              onClick={onPreview}
+              className="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100"
+            >
+              <Expand size={20} className="text-gray-600" />
+            </button>
+            <button
+              onClick={onAddToWishList}
+              className="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100"
+            >
+              <Heart size={20} className="text-gray-600" />
+            </button>
           </div>
         </div>
-        <div className="w-[300px] flex flex-wrap flex-col ">
-          <p className="font-semibold text-base flex-wrap flex"  onClick={handleClick}>
-            {data.name.includes("100")
-              ? `${data.name.split("100")[0]}100%${data.name.split("100")[1]}`
-              : data.name}
-          </p>
-          <p className="text-sm text-gray-500"> {data.category?.name}</p>
-        </div>
-        <div className="flex justify-between">
-          <div className="font-semibold"  onClick={handleClick}>
-            ₹
-            {selectedSize.discountedprice ? (
-              <>
-                {selectedSize.discountedprice}
-                <span className="line-through ml-4 text-gray-500">
-                  {selectedSize.price}
-                </span>
-              </>
-            ) : (
-              selectedSize.price
-            )}
-          </div>
-
-          <Button onClick={() => setIsModalOpen(true)}>Add To Cart</Button>
-        </div>
-        {isModalOpen && (
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-end transition-opacity duration-300">
-            <div className="bg-white rounded-t-lg p-4 w-full max-w-md">
-              <h2 className="text-lg font-semibold mb-4">Select a Size</h2>
-              <div className="flex justify-around">
-                {data.sizes.map((size) => (
-                  <button
-                    key={size.name}
-                    onClick={() => handleSizeSelect(size)}
-                    className={`rounded-full h-12 w-12 flex items-center justify-center border-2 ${
-                      selectedSize.name === size.name
-                        ? "border-primary"
-                        : "border-gray-300"
-                    }`}
-                  >
-                    {size.name}
-                  </button>
-                ))}
-              </div>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="mt-4 w-full bg-primary text-white py-2 rounded-lg"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        )}
       </div>
-    </>
+      <div
+        className="flex flex-col items-start space-y-1"
+        onClick={handleClick}
+      >
+        <p className="font-semibold text-xs sm:text-xs text-gray-600">
+          {data.name.includes("100")
+            ? `${data.name.split("100")[0]}100%${data.name.split("100")[1]}`
+            : data.name}
+        </p>
+        <p className="text-xs text-gray-500">{data.category?.name}</p>
+      </div>
+      <div className="flex justify-between items-center w-full mt-auto">
+        <div
+          className="font-semibold text-sm text-gray-900"
+          onClick={handleClick}
+        >
+          ₹
+          {selectedSize.discountedprice ? (
+            <>
+              {selectedSize.discountedprice}
+              <span className="line-through ml-2 text-gray-500 text-xs">
+                {selectedSize.price}
+              </span>
+            </>
+          ) : (
+            selectedSize.price
+          )}
+        </div>
+        <Button
+          onClick={() => setIsModalOpen(true)}
+          className="   rounded-full bg-blue-600 transition hover:bg-primary "
+        >
+          Add To Cart
+        </Button>
+      </div>
+      {isModalOpen && (
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-end transition-opacity duration-300">
+          <div className="bg-white rounded-t-lg p-4 w-full max-w-md">
+            <h2 className="text-lg font-semibold mb-4">Select a Size</h2>
+            <div className="flex justify-around">
+              {data.sizes.map((size) => (
+                <button
+                  key={size.name}
+                  onClick={() => handleSizeSelect(size)}
+                  className={`rounded-full h-10 w-10 flex items-center justify-center border-2 ${
+                    selectedSize.name === size.name
+                      ? "border-blue-500"
+                      : "border-gray-300"
+                  }`}
+                >
+                  {size.name}
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
