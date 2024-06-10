@@ -107,7 +107,7 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
           <DropdownMenuContent sideOffset={8} className="text-white">
             <DropdownMenuLabel className="mb-4 border-b text-white">
               <div className="flex items-center space-x-2">
-                <span className="text-white">Menu</span>
+                <span className="text-black">Menu</span>
                 <StoreIcon className="w-4 h-4" />
               </div>
             </DropdownMenuLabel>
