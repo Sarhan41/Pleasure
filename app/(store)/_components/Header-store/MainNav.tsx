@@ -117,12 +117,12 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
                 href={`/category/${category.name.replace(/\s+/g, "-")}`}
                 passHref
               >
-                <DropdownMenuItem
+                  <DropdownMenuItem
                   className={cn(
                     "text-sm font-medium transition-colors duration-300",
                     pathname === `/category/${category.name}`
-                      ? "text-white"
-                      : "text-white"
+                      ? "text-black"
+                      : "text-gray-800"
                   )}
                 >
                   {category.name}
