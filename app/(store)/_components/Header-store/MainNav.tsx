@@ -24,7 +24,13 @@ const getFormattedProductName = (productName: string, categoryName: string) => {
 };
 
 const MainNav: React.FC<MainNavProps> = ({ data }) => {
-  const categoryOrder = ["Panties", "Sport Bra", "Camisole", "Shorts", "Pyjama"];
+  const categoryOrder = [
+    "Panties",
+    "Sport Bra",
+    "Camisole",
+    "Shorts",
+    "Pyjama",
+  ];
 
   // Sort the categories based on the defined order
   const sortedData = data.sort((a, b) => {
@@ -33,6 +39,10 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
 
   const pathname = usePathname();
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
 
   const handleCategoryHover = (categoryName: string) => {
     setHoveredCategory(categoryName);
@@ -42,8 +52,17 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
     return hoveredCategory === categoryName;
   };
 
+  const handleCategoryClick = (category: Category) => {
+    setSelectedCategory(category);
+    setSidebarOpen(true);
+  };
+
   return (
     <nav className="flex items-center justify-between px-4 py-2 text-white">
+        {/* ===================================================================
+               //? This is Main Nav For PC View
+            ========================================================================
+        */}
       <div className="flex items-center space-x-4 lg:space-x-8">
         <div className="hidden lg:flex space-x-4">
           <div className="flex space-x-4">
@@ -76,14 +95,20 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
                       {category?.products?.map((product, index) => (
                         <React.Fragment key={product.id}>
                           <Link
-                            href={`/product/${product.name.replace(/\s+/g, "-")}`}
+                            href={`/product/${product.name.replace(
+                              /\s+/g,
+                              "-"
+                            )}`}
                             className="hover:text-pink-500 transition-colors duration-300 overflow-hidden whitespace-nowrap overflow-ellipsis flex items-center space-x-2"
                             passHref
                             onClick={() => setHoveredCategory("")}
                           >
                             <ChevronRightIcon className="w-4 h-4 text-pink-500" />
                             <span className="font-semibold">
-                              {getFormattedProductName(product.name, category.name)}
+                              {getFormattedProductName(
+                                product.name,
+                                category.name
+                              )}
                             </span>
                           </Link>
                           {(index + 1) % 3 === 0 && (
@@ -99,6 +124,10 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
           </div>
         </div>
       </div>
+      {/* ===================================================================
+            //? This is Main Nav For Mobile View
+          ====================================================================
+     */}
       <div className="lg:hidden">
         <DropdownMenu>
           <DropdownMenuTrigger>
@@ -112,26 +141,48 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
               </div>
             </DropdownMenuLabel>
             {sortedData.map((category) => (
-              <Link
+              <DropdownMenuItem
                 key={category.id}
-                href={`/category/${category.name.replace(/\s+/g, "-")}`}
-                passHref
+                className={cn(
+                  "text-sm font-medium transition-colors duration-300 cursor-pointer",
+                  pathname === `/category/${category.name}`
+                    ? "text-black"
+                    : "text-gray-800"
+                )}
+                onClick={() => handleCategoryClick(category)}
               >
-                  <DropdownMenuItem
-                  className={cn(
-                    "text-sm font-medium transition-colors duration-300",
-                    pathname === `/category/${category.name}`
-                      ? "text-black"
-                      : "text-gray-800"
-                  )}
-                >
-                  {category.name}
-                </DropdownMenuItem>
-              </Link>
+                {category.name}
+              </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+      {sidebarOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex">
+          <div className="bg-white w-3/4 max-w-xs p-4 overflow-y-auto">
+            <button
+              className="text-black mb-4"
+              onClick={() => setSidebarOpen(false)}
+            >
+              Close
+            </button>
+            <div className="space-y-4">
+              {selectedCategory?.products?.map((product) => (
+                <Link
+                  key={product.id}
+                  href={`/product/${product.name.replace(/\s+/g, "-")}`}
+                  passHref
+                  className="block text-black hover:text-pink-500 transition-colors duration-300"
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  {getFormattedProductName(product.name, selectedCategory.name)}
+                </Link>
+              ))}
+            </div>
+          </div>
+          <div className="flex-1" onClick={() => setSidebarOpen(false)}></div>
+        </div>
+      )}
     </nav>
   );
 };
