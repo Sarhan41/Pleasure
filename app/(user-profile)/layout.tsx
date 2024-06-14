@@ -1,5 +1,5 @@
 import { currentUser } from "@/lib/auth";
-import CheckoutHeader from "../(store)/_components/Header-store/CheckoutHeader";
+import CheckoutHeader from "../(store)/_components/Header-store/Checkout";
 import { Navbar } from "./_components/navbar";
 
 interface ProtectedLayoutProps {
