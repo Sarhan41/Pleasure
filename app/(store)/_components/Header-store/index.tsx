@@ -1,8 +1,8 @@
 import { db } from "@/lib/db";
-import Header from "./Header";
 import { currentUser } from "@/lib/auth";
+import Header from "./Header";
 
-export default async function HeaderIndex() {
+export default async function DesktopHeaderIndex() {
   const User = await currentUser();
 
   const userId = User?.id;
