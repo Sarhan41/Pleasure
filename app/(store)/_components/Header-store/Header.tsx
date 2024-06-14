@@ -17,21 +17,24 @@ const Header = ({ categories, allProducts, UserId }: HeaderProps) => {
   const [isMobile, setIsMobile] = useState(false);
   const pathname = usePathname();
 
-    useEffect(() => {
-        if (window.innerWidth < 1024) {
-        setIsMobile(true);
-        }
-    }, []);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
 
+    handleResize(); // Set initial state
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     let lastScrollTop = 0;
     const headerElement = document.querySelector("header");
-    const headerHeight = headerElement?.offsetHeight ?? 0; // Handle possible null
+    const headerHeight = headerElement?.offsetHeight ?? 0;
 
     const handleScroll = () => {
       const currentScrollTop =
-        window.scrollY || document.documentElement.scrollTop; // Use window.scrollY instead
+        window.scrollY || document.documentElement.scrollTop;
 
       if (currentScrollTop > lastScrollTop && currentScrollTop > headerHeight) {
         setIsHeaderVisible(false);
@@ -51,16 +54,23 @@ const Header = ({ categories, allProducts, UserId }: HeaderProps) => {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-screen  bg-white shadow-md z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 w-screen bg-white shadow-md z-50 transition-all duration-300 ${
         isHeaderVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-        {isMobile ? (
-        <    MobileHeaderIndex categories={categories} allProducts={allProducts} UserId={UserId} />
-        ) : (
-            <DesktopHeader categories={categories} allProducts={allProducts} UserId={UserId} />
-        )
-        }
+      {isMobile ? (
+        <MobileHeaderIndex
+          categories={categories}
+          allProducts={allProducts}
+          UserId={UserId}
+        />
+      ) : (
+        <DesktopHeader
+          categories={categories}
+          allProducts={allProducts}
+          UserId={UserId}
+        />
+      )}
     </header>
   );
 };

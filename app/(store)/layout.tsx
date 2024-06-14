@@ -1,5 +1,5 @@
 import { Urbanist } from "next/font/google";
-import Header from "./_components/Header-store";
+import Header from "./_components/Header-store/index";
 import Footer from "./_components/Footer/Footer";
 import { ToastProvider } from "./providers/toast-provider";
 import ModalProvider from "./providers/modal-provider";
