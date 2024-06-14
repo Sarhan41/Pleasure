@@ -1,27 +1,28 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import NavbarActions from "./NavbarActions";
-import Container from "@/components/Store/container";
-import MainNav from "./MainNav";
-import { db } from "@/lib/db";
-import UserLogin from "./UserLogin";
-import { Category, Product } from "@prisma/client";
-import Image from "next/image";
-import WishList from "./WishList";
-import Search from "./Search";
 import { usePathname } from "next/navigation";
-import CheckoutHeader from "./CheckoutHeader";
+import { useEffect, useState } from "react";
+import CheckoutHeader from "./Checkout";
+import { Category, Product } from "@prisma/client";
+import MobileHeaderIndex from "./Mobile";
+import DesktopHeader from "./Desktop/DesktopHeader";
 
-interface HeaderProps {
+export interface HeaderProps {
   categories: Category[];
   allProducts: Product[];
   UserId: string | undefined;
 }
 
 const Header = ({ categories, allProducts, UserId }: HeaderProps) => {
-  const pathname = usePathname();
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+  const pathname = usePathname();
+
+    useEffect(() => {
+        if (window.innerWidth < 1024) {
+        setIsMobile(true);
+        }
+    }, []);
+
 
   useEffect(() => {
     let lastScrollTop = 0;
@@ -46,7 +47,7 @@ const Header = ({ categories, allProducts, UserId }: HeaderProps) => {
   }, []);
 
   const isCheckOutPage = pathname.includes("/checkout");
-  if (isCheckOutPage) return <CheckoutHeader userId={UserId}/>;
+  if (isCheckOutPage) return <CheckoutHeader userId={UserId} />;
 
   return (
     <header
@@ -54,52 +55,12 @@ const Header = ({ categories, allProducts, UserId }: HeaderProps) => {
         isHeaderVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-      {/* First row */}
-      <div className="flex items-center border-b-3 gap-6 justify-between py-2 px-4 ">
-        {/* Logo */}
-        <div className="hidden lg:block"></div>
-        <div className="flex items-center  justify-center">
-          {/* Your logo image */}
-          <Link
-            href="/"
-            className="flex items-center  overflow-hidden justify-center gap-8 "
-          >
-            <Image
-              src="/logo.jpg"
-              height={48}
-              width={58}
-              alt="Logo"
-              className="rounded-full object-cover max-sm:hidden  "
-            />
-            <Image
-              src="/logo-text.png"
-              height={10}
-              width={298}
-              alt="Pleasure"
-              className="  object-cover  "
-            />
-          </Link>
-        </div>
-        {/* Search functionality */}
-        <div className="flex items-center justify-end">
-          <Search allProducts={allProducts} />
-        </div>
-      </div>
-      {/* Second row */}
-      <div className="flex items-center bg-black text-white justify-between py-2 px-4">
-        {/* Categories */}
-        <div className="flex items-center lg:pl-6 ">
-          {/* Your category links */}
-          <MainNav data={categories} />
-        </div>
-        {/* User icon, cart, and wishlist */}
-        <div className="flex items-center ">
-          {/* Your user icon */}
-          <UserLogin userId={UserId} />
-          {/* Your cart icon */}
-          <NavbarActions userId={UserId} />
-        </div>
-      </div>
+        {isMobile ? (
+        <    MobileHeaderIndex categories={categories} allProducts={allProducts} UserId={UserId} />
+        ) : (
+            <DesktopHeader categories={categories} allProducts={allProducts} UserId={UserId} />
+        )
+        }
     </header>
   );
 };
