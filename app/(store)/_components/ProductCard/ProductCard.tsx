@@ -144,7 +144,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
         onClick={handleClick}
       >
         <Image
-          alt="Product Image"
+          alt=""
           src={`${
             hovered && data?.images[1]?.url
               ? data?.images[1]?.url
