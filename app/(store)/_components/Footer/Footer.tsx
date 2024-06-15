@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
       { text: "red", route: "/product/Red-Suit" },
     ],
     Panties: [
-      { text: "Ananta", route: "/product/ANANTA" },
+      { text: "Julia", route: "/product/Hipster Modal Cotton Panties In Red Violet Ruby Pink (Pack Of 3) JULIA" },
       {
         text: "Berly",
         route:
