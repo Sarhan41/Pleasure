@@ -36,20 +36,7 @@ const Search = ({ allProducts, onSearchOpen, onSearchClose }: SearchProps) => {
     }
   };
 
-  useEffect(() => {
-    // Update showResults state based on the length of searchTerm
-    setShowResults(searchTerm.length > 0);
-    if (searchTerm.length > 0) {
-      onSearchOpen();
-    }
-  }, [searchTerm, onSearchOpen]);
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   return (
     <div className="relative" ref={searchRef}>
