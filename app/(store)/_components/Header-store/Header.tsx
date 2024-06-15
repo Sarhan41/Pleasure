@@ -3,7 +3,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import CheckoutHeader from "./Checkout";
 import { Category, Product } from "@prisma/client";
-import MobileHeaderIndex from "./Mobile";
+import MobileHeaderIndex from "./Mobile/MobileHeader";
 import DesktopHeader from "./Desktop/DesktopHeader";
 
 export interface HeaderProps {
@@ -59,7 +59,7 @@ const Header = ({ categories, allProducts, UserId }: HeaderProps) => {
       }`}
     >
       {isMobile ? (
-        <MobileHeaderIndex
+        <DesktopHeader
           categories={categories}
           allProducts={allProducts}
           UserId={UserId}

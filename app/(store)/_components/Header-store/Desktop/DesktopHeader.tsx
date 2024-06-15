@@ -36,7 +36,7 @@ HeaderProps
               src="/logo.jpg"
               height={48}
               width={58}
-              alt="Logo"
+              alt=""
               className="rounded-full object-cover max-sm:hidden  "
             />
             <Image
