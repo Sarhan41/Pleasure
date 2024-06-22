@@ -21,7 +21,7 @@ export default function RootLayout({
           <ModalProvider />
           <ToastProvider />
           <Header />
-          <div className="mt-[104px]">{children}</div>
+          <div className="mt-32">{children}</div>
           <Footer />
           {/* WhatsApp Button */}
           <Link
