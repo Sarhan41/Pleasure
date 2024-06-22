@@ -1,28 +1,38 @@
 import Container from "@/components/Store/container";
-import ProductList from "../_components/ProductList/ProductList";
 import { db } from "@/lib/db";
-import Billboard from "../_components/Billboard/index";
+import Billboard from "../_components/Billboards";
+import BestSellerBillboard from "../_components/BestSellerBillboard";
 
 const HomePage = async () => {
-  // Fetch the billboard data
   const billboard = await db.category.findUnique({
-    where: {
-      id: "79e15fe8-2cfb-420b-b144-6e11468c2327",
-    },
-    select: {
-      imageUrl: true,
-      name: true,
-    },
+    where: { id: "79e15fe8-2cfb-420b-b144-6e11468c2327" },
+    select: { imageUrl: true, name: true },
   });
 
+  const fourBillboards = await db.category.findMany({
+    where: {
+      name: {
+        not: "New",
+      },
+    },
 
-
+    select: { imageUrl: true, name: true },
+  });
 
   return (
     <Container>
       {billboard && <Billboard data={billboard} />}
-      {/* <Panty /> */}
-    
+      <div className="mt-12 text-4xl font-extrabold text-gray-900 text-center leading-tight tracking-tight">
+        <span className="block text-transparent bg-gradient-to-r from-pink-500 to-yellow-500 bg-clip-text">
+          Discover
+        </span>
+        <span className="block">Our Best Sellers</span>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 mx-auto gap-4 mt-8">
+        {fourBillboards.map((billboard) => (
+          <BestSellerBillboard key={billboard.name} data={billboard} />
+        ))}
+      </div>
     </Container>
   );
 };

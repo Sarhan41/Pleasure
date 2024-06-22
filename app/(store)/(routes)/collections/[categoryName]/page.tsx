@@ -6,7 +6,7 @@ import NoResults from "@/components/Store/NoResults";
 import ProductCard from "@/app/(store)/_components/ProductCard/ProductCard";
 import GetProducts from "@/actions/Store/GetProducts";
 import { currentUser } from "@/lib/auth";
-import Billboard from "@/app/(store)/_components/Billboard/index";
+import Billboard from "@/app/(store)/_components/Billboards/index";
 
 interface CategoryPageProps {
   params: {
@@ -100,10 +100,10 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
   return (
     <div className="bg-white">
       <Container>
-        {
+        {/* {
         
         category && <Billboard data={{ imageUrl: category?.imageUrl ?? '' }} />
-        }
+        } */}
         <div className="px-4 sm:px-6 lg:px-8 pb-24">
           <div className="lg:flex lg:justify-between lg:items-start">
             <div className="hidden lg:block w-1/5">
