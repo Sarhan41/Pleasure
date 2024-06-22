@@ -15,14 +15,29 @@ const HomePage = async () => {
     },
   });
 
-
-
-
   return (
     <Container>
       {billboard && <Billboard data={billboard} />}
-      {/* <Panty /> */}
-    
+
+      {/* Title: Best Selling */}
+      <div className="mt-12 text-3xl font-bold text-gray-800 text-center">
+        Best Selling
+      </div>
+
+      {/* Placeholder for future product category boxes */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-8">
+        {/* Placeholder boxes */}
+        <div className="bg-gray-200 p-4 rounded-lg shadow-md">
+          Panties
+        </div>
+        <div className="bg-gray-200 p-4 rounded-lg shadow-md">
+          Pyjamas
+        </div>
+        <div className="bg-gray-200 p-4 rounded-lg shadow-md">
+          Camisoles
+        </div>
+        {/* Add more boxes for other categories as needed */}
+      </div>
     </Container>
   );
 };
