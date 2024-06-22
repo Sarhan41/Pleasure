@@ -6,7 +6,7 @@ import NoResults from "@/components/Store/NoResults";
 import ProductCard from "@/app/(store)/_components/ProductCard/ProductCard";
 import GetProducts from "@/actions/Store/GetProducts";
 import { currentUser } from "@/lib/auth";
-import Billboard from "@/app/(store)/_components/Billboard/index";
+import Billboard from "@/app/(store)/_components/Billboards/index";
 
 interface CategoryPageProps {
   params: {
