@@ -80,7 +80,7 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
                       : "text-white",
                     isCategoryHovered(category.name) && "text-pink-300"
                   )}
-                  href={`/category/${category.name.replace(/\s+/g, "-")}`}
+                  href={`/collections/${category.name.replace(/\s+/g, "-")}`}
                   passHref
                 >
                   {category.name}
