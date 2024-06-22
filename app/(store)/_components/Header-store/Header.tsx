@@ -54,7 +54,7 @@ const Header = ({ categories, allProducts, UserId }: HeaderProps) => {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-screen bg-white shadow-md z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 w-screen bg-white shadow-md z-50 transition-all  duration-300 ${
         isHeaderVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >

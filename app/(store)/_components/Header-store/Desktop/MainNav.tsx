@@ -25,6 +25,7 @@ const getFormattedProductName = (productName: string, categoryName: string) => {
 
 const MainNav: React.FC<MainNavProps> = ({ data }) => {
   const categoryOrder = [
+    "New",
     "Panties",
     "Sport Bra",
     "Camisole",
