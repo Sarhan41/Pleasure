@@ -1,70 +1,67 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
-import Container from "@/components/Store/container";
 import MainNav from "./MainNav";
-import { db } from "@/lib/db";
 import Image from "next/image";
-import WishList from "./WishList";
-import { usePathname } from "next/navigation";
-import CheckoutHeader from "../Checkout";
 import UserLogin from "./UserLogin";
 import NavbarActions from "./NavbarActions";
 import Search from "./Search";
 import { HeaderProps } from "../Header";
 
-const DesktopHeader = ({
-  categories,
-  allProducts,
-  UserId,
-}:
-HeaderProps
-) => {
+const DesktopHeader = ({ categories, allProducts, UserId }: HeaderProps) => {
   return (
     <>
-      {/* First row */}
-      <div className="flex items-center border-b-3 gap-6 justify-between py-2 px-4 ">
-        {/* Logo */}
-        <div className="hidden lg:block"></div>
-        <div className="flex items-center  justify-center">
-          {/* Your logo image */}
-          <Link
-            href="/"
-            className="flex items-center  overflow-hidden justify-center gap-8 "
-          >
+      {/* Top Row */}
+      <div className="flex justify-between py-2 items-center w-full px-4 text-xs text-gray-600 ">
+        {/* Left Side */}
+        <div className="flex font-mono text-[10px] border-b  space-x-4 pl-2 self-start ">
+          <span>Free Returns</span>
+          <span>100% Privacy</span>
+          <span>Cash On Delivery</span>
+          <span>Free Shipping*</span>
+        </div>
+        {/* Center */}
+        <div className="flex justify-center items-center">
+          <Link href="/" className="flex items-center gap-4">
             <Image
               src="/logo.jpg"
               height={48}
-              width={58}
-              alt=""
-              className="rounded-full object-cover max-sm:hidden  "
+              width={48}
+              alt="Logo"
+              className="rounded-full object-cover"
             />
             <Image
               src="/logo-text.png"
-              height={10}
+              height={48}
               width={298}
               alt="Pleasure"
-              className="  object-cover  "
+              className="object-cover"
             />
           </Link>
         </div>
-        {/* Search functionality */}
-        <div className="flex items-center justify-end">
-          <Search allProducts={allProducts} />
+        {/* Right Side */}
+        <div className="flex flex-col gap-1">
+          <div className="flex text-[10px] font-mono   space-x-4 pl-2 self-start  ">
+            <span className="cursor-pointer">Become Affiliate</span>
+            <span className="cursor-pointer">Our Story</span>
+          </div>
+          {/* Search functionality */}
+          <div className="flex justify-center items-center  px-4">
+            <Search allProducts={allProducts} />
+          </div>
         </div>
       </div>
+
       {/* Second row */}
       <div className="flex items-center bg-black text-white justify-between py-2 px-4">
         {/* Categories */}
-        <div className="flex items-center lg:pl-6 ">
-          {/* Your category links */}
+        <div className="flex items-center lg:pl-6">
           <MainNav data={categories} />
         </div>
+
         {/* User icon, cart, and wishlist */}
-        <div className="flex items-center ">
-          {/* Your user icon */}
+        <div className="flex items-center">
           <UserLogin userId={UserId} />
-          {/* Your cart icon */}
           <NavbarActions userId={UserId} />
         </div>
       </div>

@@ -25,12 +25,12 @@ const getFormattedProductName = (productName: string, categoryName: string) => {
 
 const MainNav: React.FC<MainNavProps> = ({ data }) => {
   const categoryOrder = [
-    "New",
     "Panties",
     "Sport Bra",
     "Camisole",
     "Shorts",
     "Pyjama",
+    "New",
   ];
 
   // Sort the categories based on the defined order
@@ -57,69 +57,80 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
   };
 
   return (
-    <nav className="flex items-center justify-between px-4 py-2 text-white">
+    <nav className="flex h-fit justify-between px-4 py-2 text-white">
       {/* ===================================================================
                //? This is Main Nav For PC View
             ========================================================================
         */}
-      <div className="flex items-center space-x-4 lg:space-x-8">
+      <div className="flex  space-x-4 lg:space-x-8">
         <div className="hidden lg:flex space-x-4">
           <div className="flex space-x-4">
-            {sortedData.map((category) => (
-              <div
-                key={category.id}
-                className="relative group"
-                onMouseEnter={() => handleCategoryHover(category.name)}
-                onMouseLeave={() => handleCategoryHover("")}
-              >
-                <Link
-                  className={cn(
-                    "transition-colors duration-300 hover:text-pink-300 font-medium uppercase",
-                    pathname === `/category/${category.name}`
-                      ? "text-pink-300"
-                      : "text-white",
-                    isCategoryHovered(category.name) && "text-pink-300"
-                  )}
-                  href={`/collections/${category.name.replace(/\s+/g, "-")}`}
-                  passHref
-                >
-                  {category.name}
-                </Link>
-                {isCategoryHovered(category.name) && (
-                  <div className="absolute top-full w-[70vw] z-50 left-0 right-0 bg-white text-gray-800 rounded-xl shadow-2xl py-4 px-8">
-                    <div className="relative">
-                      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full w-0 h-0 border-l-8 border-r-8 border-b-8 border-transparent border-b-white"></div>
-                    </div>
-                    <div className="grid grid-cols-3 gap-4 pb-24">
-                      {category?.products?.map((product, index) => (
-                        <React.Fragment key={product.id}>
-                          <Link
-                            href={`/product/${product.name.replace(
-                              /\s+/g,
-                              "-"
-                            )}`}
-                            className="hover:text-pink-500 transition-colors duration-300 overflow-hidden whitespace-nowrap overflow-ellipsis flex items-center space-x-2"
-                            passHref
-                            onClick={() => setHoveredCategory("")}
-                          >
-                            <ChevronRightIcon className="w-4 h-4 text-pink-500" />
-                            <span className="font-semibold">
-                              {getFormattedProductName(
-                                product.name,
-                                category.name
-                              )}
-                            </span>
-                          </Link>
-                          {(index + 1) % 3 === 0 && (
-                            <div className="col-span-3 border-b my-2"></div>
-                          )}
-                        </React.Fragment>
-                      ))}
-                    </div>
-                  </div>
+            <div className="flex gap-4 ">
+              <Link
+                href="/"
+                className={cn(
+                  "transition-colors duration-300 text-sm mt-0.5 font-bold hover:text-pink-300  uppercase",
+                  pathname === `/` ? "text-pink-300" : "text-white"
                 )}
-              </div>
-            ))}
+              >
+                Home
+              </Link>
+              {sortedData.map((category) => (
+                <div
+                  key={category.id}
+                  className="relative group"
+                  onMouseEnter={() => handleCategoryHover(category.name)}
+                  onMouseLeave={() => handleCategoryHover("")}
+                >
+                  <Link
+                    className={cn(
+                      "transition-colors duration-300 text-sm font-bold hover:text-pink-300  uppercase",
+                      pathname === `/category/${category.name}`
+                        ? "text-pink-300"
+                        : "text-white",
+                      isCategoryHovered(category.name) && "text-pink-300"
+                    )}
+                    href={`/collections/${category.name.replace(/\s+/g, "-")}`}
+                    passHref
+                  >
+                    {category.name}
+                  </Link>
+                  {isCategoryHovered(category.name) && (
+                    <div className="absolute top-full w-[70vw] z-50 left-0 right-0 bg-white text-gray-800 rounded-xl shadow-2xl py-4 px-8">
+                      <div className="relative">
+                        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full w-0 h-0 border-l-8 border-r-8 border-b-8 border-transparent border-b-white"></div>
+                      </div>
+                      <div className="grid grid-cols-3 gap-4 pb-24">
+                        {category?.products?.map((product, index) => (
+                          <React.Fragment key={product.id}>
+                            <Link
+                              href={`/product/${product.name.replace(
+                                /\s+/g,
+                                "-"
+                              )}`}
+                              className="hover:text-pink-500 transition-colors duration-300 overflow-hidden whitespace-nowrap overflow-ellipsis flex items-center space-x-2"
+                              passHref
+                              onClick={() => setHoveredCategory("")}
+                            >
+                              <ChevronRightIcon className="w-4 h-4 text-pink-500" />
+                              <span className="font-semibold">
+                                {getFormattedProductName(
+                                  product.name,
+                                  category.name
+                                )}
+                              </span>
+                            </Link>
+                            {(index + 1) % 3 === 0 && (
+                              <div className="col-span-3 border-b my-2"></div>
+                            )}
+                          </React.Fragment>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
