@@ -7,6 +7,7 @@ import {
   FaInstagram as Instagram,
   FaPinterest,
 } from "react-icons/fa";
+import { SiRazorpay } from "react-icons/si"; // Razorpay icon
 
 const Footer: React.FC = () => {
   const Address = (
@@ -75,12 +76,12 @@ const Footer: React.FC = () => {
     },
     {
       text: "Instagram",
-      route: "/instagram",
+      route: "www.instagram.com",
       icon: <Instagram className="h-8 w-8 hover:text-primary" />,
     },
     {
       text: "Pinterest",
-      route: "/pinterest",
+      route: "www.pinterest.com",
       icon: <FaPinterest className="h-8 w-8 hover:text-primary" />,
     },
     {
@@ -134,7 +135,7 @@ const Footer: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="flex justify-between mx-12 max-sm:flex-col gap-24 border-t-2 mt-8 p-16 border-primary items-center">
+        <div className="flex justify-between mx-12 max-sm:flex-col gap-12 border-t-2 mt-8 p-8 border-primary items-start">
           {/* Address */}
           <div>
             <h1 className="text-white border-b-2 mb-4 border-primary">
@@ -142,24 +143,38 @@ const Footer: React.FC = () => {
             </h1>
             <p className="text-gray-200">{Address}</p>
           </div>
-          {/* Details */}
-          <div className="text-white flex gap-10 max-sm:border-t-2 border-primary max-sm:pt-4">
-            <div className="border-r-2 p-8 border-primary"></div>
-            <div>
-              <p className="mb-2">Contact us: contact@pleasure.com</p>
-              <p className="mb-2">Phone: +91 8155086856</p>
-              <div className="flex gap-4">
-                {SocialLinks.map((link, index) => (
-                  <Link
-                    target="_blank"
-                    key={index}
-                    href={link.route}
-                    className="text-white mt-4 flex gap-6"
-                  >
-                    {link.icon} {/* Here, the icon is added */}
-                  </Link>
-                ))}
+          {/* Support */}
+          <div>
+            <h1 className="text-white border-b-2 mb-4 border-primary">
+              SUPPORT
+            </h1>
+            <div className="text-white flex flex-col gap-4">
+              <div>
+                <p className="mb-2">Contact us: contact@pleasure.com</p>
+                <p className="mb-2">Phone: +91 8155086856</p>
+                <div className="flex gap-4">
+                  {SocialLinks.map((link, index) => (
+                    <Link
+                      target="_blank"
+                      key={index}
+                      href={link.route}
+                      className="text-white mt-4 flex gap-6"
+                    >
+                      {link.icon} {/* Here, the icon is added */}
+                    </Link>
+                  ))}
+                </div>
               </div>
+            </div>
+          </div>
+          {/* Details */}
+
+          {/* Payment Options */}
+          <div className="text-white">
+            <h1 className="border-b-2 mb-4 border-primary">PAYMENT OPTIONS</h1>
+            <div className="flex items-center gap-2">
+              <SiRazorpay className="h-8 w-8" />
+              <span>Razorpay</span>
             </div>
           </div>
         </div>
