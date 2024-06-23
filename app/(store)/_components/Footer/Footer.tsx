@@ -53,17 +53,17 @@ const Footer: React.FC = () => {
     {
       text: "Whatsapp",
       route: `https://wa.me/918155085865?text=Hello%20there!`,
-      icon: <Whatsapp className="h-10 w-10 hover:text-primary" />,
+      icon: <Whatsapp className="h-8 w-8 hover:text-primary" />,
     },
     {
       text: "Facebook",
       route: "/facebook",
-      icon: <Facebook className="h-10 w-10 hover:text-primary" />,
+      icon: <Facebook className="h-8 w-8 hover:text-primary" />,
     },
     {
       text: "Instagram",
       route: "/instagram",
-      icon: <Instagram className="h-10 w-10 hover:text-primary" />,
+      icon: <Instagram className="h-8 w-8 hover:text-primary" />,
     },
   ];
 
@@ -115,7 +115,6 @@ const Footer: React.FC = () => {
         {/* Details */}
         <div className="text-white flex gap-10 max-sm:border-t-2 border-primary max-sm:pt-4">
           <div className="border-r-2 p-8 border-primary">
-            <h1>Support</h1>
           </div>
           <div>
             <p className="mb-2">Contact us: contact@pleasure.com</p>
