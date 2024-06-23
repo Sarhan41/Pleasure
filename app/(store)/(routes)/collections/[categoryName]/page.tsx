@@ -4,9 +4,7 @@ import MobileFilters from "./components/MobileFilter";
 import Container from "@/components/Store/container";
 import NoResults from "@/components/Store/NoResults";
 import ProductCard from "@/app/(store)/_components/ProductCard/ProductCard";
-import GetProducts from "@/actions/Store/GetProducts";
 import { currentUser } from "@/lib/auth";
-import Billboard from "@/app/(store)/_components/Billboards/index";
 
 interface CategoryPageProps {
   params: {
@@ -45,6 +43,7 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
     include: {
       sizes: true,
       colors: true,
+      category: true,
       images: true,
     },
   });
@@ -116,7 +115,6 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
               {finalProducts.length === 0 && <NoResults />}
               <div className="flex flex-wrap gap-4">
                 {finalProducts.map((item) => (
-                  // @ts-ignore
                   <ProductCard key={item.id} data={item} userId={userId} />
                 ))}
               </div>
