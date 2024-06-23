@@ -34,7 +34,7 @@ const HomePage = async () => {
 
   return (
     <Container>
-      {/* {billboard && <Billboard data={billboard} />} */}
+      {billboard && <Billboard data={billboard} />}
       <div className="mt-12 text-4xl font-extrabold text-gray-900 text-center leading-tight tracking-tight">
         <span className="block text-transparent bg-gradient-to-r from-pink-500 to-yellow-500 bg-clip-text">
           Discover
