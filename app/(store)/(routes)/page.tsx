@@ -15,7 +15,6 @@ const HomePage = async () => {
         not: "New",
       },
     },
-
     select: { imageUrl: true, name: true },
   });
 
@@ -28,7 +27,7 @@ const HomePage = async () => {
         </span>
         <span className="block">Our Best Sellers</span>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 mx-auto gap-4 mt-8">
+      <div className="grid grid-cols-1  mx-auto px-4 sm:px-6 lg:px-8 sm:grid-cols-2  gap-8 mt-8 ">
         {fourBillboards.map((billboard) => (
           <BestSellerBillboard key={billboard.name} data={billboard} />
         ))}
