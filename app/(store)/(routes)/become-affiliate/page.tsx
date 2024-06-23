@@ -9,7 +9,7 @@ const BecomeAffiliate = () => {
         HELLO Affiliate
       </h1>
       <h2 className="text-yellow-300 font-mono text-3xl mb-4">
-        We're launching something amazing!
+        We&apos;re launching something amazing!
       </h2>
       <p className="text-primary font-serif text-3xl">
         Stay tuned, our affiliate program is coming soon.
