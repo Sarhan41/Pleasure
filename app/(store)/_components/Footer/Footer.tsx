@@ -1,3 +1,4 @@
+import { TwitterLogoIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -85,9 +86,9 @@ const Footer: React.FC = () => {
       icon: <FaPinterest className="h-8 w-8 hover:text-primary" />,
     },
     {
-      text: "Instagram",
-      route: "/instagram",
-      icon: <Instagram className="h-8 w-8 hover:text-primary" />,
+      text: "Twitter",
+      route: "/www.X.com",
+      icon: <TwitterLogoIcon className="h-8 w-8 hover:text-primary" />,
     },
   ];
 
