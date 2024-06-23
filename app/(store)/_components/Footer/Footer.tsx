@@ -9,7 +9,14 @@ import {
 } from "react-icons/fa";
 
 const Footer: React.FC = () => {
-  const Address = "123, ABC Street, XYZ City, Country - 123456";
+  const Address = (
+    <>
+      30, Raychandnagar, Opp. Shukan Mall, <br />
+      Nr. Visat Circle, Sabarmati, <br />
+      Ahmedabad, Gujarat, 380005
+    </>
+  );
+
   const footerLinks = {
     "Sport Bras": [
       { text: "white ", route: "/product/White" },
