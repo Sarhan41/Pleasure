@@ -59,8 +59,8 @@ const NavbarActions = ({ userId }: NavbarActionsProps) => {
         onClick={() => router.push(`/cart?reload=${Date.now()}`)}
         className="flex items-center rounded-full bg-black px-2 py-2"
       >
-        <ShoppingBag className="h-6 w-6 max-sm:h-4 max-sm:w-4" color="white" />
-        <span className="ml-2 text-sm font-medium text-white ">
+        <ShoppingBag className="h-5 w-5 max-sm:h-4 max-sm:w-4" color="white" />
+        <span className="ml-2 text-xs font-medium text-white ">
           {cartlength}
         </span>
       </Button>
@@ -69,8 +69,8 @@ const NavbarActions = ({ userId }: NavbarActionsProps) => {
         onClick={() => router.push(`/wishlist?reload=${Date.now()}`)}
         className="flex items-center rounded-full bg-black px-2 py-2"
       >
-        <Heart className="h-6 w-6 max-sm:h-4 max-sm:w-4" color="white" />
-        <span className="ml-2 text-sm font-medium text-white ">
+        <Heart className="h-5 w-5 max-sm:h-4 max-sm:w-4" color="white" />
+        <span className="ml-2 text-xs font-medium text-white ">
           {wishlength}
         </span>
       </Button>

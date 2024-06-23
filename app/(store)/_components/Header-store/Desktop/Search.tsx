@@ -53,7 +53,7 @@ const Search = ({ allProducts }: SearchProps) => {
         placeholder="Search products..."
         value={searchTerm}
         onChange={handleChange}
-        className="px-4 py-2 border border-gray-300 rounded-3xl focus:outline-none focus:ring lg:w-96 focus:border-blue-300 w-56 max-sm:w-44"
+        className="px-4 py-0 border border-gray-300 rounded-3xl focus:outline-none focus:ring lg:w-72 focus:border-blue-300 w-56 max-sm:w-44"
         showSearchIcon
       />
 

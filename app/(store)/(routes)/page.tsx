@@ -15,8 +15,21 @@ const HomePage = async () => {
         not: "New",
       },
     },
-
     select: { imageUrl: true, name: true },
+  });
+
+  const categoryOrder = [
+    "New",
+    "Panties",
+    "Sport Bra",
+    "Camisole",
+    "Shorts",
+    "Pyjama",
+  ];
+
+  // Sort the categories based on the defined order
+  const sortedBillboardData = fourBillboards.sort((a, b) => {
+    return categoryOrder.indexOf(a.name) - categoryOrder.indexOf(b.name);
   });
 
   return (
@@ -28,9 +41,9 @@ const HomePage = async () => {
         </span>
         <span className="block">Our Best Sellers</span>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 mx-auto gap-4 mt-8">
-        {fourBillboards.map((billboard) => (
-          <BestSellerBillboard key={billboard.name} data={billboard} />
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap gap-8 mt-8 justify-center">
+        {sortedBillboardData.map((billboard, index) => (
+          <BestSellerBillboard key={billboard.name} data={billboard} index={index} />
         ))}
       </div>
     </Container>
