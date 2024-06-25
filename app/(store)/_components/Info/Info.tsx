@@ -223,7 +223,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             Price
           =============================================
       */}
-        <div className="font-semibold">
+        <div className="font-medium">
           <p className="text-2xl text-gray-900">
             {!selectedSize ? (
               <>
