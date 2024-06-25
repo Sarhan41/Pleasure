@@ -28,6 +28,7 @@ import { FaWhatsapp } from "react-icons/fa";
 import SizeChart from "./SizeChart";
 import { Product as ProductType } from "@/types";
 import Description from "./Description";
+import { MotionSpan } from "@/constant/MotionElements";
 
 interface InfoProps {
   data: ProductType;
@@ -223,29 +224,47 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           =============================================
       */}
         <div className="font-semibold">
-        <p className="text-2xl text-gray-900">
-  ₹
-  {!selectedSize ? (
-    <>
-      <span className="line-through text-gray-500">
-        {data.sizes[0].price}
-      </span>
-      <span className="ml-4">
-        {data.sizes[0].discountedprice}
-      </span>
-    </>
-  ) : (
-    <>
-      <span className="line-through text-gray-500">
-        {selectedSize.price}
-      </span>
-      <span className="ml-4">
-        {selectedSize.discountedprice}
-      </span>
-    </>
-  )}
-</p>
-
+          <p className="text-2xl text-gray-900">
+            {!selectedSize ? (
+              <>
+                <MotionSpan
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="line-through text-gray-500"
+                >
+                  ₹{data.sizes[0].price}
+                </MotionSpan>
+                <MotionSpan
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                  className="ml-4"
+                >
+                  ₹{data.sizes[0].discountedprice}
+                </MotionSpan>
+              </>
+            ) : (
+              <>
+                <MotionSpan
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="line-through text-gray-500"
+                >
+                  ₹{selectedSize.price}
+                </MotionSpan>
+                <MotionSpan
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                  className="ml-4"
+                >
+                  ₹{selectedSize.discountedprice}
+                </MotionSpan>
+              </>
+            )}
+          </p>
         </div>
         {/* =================================================================
             SKUValue
