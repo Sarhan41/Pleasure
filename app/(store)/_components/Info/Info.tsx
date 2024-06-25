@@ -28,6 +28,7 @@ import { FaWhatsapp } from "react-icons/fa";
 import SizeChart from "./SizeChart";
 import { Product as ProductType } from "@/types";
 import Description from "./Description";
+import { MotionSpan } from "@/constant/MotionElements";
 
 interface InfoProps {
   data: ProductType;
@@ -218,23 +219,57 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           =============================================
       */}
       <div className="mt-3 flex items-end gap-4 justify-between">
-        <div className="font-semibold">
+        {/* =============================================
+            Price
+          =============================================
+      */}
+        <div className="font-medium">
           <p className="text-2xl text-gray-900">
-            ₹
             {!selectedSize ? (
-              data.sizes[0].price
-            ) : selectedSize.discountedprice ? (
               <>
-                {selectedSize.discountedprice}
-                <span className="line-through ml-4 text-gray-500">
-                  {selectedSize.price}
-                </span>
+                <MotionSpan
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="line-through text-gray-500"
+                >
+                  ₹{data.sizes[0].price}
+                </MotionSpan>
+                <MotionSpan
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                  className="ml-4"
+                >
+                  ₹{data.sizes[0].discountedprice}
+                </MotionSpan>
               </>
             ) : (
-              selectedSize.price
+              <>
+                <MotionSpan
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="line-through text-gray-500"
+                >
+                  ₹{selectedSize.price}
+                </MotionSpan>
+                <MotionSpan
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                  className="ml-4"
+                >
+                  ₹{selectedSize.discountedprice}
+                </MotionSpan>
+              </>
             )}
           </p>
         </div>
+        {/* =================================================================
+            SKUValue
+            =================================================================
+         */}
         {selectedSize && (
           <span className="text-base text-gray-900 flex gap-2">
             SKU:

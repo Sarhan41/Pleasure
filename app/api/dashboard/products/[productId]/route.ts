@@ -134,13 +134,13 @@ export async function PATCH(
                 SKUvalue: string;
                 quantity: string;
                 price: string;
-                discountedPrice: string;
+                discountedprice: string;
               }) => ({
                 name: size.name,
                 SKUvalue: size.SKUvalue,
                 quantity: size.quantity,
                 price: size.price,
-                discountedPrice: size.discountedPrice,
+                discountedprice: size.discountedprice,
               })
             ),
           },
