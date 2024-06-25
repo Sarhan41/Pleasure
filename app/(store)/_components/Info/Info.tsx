@@ -218,23 +218,39 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           =============================================
       */}
       <div className="mt-3 flex items-end gap-4 justify-between">
+        {/* =============================================
+            Price
+          =============================================
+      */}
         <div className="font-semibold">
-          <p className="text-2xl text-gray-900">
-            ₹
-            {!selectedSize ? (
-              data.sizes[0].price
-            ) : selectedSize.discountedprice ? (
-              <>
-                {selectedSize.discountedprice}
-                <span className="line-through ml-4 text-gray-500">
-                  {selectedSize.price}
-                </span>
-              </>
-            ) : (
-              selectedSize.price
-            )}
-          </p>
+        <p className="text-2xl text-gray-900">
+  ₹
+  {!selectedSize ? (
+    <>
+      <span className="line-through text-gray-500">
+        {data.sizes[0].price}
+      </span>
+      <span className="ml-4">
+        {data.sizes[0].discountedprice}
+      </span>
+    </>
+  ) : (
+    <>
+      <span className="line-through text-gray-500">
+        {selectedSize.price}
+      </span>
+      <span className="ml-4">
+        {selectedSize.discountedprice}
+      </span>
+    </>
+  )}
+</p>
+
         </div>
+        {/* =================================================================
+            SKUValue
+            =================================================================
+         */}
         {selectedSize && (
           <span className="text-base text-gray-900 flex gap-2">
             SKU:

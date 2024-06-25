@@ -78,14 +78,14 @@ export async function POST(req: Request) {
                 SKUvalue: string ;
                 quantity: string;
                 price: string;
-                discountedPrice: string;
+                discountedprice: string;
 
               }) => ({
                 name: size.name,
                 SKUvalue: size.SKUvalue,
                 quantity: size.quantity,
                 price: size.price,
-                discountedPrice: size.discountedPrice,
+                discountedprice: size.discountedprice,
                 
               })
             ),
