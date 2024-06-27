@@ -242,7 +242,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 0.5 }}
-                      className="text-black text-3xl"
+                      className="text-black ml-1 text-3xl"
                     >
                       ₹{data.sizes[0].discountedprice}
                     </MotionSpan>
@@ -453,42 +453,45 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             =============================================
         */}
 
-        <div className="flex items-center gap-x-4">
-          {data?.colors?.map((color) => {
-            const handleClick = () => {
-              const productName = color.toLink?.replace(/ /g, "-");
-              router.push(`/product/${productName}`);
-              setSelectedColor(color?.value);
-            };
-            if (color.value != "#111") {
-              return (
-                <div key={color.name}>
-                  <h3 className="font-semibold text-black ">Colors:</h3>
-                  {color.toLink ? (
-                    <div onClick={handleClick}>
-                      <div
-                        key={color.name}
-                        className="h-10 w-10 rounded-full border border-gray-600 cursor-pointer"
-                        style={{ backgroundColor: color.value }}
-                      ></div>
-                    </div>
-                  ) : (
-                    <div
-                      key={color.name}
-                      className="h-10 w-10 rounded-full border border-gray-900 relative"
-                      style={{ backgroundColor: color.value }}
-                    >
-                      <div className="absolute inset-0 flex items-center justify-center text-gray-600 bottom-0 left-0 h-3 w-3 bg-white border border-gray-900">
-                        <Check size={24} />
-                      </div>
-                    </div>
-                  )}
+<div className="flex items-center gap-x-4">
+  {data?.colors?.map((color) => {
+    const handleClick = () => {
+      const productName = color.toLink?.replace(/ /g, "-");
+      router.push(`/product/${productName}`);
+      setSelectedColor(color?.value);
+    };
+    if (color.value !== "#111") {
+      return (
+        <div key={color.name}>
+          <h3 className="font-semibold text-black">Colors:</h3>
+          {color.toLink ? (
+            <div onClick={handleClick}>
+              <div
+                key={color.name}
+                className="h-10 w-10 rounded-full border border-gray-600 cursor-pointer"
+                style={{ backgroundColor: color.value }}
+              ></div>
+            </div>
+          ) : (
+            <div
+              key={color.name}
+              className="h-10 w-10 rounded-full border border-gray-900 relative"
+              style={{ backgroundColor: color.value }}
+            >
+              {data.colors.length > 1 && (
+                <div className="absolute inset-0 flex items-center justify-center text-gray-600 bottom-0 left-0 h-3 w-3 bg-white border border-gray-900">
+                  <Check size={24} />
                 </div>
-              );
-            }
-            return null;
-          })}
+              )}
+            </div>
+          )}
         </div>
+      );
+    }
+    return null;
+  })}
+</div>
+
       </div>
 
       {/* =============================================
