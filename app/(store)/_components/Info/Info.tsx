@@ -29,6 +29,7 @@ import SizeChart from "./SizeChart";
 import { Product as ProductType } from "@/types";
 import Description from "./Description";
 import { MotionSpan } from "@/constant/MotionElements";
+import { calculateDiscountPercentage } from "@/lib/calculateDiscountedPrice";
 
 interface InfoProps {
   data: ProductType;
@@ -223,49 +224,91 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             Price
           =============================================
       */}
-        <div className="font-medium">
-          <p className="text-2xl text-gray-900">
-            {!selectedSize ? (
-              <>
-                <MotionSpan
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="line-through text-gray-500"
-                >
-                  ₹{data.sizes[0].price}
-                </MotionSpan>
-                <MotionSpan
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.5 }}
-                  className="ml-4"
-                >
-                  ₹{data.sizes[0].discountedprice}
-                </MotionSpan>
-              </>
-            ) : (
-              <>
-                <MotionSpan
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="line-through text-gray-500"
-                >
-                  ₹{selectedSize.price}
-                </MotionSpan>
-                <MotionSpan
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.5 }}
-                  className="ml-4"
-                >
-                  ₹{selectedSize.discountedprice}
-                </MotionSpan>
-              </>
-            )}
-          </p>
-        </div>
+  <div className="font-medium">
+  <p className="text-2xl text-gray-900">
+    {!selectedSize ? (
+      <>
+        {data.sizes[0].discountedprice ? (
+          <>
+            <MotionSpan
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="line-through text-gray-500"
+            >
+              ₹{data.sizes[0].price}
+            </MotionSpan>
+            <MotionSpan
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="ml-4"
+            >
+              ₹{data.sizes[0].discountedprice}
+            </MotionSpan>
+            <MotionSpan
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 1 }}
+              className="ml-4 text-green-600"
+            >
+              ({calculateDiscountPercentage(data.sizes[0].price, data.sizes[0].discountedprice)}% OFF)
+            </MotionSpan>
+          </>
+        ) : (
+          <MotionSpan
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            ₹{data.sizes[0].price}
+          </MotionSpan>
+        )}
+      </>
+    ) : (
+      <>
+        {selectedSize.discountedprice ? (
+          <>
+            <MotionSpan
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="line-through text-gray-500"
+            >
+              ₹{selectedSize.price}
+            </MotionSpan>
+            <MotionSpan
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="ml-4"
+            >
+              ₹{selectedSize.discountedprice}
+            </MotionSpan>
+            <MotionSpan
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 1 }}
+              className="ml-4 text-green-600"
+            >
+              ({calculateDiscountPercentage(selectedSize.price, selectedSize.discountedprice)}% OFF)
+            </MotionSpan>
+          </>
+        ) : (
+          <MotionSpan
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            ₹{selectedSize.price}
+          </MotionSpan>
+        )}
+      </>
+    )}
+  </p>
+</div>
+
+
         {/* =================================================================
             SKUValue
             =================================================================
