@@ -18,7 +18,7 @@ const BestSellerBillboard: React.FC<BestSellerBillboardProps> = ({
 }) => {
   return (
     <MotionDiv
-      variants={slideIn("left", "easeOut", index*0.01, 0.5)} // Adjusted animation variant for immediate entrance
+      variants={slideIn("left", "easeOut", index * 0.01, 0.5)} // Adjusted animation variant for immediate entrance
       initial="hidden"
       animate="show"
       className="sm:w-1/2 lg:w-1/3 p-4 flex flex-col items-center justify-center w-full min-h-[300px] mt-8 lg:mt-16 overflow-hidden rounded-3xl shadow-xl transform transition-transform duration-500 hover:scale-105 hover:shadow-2xl border-4 border-transparent hover:border-pink-500"
@@ -28,7 +28,7 @@ const BestSellerBillboard: React.FC<BestSellerBillboardProps> = ({
           <Image
             src={data.imageUrl}
             alt={data.name}
-            layout="fill"
+            fill
             objectFit="cover"
             className="rounded-3xl shadow-lg transform transition-transform duration-500 hover:scale-105"
           />
