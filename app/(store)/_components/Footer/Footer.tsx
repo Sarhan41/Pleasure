@@ -96,10 +96,10 @@ const Footer: React.FC = () => {
     <>
       <div className="bg-pink-500 w-full overflow-hidden flex justify-center items-center py-4 mt-24 text-center">
         <Image
-          src="/logo-Text.jpg"
+          src="/logo-text.jpg"
           height={48}
           width={298}
-          alt="Pleasure"
+          alt=""
           className="object-cover"
         />
       </div>
