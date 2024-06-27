@@ -10,6 +10,7 @@ import { Product as ProductType } from "@/types";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
+import { calculateDiscountPercentage } from "@/lib/calculateDiscountedPrice";
 
 interface ProductCardProps {
   data: ProductType;
@@ -23,6 +24,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
   const previewModal = usePreviewModal();
   const router = useRouter();
 
+  // Div CLick
   const handleClick = () => {
     const productName = data?.name.replace(/\s+/g, "-");
     if (!isModalOpen) {
@@ -30,11 +32,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
     }
   };
 
+  // Preview Modal Open
   const onPreview: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation();
     previewModal.onOpen(data, userId);
   };
 
+  //Add to cart After selecting size from product card
   // @ts-ignore
   const handleSizeSelect = async (size) => {
     setSelectedSize(size);
@@ -95,6 +99,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
     }
   };
 
+  //Add to wishlist
   const onAddToWishList: MouseEventHandler<HTMLButtonElement> = async (
     event
   ) => {
@@ -127,22 +132,42 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
     }
   };
 
+  // Hover effect on image setting
   const [hovered, setHovered] = useState(false);
-
   const handleMouseEnter = () => {
     setHovered(true);
   };
-
   const handleMouseLeave = () => {
     setHovered(false);
   };
 
+  const discountedPercentage = calculateDiscountPercentage(
+    data.sizes[0].price,
+    data.sizes[0].discountedprice
+  );
+
   return (
+    // Parent Div
     <div className="relative overflow-hidden bg-white h-auto w-[260px] sm:w-[320px] group cursor-pointer rounded-2xl border border-gray-200 shadow-md p-3 space-y-2 transition-transform transform hover:scale-105">
+      {/* // Image Div and Three Icon and Discount Div */}
       <div
         className="h-[280px] sm:h-[320px] w-full rounded-lg bg-gray-100 relative overflow-hidden"
         onClick={handleClick}
       >
+        {parseFloat(discountedPercentage) > 0 && (
+          <div
+            className={`absolute top-2 right-2 z-20 text-white text-xs font-semibold px-2 py-1 rounded-lg ${
+              parseFloat(discountedPercentage) < 45
+                ? "bg-primary"
+                : parseFloat(discountedPercentage) > 50
+                ? "bg-red-500"
+                : "bg-blue-500"
+            }`}
+          >
+            {discountedPercentage}% OFF
+          </div>
+        )}
+
         <Image
           alt=""
           src={`${
@@ -172,6 +197,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
           </div>
         </div>
       </div>
+      {/* // Product Name and Category Div */}
       <div
         className="flex flex-col items-start space-y-1"
         onClick={handleClick}
@@ -183,6 +209,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
         </p>
         <p className="text-xs text-gray-500">{data.category?.name}</p>
       </div>
+      {/* // Price and Add to Cart Div */}
       <div className="flex justify-between items-center w-full mt-auto">
         <div
           className="font-semibold text-sm text-gray-900"
@@ -207,6 +234,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
           Add To Cart
         </Button>
       </div>
+      {/* // Modal for Size Selection */}
       {isModalOpen && (
         <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-end transition-opacity duration-300">
           <div className="bg-white rounded-t-lg p-4 w-full max-w-md">
