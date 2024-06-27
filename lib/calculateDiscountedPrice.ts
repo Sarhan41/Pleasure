@@ -11,7 +11,7 @@ export const calculateDiscountPercentage = (
         originalPriceNum <= 0 ||
         discountedPriceNum < 0
       ) {
-        throw new Error("Prices should be valid positive numbers");
+        return "0"; // Return 0 if originalPrice is not a number or is less than or equal to 0
       }
   
       const discount = originalPriceNum - discountedPriceNum;
