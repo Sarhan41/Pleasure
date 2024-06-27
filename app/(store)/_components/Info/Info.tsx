@@ -224,90 +224,99 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             Price
           =============================================
       */}
-  <div className="font-medium">
-  <p className="text-2xl text-gray-900">
-    {!selectedSize ? (
-      <>
-        {data.sizes[0].discountedprice ? (
-          <>
-            <MotionSpan
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="line-through text-gray-500"
-            >
-              ₹{data.sizes[0].price}
-            </MotionSpan>
-            <MotionSpan
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-              className="ml-4"
-            >
-              ₹{data.sizes[0].discountedprice}
-            </MotionSpan>
-            <MotionSpan
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1 }}
-              className="ml-4 text-green-600"
-            >
-              ({calculateDiscountPercentage(data.sizes[0].price, data.sizes[0].discountedprice)}% OFF)
-            </MotionSpan>
-          </>
-        ) : (
-          <MotionSpan
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            ₹{data.sizes[0].price}
-          </MotionSpan>
-        )}
-      </>
-    ) : (
-      <>
-        {selectedSize.discountedprice ? (
-          <>
-            <MotionSpan
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="line-through text-gray-500"
-            >
-              ₹{selectedSize.price}
-            </MotionSpan>
-            <MotionSpan
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-              className="ml-4"
-            >
-              ₹{selectedSize.discountedprice}
-            </MotionSpan>
-            <MotionSpan
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1 }}
-              className="ml-4 text-green-600"
-            >
-              ({calculateDiscountPercentage(selectedSize.price, selectedSize.discountedprice)}% OFF)
-            </MotionSpan>
-          </>
-        ) : (
-          <MotionSpan
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            ₹{selectedSize.price}
-          </MotionSpan>
-        )}
-      </>
-    )}
-  </p>
-</div>
-
+        <div className="font-medium">
+          <p className="text-2xl text-gray-900 flex items-center">
+            {!selectedSize ? (
+              <>
+                {data.sizes[0].discountedprice ? (
+                  <>
+                    <MotionSpan
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5 }}
+                      className="text-gray-500 text-base line-through mr-2"
+                    >
+                      ₹{data.sizes[0].price}
+                    </MotionSpan>
+                    <MotionSpan
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.5 }}
+                      className="text-black text-3xl"
+                    >
+                      ₹{data.sizes[0].discountedprice}
+                    </MotionSpan>
+                    <MotionSpan
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 1 }}
+                      className="ml-2 text-primary text-lg"
+                    >
+                      (
+                      {calculateDiscountPercentage(
+                        data.sizes[0].price,
+                        data.sizes[0].discountedprice
+                      )}
+                      % OFF)
+                    </MotionSpan>
+                  </>
+                ) : (
+                  <MotionSpan
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    ₹{data.sizes[0].price}
+                  </MotionSpan>
+                )}
+              </>
+            ) : (
+              <>
+                {selectedSize.discountedprice ? (
+                  <>
+                    <MotionSpan
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5 }}
+                      className="text-gray-500 line-through mr-2"
+                    >
+                      ₹{selectedSize.price}
+                    </MotionSpan>
+                    <MotionSpan
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.5 }}
+                      className="text-green-600 text-3xl"
+                    >
+                      ₹{selectedSize.discountedprice}
+                    </MotionSpan>
+                    <MotionSpan
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 1 }}
+                      className="ml-2 text-green-600 text-lg"
+                    >
+                      (
+                      {calculateDiscountPercentage(
+                        selectedSize.price,
+                        selectedSize.discountedprice
+                      )}
+                      % OFF)
+                    </MotionSpan>
+                  </>
+                ) : (
+                  <MotionSpan
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    ₹{selectedSize.price}
+                  </MotionSpan>
+                )}
+              </>
+            )}
+          </p>
+        </div>
 
         {/* =================================================================
             SKUValue
