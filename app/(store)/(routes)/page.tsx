@@ -4,17 +4,11 @@ import Billboard from "../_components/Billboards";
 import BestSellerBillboard from "../_components/BestSellerBillboard";
 
 const HomePage = async () => {
-  const billboard = await db.category.findUnique({
-    where: { id: "79e15fe8-2cfb-420b-b144-6e11468c2327" },
+  const billboard = await db.category.findMany({
     select: { imageUrl: true, name: true },
   });
 
   const fourBillboards = await db.category.findMany({
-    where: {
-      name: {
-        not: "New",
-      },
-    },
     select: { imageUrl: true, name: true },
   });
 
@@ -43,7 +37,11 @@ const HomePage = async () => {
       </div>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap gap-8 mt-8 justify-center">
         {sortedBillboardData.map((billboard, index) => (
-          <BestSellerBillboard key={billboard.name} data={billboard} index={index} />
+          <BestSellerBillboard
+            key={billboard.name}
+            data={billboard}
+            index={index}
+          />
         ))}
       </div>
     </Container>
