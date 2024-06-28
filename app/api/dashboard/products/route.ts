@@ -26,6 +26,7 @@ export async function POST(req: Request) {
       isFeatured,
       isArchived,
       description,
+      isNew,
     } = body;
 
     if (!name) {
@@ -53,7 +54,7 @@ export async function POST(req: Request) {
     if (!description) {
       return new NextResponse("Description is required ", { status: 400 });
     }
-
+   
     const product = await db.product.create({
       data: {
         name,
@@ -98,6 +99,7 @@ export async function POST(req: Request) {
         },
         isFeatured,
         isArchived,
+        isNew,
       },
     });
 

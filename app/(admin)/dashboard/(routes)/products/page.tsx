@@ -22,6 +22,7 @@ const ProductsPage = async () => {
     name: item.name,
     isFeatured: item.isFeatured,
     isArchived: item.isArchived,
+    isNew: item.isNew,
     category: item.category.name,
     price:item.sizes.map((size) => size.price).join(", "),
     size: item.sizes.map((size) => size.name).join(", "),
