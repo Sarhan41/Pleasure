@@ -11,6 +11,7 @@ export type ProductColumn = {
   colorHex: string;
   isFeatured: boolean;
   isArchived: boolean;
+  isNew: boolean;
   createdAt: string;
 };
 
@@ -26,6 +27,10 @@ export const columns: ColumnDef<ProductColumn>[] = [
   {
     accessorKey: "isFeatured",
     header: "Featured",
+  },
+  {
+    accessorKey: "isNew",
+    header: "New",
   },
   {
     accessorKey: "price",

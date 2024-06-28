@@ -52,6 +52,7 @@ const formSchema = z.object({
     })
     .array(),
 
+  isNew: z.boolean().default(false).optional(),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
 });
@@ -120,6 +121,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           ],
           isFeatured: false,
           isArchived: false,
+          isNew: false,
           description: "",
         },
   });
@@ -528,6 +530,27 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                         <FormLabel>Featured</FormLabel>
                         <FormDescription>
                           This product will appear on the home page
+                        </FormDescription>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="isNew"
+                  render={({ field }) => (
+                    <FormItem className=" flex flex-row space-x-3 space-y-0 rounded-md border p-4 items-start">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>New</FormLabel>
+                        <FormDescription>
+                          This product will appear on the New page
                         </FormDescription>
                       </div>
                       <FormMessage />
