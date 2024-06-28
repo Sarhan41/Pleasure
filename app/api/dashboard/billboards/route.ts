@@ -10,7 +10,7 @@ export async function POST(req: Request) {
 
     const body = await req.json();
 
-    const { name, title, description, imageUrl } = body;
+    const { name, title, subtitle, imageUrl, link } = body;
 
     if (!user) {
       return new NextResponse("Unauthenticated", { status: 401 });
@@ -23,33 +23,35 @@ export async function POST(req: Request) {
       return new NextResponse("Name is required ", { status: 400 });
     }
 
-  
+   
+
     if (!imageUrl) {
       return new NextResponse("Image is required", { status: 400 });
     }
 
-    const category = await db.category.create({
+    const billboard = await db.billboard.create({
       data: {
         name,
         imageUrl,
         title,
-        description,
+        subtitle,
+        link,
       },
     });
 
-    return NextResponse.json(category);
+    return NextResponse.json(billboard);
   } catch (error) {
-    console.log("[CATEGORIES_POST]", error);
+    console.log("[BILLBOARDS_POST]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
 export async function GET(req: Request) {
   try {
-    const categories = await db.category.findMany({});
+    const billboard = await db.billboard.findMany({});
 
-    return NextResponse.json(categories);
+    return NextResponse.json(billboard);
   } catch (error) {
-    console.log("[CATEGORIES_GET]", error);
+    console.log("[BILLBOARDS_GET]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }

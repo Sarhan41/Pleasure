@@ -26,6 +26,11 @@ export function MainNav({
       active: pathname === "/dashboard",
     },
     {
+      href: `/dashboard/billboards`,
+      label: "Billboards",
+      active: pathname === "/dashboard/billboards",
+    },
+    {
       href: `/dashboard/categories`,
       label: "Categories",
       active: pathname === `/dashboard/categories`,

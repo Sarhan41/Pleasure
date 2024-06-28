@@ -5,31 +5,31 @@ import { currentRole, currentUser } from "@/lib/auth";
 
 export async function GET(
   req: Request,
-  { params }: { params: { categoryId: string } }
+  { params }: { params: { billboardId: string } }
 ) {
   try {
  
 
-    if (!params.categoryId) {
-      return new NextResponse("Category Id is required", { status: 400 });
+    if (!params.billboardId) {
+      return new NextResponse("Billboard Id is required", { status: 400 });
     }
 
-    const category = await db.category.findUnique({
+    const billboard = await db.billboard.findUnique({
       where: {
-        id: params.categoryId,
+        id: params.billboardId,
       },
     });
 
-    return NextResponse.json(category);
+    return NextResponse.json(billboard);
   } catch (error) {
-    console.log("[CATEGORY_GET]", error);
+    console.log("[BILLBOARD_GET]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { categoryId: string } }
+  { params }: { params: { billboardId: string } }
 ) {
   try {
     const user = await currentUser();
@@ -45,46 +45,44 @@ export async function PATCH(
 
     const body = await req.json();
 
-    const { name, title, imageUrl, description } = body;
+    const { name, title, imageUrl, subtitle, link } = body;
 
     if (!name) {
       return new NextResponse("Name is required", { status: 400 });
     }
 
-    if (!title) {
-      return new NextResponse("Title is required", { status: 400 });
-    }
 
     if (!imageUrl) {
       return new NextResponse("Image is required", { status: 400 });
     }
 
-    if (!params.categoryId) {
-      return new NextResponse("Category Id Is Required", { status: 400 });
+    if (!params.billboardId) {
+      return new NextResponse("Billboard Id is Required", { status: 400 });
     }
 
-    const category = await db.category.updateMany({
+    const Billboard = await db.billboard.updateMany({
       where: {
-        id: params.categoryId,
+        id: params.billboardId,
       },
       data: {
         name,
         imageUrl,
         title,
-        description,
+        subtitle,
+        link,
       },
     });
 
-    return NextResponse.json(category);
+    return NextResponse.json(Billboard);
   } catch (error) {
-    console.log("[CATEGORY_PATCH]", error);
+    console.log("[BILLBOARDS_PATCH]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { categoryId: string } }
+  { params }: { params: { billboardId: string } }
 ) {
   try {
     const user = await currentUser();
@@ -98,19 +96,19 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    if (!params.categoryId) {
-      return new NextResponse("Category Id Is Required", { status: 400 });
+    if (!params.billboardId) {
+      return new NextResponse("Billboard Id Is Required", { status: 400 });
     }
 
-    const category = await db.category.deleteMany({
+    const billboard = await db.billboard.deleteMany({
       where: {
-        id: params.categoryId,
+        id: params.billboardId,
       },
     });
 
-    return NextResponse.json(category);
+    return NextResponse.json(billboard);
   } catch (error) {
-    console.log("[CATEGORY_DELETE]", error);
+    console.log("[BILLBOARD_DELETE]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
