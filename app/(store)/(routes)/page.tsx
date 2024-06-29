@@ -2,13 +2,13 @@ import Container from "@/components/Store/container";
 import { db } from "@/lib/db";
 import Billboard from "../_components/Billboards";
 import BestSellerBillboard from "../_components/BestSellerBillboard";
+import FeatureSection from "../_components/FeatureSection";
 
 const HomePage = async () => {
   const billboards = await db.billboard.findMany({
     select: { imageUrl: true, name: true, title: true, subtitle: true , link: true},
   });
 
-  console.log(billboards);
 
   const fourCategories = await db.category.findMany({
     select: { imageUrl: true, name: true },
@@ -45,6 +45,9 @@ const HomePage = async () => {
             index={index}
           />
         ))}
+      </div>
+      <div>
+        <FeatureSection />
       </div>
     </Container>
   );
