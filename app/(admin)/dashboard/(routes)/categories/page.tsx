@@ -14,9 +14,11 @@ const CategoriesPage = async () => {
   const formattedCategories: CategoryColumn[] = categories.map((item) => ({
     id: item.id,
     name: item.name,
-    title: item.title,
+    title: item.title || '',
+    description: item.description || '',
     createdAt: format(item.createdAt, "MMM do, yyyy"),
   }));
+  
 
   return (
     <div className="  flex-col">
