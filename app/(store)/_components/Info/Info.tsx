@@ -278,7 +278,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5 }}
-                      className="text-gray-500 line-through mr-2"
+                      className="text-gray-500 text-base line-through mr-2"
                     >
                       ₹{selectedSize.price}
                     </MotionSpan>
@@ -286,7 +286,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 0.5 }}
-                      className="text-green-600 text-3xl"
+                      className="text-3xl"
                     >
                       ₹{selectedSize.discountedprice}
                     </MotionSpan>
@@ -294,7 +294,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 1 }}
-                      className="ml-2 text-green-600 text-lg"
+                      className="ml-2 text-lg text-primary"
                     >
                       (
                       {calculateDiscountPercentage(
@@ -453,45 +453,44 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             =============================================
         */}
 
-<div className="flex items-center gap-x-4">
-  {data?.colors?.map((color) => {
-    const handleClick = () => {
-      const productName = color.toLink?.replace(/ /g, "-");
-      router.push(`/product/${productName}`);
-      setSelectedColor(color?.value);
-    };
-    if (color.value !== "#111") {
-      return (
-        <div key={color.name}>
-          <h3 className="font-semibold text-black">Colors:</h3>
-          {color.toLink ? (
-            <div onClick={handleClick}>
-              <div
-                key={color.name}
-                className="h-10 w-10 rounded-full border border-gray-600 cursor-pointer"
-                style={{ backgroundColor: color.value }}
-              ></div>
-            </div>
-          ) : (
-            <div
-              key={color.name}
-              className="h-10 w-10 rounded-full border border-gray-900 relative"
-              style={{ backgroundColor: color.value }}
-            >
-              {data.colors.length > 1 && (
-                <div className="absolute inset-0 flex items-center justify-center text-gray-600 bottom-0 left-0 h-3 w-3 bg-white border border-gray-900">
-                  <Check size={24} />
+        <div className="flex items-center gap-x-4">
+          {data?.colors?.map((color) => {
+            const handleClick = () => {
+              const productName = color.toLink?.replace(/ /g, "-");
+              router.push(`/product/${productName}`);
+              setSelectedColor(color?.value);
+            };
+            if (color.value !== "#111") {
+              return (
+                <div key={color.name}>
+                  <h3 className="font-semibold text-black">Colors:</h3>
+                  {color.toLink ? (
+                    <div onClick={handleClick}>
+                      <div
+                        key={color.name}
+                        className="h-10 w-10 rounded-full border border-gray-600 cursor-pointer"
+                        style={{ backgroundColor: color.value }}
+                      ></div>
+                    </div>
+                  ) : (
+                    <div
+                      key={color.name}
+                      className="h-10 w-10 rounded-full border border-gray-900 relative"
+                      style={{ backgroundColor: color.value }}
+                    >
+                      {data.colors.length > 1 && (
+                        <div className="absolute inset-0 flex items-center justify-center text-gray-600 bottom-0 left-0 h-3 w-3 bg-white border border-gray-900">
+                          <Check size={24} />
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          )}
+              );
+            }
+            return null;
+          })}
         </div>
-      );
-    }
-    return null;
-  })}
-</div>
-
       </div>
 
       {/* =============================================
