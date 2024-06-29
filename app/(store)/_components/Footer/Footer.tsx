@@ -139,9 +139,13 @@ const Footer: React.FC = () => {
         <div className="flex justify-between mx-12 max-sm:flex-col gap-12 border-t-2 mt-8 p-8 border-primary items-start">
           {/* Address */}
           <div>
+            <div>
+
             <h1 className="text-white border-b-2 mb-4 border-primary">
               REGISTERED OFFICE ADDRESS
             </h1>
+            <h1 className="text-base font-bold uppercase text-white">Pleasure</h1>
+            </div>
             <p className="text-gray-200">{Address}</p>
           </div>
           {/* Support */}
