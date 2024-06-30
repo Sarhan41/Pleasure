@@ -110,7 +110,7 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
                       fill
                       src={images?.[selectedImageIndex]?.url ?? ""}
                       alt="Image"
-                      objectFit="contain"
+                      className="object-contain"
                     />
                   </div>
                 </CarouselItem>
