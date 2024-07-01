@@ -39,6 +39,7 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
   let products = await db.product.findMany({
     where: {
       categoryId: category?.id,
+      isArchived: false,
     },
     include: {
       sizes: true,
