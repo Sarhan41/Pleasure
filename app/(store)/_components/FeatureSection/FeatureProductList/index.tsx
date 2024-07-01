@@ -1,26 +1,62 @@
+"use client";
 import { Product } from "@/types";
 import NoResults from "@/components/Store/NoResults";
-import { currentUser } from "@/lib/auth";
 import FeaturedProductCard from "../FeatureProductCard";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "../../Billboards/carousel";
 
 interface FeaturedProductListProps {
   items: Product[];
+  userId: string | undefined;
 }
 
-const FeaturedProductList: React.FC<FeaturedProductListProps> = async ({ items }) => {
-  const user = await currentUser();
+export const FeaturedProductList: React.FC<FeaturedProductListProps> = ({
+  items,
+  userId,
+}) => {
+  const halfIndex = Math.ceil(items.length / 2);
+  const firstHalf = items.slice(0, halfIndex);
+  const secondHalf = items.slice(halfIndex);
 
   return items.length === 0 ? (
     <NoResults />
   ) : (
-    <div className="p-3 space-y-3">
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {items.map((item) => (
-          <FeaturedProductCard key={item.id} data={item} userId={user?.id} />
-        ))}
-      </div>
+    <div className="p-3 space-y-8">
+      <Carousel
+        opts={{ containScroll: "trimSnaps" }}
+        className="mt-8 lg:mt-16 max-w-5xl mx-auto relative"
+        autoPlayInterval={4000}
+        hideArrows
+      >
+        <CarouselContent className="flex">
+          {firstHalf.map((item, index) => (
+            <div key={item.id} className="w-full sm:w-1/2 md:w-1/3 px-2">
+              <CarouselItem>
+                <FeaturedProductCard data={item} userId={userId} />
+              </CarouselItem>
+            </div>
+          ))}
+        </CarouselContent>
+      </Carousel>
+      <Carousel
+        opts={{ containScroll: "trimSnaps" }}
+        className="mt-8 lg:mt-16 max-w-5xl mx-auto relative"
+        autoPlayInterval={4000}
+        hideArrows
+      >
+        <CarouselContent className="flex">
+          {secondHalf.map((item, index) => (
+            <div key={item.id} className="w-full sm:w-1/2 md:w-1/3 px-2">
+              <CarouselItem>
+                <FeaturedProductCard data={item} userId={userId} />
+              </CarouselItem>
+            </div>
+          ))}
+        </CarouselContent>
+      </Carousel>
     </div>
   );
 };
-
-export default FeaturedProductList;

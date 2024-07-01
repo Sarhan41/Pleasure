@@ -48,7 +48,8 @@ const Billboard: React.FC<BillboardProps> = ({ data }) => {
                 <div
                   style={{
                     backgroundImage: `url(${item.imageUrl})`,
-                    backgroundSize: "cover",
+                    backgroundSize: "contain",
+                    backgroundRepeat: "no-repeat",
                   }}
                   className="relative w-full h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[80vh] rounded-xl overflow-hidden shadow-2xl transform transition-transform duration-500 hover:scale-105 bg-center max-sm:bg-left"
                 >

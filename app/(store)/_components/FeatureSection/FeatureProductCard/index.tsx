@@ -17,7 +17,10 @@ interface FeaturedProductCardProps {
   userId?: string;
 }
 
-const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({ data, userId }) => {
+const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({
+  data,
+  userId,
+}) => {
   const [existingItem, setExistingItem] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState(data.sizes[0]);
@@ -36,7 +39,7 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({ data, userId 
     previewModal.onOpen(data, userId);
   };
 
-  const handleSizeSelect = async (size : any) => {
+  const handleSizeSelect = async (size: any) => {
     setSelectedSize(size);
     setIsModalOpen(false);
 
@@ -49,7 +52,12 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({ data, userId 
       }
 
       const foundItem = cartItems.find(
-        (item: { productId: string; userId: string; sizeName: string; color: string; }) =>
+        (item: {
+          productId: string;
+          userId: string;
+          sizeName: string;
+          color: string;
+        }) =>
           item.productId === data.id &&
           item.userId === userId &&
           item.sizeName === selectedSize?.name
@@ -87,7 +95,9 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({ data, userId 
     }
   };
 
-  const onAddToWishList: MouseEventHandler<HTMLButtonElement> = async (event) => {
+  const onAddToWishList: MouseEventHandler<HTMLButtonElement> = async (
+    event
+  ) => {
     event.stopPropagation();
     try {
       const response = await axios.get("/api/dashboard/wishlist");
@@ -129,11 +139,10 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({ data, userId 
     data.sizes[0].price,
     data.sizes[0].discountedprice
   );
-
   return (
-    <div className="relative overflow-hidden bg-white h-auto w-[260px] sm:w-[320px] group cursor-pointer rounded-2xl border border-gray-200 shadow-md p-3 space-y-2 transition-transform transform hover:scale-105">
+    <div className="relative overflow-hidden bg-white w-full sm:w-80 group cursor-pointer rounded-2xl border border-gray-200 shadow-lg p-3 space-y-2 transition-transform transform hover:scale-105">
       <div
-        className="h-[280px] sm:h-[320px] w-full rounded-lg bg-gray-100 relative overflow-hidden"
+        className="h-72 sm:h-80 w-full rounded-lg bg-gray-100 relative overflow-hidden"
         onClick={handleClick}
       >
         {parseFloat(discountedPercentage) > 0 && (
@@ -180,8 +189,11 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({ data, userId 
         </div>
       </div>
 
-      <div className="flex flex-col items-start space-y-1" onClick={handleClick}>
-        <p className="font-semibold text-xs sm:text-xs text-gray-600">
+      <div
+        className="flex flex-col items-start space-y-1"
+        onClick={handleClick}
+      >
+        <p className="font-semibold text-sm text-gray-600">
           {data.name.includes("100")
             ? `${data.name.split("100")[0]}100%${data.name.split("100")[1]}`
             : data.name}
@@ -190,7 +202,10 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({ data, userId 
       </div>
 
       <div className="flex justify-between items-center w-full mt-auto">
-        <div className="font-semibold text-sm text-gray-900" onClick={handleClick}>
+        <div
+          className="font-semibold text-sm text-gray-900"
+          onClick={handleClick}
+        >
           ₹
           {selectedSize.discountedprice ? (
             <>
@@ -205,7 +220,7 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({ data, userId 
         </div>
         <Button
           onClick={() => setIsModalOpen(true)}
-          className="rounded-full bg-blue-600 transition hover:bg-primary"
+          className="rounded-full bg-blue-600 text-white px-4 py-2 transition hover:bg-blue-500"
         >
           Add To Cart
         </Button>
