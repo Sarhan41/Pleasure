@@ -17,9 +17,9 @@ export const RelatedProductList: React.FC<RelatedProductListProps> = ({
   items,
   userId,
 }) => {
-  const halfIndex = Math.ceil(items.length / 2);
-  const firstHalf = items.slice(0, halfIndex);
-  const secondHalf = items.slice(halfIndex);
+  // const halfIndex = Math.ceil(items.length / 2);
+  // const firstHalf = items.slice(0, halfIndex);
+  // const secondHalf = items.slice(halfIndex);
 
   return items.length === 0 ? (
     <NoResults />
@@ -36,7 +36,7 @@ export const RelatedProductList: React.FC<RelatedProductListProps> = ({
           hideArrows
         >
           <CarouselContent className="flex">
-            {firstHalf.map((item, index) => (
+            {items.map((item, index) => (
               <div key={item.id} className="w-full sm:w-1/2 md:w-1/3 px-2">
                 <CarouselItem>
                   <FeaturedProductCard data={item} userId={userId} />
@@ -45,7 +45,7 @@ export const RelatedProductList: React.FC<RelatedProductListProps> = ({
             ))}
           </CarouselContent>
         </Carousel>
-        <Carousel
+        {/* <Carousel
           opts={{ containScroll: "trimSnaps" }}
           className="mt-8 lg:mt-16 max-w-5xl mx-auto relative"
           autoPlayInterval={4000}
@@ -60,7 +60,7 @@ export const RelatedProductList: React.FC<RelatedProductListProps> = ({
               </div>
             ))}
           </CarouselContent>
-        </Carousel>
+        </Carousel> */}
       </div>
     </div>
   );
