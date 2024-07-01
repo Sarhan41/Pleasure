@@ -29,8 +29,7 @@ const BestSellerBillboard: React.FC<BestSellerBillboardProps> = ({
             src={data.imageUrl}
             alt={data.name}
             fill
-            objectFit="cover"
-            className="rounded-3xl shadow-lg transform transition-transform duration-500 hover:scale-105"
+            className="rounded-3xl objext-cover shadow-lg transform transition-transform duration-500 hover:scale-105"
           />
         </Link>
       </div>

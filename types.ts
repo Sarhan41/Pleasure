@@ -39,6 +39,7 @@ export interface Product {
   images: Image[];
   sizes: Size[];
   colors: Color[];
+  isNew: boolean;
 }
 
 export interface OrderItem {
