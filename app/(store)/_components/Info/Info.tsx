@@ -190,6 +190,8 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
     setIsSharePopupOpen2(false);
   };
 
+  const sizeSku = selectedSize?.SKUvalue;
+
   return (
     <div>
       {/* =============================================
@@ -234,7 +236,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5 }}
-                      className="text-gray-500 text-base line-through mr-2"
+                      className="text-gray-500 text-lg line-through mr-2"
                     >
                       ₹{data.sizes[0].price}
                     </MotionSpan>
@@ -250,7 +252,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 1 }}
-                      className="ml-2 text-primary text-lg"
+                      className="ml-2 text-pink-700 text-lg"
                     >
                       (
                       {calculateDiscountPercentage(
@@ -259,6 +261,16 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                       )}
                       % OFF)
                     </MotionSpan>
+                    {data.name.toLowerCase().includes("pack of") && (
+                      <MotionSpan
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 1.5 }}
+                        className="ml-2 text-sm text-gray-600 uppercase"
+                      >
+                        {data.name.match(/pack of \d+/i)}
+                      </MotionSpan>
+                    )}
                   </>
                 ) : (
                   <MotionSpan
@@ -278,7 +290,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5 }}
-                      className="text-gray-500 text-base line-through mr-2"
+                      className="text-gray-500 text-lg line-through mr-2"
                     >
                       ₹{selectedSize.price}
                     </MotionSpan>
@@ -294,7 +306,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 1 }}
-                      className="ml-2 text-lg text-primary"
+                      className="ml-2 text-lg text-pink-700"
                     >
                       (
                       {calculateDiscountPercentage(
@@ -303,6 +315,16 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                       )}
                       % OFF)
                     </MotionSpan>
+                    {data.name.toLowerCase().includes("pack of") && (
+                      <MotionSpan
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 1.5 }}
+                        className="ml-2 text-sm text-gray-600 uppercase"
+                      >
+                        {data.name.match(/pack of \d+/i)}
+                      </MotionSpan>
+                    )}
                   </>
                 ) : (
                   <MotionSpan
@@ -322,12 +344,6 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             SKUValue
             =================================================================
          */}
-        {selectedSize && (
-          <span className="text-base text-gray-900 flex gap-2">
-            SKU:
-            <h4>{selectedSize?.SKUvalue}</h4>
-          </span>
-        )}
       </div>
 
       <div className="flex flex-col my-4 gap-y-4">
@@ -547,7 +563,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         <h3 className="font-bold text-black border-b-2 border-primary w-fit p-2 mb-4">
           Description
         </h3>
-        <Description data={data.description} />
+        <Description data={data.description} SKU={sizeSku} />
       </div>
       {/* 
           // ! Reviews Divs Will Be Added Here
