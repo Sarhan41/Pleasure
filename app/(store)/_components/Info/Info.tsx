@@ -253,7 +253,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           =============================================
       */}
         <div className="font-medium bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-400 p-4 rounded-lg">
-          <p className="text-xl md:text-2xl text-gray-900 flex items-center">
+          <div className="text-xl md:text-2xl text-gray-900 flex items-center">
             {!selectedSize ? (
               data.sizes[0].discountedprice ? (
                 <div className="flex flex-col md:flex-row items-start md:items-center">
@@ -367,7 +367,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                 ₹{selectedSize.price}
               </MotionSpan>
             )}
-          </p>
+          </div>
         </div>
 
         {/* =================================================================
