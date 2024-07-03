@@ -216,6 +216,8 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
 
   const sizeSku = selectedSize?.SKUvalue;
 
+  // Extracted PriceDisplay component
+
   return (
     <div>
       {/* =============================================
@@ -236,7 +238,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         Name Of The Product
          =============================================
       */}
-      <h1 className="text-3xl font-bold text-gray-900 border-b-2 pb-4">
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-900 border-b-2 pb-4">
         {data.name.includes("100")
           ? `${data.name.split("100")[0]}100%${data.name.split("100")[1]}`
           : data.name}
@@ -250,17 +252,17 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             Price
           =============================================
       */}
-        <div className="font-medium">
-          <p className="text-2xl text-gray-900 flex items-center">
+        <div className="font-medium bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-400 p-4 rounded-lg">
+          <p className="text-xl md:text-2xl text-gray-900 flex items-center">
             {!selectedSize ? (
-              <>
-                {data.sizes[0].discountedprice ? (
-                  <>
+              data.sizes[0].discountedprice ? (
+                <div className="flex flex-col md:flex-row items-start md:items-center">
+                  <div className="flex items-center">
                     <MotionSpan
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5 }}
-                      className="text-gray-500 text-lg line-through mr-2"
+                      className="text-gray-500 text-sm md:text-lg line-through mr-2"
                     >
                       ₹{data.sizes[0].price}
                     </MotionSpan>
@@ -268,15 +270,17 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 0.5 }}
-                      className="text-black ml-1 text-3xl"
+                      className="text-black ml-1 text-xl md:text-3xl"
                     >
                       ₹{data.sizes[0].discountedprice}
                     </MotionSpan>
+                  </div>
+                  <div className="flex items-center md:ml-2 md:mt-0 mt-2">
                     <MotionSpan
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 1 }}
-                      className="ml-2 text-pink-700 text-lg"
+                      className="md:ml-2 text-sm md:text-lg text-pink-700"
                     >
                       (
                       {calculateDiscountPercentage(
@@ -290,76 +294,78 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 1.5 }}
-                        className="ml-2 text-sm text-gray-600 uppercase"
+                        className="ml-2 text-xs md:text-sm text-gray-600 uppercase"
                       >
                         {data.name.match(/pack of \d+/i)}
                       </MotionSpan>
                     )}
-                  </>
-                ) : (
+                  </div>
+                </div>
+              ) : (
+                <MotionSpan
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="text-gray-500 text-sm md:text-lg line-through mr-2"
+                >
+                  ₹{data.sizes[0].price}
+                </MotionSpan>
+              )
+            ) : data.sizes[0].discountedprice ? (
+              <div className="flex flex-col md:flex-row items-start md:items-center">
+                <div className="flex items-center">
                   <MotionSpan
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                  >
-                    ₹{data.sizes[0].price}
-                  </MotionSpan>
-                )}
-              </>
-            ) : (
-              <>
-                {selectedSize.discountedprice ? (
-                  <>
-                    <MotionSpan
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5 }}
-                      className="text-gray-500 text-lg line-through mr-2"
-                    >
-                      ₹{selectedSize.price}
-                    </MotionSpan>
-                    <MotionSpan
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.5 }}
-                      className="text-3xl"
-                    >
-                      ₹{selectedSize.discountedprice}
-                    </MotionSpan>
-                    <MotionSpan
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 1 }}
-                      className="ml-2 text-lg text-pink-700"
-                    >
-                      (
-                      {calculateDiscountPercentage(
-                        selectedSize.price,
-                        selectedSize.discountedprice
-                      )}
-                      % OFF)
-                    </MotionSpan>
-                    {data.name.toLowerCase().includes("pack of") && (
-                      <MotionSpan
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 1.5 }}
-                        className="ml-2 text-sm text-gray-600 uppercase"
-                      >
-                        {data.name.match(/pack of \d+/i)}
-                      </MotionSpan>
-                    )}
-                  </>
-                ) : (
-                  <MotionSpan
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
+                    className="text-gray-500 text-sm md:text-lg line-through mr-2"
                   >
                     ₹{selectedSize.price}
                   </MotionSpan>
-                )}
-              </>
+                  <MotionSpan
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.5 }}
+                    className="text-black ml-1 text-xl md:text-3xl"
+                  >
+                    ₹{selectedSize.discountedprice}
+                  </MotionSpan>
+                </div>
+                <div className="flex items-center md:ml-2 md:mt-0 mt-2">
+                  <MotionSpan
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 1 }}
+                    className="md:ml-2 text-sm md:text-lg text-pink-700"
+                  >
+                    (
+                    {calculateDiscountPercentage(
+                      selectedSize.price,
+                      selectedSize.discountedprice
+                    )}
+                    % OFF)
+                  </MotionSpan>
+                  {data.name.toLowerCase().includes("pack of") && (
+                    <MotionSpan
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 1.5 }}
+                      className="ml-2 text-xs md:text-sm text-gray-600 uppercase"
+                    >
+                      {data.name.match(/pack of \d+/i)}
+                    </MotionSpan>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <MotionSpan
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-gray-500 text-sm md:text-lg line-through mr-2"
+              >
+                ₹{selectedSize.price}
+              </MotionSpan>
             )}
           </p>
         </div>
@@ -378,7 +384,11 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         */}
 
         <div className="flex gap-4 flex-col">
-          <h3 className="font-semibold text-black"> Available sizes:</h3>
+          <h3 className="font-semibold text-base md:text-lg text-black">
+            {" "}
+            Available sizes:
+          </h3>
+
           <div className="flex gap-4">
             {data?.sizes
               ?.sort((a, b) =>
@@ -388,9 +398,9 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                 <div key={size.name} className="flex flex-col relative">
                   <span
                     key={size.name}
-                    className={`text-black ${
+                    className={`text-xs md:text-base text-black ${
                       selectedSize !== size && "hover:bg-primary"
-                    } hover:text-white hover:cursor-pointer font-semibold border-2 border-gray-500 rounded-md p-2 ${
+                    } hover:text-white hover:cursor-pointer font-semibold border-2 border-gray-500 rounded-md p-1 md:p-2 ${
                       selectedSize === size ? "bg-gray-600 text-white" : ""
                     } ${sizeError && "border-red-700"} ${
                       Number(size.quantity) === 0
@@ -445,7 +455,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         <div>
           <h3
             onClick={handleSizeChartOpen}
-            className="font-semibold text-primary cursor-pointer w-fit hover:underline"
+            className="font-semibold text-sm md:text-base text-primary cursor-pointer w-fit hover:underline"
           >
             Size Chart
           </h3>
@@ -470,15 +480,19 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         */}
 
         <div className="flex flex-col gap-x-4">
-          <h3 className="font-semibold text-black">Qty:</h3>
-          <div className="flex items-center border border-gray-300 rounded-md w-fit p-2">
+          <h3 className="font-semibold text-base md:text-lg text-black">
+            Qty:
+          </h3>
+
+          <div className="flex items-center border border-gray-300 rounded-md w-fit p-1 md:p-2">
             <button
               onClick={decrementQuantity}
               className="flex justify-center items-center w-8 h-8 rounded-md bg-gray-100 hover:bg-gray-200 focus:outline-none"
             >
               <MinusIcon className="h-4 w-4" />
             </button>
-            <span className="mx-4">{quantity}</span>
+            <span className="mx-2 md:mx-4">{quantity}</span>
+
             <button
               onClick={incrementQuantity}
               className="flex justify-center items-center w-8 h-8 rounded-md bg-gray-100 hover:bg-gray-200 focus:outline-none"
@@ -488,76 +502,75 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           </div>
         </div>
 
-        {/* =============================================
-            Div For Colors
-            =============================================
-        */}
-
-        <div className="flex items-center gap-x-4">
-          <div className="flex flex-col gap-x-4">
-            {data?.colors?.some((color) => color.value !== "#111") && (
-              <h3 className="font-semibold text-black">Colors:</h3>
-            )}
-            <div className="flex gap-x-4 mt-2">
-              {data?.colors?.map((color) => {
-                const handleClick = () => {
-                  if (color.toLink) {
-                    const productName = color.toLink?.replace(/ /g, "-");
-                    router.push(`/product/${productName}`);
-                  }
-                  handleColorSelection(color.value);
-                };
-                if (color.value !== "#111") {
-                  return (
-                    <div key={color.name} onClick={handleClick}>
-                      <div
-                        key={color.name}
-                        className={`h-8 w-8 rounded-full border border-gray-900 relative`}
-                        style={{ backgroundColor: color.value }}
-                      >
-                        {selectedColors.includes(color.value) && (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <svg
-                              className="w-4 h-4 text-white"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
+        {/* Colors */}
+        <div className="mt-6 flex flex-col gap-y-4">
+          {data?.colors?.some((color) => color.value !== "#111") && (
+            <h3 className="font-semibold text-base md:text-lg text-black">
+              Colors:
+            </h3>
+          )}
+          <div className="flex flex-row gap-x-4 mt-2">
+            {data?.colors?.map((color) => {
+              const handleClick = () => {
+                if (color.toLink) {
+                  const productName = color.toLink?.replace(/ /g, "-");
+                  router.push(`/product/${productName}`);
                 }
-                return null;
-              })}
-            </div>
+                handleColorSelection(color.value);
+              };
+              if (color.value !== "#111") {
+                return (
+                  <div key={color.name} onClick={handleClick}>
+                    <div
+                      className="h-6 w-6 md:h-8 md:w-8 rounded-full border border-gray-900 relative"
+                      style={{ backgroundColor: color.value }}
+                    >
+                      {selectedColors.includes(color.value) && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <svg
+                            className="w-4 h-4 text-gray-400"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              }
+              return null;
+            })}
           </div>
         </div>
 
-        {/* New section for displaying selected colors */}
+        {/* Selected Colors */}
         {selectedColors.length > 0 && (
-          <div className="mt-4">
-            <h3 className="font-semibold text-black">Selected Colors:</h3>
-            <div className="flex gap-2 flex-wrap mt-2">
+          <div className="mt-4 flex flex-col gap-y-4">
+            <h3 className="font-semibold text-base md:text-lg text-black">
+              Selected Colors:
+            </h3>
+
+            <div className="flex flex-row gap-x-2 flex-wrap mt-2">
               {selectedColors.map((color, index) => (
                 <div key={index} className="relative">
                   <div
-                    className="h-8 w-8 rounded-full border border-gray-900"
+                    className="h-6 w-6 md:h-8 md:w-8 rounded-full border border-gray-900"
                     style={{ backgroundColor: color }}
                   />
+
                   <span
                     onClick={() => {
                       const newSelectedColors = [...selectedColors];
                       newSelectedColors.splice(index, 1);
                       setSelectedColors(newSelectedColors);
                     }}
-                    className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full cursor-pointer"
+                    className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full cursor-pointer text-xs md:text-sm"
                   >
                     &times;
                   </span>
@@ -572,7 +585,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           Div For Add To Cart And Add To Wishlist and Share 1
           =============================================
        */}
-      <div className="mt-4 flex items-center gap-x-3 relative">
+      <div className="flex items-center mt-6 gap-x-3 relative">
         <div className="border-primary border-2 rounded-full">
           <IconButton
             onClick={handleShareButtonClick1}
@@ -606,7 +619,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         <div>
           <Button
             onClick={onAddToCart}
-            className="flex items-center gap-x-2 w-60"
+            className="flex items-center gap-x-2 w-40 md:w-60"
           >
             Add To Cart
           </Button>
@@ -619,7 +632,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
       */}
 
       <div className="mt-8">
-        <h3 className="font-bold text-black border-b-2 border-primary w-fit p-2 mb-4">
+        <h3 className="font-bold text-lg md:text-xl text-black border-b-2 border-primary w-fit p-2 mb-4">
           Description
         </h3>
         <Description description={data.description} SKU={sizeSku} />
