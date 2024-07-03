@@ -5,6 +5,8 @@ export interface OrderItem {
   quantity: number;
   price: number;
   imageUrl: string;
+  color: string | null;
+  sizeSKU: string | null;
 }
 
 export interface OrderColumn {

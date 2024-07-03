@@ -31,7 +31,8 @@ const fetchOrders = async () => {
     items: order.orderItems.map((item) => ({
       productName: item.product.name,
       size: item.size,
-      SUK: item.sizeSKU,
+      color: item.color, // Add the missing 'color' property
+      sizeSKU: item.sizeSKU,
       quantity: item.quantity,
       price: item.price,
       imageUrl: item.product.images[0]?.url || "",

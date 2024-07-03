@@ -134,6 +134,21 @@ export function DataTable<TData extends OrderColumn>({
                             Size: {item.size}
                           </p>
                           <p className="text-sm text-gray-500">
+                            SizeSKU: {item.sizeSKU}
+                          </p>
+                          {item.color && (
+                            <div>
+                              <p className="text-sm text-gray-500">
+                                Color: {item.color}
+                              </p>
+                              <span
+                                style={{ backgroundColor: item.color }}
+                                className="block h-4 w-4 rounded-sm border border-gray-600 mt-1"
+                              />
+                            </div>
+                          )}
+
+                          <p className="text-sm text-gray-500">
                             Quantity: {item.quantity}
                           </p>
                           <p className="text-sm text-gray-500">

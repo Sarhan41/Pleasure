@@ -38,17 +38,35 @@ interface InfoProps {
 
 const Info: React.FC<InfoProps> = ({ data, userId }) => {
   const [selectedSize, setSelectedSize] = useState<Size | null>(null);
-  const [selectedColor, setSelectedColor] = useState<string | null>(
-    data.colors[0].name
-  );
+
+  const packMatch = data.name.match(/\(pack of (\d+)\)/i);
+  const maxSelectableColors = packMatch ? parseInt(packMatch[1], 10) : 1;
+
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+
   const [quantity, setQuantity] = useState(1);
+
   const [sizeError, setSizeError] = useState(false);
+
   const [isSizeChartOpen, setIsSizeChartOpen] = useState(false);
+
   const [isSharePopupOpen1, setIsSharePopupOpen1] = useState(false);
+
   const [isSharePopupOpen2, setIsSharePopupOpen2] = useState(false);
+
   const router = useRouter();
 
   const categoryName = data.category.name;
+
+  const handleColorSelection = (colorValue: string) => {
+    if (selectedColors.length < maxSelectableColors) {
+      setSelectedColors([...selectedColors, colorValue]);
+    } else {
+      toast.error(
+        `You can select up to ${maxSelectableColors} colors for this Product.`
+      );
+    }
+  };
 
   const onAddToCart: MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.stopPropagation();
@@ -60,45 +78,51 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         return toast.error("Please login to add to cart");
       }
 
-      const foundItem = cartItems.find(
-        (item: {
-          productId: string;
-          userId: string;
-          sizeName: string;
-          color: string;
-        }) =>
-          item.productId === data.id &&
-          item.userId === userId &&
-          item.sizeName === selectedSize?.name &&
-          item.color === selectedColor
-      );
-
       if (selectedSize === null) {
         toast.error("Please select a size");
         setSizeError(true);
         return;
       }
 
-      if (!foundItem) {
-        await axios.post("/api/dashboard/cartItems", {
-          id: data.id,
-          quantity: quantity,
-          userId,
-          sizeName: selectedSize?.name,
-          price: selectedSize?.price,
-          color: selectedColor,
-          SKUvalue: selectedSize?.SKUvalue,
-          discountedPrice: selectedSize?.discountedprice,
-          category: data.category?.name,
-        });
-        toast.success("Added to cart");
-      } else {
-        const cartId = foundItem.id;
-        await axios.patch(`/api/dashboard/cartItems/${cartId}`, {
-          quantity: foundItem.quantity + quantity,
-        });
-        toast.success("Item's quantity increased in cart");
+      if (selectedColors.length === 0) {
+        toast.error("Please select at least one color");
+        return;
       }
+
+      for (const color of selectedColors) {
+        const foundItem = cartItems.find(
+          (item: {
+            productId: string;
+            userId: string;
+            sizeName: string;
+            color: string;
+          }) =>
+            item.productId === data.id &&
+            item.userId === userId &&
+            item.sizeName === selectedSize?.name &&
+            item.color === color
+        );
+
+        if (!foundItem) {
+          await axios.post("/api/dashboard/cartItems", {
+            id: data.id,
+            quantity: quantity,
+            userId,
+            sizeName: selectedSize?.name,
+            price: selectedSize?.price,
+            color: color,
+            SKUvalue: selectedSize?.SKUvalue,
+            discountedPrice: selectedSize?.discountedprice,
+            category: data.category?.name,
+          });
+        } else {
+          const cartId = foundItem.id;
+          await axios.patch(`/api/dashboard/cartItems/${cartId}`, {
+            quantity: foundItem.quantity + quantity,
+          });
+        }
+      }
+      toast.success("Added to cart");
     } catch (error) {
       console.log(error);
       toast.error("Error adding to cart");
@@ -428,7 +452,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           <Dialog open={isSizeChartOpen} onOpenChange={handleSizeChartClose}>
             <DialogOverlay className="absolute inset-0 flex items-center min-h-screen min-w-screen justify-center bg-black opacity-50">
               <DialogContent className="absolute transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg">
-                <SizeChart categoryName={data.category.name} />
+                <SizeChart categoryName={categoryName} />
                 <DialogClose asChild>
                   <button className="absolute top-4 right-4">
                     <Cross2Icon className="h-4 w-4" />
@@ -470,43 +494,78 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         */}
 
         <div className="flex items-center gap-x-4">
-          {data?.colors?.map((color) => {
-            const handleClick = () => {
-              const productName = color.toLink?.replace(/ /g, "-");
-              router.push(`/product/${productName}`);
-              setSelectedColor(color?.value);
-            };
-            if (color.value !== "#111") {
-              return (
-                <div key={color.name}>
-                  <h3 className="font-semibold text-black">Colors:</h3>
-                  {color.toLink ? (
-                    <div onClick={handleClick}>
+          <div className="flex flex-col gap-x-4">
+            {data?.colors?.some((color) => color.value !== "#111") && (
+              <h3 className="font-semibold text-black">Colors:</h3>
+            )}
+            <div className="flex gap-x-4 mt-2">
+              {data?.colors?.map((color) => {
+                const handleClick = () => {
+                  if (color.toLink) {
+                    const productName = color.toLink?.replace(/ /g, "-");
+                    router.push(`/product/${productName}`);
+                  }
+                  handleColorSelection(color.value);
+                };
+                if (color.value !== "#111") {
+                  return (
+                    <div key={color.name} onClick={handleClick}>
                       <div
                         key={color.name}
-                        className="h-10 w-10 rounded-full border border-gray-600 cursor-pointer"
+                        className={`h-8 w-8 rounded-full border border-gray-900 relative`}
                         style={{ backgroundColor: color.value }}
-                      ></div>
+                      >
+                        {selectedColors.includes(color.value) && (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <svg
+                              className="w-4 h-4 text-white"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  ) : (
-                    <div
-                      key={color.name}
-                      className="h-10 w-10 rounded-full border border-gray-900 relative"
-                      style={{ backgroundColor: color.value }}
-                    >
-                      {data.colors.length > 1 && (
-                        <div className="absolute inset-0 flex items-center justify-center text-gray-600 bottom-0 left-0 h-3 w-3 bg-white border border-gray-900">
-                          <Check size={24} />
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              );
-            }
-            return null;
-          })}
+                  );
+                }
+                return null;
+              })}
+            </div>
+          </div>
         </div>
+
+        {/* New section for displaying selected colors */}
+        {selectedColors.length > 0 && (
+          <div className="mt-4">
+            <h3 className="font-semibold text-black">Selected Colors:</h3>
+            <div className="flex gap-2 flex-wrap mt-2">
+              {selectedColors.map((color, index) => (
+                <div key={index} className="relative">
+                  <div
+                    className="h-8 w-8 rounded-full border border-gray-900"
+                    style={{ backgroundColor: color }}
+                  />
+                  <span
+                    onClick={() => {
+                      const newSelectedColors = [...selectedColors];
+                      newSelectedColors.splice(index, 1);
+                      setSelectedColors(newSelectedColors);
+                    }}
+                    className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full cursor-pointer"
+                  >
+                    &times;
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* =============================================
@@ -563,7 +622,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         <h3 className="font-bold text-black border-b-2 border-primary w-fit p-2 mb-4">
           Description
         </h3>
-        <Description data={data.description} SKU={sizeSku} />
+        <Description description={data.description} SKU={sizeSku} />
       </div>
       {/* 
           // ! Reviews Divs Will Be Added Here

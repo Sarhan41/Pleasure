@@ -123,19 +123,19 @@ model TwoFactorConfirmation {
 }
 
 model Category {
-  id        String    @id @default(uuid())
-  products  Product[] @relation("CategoryToProduct")
-  imageUrl  String
-  name      String
-  title     String?
+  id          String    @id @default(uuid())
+  products    Product[] @relation("CategoryToProduct")
+  imageUrl    String
+  name        String
+  title       String?
   description String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Billboard {
   id        String   @id @default(uuid())
-  name     String
+  name      String
   imageUrl  String
   title     String?
   subtitle  String?
@@ -227,12 +227,26 @@ model CartItems {
   sizeName        String
   price           String
   discountedPrice String?
-  color           String?
+  color           CartColor[]
   SKUvalue        String
+
 
   @@index([userId])
   @@index([productId])
 }
+
+model CartColor {
+  id        String  @id @default(uuid())
+  cartItemId String
+  cartItem   CartItems @relation(fields: [cartItemId], references: [id])
+  value     String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([cartItemId])
+}
+
 
 model Order {
   id         String      @id @default(uuid())
@@ -256,12 +270,62 @@ model OrderItem {
   quantity  Int
   size      String
   sizeSKU   String
-  color     String?
+  color     OrderIemColor[]
   orderId   String
   order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   productId String
   product   Product @relation(fields: [productId], references: [id])
+  
 
   @@index([orderId])
   @@index([productId])
+
+}
+
+model OrderIemColor {
+  id        String  @id @default(uuid())
+  orderItemId String
+  orderItem   OrderItem @relation(fields: [orderItemId], references: [id])
+  value      String
+  name       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([orderItemId])
+
+}
+
+
+model Blog {
+  id      String  @id @default(uuid())
+  title   String
+  content String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  smallImagesBlog smallImagesBlog[]
+  ImagesBlog      ImagesBlog[]
+}
+
+model smallImagesBlog {
+  id        String   @id @default(uuid())
+  blogId    String
+  blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  imageUrl  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([blogId])
+}
+
+model ImagesBlog {
+  id        String   @id @default(uuid())
+  blogId    String
+  blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  imageUrl  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([blogId])
 }

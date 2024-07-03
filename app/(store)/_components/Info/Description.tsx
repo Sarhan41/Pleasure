@@ -1,18 +1,18 @@
 import React from "react";
 
 const Description = ({
-  data,
+  description,
   SKU,
 }: {
-  data: string | undefined | null;
+  description: string | undefined | null;
   SKU: string | undefined | null;
 }) => {
-  if (!data) {
+  if (!description) {
     return <p>No description available.</p>;
   }
 
   // Split the data into individual specifications
-  const specifications = data
+  const specifications = description
     .split("   ")
     .map((spec) => spec.trim())
     .filter((spec) => spec);
