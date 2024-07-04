@@ -2,10 +2,7 @@ import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: { cartId: string } }
-) {
+export async function PATCH(req: Request, { params }: { params: { cartId: string } }) {
   try {
     const user = await currentUser();
 
@@ -13,42 +10,47 @@ export async function DELETE(
       return new NextResponse("Unauthenticated", { status: 401 });
     }
 
-    const userId = user.id;
+    const body = await req.json();
+    const { quantity } = body;
 
     if (!params.cartId) {
       return new NextResponse("Cart item ID is required", { status: 400 });
+    }
+
+    if (!quantity || quantity <= 0) {
+      return new NextResponse("Valid quantity is required", { status: 400 });
     }
 
     const cartItem = await db.cartItems.findUnique({
       where: {
         id: params.cartId,
       },
+      include: {
+        color: true,
+      },
     });
 
-    if (!cartItem || cartItem.userId !== userId) {
+    if (!cartItem || cartItem.userId !== user.id) {
       return new NextResponse("Cart item not found or unauthorized", {
         status: 404,
       });
     }
 
-    // Delete related entries in CartColor table
-    await db.cartColor.deleteMany({
-      where: {
-        cartItemId: params.cartId,
-      },
-    });
-
-    await db.cartItems.delete({
+    const updatedCartItem = await db.cartItems.update({
       where: {
         id: params.cartId,
       },
+      data: {
+        quantity: quantity,
+      },
+      include: {
+        color: true,
+      },
     });
 
-    return new NextResponse("Cart item deleted successfully", { status: 200 });
+    return NextResponse.json(updatedCartItem);
   } catch (error) {
-    console.log("[CART_ITEM_DELETE]", error);
+    console.error("[CART_ITEM_UPDATE]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
-
-
