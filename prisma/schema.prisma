@@ -217,36 +217,34 @@ model Wishlist {
 }
 
 model CartItems {
-  id              String  @id @default(uuid())
+  id              String      @id @default(uuid())
   userId          String
-  user            User    @relation(fields: [userId], references: [id])
+  user            User        @relation(fields: [userId], references: [id])
   category        String
   productId       String
-  product         Product @relation(fields: [productId], references: [id])
-  quantity        Int     @default(1)
+  product         Product     @relation(fields: [productId], references: [id])
+  quantity        Int         @default(1)
   sizeName        String
   price           String
   discountedPrice String?
   color           CartColor[]
   SKUvalue        String
 
-
   @@index([userId])
   @@index([productId])
 }
 
 model CartColor {
-  id        String  @id @default(uuid())
+  id         String    @id @default(uuid())
   cartItemId String
-  cartItem   CartItems @relation(fields: [cartItemId], references: [id])
-  value     String
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  cartItem   CartItems @relation(fields: [cartItemId], references: [id], onDelete: Cascade)
+  value      String
+  name       String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 
   @@index([cartItemId])
 }
-
 
 model Order {
   id         String      @id @default(uuid())
@@ -264,7 +262,7 @@ model Order {
 }
 
 model OrderItem {
-  id        String  @id @default(uuid())
+  id        String          @id @default(uuid())
   name      String
   price     Int
   quantity  Int
@@ -272,29 +270,25 @@ model OrderItem {
   sizeSKU   String
   color     OrderIemColor[]
   orderId   String
-  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  order     Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
   productId String
-  product   Product @relation(fields: [productId], references: [id])
-  
+  product   Product         @relation(fields: [productId], references: [id])
 
   @@index([orderId])
   @@index([productId])
-
 }
 
 model OrderIemColor {
-  id        String  @id @default(uuid())
+  id          String    @id @default(uuid())
   orderItemId String
   orderItem   OrderItem @relation(fields: [orderItemId], references: [id])
-  value      String
-  name       String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  value       String
+  name        String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@index([orderItemId])
-
 }
-
 
 model Blog {
   id      String  @id @default(uuid())
