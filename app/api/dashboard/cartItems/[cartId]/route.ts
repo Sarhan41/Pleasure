@@ -19,36 +19,53 @@ export async function DELETE(
       return new NextResponse("Cart item ID is required", { status: 400 });
     }
 
-    const cartItem = await db.cartItems.findUnique({
+    const cartItem = await db.cartItems.delete({
       where: {
+        userId: userId,
         id: params.cartId,
       },
     });
 
-    if (!cartItem || cartItem.userId !== userId) {
-      return new NextResponse("Cart item not found or unauthorized", {
-        status: 404,
-      });
-    }
-
-    // Delete related entries in CartColor table
-    await db.cartColor.deleteMany({
-      where: {
-        cartItemId: params.cartId,
-      },
-    });
-
-    await db.cartItems.delete({
-      where: {
-        id: params.cartId,
-      },
-    });
-
-    return new NextResponse("Cart item deleted successfully", { status: 200 });
+    return NextResponse.json(cartItem);
   } catch (error) {
     console.log("[CART_ITEM_DELETE]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
 
+export async function PATCH(
+  req: Request,
+  { params }: { params: { cartId: string } }
+) {
+  try {
+    const user = await currentUser();
+    const body = await req.json();
 
+    if (!user) {
+      return new NextResponse("Unauthenticated", { status: 401 });
+    }
+
+    const userId = user.id;
+
+    if (!params.cartId) {
+      return new NextResponse("Cart item ID is required", { status: 400 });
+    }
+
+    const { quantity } = body; // Assuming quantity is sent in the request body
+
+    const updatedCartItem = await db.cartItems.update({
+      where: {
+        userId: userId,
+        id: params.cartId,
+      },
+      data: {
+        quantity: quantity, // Update quantity here
+      },
+    });
+
+    return NextResponse.json(updatedCartItem);
+  } catch (error) {
+    console.error("[CART_ITEM_UPDATE]", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}

@@ -68,143 +68,61 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
     }
   };
 
-  const handleAddToCartPackOf: MouseEventHandler<HTMLButtonElement> = async (
-    event
-  ) => {
-    event.stopPropagation();
-    try {
-      const response = await axios.get("/api/dashboard/cartItems/addPack");
-      const cartItems = response.data;
-
-      if (!userId) {
-        return toast.error("Please login to add to cart");
-      }
-
-      if (selectedSize === null) {
-        toast.error("Please select a size");
-        setSizeError(true);
-        return;
-      }
-
-      if (selectedColors.length < maxSelectableColors) {
-        toast.error(`Please select ${maxSelectableColors} colors`);
-        return;
-      }
-
-      for (const color of selectedColors) {
-        const foundItem = cartItems.find(
-          (item: {
-            id: string;
-            userId: string;
-            productId: string;
-            sizeName: string;
-            color: string;
-          }) =>
-            item.productId === data.id &&
-            item.userId === userId &&
-            item.sizeName === selectedSize?.name &&
-            item.color === color
-        );
-
-        if (!foundItem) {
-          await axios.post("/api/dashboard/cartItems", {
-            id: data.id,
-            quantity: quantity,
-            userId,
-            sizeName: selectedSize?.name,
-            price: selectedSize?.price,
-            color: [{ name: color, value: color }],
-            SKUvalue: selectedSize?.SKUvalue,
-            discountedPrice: selectedSize?.discountedprice,
-            category: data.category?.name,
-          });
-        } else {
-          const cartId = foundItem.id;
-          await axios.patch(`/api/dashboard/cartItems/${cartId}`, {
-            quantity: foundItem.quantity + quantity,
-          });
-        }
-      }
-      toast.success("Added to cart");
-    } catch (error) {
-      console.log(error);
-      toast.error("Error adding to cart");
-    }
-  };
-
-  const handleAddToCartSingle: MouseEventHandler<HTMLButtonElement> = async (event) => {
+  const onAddToCart: MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.stopPropagation();
     try {
       const response = await axios.get("/api/dashboard/cartItems");
       const cartItems = response.data;
-  
+
       if (!userId) {
         return toast.error("Please login to add to cart");
       }
-  
+
+      const foundItem = cartItems.find(
+        (item: {
+          productId: string;
+          userId: string;
+          sizeName: string;
+          color: string;
+        }) =>
+          item.productId === data.id &&
+          item.userId === userId &&
+          item.sizeName === selectedSize?.name 
+          // item.color === selectedColors
+      );
+
       if (selectedSize === null) {
         toast.error("Please select a size");
         setSizeError(true);
         return;
       }
-  
-      if (selectedColors.length === 0) {
-        toast.error("Please select at least one color");
-        return;
-      }
-  
-      const foundItem = cartItems.find(
-        (item: {
-          id: string;
-          userId: string;
-          productId: string;
-          sizeName: string;
-          color: { value: string }[];
-        }) =>
-          item.productId === data.id &&
-          item.userId === userId &&
-          item.sizeName === selectedSize?.name &&
-          selectedColors.every((color) => item.color.some((c) => c.value === color))
-      );
-  
+
       if (!foundItem) {
-        await axios.post("/api/dashboard/cartItems/addSingle", {
+        await axios.post("/api/dashboard/cartItems", {
           id: data.id,
           quantity: quantity,
           userId,
           sizeName: selectedSize?.name,
           price: selectedSize?.price,
-          color: selectedColors.map((color) => ({ name: color, value: color })),
+          // color: selectedColor,
           SKUvalue: selectedSize?.SKUvalue,
           discountedPrice: selectedSize?.discountedprice,
           category: data.category?.name,
         });
+        toast.success("Added to cart");
       } else {
         const cartId = foundItem.id;
-        await axios.patch(`/api/dashboard/cartItems/addSingle/${cartId}`, {
+        await axios.patch(`/api/dashboard/cartItems/${cartId}`, {
           quantity: foundItem.quantity + quantity,
         });
+        toast.success("Item's quantity increased in cart");
       }
-  
-      toast.success("Added to cart");
     } catch (error) {
       console.log(error);
       toast.error("Error adding to cart");
     }
   };
-  
-  
-  const onAddToCart: MouseEventHandler<HTMLButtonElement> = (event) => {
-    const requiresMultipleColors = data.name
-      .toLowerCase()
-      .match(/\(pack of (\d+)\)/i);
 
-    if (requiresMultipleColors) {
-      handleAddToCartPackOf(event);
-    } else {
-      handleAddToCartSingle(event);
-    }
-  };
 
   const handleSizeSelection = (size: Size) => {
     setSelectedSize(size);
