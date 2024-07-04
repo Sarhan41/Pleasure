@@ -178,7 +178,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           fill
-          className="object-cover rounded-lg transition-transform transform group-hover:scale-105"
+          className={`" ${
+            data.category.name == "Sport Bra"
+              ? "object-contain w-full bg-white"
+              : "object-cover"
+          } rounded-lg transition-transform transform group-hover:scale-105"`}
         />
         <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute w-full px-4 bottom-4">
           <div className="flex gap-4 justify-center">

@@ -169,7 +169,11 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           fill
-          className="object-cover rounded-lg transition-transform transform group-hover:scale-105"
+          className={`" ${
+            data.category.name == "Sport Bra"
+              ? "object-contain w-full bg-white"
+              : "object-cover"
+          } rounded-lg transition-transform transform group-hover:scale-105"`}
         />
         <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute w-full px-4 bottom-4">
           <div className="flex gap-4 justify-center">
@@ -198,7 +202,7 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({
             ? `${data.name.split("100")[0]}100%${data.name.split("100")[1]}`
             : data.name}
         </p>
-        <p className="text-xs text-gray-500">{data.category?.name}</p>
+        <p className="text-xs text-blue-600">{data.category?.name}</p>
       </div>
 
       <div className="flex justify-between items-center w-full mt-auto">
