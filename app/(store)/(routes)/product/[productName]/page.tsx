@@ -1,7 +1,8 @@
 import Gallery from "@/app/(store)/_components/Gallery";
-import Info from "@/app/(store)/_components/Info/Info";
+import InfoSingle from "@/app/(store)/_components/Info/InfoSingle/Info";
+import InfoPack from "@/app/(store)/_components/Info/InfoPack/Info"; // Import the new Info component for pack of products
 import ProductList from "@/app/(store)/_components/ProductList/ProductList";
-import {  RelatedProductList } from "@/app/(store)/_components/RelatedItemsList";
+import { RelatedProductList } from "@/app/(store)/_components/RelatedItemsList";
 import Container from "@/components/Store/container";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -67,6 +68,8 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
     (suggestedProduct) => suggestedProduct.id !== product?.id
   );
 
+  const isPackOfProduct = product.name.includes("Pack Of");
+
   return (
     <div className="bg-white mt-14">
       <Container>
@@ -74,7 +77,13 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
           <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
             <Gallery images={product?.images} />
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0 lg:overflow-y-scroll lg:max-h-[calc(100vh-200px)]">
-              {product && <Info data={product} userId={userId} />}
+              {product && (
+                isPackOfProduct ? (
+                  <InfoPack data={product} userId={userId} />
+                ) : (
+                  <InfoSingle data={product} userId={userId} />
+                )
+              )}
             </div>
           </div>
           <hr className="my-10" />

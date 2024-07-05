@@ -25,9 +25,9 @@ import {
 } from "lucide-react";
 import IconButton from "@/components/Store/IconButton";
 import { FaWhatsapp } from "react-icons/fa";
-import SizeChart from "./SizeChart";
+import SizeChart from "../SizeChart";
 import { Product as ProductType } from "@/types";
-import Description from "./Description";
+import Description from "../Description";
 import { MotionSpan } from "@/constant/MotionElements";
 import { calculateDiscountPercentage } from "@/lib/calculateDiscountedPrice";
 
@@ -219,6 +219,10 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             Div For Closing Share Popup
           =============================================
       */}
+
+      <h1 className="text-xl text-primary">
+        Info Pack 
+      </h1>
       {(isSharePopupOpen1 || isSharePopupOpen2) && (
         <div
           className="fixed inset-0 bg-transparent bg-opacity-50 z-40"
