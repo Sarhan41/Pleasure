@@ -1,6 +1,6 @@
 "use client";
 
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import Currency from "@/components/Store/Currency";
@@ -25,9 +25,9 @@ import {
 } from "lucide-react";
 import IconButton from "@/components/Store/IconButton";
 import { FaWhatsapp } from "react-icons/fa";
-import SizeChart from "./SizeChart";
+import SizeChart from "../SizeChart";
 import { Product as ProductType } from "@/types";
-import Description from "./Description";
+import Description from "../Description";
 import { MotionSpan } from "@/constant/MotionElements";
 import { calculateDiscountPercentage } from "@/lib/calculateDiscountedPrice";
 
@@ -38,59 +38,98 @@ interface InfoProps {
 
 const Info: React.FC<InfoProps> = ({ data, userId }) => {
   const [selectedSize, setSelectedSize] = useState<Size | null>(null);
-  const [selectedColor, setSelectedColor] = useState<string | null>(
-    data.colors[0].name
-  );
+
+  const packMatch = data.name.match(/\(pack of (\d+)\)/i);
+  const maxSelectableColors = packMatch ? parseInt(packMatch[1], 10) : 1;
+
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+
   const [quantity, setQuantity] = useState(1);
+
   const [sizeError, setSizeError] = useState(false);
+
   const [isSizeChartOpen, setIsSizeChartOpen] = useState(false);
+
   const [isSharePopupOpen1, setIsSharePopupOpen1] = useState(false);
+
   const [isSharePopupOpen2, setIsSharePopupOpen2] = useState(false);
+  const [isSelectedColorHidden, setIsSelectedColorHidden] = useState(false);
+
   const router = useRouter();
 
   const categoryName = data.category.name;
 
+  useEffect(() => {
+    if (data?.colors?.length === 1) {
+      setSelectedColors([data.colors[0].value]);
+      setIsSelectedColorHidden(true);
+    }
+  }, [data?.colors]);
+
+  const handleColorSelection = (colorValue: string) => {
+    if (selectedColors.includes(colorValue)) {
+      toast.error("Color already selected.");
+      return;
+    }
+    if (selectedColors.length < maxSelectableColors) {
+      setSelectedColors([...selectedColors, colorValue]);
+    } else {
+      toast.error(
+        `You can select up to ${maxSelectableColors} colors for this product.`
+      );
+    }
+  };
+
   const onAddToCart: MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.stopPropagation();
+  
+    if (!userId) {
+      return toast.error("Please login to add to cart");
+    }
+  
+    if (selectedSize === null) {
+      toast.error("Please select a size");
+      setSizeError(true);
+      return;
+    }
+  
     try {
       const response = await axios.get("/api/dashboard/cartItems");
       const cartItems = response.data;
-
-      if (!userId) {
-        return toast.error("Please login to add to cart");
-      }
-
+  
       const foundItem = cartItems.find(
         (item: {
+          id: string;
           productId: string;
           userId: string;
           sizeName: string;
-          color: string;
+          color?: { value: string; name: string }[];  // Made color optional
+          quantity: number;
         }) =>
           item.productId === data.id &&
           item.userId === userId &&
-          item.sizeName === selectedSize?.name &&
-          item.color === selectedColor
+          item.sizeName === selectedSize.name &&
+          item.color &&
+          item.color.some((colorObj) => selectedColors.includes(colorObj.value))
       );
-
-      if (selectedSize === null) {
-        toast.error("Please select a size");
-        setSizeError(true);
-        return;
-      }
-
+  
       if (!foundItem) {
-        await axios.post("/api/dashboard/cartItems", {
-          id: data.id,
-          quantity: quantity,
+        const newItem = {
+          productId: data.id,
+          quantity,
           userId,
-          sizeName: selectedSize?.name,
-          price: selectedSize?.price,
-          color: selectedColor,
-          SKUvalue: selectedSize?.SKUvalue,
-          discountedPrice: selectedSize?.discountedprice,
-          category: data.category?.name,
-        });
+          sizeName: selectedSize.name,
+          price: selectedSize.price,
+          SKUvalue: selectedSize.SKUvalue,
+          discountedPrice: selectedSize.discountedprice,
+          category: data.category.name,
+          color: selectedColors.map((color) => ({
+            value: color,
+            name: data.colors.find((c) => c.value === color)?.name || color,
+          })),
+        };
+  
+        await axios.post("/api/dashboard/cartItems/single", newItem);
         toast.success("Added to cart");
       } else {
         const cartId = foundItem.id;
@@ -100,11 +139,11 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         toast.success("Item's quantity increased in cart");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error("Error adding to cart");
     }
   };
-
+  
   const handleSizeSelection = (size: Size) => {
     setSelectedSize(size);
     if (selectedSize === size) setSelectedSize(null);
@@ -190,12 +229,17 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
     setIsSharePopupOpen2(false);
   };
 
+  const sizeSku = selectedSize?.SKUvalue;
+
+  // Extracted PriceDisplay component
+
   return (
     <div>
       {/* =============================================
             Div For Closing Share Popup
           =============================================
       */}
+      <h1>Info Single</h1>
       {(isSharePopupOpen1 || isSharePopupOpen2) && (
         <div
           className="fixed inset-0 bg-transparent bg-opacity-50 z-40"
@@ -210,7 +254,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         Name Of The Product
          =============================================
       */}
-      <h1 className="text-3xl font-bold text-gray-900 border-b-2 pb-4">
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-900 border-b-2 pb-4">
         {data.name.includes("100")
           ? `${data.name.split("100")[0]}100%${data.name.split("100")[1]}`
           : data.name}
@@ -224,17 +268,17 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             Price
           =============================================
       */}
-        <div className="font-medium">
-          <p className="text-2xl text-gray-900 flex items-center">
+        <div className="font-medium bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-400 p-4 rounded-lg">
+          <div className="text-xl md:text-2xl text-gray-900 flex items-center">
             {!selectedSize ? (
-              <>
-                {data.sizes[0].discountedprice ? (
-                  <>
+              data.sizes[0].discountedprice ? (
+                <div className="flex flex-col md:flex-row items-start md:items-center">
+                  <div className="flex items-center">
                     <MotionSpan
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5 }}
-                      className="text-gray-500 text-base line-through mr-2"
+                      className="text-gray-500 text-sm md:text-lg line-through mr-2"
                     >
                       ₹{data.sizes[0].price}
                     </MotionSpan>
@@ -242,15 +286,17 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 0.5 }}
-                      className="text-black ml-1 text-3xl"
+                      className="text-black ml-1 text-xl md:text-3xl"
                     >
                       ₹{data.sizes[0].discountedprice}
                     </MotionSpan>
+                  </div>
+                  <div className="flex items-center md:ml-2 md:mt-0 mt-2">
                     <MotionSpan
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 1 }}
-                      className="ml-2 text-primary text-lg"
+                      className="md:ml-2 text-sm md:text-lg text-pink-700"
                     >
                       (
                       {calculateDiscountPercentage(
@@ -259,75 +305,91 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                       )}
                       % OFF)
                     </MotionSpan>
-                  </>
-                ) : (
+                    {data.name.toLowerCase().includes("pack of") && (
+                      <MotionSpan
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 1.5 }}
+                        className="ml-2 text-xs md:text-sm text-gray-600 uppercase"
+                      >
+                        {data.name.match(/pack of \d+/i)}
+                      </MotionSpan>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <MotionSpan
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="text-gray-500 text-sm md:text-lg line-through mr-2"
+                >
+                  ₹{data.sizes[0].price}
+                </MotionSpan>
+              )
+            ) : data.sizes[0].discountedprice ? (
+              <div className="flex flex-col md:flex-row items-start md:items-center">
+                <div className="flex items-center">
                   <MotionSpan
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                  >
-                    ₹{data.sizes[0].price}
-                  </MotionSpan>
-                )}
-              </>
-            ) : (
-              <>
-                {selectedSize.discountedprice ? (
-                  <>
-                    <MotionSpan
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5 }}
-                      className="text-gray-500 text-base line-through mr-2"
-                    >
-                      ₹{selectedSize.price}
-                    </MotionSpan>
-                    <MotionSpan
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.5 }}
-                      className="text-3xl"
-                    >
-                      ₹{selectedSize.discountedprice}
-                    </MotionSpan>
-                    <MotionSpan
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 1 }}
-                      className="ml-2 text-lg text-primary"
-                    >
-                      (
-                      {calculateDiscountPercentage(
-                        selectedSize.price,
-                        selectedSize.discountedprice
-                      )}
-                      % OFF)
-                    </MotionSpan>
-                  </>
-                ) : (
-                  <MotionSpan
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
+                    className="text-gray-500 text-sm md:text-lg line-through mr-2"
                   >
                     ₹{selectedSize.price}
                   </MotionSpan>
-                )}
-              </>
+                  <MotionSpan
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.5 }}
+                    className="text-black ml-1 text-xl md:text-3xl"
+                  >
+                    ₹{selectedSize.discountedprice}
+                  </MotionSpan>
+                </div>
+                <div className="flex items-center md:ml-2 md:mt-0 mt-2">
+                  <MotionSpan
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 1 }}
+                    className="md:ml-2 text-sm md:text-lg text-pink-700"
+                  >
+                    (
+                    {calculateDiscountPercentage(
+                      selectedSize.price,
+                      selectedSize.discountedprice
+                    )}
+                    % OFF)
+                  </MotionSpan>
+                  {data.name.toLowerCase().includes("pack of") && (
+                    <MotionSpan
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 1.5 }}
+                      className="ml-2 text-xs md:text-sm text-gray-600 uppercase"
+                    >
+                      {data.name.match(/pack of \d+/i)}
+                    </MotionSpan>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <MotionSpan
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-gray-500 text-sm md:text-lg line-through mr-2"
+              >
+                ₹{selectedSize.price}
+              </MotionSpan>
             )}
-          </p>
+          </div>
         </div>
 
         {/* =================================================================
             SKUValue
             =================================================================
          */}
-        {selectedSize && (
-          <span className="text-base text-gray-900 flex gap-2">
-            SKU:
-            <h4>{selectedSize?.SKUvalue}</h4>
-          </span>
-        )}
       </div>
 
       <div className="flex flex-col my-4 gap-y-4">
@@ -338,7 +400,11 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         */}
 
         <div className="flex gap-4 flex-col">
-          <h3 className="font-semibold text-black"> Available sizes:</h3>
+          <h3 className="font-semibold text-base md:text-lg text-black">
+            {" "}
+            Available sizes:
+          </h3>
+
           <div className="flex gap-4">
             {data?.sizes
               ?.sort((a, b) =>
@@ -348,9 +414,9 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                 <div key={size.name} className="flex flex-col relative">
                   <span
                     key={size.name}
-                    className={`text-black ${
+                    className={`text-xs md:text-base text-black ${
                       selectedSize !== size && "hover:bg-primary"
-                    } hover:text-white hover:cursor-pointer font-semibold border-2 border-gray-500 rounded-md p-2 ${
+                    } hover:text-white hover:cursor-pointer font-semibold border-2 border-gray-500 rounded-md p-1 md:p-2 ${
                       selectedSize === size ? "bg-gray-600 text-white" : ""
                     } ${sizeError && "border-red-700"} ${
                       Number(size.quantity) === 0
@@ -405,14 +471,14 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         <div>
           <h3
             onClick={handleSizeChartOpen}
-            className="font-semibold text-primary cursor-pointer w-fit hover:underline"
+            className="font-semibold text-sm md:text-base text-primary cursor-pointer w-fit hover:underline"
           >
             Size Chart
           </h3>
           <Dialog open={isSizeChartOpen} onOpenChange={handleSizeChartClose}>
             <DialogOverlay className="absolute inset-0 flex items-center min-h-screen min-w-screen justify-center bg-black opacity-50">
               <DialogContent className="absolute transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg">
-                <SizeChart categoryName={data.category.name} />
+                <SizeChart categoryName={categoryName} />
                 <DialogClose asChild>
                   <button className="absolute top-4 right-4">
                     <Cross2Icon className="h-4 w-4" />
@@ -430,15 +496,19 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         */}
 
         <div className="flex flex-col gap-x-4">
-          <h3 className="font-semibold text-black">Qty:</h3>
-          <div className="flex items-center border border-gray-300 rounded-md w-fit p-2">
+          <h3 className="font-semibold text-base md:text-lg text-black">
+            Qty:
+          </h3>
+
+          <div className="flex items-center border border-gray-300 rounded-md w-fit p-1 md:p-2">
             <button
               onClick={decrementQuantity}
               className="flex justify-center items-center w-8 h-8 rounded-md bg-gray-100 hover:bg-gray-200 focus:outline-none"
             >
               <MinusIcon className="h-4 w-4" />
             </button>
-            <span className="mx-4">{quantity}</span>
+            <span className="mx-2 md:mx-4">{quantity}</span>
+
             <button
               onClick={incrementQuantity}
               className="flex justify-center items-center w-8 h-8 rounded-md bg-gray-100 hover:bg-gray-200 focus:outline-none"
@@ -448,56 +518,91 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           </div>
         </div>
 
-        {/* =============================================
-            Div For Colors
-            =============================================
-        */}
+        {/* Colors */}
+        <div className="mt-6 flex flex-col gap-y-4">
+          {data?.colors?.some((color) => color.value !== "#111") && (
+            <h3 className="font-semibold text-base md:text-lg text-black">
+              Colors:
+            </h3>
+          )}
+          <div className="flex flex-row gap-x-4 mt-2">
+            {data?.colors?.map((color) => {
+              const handleClick = () => {
+                if (color.toLink) {
+                  const productName = color.toLink?.replace(/ /g, "-");
+                  router.push(`/product/${productName}`);
+                }
+                handleColorSelection(color.value);
+              };
 
-        <div className="flex items-center gap-x-4">
-          {data?.colors?.map((color) => {
-            const handleClick = () => {
-              const productName = color.toLink?.replace(/ /g, "-");
-              router.push(`/product/${productName}`);
-              setSelectedColor(color?.value);
-            };
-            if (color.value !== "#111") {
-              return (
-                <div key={color.name}>
-                  <h3 className="font-semibold text-black">Colors:</h3>
-                  {color.toLink ? (
-                    <div onClick={handleClick}>
-                      <div
-                        key={color.name}
-                        className="h-10 w-10 rounded-full border border-gray-600 cursor-pointer"
-                        style={{ backgroundColor: color.value }}
-                      ></div>
-                    </div>
-                  ) : (
+              if (color.value !== "#111") {
+                return (
+                  <div key={color.name} onClick={handleClick}>
                     <div
-                      key={color.name}
-                      className="h-10 w-10 rounded-full border border-gray-900 relative"
+                      className="h-6 w-6 md:h-8 md:w-8 rounded-full border border-gray-900 relative"
                       style={{ backgroundColor: color.value }}
                     >
-                      {data.colors.length > 1 && (
-                        <div className="absolute inset-0 flex items-center justify-center text-gray-600 bottom-0 left-0 h-3 w-3 bg-white border border-gray-900">
-                          <Check size={24} />
+                      {selectedColors.includes(color.value) && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <svg
+                            className="w-4 h-4 text-gray-400"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
                         </div>
                       )}
                     </div>
-                  )}
-                </div>
-              );
-            }
-            return null;
-          })}
+                  </div>
+                );
+              }
+              return null;
+            })}
+          </div>
         </div>
+
+        {/* Selected Colors */}
+        {selectedColors.length > 0 && isSelectedColorHidden === false && (
+          <div className="mt-4 flex flex-col gap-y-4">
+            <h3 className="font-semibold text-base md:text-lg text-black">
+              Selected Colors:
+            </h3>
+
+            <div className="flex flex-row gap-x-2 flex-wrap mt-2">
+              {selectedColors.map((color, index) => (
+                <div key={index} className="relative">
+                  <div
+                    className="h-6 w-6 md:h-8 md:w-8 rounded-full border border-gray-900"
+                    style={{ backgroundColor: color }}
+                  />
+
+                  <span
+                    onClick={() => {
+                      const newSelectedColors = [...selectedColors];
+                      newSelectedColors.splice(index, 1);
+                      setSelectedColors(newSelectedColors);
+                    }}
+                    className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full cursor-pointer text-xs md:text-sm"
+                  >
+                    &times;
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* =============================================
           Div For Add To Cart And Add To Wishlist and Share 1
           =============================================
        */}
-      <div className="mt-4 flex items-center gap-x-3 relative">
+      <div className="flex items-center mt-6 gap-x-3 relative">
         <div className="border-primary border-2 rounded-full">
           <IconButton
             onClick={handleShareButtonClick1}
@@ -531,7 +636,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         <div>
           <Button
             onClick={onAddToCart}
-            className="flex items-center gap-x-2 w-60"
+            className="flex items-center gap-x-2 w-40 md:w-60"
           >
             Add To Cart
           </Button>
@@ -544,10 +649,10 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
       */}
 
       <div className="mt-8">
-        <h3 className="font-bold text-black border-b-2 border-primary w-fit p-2 mb-4">
+        <h3 className="font-bold text-lg md:text-xl text-black border-b-2 border-primary w-fit p-2 mb-4">
           Description
         </h3>
-        <Description data={data.description} />
+        <Description description={data.description} SKU={sizeSku} />
       </div>
       {/* 
           // ! Reviews Divs Will Be Added Here

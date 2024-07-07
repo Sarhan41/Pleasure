@@ -6,7 +6,7 @@ import { MinusIcon, PlusIcon, X } from "lucide-react";
 import { useState } from "react";
 import { ClipLoader } from "react-spinners";
 
-import { Product } from "@/types";
+import { CartItemWithColors, Product } from "@/types";
 import { useRouter } from "next/navigation";
 import Currency from "@/components/Store/Currency";
 import IconButton from "@/components/Store/IconButton";
@@ -14,7 +14,7 @@ import axios from "axios";
 import { CartItems } from "@prisma/client";
 
 interface CartItemProps {
-  data: CartItems & { product: Product };
+  data: CartItemWithColors & { product: Product };
   cartId: string;
 }
 
@@ -37,7 +37,9 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
   };
 
   const onProductClick = () => {
-    router.push(`/product/${data.product.name}`);
+    const productName = data.product.name.replace(/\s+/g, "-");
+
+    router.push(`/product/${productName}`);
   };
 
   const onPlusClick = async () => {
@@ -104,13 +106,21 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
             {data.product.name}
           </p>
           <div className="flex items-center mt-2">
-            {data?.color && data?.color !== "#111" && (
-              <div
-                // @ts-ignore
-                key={data?.color?.name}
-                className="w-4 h-4 rounded-full mr-2 border-2 border-black"
-                style={{ backgroundColor: data?.color }}
-              ></div>
+            {data.color && (
+              <div>
+                <p className="text-sm text-gray-500">
+                  Colors: {data.color.map((color) => color.name).join(", ")}
+                </p>
+                <div className="flex space-x-1">
+                  {data.color.map((color, idx) => (
+                    <span
+                      key={idx}
+                      style={{ backgroundColor: color.value }}
+                      className="block h-4 w-4 rounded-sm border border-gray-600"
+                    />
+                  ))}
+                </div>
+              </div>
             )}
             <div className="flex">
               <h1 className="border font-bold px-4 py-2 mt-2">

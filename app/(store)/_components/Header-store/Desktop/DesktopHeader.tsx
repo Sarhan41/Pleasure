@@ -41,18 +41,15 @@ const DesktopHeader = ({ categories, allProducts, UserId }: HeaderProps) => {
         </div>
         {/* Right Side */}
         <div className="flex flex-col gap-1">
-          <div className="flex text-[10px] font-mono   space-x-4 pl-2 self-start  ">
+          {/* <div className="flex text-[10px] font-mono   space-x-4 pl-2 self-start  ">
             <span className="cursor-pointer">
-              <Link href="/become-affiliate">
-              
-              Become Affiliate
-              </Link>
-              </span>
-            <span className="cursor-pointer"> <Link href="/about-us">
-              
-              Our Story
-              </Link></span>
-          </div>
+              <Link href="/become-affiliate">Become Affiliate</Link>
+            </span>
+            <span className="cursor-pointer">
+              {" "}
+              <Link href="/about-us">Our Story</Link>
+            </span>
+          </div> */}
           {/* Search functionality */}
           <div className="flex justify-center items-center  px-4">
             <Search allProducts={allProducts} />

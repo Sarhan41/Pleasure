@@ -4,7 +4,7 @@ A dynamic website designed for Pleasure, a E-commerce store owned by My Client. 
 
 ## Live Demo
 
-Explore the Pleasure Website live at the following link: [Navrang Restaurant Website Live Demo](https://pleasurefive.vercel.app/)
+Explore the Pleasure Website live at the following link: [Pleasure Website Live Demo](https://pleasurefive.vercel.app/)
 
 Feel free to navigate through the website and provide any feedback or suggestions!
 Soon Owner gonna buy domain and website will get domain, till then it's on vercel.

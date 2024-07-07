@@ -155,7 +155,7 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
                 key={category.id}
                 className={cn(
                   "text-sm font-medium transition-colors duration-300 cursor-pointer",
-                  pathname === `/category/${category.name}`
+                  pathname === `/collections/${category.name}`
                     ? "text-black"
                     : "text-gray-800"
                 )}
@@ -164,12 +164,12 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
                 <Link
                   className={cn(
                     "transition-colors duration-300 hover:text-pink-300 font-medium uppercase",
-                    pathname === `/category/${category.name}`
+                    pathname === `/collections/${category.name}`
                       ? "text-pink-300"
                       : "text-black",
                     isCategoryHovered(category.name) && "text-pink-300"
                   )}
-                  href={`/category/${category.name.replace(/\s+/g, "-")}`}
+                  href={`/collections/${category.name.replace(/\s+/g, "-")}`}
                   passHref
                 >
                   {category.name}

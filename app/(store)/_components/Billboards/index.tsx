@@ -21,15 +21,18 @@ const Billboard: React.FC<BillboardProps> = ({ data }) => {
     return parts.map((part, index) => {
       if (part.startsWith('"') && part.endsWith('"')) {
         return (
-          <span key={index} className="text-pink-500 font-bold">
-            {part.slice(1, -1)}
+          <span key={index} className="relative">
+         <span className="text-transparent bg-gradient-to-r from-pink-500 via-yellow-600 to-red-900 bg-clip-text hover:from-yellow-500 hover:via-orange-600 hover:to-pink-900 transition duration-300 ease-in-out">
+              {part.slice(1, -1)}
+            </span>
           </span>
         );
       }
       return part;
     });
   };
-
+  
+  
   return (
     <Carousel
       className="mt-8 lg:mt-16 relative"

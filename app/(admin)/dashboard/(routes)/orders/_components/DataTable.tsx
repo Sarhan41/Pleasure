@@ -26,7 +26,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { OrderColumn, OrderItem } from "./order-types";
+import { OrderColumn, OrderItem, ColorItem } from "./order-types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -73,7 +73,7 @@ export function DataTable<TData extends OrderColumn>({
       header: "Total Payment",
     },
     {
-      accessorKey: "status", // Ensure status column is included
+      accessorKey: "status",
       header: "Status",
     },
     {
@@ -114,7 +114,7 @@ export function DataTable<TData extends OrderColumn>({
                 </div>
                 <div>
                   <span className="font-semibold">Status:</span>{" "}
-                  {row.original.status} {/* Display status */}
+                  {row.original.status}
                 </div>
                 <div>
                   <span className="font-semibold">Products:</span>
@@ -133,6 +133,30 @@ export function DataTable<TData extends OrderColumn>({
                           <p className="text-sm text-gray-500">
                             Size: {item.size}
                           </p>
+                          <p className="text-sm text-gray-500">
+                            SizeSKU: {item.sizeSKU}
+                          </p>
+                          {item.color && (
+                            <div>
+                              <p className="text-sm text-gray-500">
+                                Color:{" "}
+                                {item.color
+                                  .map((color) => color.name)
+                                  .join(", ")}
+                              </p>
+                              <div className="flex space-x-1">
+                                {item.color.map((color, idx) => (
+                                  <span
+                                    key={idx}
+                                    style={{
+                                      backgroundColor: color.value,
+                                    }}
+                                    className="block h-4 w-4 rounded-sm border border-gray-600"
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                          )}
                           <p className="text-sm text-gray-500">
                             Quantity: {item.quantity}
                           </p>

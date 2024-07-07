@@ -1,4 +1,3 @@
-
 import { Heading } from "@/components/ui/Heading";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -9,7 +8,6 @@ import { formatter } from "@/lib/utils";
 // import { Overview } from "@/components/Overview/OverView";
 // import { getGraphRevenue } from "@/actions/GetGraphRevenue";
 import { FaCreditCard, FaRupeeSign } from "react-icons/fa";
-
 
 const DashboardPage = async () => {
   // const totalRevenue = await getTotalRevenue(params.storeId);
@@ -57,11 +55,11 @@ const DashboardPage = async () => {
             </CardContent>
           </Card>
         </div>
-        <Card className="col-span-4" >
+        <Card className="col-span-4">
           <CardHeader>
             <CardTitle>OverView</CardTitle>
           </CardHeader>
-          <CardContent className="pt-2" >
+          <CardContent className="pt-2">
             {/* <Overview data={graphRevenue} /> */}
           </CardContent>
         </Card>

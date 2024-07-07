@@ -15,12 +15,16 @@ import toast from "react-hot-toast";
 import { CartItems } from "@prisma/client";
 import Link from "next/link";
 
+interface CartItemWithColors extends CartItems {
+  color: { value: string; name: string }[];
+}
+
 interface CheckoutClientCartProps {
   user?: ExtendedUser;
   prices: number[];
   quantities: number[];
   AddressId: string;
-  products: CartItems[];
+  products: CartItemWithColors[];
 }
 
 const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
@@ -146,7 +150,10 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
                   price: product.price,
                   quantity: product.quantity,
                   size: product.sizeName,
-                  color: product.color,
+                  color: product.color.map((color: any) => ({
+                    value: color.value,
+                    name: color.name,
+                  })),
                   sizeSKU: product.SKUvalue,
                 })),
               });
@@ -183,7 +190,10 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
             price: product.price,
             quantity: product.quantity,
             size: product.sizeName,
-            color: product.color,
+            color: product.color.map((color: any) => ({
+              value: color.value,
+              name: color.name,
+            })),
             sizeSKU: product.SKUvalue,
           })),
         });

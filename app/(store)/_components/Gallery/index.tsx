@@ -74,7 +74,7 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
                 images.map((image, index) => (
                   <CarouselItem key={image.id}>
                     <div
-                      className="border-4 relative h-[600px] w-[400px] sm:rounded-lg overflow-hidden ml-24"
+                      className="border-4 relative h-[600px] w-[400px] sm:ml-24"
                       onClick={() => openFullScreen(index)}
                     >
                       <Image
@@ -115,8 +115,8 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
                   </div>
                 </CarouselItem>
               </CarouselContent>
-              <CarouselPrevious className="absolute top-1/2 left-4 transform -translate-y-1/2" />
-              <CarouselNext className="absolute top-1/2 right-4 transform -translate-y-1/2" />
+              <CarouselPrevious className="max-sm:hidden absolute top-1/2 left-4 transform -translate-y-1/2" />
+              <CarouselNext className="max-sm:hidden absolute top-1/2 right-4 transform -translate-y-1/2" />
             </Carousel>
           </div>
         </div>
