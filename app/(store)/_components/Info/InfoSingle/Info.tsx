@@ -131,7 +131,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           })),
         };
   
-        await axios.post("/api/dashboard/cartItems", newItem);
+        await axios.post("/api/dashboard/cartItems/single", newItem);
         toast.success("Added to cart");
       } else {
         const cartId = foundItem.id;

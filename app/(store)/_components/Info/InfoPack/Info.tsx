@@ -65,79 +65,53 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
       setSelectedColors([...selectedColors, colorValue]);
     } else {
       toast.error(
-        `You can select up to ${maxSelectableColors} colors for this Product.`
+        `You can select up to ${maxSelectableColors} colors for this product.`
       );
     }
   };
 
   const onAddToCart: MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.stopPropagation();
+    if (!userId) {
+      return toast.error("Please login to add to cart");
+    }
+    if (selectedSize === null || 0) {
+      toast.error("Please select a size");
+      setSizeError(true);
+      return;
+    }
+    if (
+      data.colors.some((color) => color.value !== "#111") &&
+      (selectedColors.length === 0 ||
+        selectedColors.length < maxSelectableColors)
+    ) {
+      toast.error(`Please select ${maxSelectableColors} colors`);
+      return;
+    }
+
     try {
-      const response = await axios.get("/api/dashboard/cartItems");
-      const cartItems = response.data;
+      await axios.post("/api/dashboard/cartItems/pack", {
+        productId: data.id,
+        quantity,
+        userId,
+        sizeName: selectedSize.name,
+        price: selectedSize.price,
+        SKUvalue: selectedSize.SKUvalue,
+        discountedPrice: selectedSize.discountedprice,
+        category: data.category.name,
+        colors: Array.isArray(selectedColors)
+          ? selectedColors.map((color) => ({
+              value: color,
+              name: data.colors.find((c) => c.value === color)?.name || color,
+            }))
+          : [],
+      });
+      toast.success("Added to cart");
 
-      if (!userId) {
-        return toast.error("Please login to add to cart");
-      }
-
-      const foundItem = cartItems.find(
-        (item: {
-          productId: string;
-          userId: string;
-          sizeName: string;
-          colors: string[];
-        }) =>
-          item.productId === data.id &&
-          item.userId === userId &&
-          item.sizeName === selectedSize?.name &&
-          JSON.stringify(item.colors.sort()) ===
-            JSON.stringify(selectedColors.sort())
-      );
-
-      if (selectedSize === null) {
-        toast.error("Please select a size");
-        setSizeError(true);
-        return;
-      }
-
-      if (
-        data.colors.some((color) => color.value !== "#111") &&
-        selectedColors.length === 0
-      ) {
-        toast.error(`Please select ${maxSelectableColors} colors`);
-        return;
-      }
-
-      if (!foundItem) {
-        await axios.post("/api/dashboard/cartItems", {
-          id: data.id,
-          quantity: quantity,
-          userId,
-          sizeName: selectedSize?.name,
-          price: selectedSize?.price,
-          colors: selectedColors ? selectedColors : "",
-          SKUvalue: selectedSize?.SKUvalue,
-          discountedPrice: selectedSize?.discountedprice,
-          category: data.category?.name,
-        });
-        toast.success("Added to cart");
-      } else {
-        const cartId = foundItem.id;
-        await axios.patch(`/api/dashboard/cartItems/${cartId}`, {
-          quantity: foundItem.quantity + quantity,
-        });
-        toast.success("Item's quantity increased in cart");
-      }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error("Error adding to cart");
     }
-  };
-
-  const handleSizeSelection = (size: Size) => {
-    setSelectedSize(size);
-    if (selectedSize === size) setSelectedSize(null);
-    setSizeError(false);
   };
 
   const handleSizeChartOpen = () => {
@@ -217,6 +191,12 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
     );
     setIsSharePopupOpen1(false);
     setIsSharePopupOpen2(false);
+  };
+
+  const handleSizeSelection = (size: Size) => {
+    setSelectedSize(size);
+    if (selectedSize === size) setSelectedSize(null);
+    setSizeError(false);
   };
 
   const sizeSku = selectedSize?.SKUvalue;
