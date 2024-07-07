@@ -1,3 +1,5 @@
+import { CartItems } from "@prisma/client";
+
 export interface Category {
   id: string;
   name: string;
@@ -65,4 +67,9 @@ export interface Order {
   updatedAt: Date;
   userId: string;
   orderItems: OrderItem[];
+}
+
+
+export interface CartItemWithColors extends CartItems {
+  color: { value: string; name: string }[];
 }

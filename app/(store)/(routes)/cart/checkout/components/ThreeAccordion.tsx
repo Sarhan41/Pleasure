@@ -16,7 +16,9 @@ import { FaCheck } from "react-icons/fa";
 import { FaCheckCircle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import CheckoutClientCart from "./CheckoutClientCart";
-import { Address, CartItems } from "@prisma/client";
+import { Address } from "@prisma/client";
+import { CartItemWithColors } from "@/types";
+
 import Link from "next/link";
 
 interface ThreeAccordionProps {
@@ -24,7 +26,7 @@ interface ThreeAccordionProps {
   addresses: Address[];
   prices: number[];
   quantities: number[];
-  products: CartItems[];
+  products: CartItemWithColors[];
 }
 
 const ThreeAccordion: React.FC<ThreeAccordionProps> = ({
@@ -44,7 +46,6 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({
     setSelectedAddress(address);
     setOpenItem("item-3");
   };
-
 
   return (
     <Accordion
