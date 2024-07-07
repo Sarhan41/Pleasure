@@ -59,9 +59,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
   const categoryName = data.category.name;
 
   const handleColorSelection = (colorValue: string) => {
-    if (selectedColors.includes(colorValue)) {
-      setSelectedColors(selectedColors.filter((color) => color !== colorValue));
-    } else if (selectedColors.length < maxSelectableColors) {
+    if (selectedColors.length < maxSelectableColors) {
       setSelectedColors([...selectedColors, colorValue]);
     } else {
       toast.error(
@@ -107,7 +105,6 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           : [],
       });
       toast.success("Added to cart");
-
     } catch (error) {
       console.error(error);
       toast.error("Error adding to cart");
