@@ -73,7 +73,7 @@ export function DataTable<TData extends OrderColumn>({
       header: "Total Payment",
     },
     {
-      accessorKey: "status", // Ensure status column is included
+      accessorKey: "status",
       header: "Status",
     },
     {
@@ -114,7 +114,7 @@ export function DataTable<TData extends OrderColumn>({
                 </div>
                 <div>
                   <span className="font-semibold">Status:</span>{" "}
-                  {row.original.status} {/* Display status */}
+                  {row.original.status}
                 </div>
                 <div>
                   <span className="font-semibold">Products:</span>
@@ -141,13 +141,17 @@ export function DataTable<TData extends OrderColumn>({
                               <p className="text-sm text-gray-500">
                                 Color: {item.color}
                               </p>
-                              <span
-                                style={{ backgroundColor: item.color }}
-                                className="block h-4 w-4 rounded-sm border border-gray-600 mt-1"
-                              />
+                              <div className="flex space-x-1">
+                                {item.color.split(", ").map((color, idx) => (
+                                  <span
+                                    key={idx}
+                                    style={{ backgroundColor: color }}
+                                    className="block h-4 w-4 rounded-sm border border-gray-600"
+                                  />
+                                ))}
+                              </div>
                             </div>
                           )}
-
                           <p className="text-sm text-gray-500">
                             Quantity: {item.quantity}
                           </p>

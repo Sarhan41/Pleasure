@@ -5,12 +5,10 @@ export async function POST(request: NextRequest) {
   const { orderId, total, status, isPaid, userId, addressId, products } = await request.json();
 
   try {
-    // Validate orderId
     if (!orderId) {
       throw new Error("Order ID is missing");
     }
 
-    // Fetch product details
     const productDetails = await db.product.findMany({
       where: {
         id: {
@@ -28,28 +26,31 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No products found" }, { status: 400 });
     }
 
-    // Map products to include additional details
     const orderItemsData = products.map((product: any) => {
       const productDetail = productDetails.find((p) => p.id === product.productId);
       if (!productDetail) {
         throw new Error(`Product with id ${product.productId} not found`);
       }
       return {
-        name: productDetail?.name,
-        price: parseInt(product.price, 10), // Convert price to integer
+        name: productDetail.name,
+        price: parseInt(product.price, 10),
         quantity: product.quantity,
         size: product.size,
-        color: product.color,
         productId: product.productId,
         sizeSKU: product.sizeSKU,
+        color: {
+          create: product.color.map((color: any) => ({
+            value: color.value,
+            name: color.name,
+          })),
+        },
       };
     });
 
-    // Create the order
     const order = await db.order.create({
       data: {
         id: orderId,
-        total: parseInt(total, 10), // Convert total to integer
+        total: parseInt(total, 10),
         status: status,
         isPaid: isPaid,
         userId: userId,
@@ -60,7 +61,6 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Empty the cart
     await db.cartItems.deleteMany({
       where: {
         userId: userId,

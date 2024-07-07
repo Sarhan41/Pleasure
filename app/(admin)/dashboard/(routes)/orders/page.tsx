@@ -18,6 +18,7 @@ const fetchOrders = async () => {
               images: true,
             },
           },
+          color: true,
         },
       },
     },
@@ -31,7 +32,7 @@ const fetchOrders = async () => {
     items: order.orderItems.map((item) => ({
       productName: item.product.name,
       size: item.size,
-      color: item.color, // Add the missing 'color' property
+      color: item.color.map((c) => c.value).join(", "), // Handling multiple colors
       sizeSKU: item.sizeSKU,
       quantity: item.quantity,
       price: item.price,
@@ -48,9 +49,7 @@ const fetchOrders = async () => {
     isPaid: order.isPaid,
     createdAt: format(order.createdAt, "MMM do, yyyy"),
     totalPayment: order.total,
-
-    status: order.status, // Ensure status is included
-    orderItems: order.orderItems,
+    status: order.status,
   }));
 
   return formattedOrders;

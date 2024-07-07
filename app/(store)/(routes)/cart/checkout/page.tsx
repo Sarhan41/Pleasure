@@ -22,6 +22,8 @@ export default async function CartCheckoutPage() {
     },
     include: {
       product: true,
+      color: true,
+      
     },
   });
 

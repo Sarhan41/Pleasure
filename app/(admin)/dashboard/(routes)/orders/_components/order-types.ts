@@ -5,7 +5,7 @@ export interface OrderItem {
   quantity: number;
   price: number;
   imageUrl: string;
-  color: string | null;
+  color: string | null; // Can be a comma-separated string of colors
   sizeSKU: string | null;
 }
 
