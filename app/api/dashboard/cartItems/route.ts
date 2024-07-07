@@ -7,10 +7,13 @@ export async function POST(req: Request) {
   try {
     const user = await currentUser();
 
-    const body = await req.json();
+    if (!user) {
+      return new NextResponse("Unauthenticated", { status: 401 });
+    }
 
+    const body = await req.json();
     const {
-      id,
+      productId,
       sizeName,
       color,
       price,
@@ -20,23 +23,25 @@ export async function POST(req: Request) {
       category,
     } = body;
 
-    if (!user) {
-      return new NextResponse("Unauthenticated", { status: 401 });
-    }
-
     const UserId: string = user.id || "";
 
+    // Create the cart item along with related colors
     const cartItem = await db.cartItems.create({
       data: {
         userId: UserId,
-        productId: id,
+        productId: productId,
         sizeName: sizeName,
-        color: color,
         price: price,
         quantity: quantity,
         SKUvalue: SKUvalue,
         discountedPrice: discountedPrice,
         category: category,
+        color: {
+          create: color.map((c: { value: string; name: string }) => ({
+            value: c.value,
+            name: c.name,
+          })),
+        },
       },
     });
 
@@ -46,6 +51,7 @@ export async function POST(req: Request) {
     return new NextResponse("Internal error", { status: 500 });
   }
 }
+
 export async function GET(req: Request) {
   try {
     const user = await currentUser();
@@ -60,6 +66,7 @@ export async function GET(req: Request) {
       },
       include: {
         product: true,
+        color: true,
       },
     });
 

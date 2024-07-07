@@ -59,7 +59,9 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
   const categoryName = data.category.name;
 
   const handleColorSelection = (colorValue: string) => {
-    if (selectedColors.length < maxSelectableColors) {
+    if (selectedColors.includes(colorValue)) {
+      setSelectedColors(selectedColors.filter((color) => color !== colorValue));
+    } else if (selectedColors.length < maxSelectableColors) {
       setSelectedColors([...selectedColors, colorValue]);
     } else {
       toast.error(
@@ -83,17 +85,26 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           productId: string;
           userId: string;
           sizeName: string;
-          color: string;
+          colors: string[];
         }) =>
           item.productId === data.id &&
           item.userId === userId &&
-          item.sizeName === selectedSize?.name 
-          // item.color === selectedColors
+          item.sizeName === selectedSize?.name &&
+          JSON.stringify(item.colors.sort()) ===
+            JSON.stringify(selectedColors.sort())
       );
 
       if (selectedSize === null) {
         toast.error("Please select a size");
         setSizeError(true);
+        return;
+      }
+
+      if (
+        data.colors.some((color) => color.value !== "#111") &&
+        selectedColors.length === 0
+      ) {
+        toast.error(`Please select ${maxSelectableColors} colors`);
         return;
       }
 
@@ -104,7 +115,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           userId,
           sizeName: selectedSize?.name,
           price: selectedSize?.price,
-          // color: selectedColor,
+          colors: selectedColors ? selectedColors : "",
           SKUvalue: selectedSize?.SKUvalue,
           discountedPrice: selectedSize?.discountedprice,
           category: data.category?.name,
@@ -122,7 +133,6 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
       toast.error("Error adding to cart");
     }
   };
-
 
   const handleSizeSelection = (size: Size) => {
     setSelectedSize(size);
@@ -220,9 +230,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           =============================================
       */}
 
-      <h1 className="text-xl text-primary">
-        Info Pack 
-      </h1>
+      <h1 className="text-xl text-primary">Info Pack</h1>
       {(isSharePopupOpen1 || isSharePopupOpen2) && (
         <div
           className="fixed inset-0 bg-transparent bg-opacity-50 z-40"

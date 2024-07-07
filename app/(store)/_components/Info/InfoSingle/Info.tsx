@@ -1,6 +1,6 @@
 "use client";
 
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import Currency from "@/components/Store/Currency";
@@ -53,62 +53,85 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
   const [isSharePopupOpen1, setIsSharePopupOpen1] = useState(false);
 
   const [isSharePopupOpen2, setIsSharePopupOpen2] = useState(false);
+  const [isSelectedColorHidden, setIsSelectedColorHidden] = useState(false);
 
   const router = useRouter();
 
   const categoryName = data.category.name;
 
+  if (data?.colors?.length === 1) {
+    useEffect(() => {
+      if (data?.colors?.length === 1) {
+        setSelectedColors([data.colors[0].value]);
+        setIsSelectedColorHidden(true);
+      }
+    }, [data?.colors]);
+  }
+
   const handleColorSelection = (colorValue: string) => {
+    if (selectedColors.includes(colorValue)) {
+      toast.error("Color already selected.");
+      return;
+    }
     if (selectedColors.length < maxSelectableColors) {
       setSelectedColors([...selectedColors, colorValue]);
     } else {
       toast.error(
-        `You can select up to ${maxSelectableColors} colors for this Product.`
+        `You can select up to ${maxSelectableColors} colors for this product.`
       );
     }
   };
 
   const onAddToCart: MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.stopPropagation();
+  
+    if (!userId) {
+      return toast.error("Please login to add to cart");
+    }
+  
+    if (selectedSize === null) {
+      toast.error("Please select a size");
+      setSizeError(true);
+      return;
+    }
+  
     try {
       const response = await axios.get("/api/dashboard/cartItems");
       const cartItems = response.data;
-
-      if (!userId) {
-        return toast.error("Please login to add to cart");
-      }
-
+  
       const foundItem = cartItems.find(
         (item: {
+          id: string;
           productId: string;
           userId: string;
           sizeName: string;
-          color: string;
+          color?: { value: string; name: string }[];  // Made color optional
+          quantity: number;
         }) =>
           item.productId === data.id &&
           item.userId === userId &&
-          item.sizeName === selectedSize?.name
-        // item.color === selectedColors
+          item.sizeName === selectedSize.name &&
+          item.color &&
+          item.color.some((colorObj) => selectedColors.includes(colorObj.value))
       );
-
-      if (selectedSize === null) {
-        toast.error("Please select a size");
-        setSizeError(true);
-        return;
-      }
-
+  
       if (!foundItem) {
-        await axios.post("/api/dashboard/cartItems", {
-          id: data.id,
-          quantity: quantity,
+        const newItem = {
+          productId: data.id,
+          quantity,
           userId,
-          sizeName: selectedSize?.name,
-          price: selectedSize?.price,
-          // color: selectedColor,
-          SKUvalue: selectedSize?.SKUvalue,
-          discountedPrice: selectedSize?.discountedprice,
-          category: data.category?.name,
-        });
+          sizeName: selectedSize.name,
+          price: selectedSize.price,
+          SKUvalue: selectedSize.SKUvalue,
+          discountedPrice: selectedSize.discountedprice,
+          category: data.category.name,
+          color: selectedColors.map((color) => ({
+            value: color,
+            name: data.colors.find((c) => c.value === color)?.name || color,
+          })),
+        };
+  
+        await axios.post("/api/dashboard/cartItems", newItem);
         toast.success("Added to cart");
       } else {
         const cartId = foundItem.id;
@@ -118,11 +141,11 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         toast.success("Item's quantity increased in cart");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error("Error adding to cart");
     }
   };
-
+  
   const handleSizeSelection = (size: Size) => {
     setSelectedSize(size);
     if (selectedSize === size) setSelectedSize(null);
@@ -218,7 +241,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             Div For Closing Share Popup
           =============================================
       */}
-      <h1 className="text-xl text-primary">Info Single</h1>
+      <h1>Info Single</h1>
       {(isSharePopupOpen1 || isSharePopupOpen2) && (
         <div
           className="fixed inset-0 bg-transparent bg-opacity-50 z-40"
@@ -284,6 +307,16 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                       )}
                       % OFF)
                     </MotionSpan>
+                    {data.name.toLowerCase().includes("pack of") && (
+                      <MotionSpan
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 1.5 }}
+                        className="ml-2 text-xs md:text-sm text-gray-600 uppercase"
+                      >
+                        {data.name.match(/pack of \d+/i)}
+                      </MotionSpan>
+                    )}
                   </div>
                 </div>
               ) : (
@@ -355,7 +388,10 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           </div>
         </div>
 
-            
+        {/* =================================================================
+            SKUValue
+            =================================================================
+         */}
       </div>
 
       <div className="flex flex-col my-4 gap-y-4">
@@ -500,6 +536,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                 }
                 handleColorSelection(color.value);
               };
+
               if (color.value !== "#111") {
                 return (
                   <div key={color.name} onClick={handleClick}>
@@ -532,7 +569,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         </div>
 
         {/* Selected Colors */}
-        {selectedColors.length > 0 && (
+        {selectedColors.length > 0 && isSelectedColorHidden === false && (
           <div className="mt-4 flex flex-col gap-y-4">
             <h3 className="font-semibold text-base md:text-lg text-black">
               Selected Colors:

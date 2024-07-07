@@ -68,7 +68,9 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
     (suggestedProduct) => suggestedProduct.id !== product?.id
   );
 
-  const isPackOfProduct = product.name.includes("Pack Of");
+  const isPackOfProduct =
+    product.name.includes("Pack ") &&
+    product.colors.some((color) => color.value !== "#111");
 
   return (
     <div className="bg-white mt-14">
@@ -77,13 +79,12 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
           <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
             <Gallery images={product?.images} />
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0 lg:overflow-y-scroll lg:max-h-[calc(100vh-200px)]">
-              {product && (
-                isPackOfProduct ? (
+              {product &&
+                (isPackOfProduct ? (
                   <InfoPack data={product} userId={userId} />
                 ) : (
                   <InfoSingle data={product} userId={userId} />
-                )
-              )}
+                ))}
             </div>
           </div>
           <hr className="my-10" />

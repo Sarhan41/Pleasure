@@ -59,7 +59,7 @@ const Header = ({ categories, allProducts, UserId }: HeaderProps) => {
       }`}
     >
       {isMobile ? (
-        <DesktopHeader
+        <MobileHeaderIndex
           categories={categories}
           allProducts={allProducts}
           UserId={UserId}

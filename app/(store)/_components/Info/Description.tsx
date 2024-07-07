@@ -26,7 +26,7 @@ const Description = ({
           </li>
         ))}
       </ul>
-      {typeof SKU === "string" && (
+      {typeof SKU === "string" && SKU != "." && (
         <ul className="list-disc list-inside">
           <li className="mb-1">SKU: {SKU}</li>
         </ul>
