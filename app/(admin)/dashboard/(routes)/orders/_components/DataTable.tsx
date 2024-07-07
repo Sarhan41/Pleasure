@@ -26,7 +26,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { OrderColumn, OrderItem } from "./order-types";
+import { OrderColumn, OrderItem, ColorItem } from "./order-types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -139,13 +139,18 @@ export function DataTable<TData extends OrderColumn>({
                           {item.color && (
                             <div>
                               <p className="text-sm text-gray-500">
-                                Color: {item.color}
+                                Color:{" "}
+                                {item.color
+                                  .map((color) => color.name)
+                                  .join(", ")}
                               </p>
                               <div className="flex space-x-1">
-                                {item.color.split(", ").map((color, idx) => (
+                                {item.color.map((color, idx) => (
                                   <span
                                     key={idx}
-                                    style={{ backgroundColor: color }}
+                                    style={{
+                                      backgroundColor: color.value,
+                                    }}
                                     className="block h-4 w-4 rounded-sm border border-gray-600"
                                   />
                                 ))}

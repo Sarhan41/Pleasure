@@ -18,7 +18,7 @@ const fetchOrders = async () => {
               images: true,
             },
           },
-          color: true,
+          color: true, // Include color data
         },
       },
     },
@@ -32,7 +32,10 @@ const fetchOrders = async () => {
     items: order.orderItems.map((item) => ({
       productName: item.product.name,
       size: item.size,
-      color: item.color.map((c) => c.value).join(", "), // Handling multiple colors
+      color: item.color.map((c) => ({
+        value: c.value,
+        name: c.name, // Include color name
+      })),
       sizeSKU: item.sizeSKU,
       quantity: item.quantity,
       price: item.price,

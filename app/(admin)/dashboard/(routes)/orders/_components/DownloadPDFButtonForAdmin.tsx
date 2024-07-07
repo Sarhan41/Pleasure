@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import html2pdf from "html2pdf.js";
 import { OrderColumn } from "./order-types";
 
-const generatePdf = (order: OrderColumn, userName: string) => {
+export const generatePdf = (order: OrderColumn, userName: string) => {
   const element = document.createElement("div");
   element.innerHTML = `
     <div style="padding: 20px; font-family: Arial, sans-serif;">
