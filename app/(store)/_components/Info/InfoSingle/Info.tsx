@@ -59,14 +59,12 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
 
   const categoryName = data.category.name;
 
-  if (data?.colors?.length === 1) {
-    useEffect(() => {
-      if (data?.colors?.length === 1) {
-        setSelectedColors([data.colors[0].value]);
-        setIsSelectedColorHidden(true);
-      }
-    }, [data?.colors]);
-  }
+  useEffect(() => {
+    if (data?.colors?.length === 1) {
+      setSelectedColors([data.colors[0].value]);
+      setIsSelectedColorHidden(true);
+    }
+  }, [data?.colors]);
 
   const handleColorSelection = (colorValue: string) => {
     if (selectedColors.includes(colorValue)) {
