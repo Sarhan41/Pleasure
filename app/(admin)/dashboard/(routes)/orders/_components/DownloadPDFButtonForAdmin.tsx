@@ -10,7 +10,7 @@ export const generatePdf = (order: OrderColumn, userName: string) => {
       <div>
         <p><strong>Phone:</strong> ${order.phone}</p>
         <p><strong>Ship To:</strong> ${order.address}</p>
-        <p><strong>Ship From:</strong>30 RayChandnagar Opposite Sukan Mall, Near Visat Circle, Motera,                                  Sabarmati, Ahemdabad, Gujarat, 380005</p>
+        <p><strong>Ship From:</strong>30 RayChandnagar Opposite Sukan Mall, Near Visat Circle, Motera, Sabarmati, Ahmedabad, Gujarat, 380005</p>
         <p><strong>Email:</strong> ${order.email}</p>
         <p><strong>Total Payment:</strong> ₹${order.totalPayment}</p>
         <p><strong>Paid:</strong> ${order.isPaid ? "Yes" : "No"}</p>
@@ -29,9 +29,7 @@ export const generatePdf = (order: OrderColumn, userName: string) => {
             <div>
               <p><strong>${item.productName}</strong></p>
               <p>Size: ${item.size}</p>
-               <p>Colors: ${item.color
-                 .map((color) => color.name)
-                 .join(", ")}</p>
+              <p>Colors: ${item.color.map((color) => color.name).join(", ")}</p>
               <p>Quantity: ${item.quantity}</p>
               <p>Price: ₹${item.price}</p>
             </div>
