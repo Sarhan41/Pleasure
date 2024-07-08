@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -38,6 +38,13 @@ interface DataTableProps<TData> {
 export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TData>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [selectedOrders, setSelectedOrders] = useState<Record<string, boolean>>({});
+  const [isAllSelected, setIsAllSelected] = useState(false);
+
+  useEffect(() => {
+    setIsAllSelected(
+      data.length > 0 && Object.keys(selectedOrders).length === data.length
+    );
+  }, [selectedOrders, data.length]);
 
   const columns: ColumnDef<TData>[] = [
     {
@@ -45,7 +52,7 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
       header: ({ table }) => (
         <input
           type="checkbox"
-          checked={Object.keys(selectedOrders).length === table.getRowModel().rows.length}
+          checked={isAllSelected}
           onChange={(e) => {
             const checked = e.target.checked;
             setSelectedOrders(
@@ -62,10 +69,13 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
           checked={!!selectedOrders[row.original.id]}
           onChange={(e) => {
             const checked = e.target.checked;
-            setSelectedOrders((prev) => ({
-              ...prev,
-              [row.original.id]: checked,
-            }));
+            setSelectedOrders((prev) => {
+              const updated = { ...prev, [row.original.id]: checked };
+              if (!checked) {
+                delete updated[row.original.id];
+              }
+              return updated;
+            });
           }}
         />
       ),
