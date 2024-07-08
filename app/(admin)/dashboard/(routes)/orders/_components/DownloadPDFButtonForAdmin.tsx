@@ -23,10 +23,15 @@ export const generatePdf = (order: OrderColumn, userName: string) => {
             (item, index) => `
           <div style="display: flex; margin-bottom: 10px; align-items: center;">
           <h1>${index + 1}.</h1>
-            <img src="${item.imageUrl}" alt="${item.productName}" style="width: 50px; height: 50px; margin-right: 10px;">
+            <img src="${item.imageUrl}" alt="${
+              item.productName
+            }" style="width: 50px; height: 50px; margin-right: 10px;">
             <div>
               <p><strong>${item.productName}</strong></p>
               <p>Size: ${item.size}</p>
+               <p>Colors: ${item.color
+                 .map((color) => color.name)
+                 .join(", ")}</p>
               <p>Quantity: ${item.quantity}</p>
               <p>Price: ₹${item.price}</p>
             </div>
@@ -49,7 +54,13 @@ export const generatePdf = (order: OrderColumn, userName: string) => {
     .save();
 };
 
-const DownloadPdfButtonAdmin = ({ order , userName}: { order: OrderColumn , userName: string}) => (
+const DownloadPdfButtonAdmin = ({
+  order,
+  userName,
+}: {
+  order: OrderColumn;
+  userName: string;
+}) => (
   <Button
     onClick={() => generatePdf(order, userName)}
     size="lg"
