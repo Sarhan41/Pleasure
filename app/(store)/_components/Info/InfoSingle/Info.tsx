@@ -82,28 +82,28 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
 
   const onAddToCart: MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.stopPropagation();
-  
+
     if (!userId) {
       return toast.error("Please login to add to cart");
     }
-  
+
     if (selectedSize === null) {
       toast.error("Please select a size");
       setSizeError(true);
       return;
     }
-  
+
     try {
       const response = await axios.get("/api/dashboard/cartItems");
       const cartItems = response.data;
-  
+
       const foundItem = cartItems.find(
         (item: {
           id: string;
           productId: string;
           userId: string;
           sizeName: string;
-          color?: { value: string; name: string }[];  // Made color optional
+          color?: { value: string; name: string }[]; // Made color optional
           quantity: number;
         }) =>
           item.productId === data.id &&
@@ -112,7 +112,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           item.color &&
           item.color.some((colorObj) => selectedColors.includes(colorObj.value))
       );
-  
+
       if (!foundItem) {
         const newItem = {
           productId: data.id,
@@ -128,7 +128,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             name: data.colors.find((c) => c.value === color)?.name || color,
           })),
         };
-  
+
         await axios.post("/api/dashboard/cartItems/single", newItem);
         toast.success("Added to cart");
       } else {
@@ -143,7 +143,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
       toast.error("Error adding to cart");
     }
   };
-  
+
   const handleSizeSelection = (size: Size) => {
     setSelectedSize(size);
     if (selectedSize === size) setSelectedSize(null);
@@ -239,7 +239,6 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             Div For Closing Share Popup
           =============================================
       */}
-      <h1>Info Single</h1>
       {(isSharePopupOpen1 || isSharePopupOpen2) && (
         <div
           className="fixed inset-0 bg-transparent bg-opacity-50 z-40"
