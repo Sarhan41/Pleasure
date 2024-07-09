@@ -1,7 +1,6 @@
 import { LoginButton } from "@/components/Auth/AuthUi/LoginButton";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
-import { set } from "date-fns";
 import { Heart, ShoppingBag } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -57,20 +56,20 @@ const NavbarActions = ({ userId }: NavbarActionsProps) => {
     <div className="flex items-center gap-x-4">
       <Button
         onClick={() => router.push(`/cart?reload=${Date.now()}`)}
-        className="flex items-center rounded-full bg-black px-2 py-2"
+        className="flex items-center rounded-full px-2 py-2 lg:bg-black lg:text-white bg-transparent text-black"
       >
-        <ShoppingBag className="h-5 w-5 max-sm:h-4 max-sm:w-4" color="white" />
-        <span className="ml-2 text-xs font-medium text-white ">
+        <ShoppingBag className="lg:h-5 lg:w-5 h-6 w-6" />
+        <span className="ml-2 text-xs font-medium lg:text-white text-black">
           {cartlength}
         </span>
       </Button>
 
       <Button
         onClick={() => router.push(`/wishlist?reload=${Date.now()}`)}
-        className="flex items-center rounded-full bg-black px-2 py-2"
+        className=" items-center rounded-full px-2 py-2 hidden lg:flex lg:bg-black lg:text-white bg-transparent text-black"
       >
-        <Heart className="h-5 w-5 max-sm:h-4 max-sm:w-4" color="white" />
-        <span className="ml-2 text-xs font-medium text-white ">
+        <Heart className="lg:h-5 lg:w-5 h-6 w-6" />
+        <span className="ml-2 text-xs font-medium lg:text-white text-black">
           {wishlength}
         </span>
       </Button>
