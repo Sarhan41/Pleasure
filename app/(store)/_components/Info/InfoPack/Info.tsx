@@ -207,7 +207,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           =============================================
       */}
 
-      <h1 className="text-xl text-primary">Info Pack</h1>
+      
       {(isSharePopupOpen1 || isSharePopupOpen2) && (
         <div
           className="fixed inset-0 bg-transparent bg-opacity-50 z-40"

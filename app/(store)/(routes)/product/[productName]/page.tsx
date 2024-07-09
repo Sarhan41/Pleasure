@@ -73,9 +73,9 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
     product.colors.some((color) => color.value !== "#111");
 
   return (
-    <div className="bg-white mt-14">
+    <div className="bg-white lg:mt-14">
       <Container>
-        <div className="px-4 py-10 sm:px-6 lg:px-8">
+        <div className="px-4 lg:py-10 sm:px-6 lg:px-8">
           <div className="xl:grid xl:grid-cols-2 lg:items-start lg:gap-x-8">
             <Gallery images={product?.images} />
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0 lg:overflow-y-scroll lg:max-h-[calc(100vh-200px)]">
