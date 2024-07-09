@@ -50,7 +50,24 @@ const NavbarActions = ({ userId }: NavbarActionsProps) => {
     return () => clearInterval(intervalId); // Cleanup interval on unmount
   }, [userId, pathname]);
 
-  if (!isMounted) return null;
+  if (!isMounted)
+    return (
+      <div className="flex items-center gap-x-4">
+        <Button
+          onClick={() => router.push(`/cart?reload=${Date.now()}`)}
+          className="flex items-center rounded-full px-2 py-2 lg:bg-black lg:text-white bg-transparent text-black"
+        >
+          <ShoppingBag className="lg:h-5 lg:w-5 h-6 w-6" />
+        </Button>
+
+        <Button
+          onClick={() => router.push(`/wishlist?reload=${Date.now()}`)}
+          className="items-center rounded-full px-2 py-2 hidden lg:flex lg:bg-black lg:text-white bg-transparent text-black"
+        >
+          <Heart className="lg:h-5 lg:w-5 h-6 w-6" />
+        </Button>
+      </div>
+    );
 
   return (
     <div className="flex items-center gap-x-4">
@@ -59,19 +76,23 @@ const NavbarActions = ({ userId }: NavbarActionsProps) => {
         className="flex items-center rounded-full px-2 py-2 lg:bg-black lg:text-white bg-transparent text-black"
       >
         <ShoppingBag className="lg:h-5 lg:w-5 h-6 w-6" />
-        <span className="ml-2 text-xs font-medium lg:text-white text-black">
-          {cartlength}
-        </span>
+        {cartlength > 0 && (
+          <span className="ml-2 text-xs font-medium lg:text-white text-black w-6 text-center">
+            {cartlength}
+          </span>
+        )}
       </Button>
 
       <Button
         onClick={() => router.push(`/wishlist?reload=${Date.now()}`)}
-        className=" items-center rounded-full px-2 py-2 hidden lg:flex lg:bg-black lg:text-white bg-transparent text-black"
+        className="items-center rounded-full px-2 py-2 hidden lg:flex lg:bg-black lg:text-white bg-transparent text-black"
       >
         <Heart className="lg:h-5 lg:w-5 h-6 w-6" />
-        <span className="ml-2 text-xs font-medium lg:text-white text-black">
-          {wishlength}
-        </span>
+        {wishlength > 0 && (
+          <span className="ml-2 text-xs font-medium lg:text-white text-black w-6 text-center">
+            {wishlength}
+          </span>
+        )}
       </Button>
     </div>
   );
