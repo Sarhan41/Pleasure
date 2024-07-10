@@ -2,8 +2,8 @@
 
 import { useRouter } from "next/navigation";
 
-import { Dialog, DialogContent, DialogTrigger } from "@/components/Auth/AuthUi/Dialog";
-import { RegisterForm } from "../RegisterForm";
+import { Dialog, DialogContent, DialogTrigger } from "../Dialog";
+import { RegisterForm } from "../../RegisterForm";
 
 interface LoginButtonProps {
   children: React.ReactNode;
