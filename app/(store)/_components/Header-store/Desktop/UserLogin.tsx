@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Divide, User2Icon } from "lucide-react";
 import { LoginButton } from "@/components/Auth/AuthUi/LoginButton";
 import Link from "next/link";
-import { SignUpButton } from "@/components/Auth/SignUpButton";
+import { SignUpButton } from "@/components/Auth/AuthUi/SignUpButton";
 import { FaUser } from "react-icons/fa";
 import { LogoutButton } from "@/components/Auth/AuthUi/LogoutButton";
 

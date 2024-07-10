@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { LoginButton } from "@/components/Auth/AuthUi/LoginButton";
 import { LogoutButton } from "@/components/Auth/AuthUi/LogoutButton";
-import { SignUpButton } from "@/components/Auth/SignUpButton";
+import { SignUpButton } from "@/components/Auth/AuthUi/SignUpButton";
 import {
   Accordion,
   AccordionContent,
