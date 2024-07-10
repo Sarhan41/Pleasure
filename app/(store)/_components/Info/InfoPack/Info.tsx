@@ -219,7 +219,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
 
       {/* =============================================
         Name Of The Product
-         =============================================
+         ==============================================
       */}
       <h1 className="text-xl md:text-2xl font-bold text-gray-900 border-b-2 pb-4">
         {data.name.includes("100")
