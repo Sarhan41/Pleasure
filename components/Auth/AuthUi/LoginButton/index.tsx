@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogTrigger } from "../Dialog";
 import { LoginForm } from "@/components/Auth/LoginForm";
 
 interface LoginButtonProps {
@@ -11,11 +11,7 @@ interface LoginButtonProps {
   asChild?: boolean;
 }
 
-export const LoginButton = ({
-  children,
-  mode = "redirect",
-  asChild,
-}: LoginButtonProps) => {
+export const LoginButton = ({ children, mode = "redirect", asChild }: LoginButtonProps) => {
   const router = useRouter();
 
   const onClick = () => {
@@ -23,16 +19,21 @@ export const LoginButton = ({
   };
 
   if (mode === "modal") {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleDialogClose = () => {
+      setIsOpen(false);
+    };
+
     return (
-      <Dialog>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild={asChild}>{children}</DialogTrigger>
-        <DialogContent className="p-0 bg-transparent border-none w-full h-full flex justify-center items-center mx-auto ">
+        <DialogContent className="p-0 bg-transparent border-none w-full h-full flex justify-center items-center mx-auto" >
           <LoginForm />
         </DialogContent>
       </Dialog>
     );
   }
-
   return (
     <span onClick={onClick} className="cursor-pointer">
       {children}
