@@ -170,6 +170,7 @@ const Footer: React.FC = () => {
                   ))}
                 </div>
               </div>
+              {/* // */}
             </div>
           </div>
           {/* Details */}
