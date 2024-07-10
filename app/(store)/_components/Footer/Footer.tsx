@@ -156,7 +156,7 @@ const Footer: React.FC = () => {
             <div className="text-white flex flex-col gap-4">
               <div>
                 <p className="mb-2">Contact us: contact@pleasure.com</p>
-                <p className="mb-2">Phone: +91 8155086856</p>
+                <p className="mb-2">Phone: +91 8155085865</p>
                 <div className="flex gap-4">
                   {SocialLinks.map((link, index) => (
                     <Link
@@ -170,6 +170,7 @@ const Footer: React.FC = () => {
                   ))}
                 </div>
               </div>
+              {/* // */}
             </div>
           </div>
           {/* Details */}
