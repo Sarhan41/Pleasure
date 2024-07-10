@@ -159,17 +159,17 @@ const SizeChart: React.FC<SizeChartProps> = ({ categoryName }) => {
     if (isPantiesOrShortsOrPyjama(row)) {
       return (
         <>
-          <td className="p-2 text-center border border-gray-200">{row.size}</td>
-          <td className="p-2 text-center border border-gray-200">{row.waist}</td>
-          <td className="p-2 text-center border border-gray-200">{row.hip}</td>
+          <td className="p-2 text-center border text-green-800 font-extrabold bold border-black">{row.size}</td>
+          <td className="p-2 text-center border border-black">{row.waist}</td>
+          <td className="p-2 text-center border border-black">{row.hip}</td>
         </>
       );
     } else if (isCamisoleOrSportBra(row)) {
       return (
         <>
-          <td className="p-2 text-center border border-gray-200">{row.size}</td>
-          <td className="p-2 text-center border border-gray-200">{row.bust}</td>
-          <td className="p-2 text-center border border-gray-200">{row.underbust}</td>
+          <td className="p-2 text-center border border-black">{row.size}</td>
+          <td className="p-2 text-center border border-black">{row.bust}</td>
+          <td className="p-2 text-center border border-black">{row.underbust}</td>
         </>
       );
     }
@@ -189,15 +189,15 @@ const SizeChart: React.FC<SizeChartProps> = ({ categoryName }) => {
               <tr className="bg-blue-500 text-white">
                 {categoryName === "Panties" || categoryName === "Shorts" || categoryName === "Pyjama" ? (
                   <>
-                    <th className="p-2 border border-gray-200">Size</th>
-                    <th className="p-2 border border-gray-200">Waist (inch)</th>
-                    <th className="p-2 border border-gray-200">Hip (inch)</th>
+                    <th className="p-2 border border-black">Size</th>
+                    <th className="p-2 border border-black">Waist (inch)</th>
+                    <th className="p-2 border border-black">Hip (inch)</th>
                   </>
                 ) : (
                   <>
-                    <th className="p-2 border border-gray-200">Size</th>
-                    <th className="p-2 border border-gray-200">Bust (inch)</th>
-                    <th className="p-2 border border-gray-200">Underbust (inch)</th>
+                    <th className="p-2 border border-black">Size</th>
+                    <th className="p-2 border border-black">Bust (inch)</th>
+                    <th className="p-2 border border-black">Underbust (inch)</th>
                   </>
                 )}
               </tr>
@@ -218,15 +218,15 @@ const SizeChart: React.FC<SizeChartProps> = ({ categoryName }) => {
               <tr className="bg-blue-500 text-white">
                 {categoryName === "Panties" || categoryName === "Shorts" || categoryName === "Pyjama" ? (
                   <>
-                    <th className="p-2 border border-gray-200">Size</th>
-                    <th className="p-2 border border-gray-200">Waist (cm)</th>
-                    <th className="p-2 border border-gray-200">Hip (cm)</th>
+                    <th className="p-2 border border-black">Size</th>
+                    <th className="p-2 border border-black">Waist (cm)</th>
+                    <th className="p-2 border border-black">Hip (cm)</th>
                   </>
                 ) : (
                   <>
-                    <th className="p-2 border border-gray-200">Size</th>
-                    <th className="p-2 border border-gray-200">Bust (cm)</th>
-                    <th className="p-2 border border-gray-200">Underbust (cm)</th>
+                    <th className="p-2 border border-black">Size</th>
+                    <th className="p-2 border border-black">Bust (cm)</th>
+                    <th className="p-2 border border-black">Underbust (cm)</th>
                   </>
                 )}
               </tr>
