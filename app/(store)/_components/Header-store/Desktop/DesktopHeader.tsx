@@ -65,7 +65,7 @@ const DesktopHeader = ({ categories, allProducts, UserId }: HeaderProps) => {
         </div>
 
         {/* User icon, cart, and wishlist */}
-        <div className="flex items-center mr-4">
+        <div className="flex items-center mr-36">
           <UserLogin userId={UserId} />
           <NavbarActions userId={UserId} />
         </div>

@@ -25,12 +25,12 @@ const UserLogin = ({ userId }: UserLoginProps) => {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuTrigger className=" bg-black data-[state=open]:bg-black data-[active]:bg-black  hover:bg-black pr-5  text-white ">
+            <NavigationMenuTrigger className="bg-black data-[state=open]:bg-black data-[active]:bg-black  hover:bg-black pr-5  text-white ">
               <Link href="/my-profile">
                 <FaUser className="h-5 w-5 max-sm:h-4 max-sm:w-4  text-white bg-black " />
               </Link>
             </NavigationMenuTrigger>
-            <NavigationMenuContent className="w-full md:w-80 px-4  py-6 bg-white border border-gray-200 rounded-lg shadow-lg z-50 ">
+            <NavigationMenuContent className="w-full md:w-80 px-4  py-6 bg-white border border-gray-200 rounded-lg shadow-lg  z-50 ">
               <h2 className="text-lg font-bold mb-1">Welcome to the store</h2>
               <p className="text-sm text-gray-600 mb-2">
                 Access your pleasure account
@@ -92,7 +92,7 @@ const UserLogin = ({ userId }: UserLoginProps) => {
                         variant="outline"
                         className="border-primary hover:bg-primary z-50 hover:text-white"
                       >
-                        Sign up
+                        Create an account
                       </Button>
                     </SignUpButton>
                   </div>

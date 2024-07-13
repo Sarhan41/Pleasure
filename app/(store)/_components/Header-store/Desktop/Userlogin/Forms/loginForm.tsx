@@ -6,6 +6,7 @@ import { useState, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import toast from "react-hot-toast"; // Import toast
 
 import { LoginSchema } from "@/schemas";
 import { Input } from "@/components/ui/input";
@@ -19,11 +20,8 @@ import {
 } from "@/components/ui/form";
 import { CardWrapper } from "@/components/Auth/AuthUi/CardWrapper";
 import { Button } from "@/components/ui/button";
-import {
-  FormError,
-  FormSuccess,
-} from "@/components/Auth/AuthUi/Form-Error-Success";
 import { login } from "@/actions/auth/login";
+import useDialogStore from "@/hooks/store/dialog-login";
 
 export const LoginForm = () => {
   const searchParams = useSearchParams();
@@ -33,9 +31,9 @@ export const LoginForm = () => {
       ? "Email already in use with different provider!"
       : "";
 
+  const { closeLoginDialog } = useDialogStore();
+
   const [showTwoFactor, setShowTwoFactor] = useState(false);
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -47,27 +45,30 @@ export const LoginForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-    setError("");
-    setSuccess("");
-
     startTransition(() => {
       login(values, callbackUrl)
         .then((data) => {
           if (data?.error) {
             form.reset();
-            setError(data.error);
+            toast.error(data.error);
           }
 
           if (data?.success) {
             form.reset();
-            setSuccess(data.success);
+            toast.success(data.success);
+            closeLoginDialog(); // Close the dialog on successful login
           }
 
           if (data?.twoFactor) {
             setShowTwoFactor(true);
+          } else {
+            closeLoginDialog(); // Close the dialog if not two-factor
           }
         })
-        .catch(() => setError("Something went wrong"));
+        .catch((error) => {
+          toast.error(error);
+          closeLoginDialog(); // Close the dialog in case of error
+        });
     });
   };
 
@@ -151,8 +152,6 @@ export const LoginForm = () => {
                 </>
               )}
             </div>
-            <FormError message={error || urlError} />
-            <FormSuccess message={success} />
             <Button disabled={isPending} type="submit" className="w-full">
               {showTwoFactor ? "Confirm" : "Login"}
             </Button>
