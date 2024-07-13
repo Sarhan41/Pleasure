@@ -1,42 +1,16 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "../components/dialog";
-import { LoginForm } from "@/components/Auth/AuthUi/LoginForm";
+import useDialogStore from "@/hooks/store/dialog-login";
 
 interface LoginButtonProps {
   children: React.ReactNode;
-  mode?: "modal" | "redirect";
-  asChild?: boolean;
 }
 
-export const LoginButton = ({
-  children,
-  mode = "redirect",
-  asChild,
-}: LoginButtonProps) => {
-  const router = useRouter();
-  const [open, setOpen] = useState(false);
+export const LoginButton = ({ children }: LoginButtonProps) => {
+  const { openLoginDialog } = useDialogStore();
 
-  const onClick = () => {
-    router.push("/auth/login");
-  };
-
-  if (mode === "modal") {
-    return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild={asChild} onClick={() => setOpen(true)}>
-          {children}
-        </DialogTrigger>
-        <DialogContent className="p-0 bg-transparent border-none w-full h-full flex justify-center items-center mx-auto">
-          <LoginForm />
-        </DialogContent>
-      </Dialog>
-    );
-  }
   return (
-    <span onClick={onClick} className="cursor-pointer">
+    <span onClick={openLoginDialog} className="cursor-pointer">
       {children}
     </span>
   );

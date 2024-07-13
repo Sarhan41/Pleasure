@@ -1,40 +1,16 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import useDialogStore from "@/hooks/store/dialog-login";
 
-import { Dialog, DialogContent, DialogTrigger } from "../components/dialog";
-import { RegisterForm } from "../Forms/RegisterForm";
-
-interface LoginButtonProps {
+interface SignUpButtonProps {
   children: React.ReactNode;
-  mode?: "modal" | "redirect";
-  asChild?: boolean;
 }
 
-export const SignUpButton = ({
-  children,
-  mode = "redirect",
-  asChild,
-}: LoginButtonProps) => {
-  const router = useRouter();
-
-  const onClick = () => {
-    router.push("/auth/login");
-  };
-
-  if (mode === "modal") {
-    return (
-      <Dialog>
-        <DialogTrigger asChild={asChild}>{children}</DialogTrigger>
-        <DialogContent className="p-0 w-auto bg-transparent border-none">
-          <RegisterForm />
-        </DialogContent>
-      </Dialog>
-    );
-  }
+export const SignUpButton = ({ children }: SignUpButtonProps) => {
+  const { openSignupDialog } = useDialogStore();
 
   return (
-    <span onClick={onClick} className="cursor-pointer">
+    <span onClick={openSignupDialog} className="cursor-pointer">
       {children}
     </span>
   );
