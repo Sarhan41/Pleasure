@@ -6,8 +6,7 @@ import {
   NavigationMenuItem,
   NavigationMenuTrigger,
   NavigationMenuContent,
-  NavigationMenuLink,
-} from "@/components/ui/navigation-menu";
+} from "./components/navigation";
 import { Button } from "@/components/ui/button";
 import { Divide, User2Icon } from "lucide-react";
 import { LoginButton } from "@/components/Auth/AuthUi/LoginButton";
