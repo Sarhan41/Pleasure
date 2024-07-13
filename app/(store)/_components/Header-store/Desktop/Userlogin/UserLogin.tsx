@@ -86,7 +86,7 @@ const UserLogin = ({ userId }: UserLoginProps) => {
                     <>
                       <div className="flex flex-col justify-center gap-3">
                         <div className="z-50"></div>
-                        <LoginButton asChild mode="modal">
+                        <LoginButton asChild>
                           <Button
                             variant="outline"
                             className="border-primary hover:bg-primary z-50 hover:text-white"
@@ -96,7 +96,7 @@ const UserLogin = ({ userId }: UserLoginProps) => {
                           </Button>
                         </LoginButton>
                         <div className="z-50"></div>
-                        <SignUpButton asChild mode="modal">
+                        <SignUpButton asChild >
                           <Button
                             size="lg"
                             variant="outline"
