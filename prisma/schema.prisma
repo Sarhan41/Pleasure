@@ -149,6 +149,7 @@ model Product {
   categoryId  String
   category    Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
   name        String
+  subname     String?
   isFeatured  Boolean     @default(false)
   isNew       Boolean     @default(false)
   isArchived  Boolean     @default(false)

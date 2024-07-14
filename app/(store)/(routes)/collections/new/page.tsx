@@ -5,7 +5,7 @@ const NewArrivalPage = async () => {
   // Fetch the featured products
   const products = await db.product.findMany({
     where: {
-      isFeatured: true,
+      isNew: true,
     },
     include: {
       images: true,

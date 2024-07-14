@@ -254,8 +254,12 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
          =============================================
       */}
       <h1 className="text-xl md:text-2xl font-bold text-gray-900 border-b-2 pb-4">
-        {data.name.includes("100")
-          ? `${data.name.split("100")[0]}100%${data.name.split("100")[1]}`
+        {data.subname && data.subname.length > 0
+          ? data.subname.includes("100")
+            ? data.subname.replace("100", "100%")
+            : data.subname
+          : data.name.includes("100")
+          ? data.name.replace("100", "100%")
           : data.name}
       </h1>
       {/* =============================================

@@ -26,6 +26,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { TrashIcon } from "@radix-ui/react-icons";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const formSchema = z.object({
   phone: z.string().min(1, "Phone number is required"),
@@ -79,7 +88,6 @@ export const AddressForm: React.FC<AddressFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
-  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const title = initialData ? "Edit Address" : "Create Address";
@@ -110,10 +118,6 @@ export const AddressForm: React.FC<AddressFormProps> = ({ initialData }) => {
     }
   };
 
-  const onClose = () => {
-    setOpen(false);
-  };
-
   const onDelete = async () => {
     try {
       setLoading(true);
@@ -123,11 +127,10 @@ export const AddressForm: React.FC<AddressFormProps> = ({ initialData }) => {
       router.push(`/my-profile/address?reload=${Date.now()}`);
     } catch (error) {
       toast.error(
-        "Make sure you cleared your all Orders using this Address first. "
+        "Make sure you cleared your all Orders using this Address first."
       );
     } finally {
       setLoading(false);
-      setOpen(false);
     }
   };
 
@@ -307,12 +310,24 @@ export const AddressForm: React.FC<AddressFormProps> = ({ initialData }) => {
                 <FormItem>
                   <FormLabel>Address Type</FormLabel>
                   <FormControl>
-                    <Input
+                    <Select
                       disabled={loading}
-                      placeholder="Address Type (e.g., Home, Office)"
-                      {...field}
-                      className="w-full"
-                    />
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select an address type"
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Home">Home</SelectItem>
+                        <SelectItem value="Office">Office</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

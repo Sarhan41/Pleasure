@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Product } from "@prisma/client";
 import Link from "next/link";
 import { SearchIcon, XIcon, FlameIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface SearchProps {
   allProducts: Product[];
@@ -26,12 +27,19 @@ const popularSearches = [
   },
 ];
 
+const formatProductName = (name: string) => {
+  return name.replace(/\s+/g, "-");
+};
+
 const Search = ({ allProducts }: SearchProps) => {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [showResults, setShowResults] = useState<boolean>(false);
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
+  const [focusedIndex, setFocusedIndex] = useState<number>(-1);
   const searchRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSearch = (term: string) => {
     const filteredProducts = allProducts.filter((product) =>
@@ -39,6 +47,7 @@ const Search = ({ allProducts }: SearchProps) => {
     );
     setSearchResults(filteredProducts);
     setShowResults(filteredProducts.length > 0 && term.length > 0);
+    setFocusedIndex(-1); // Reset focus index
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,6 +62,24 @@ const Search = ({ allProducts }: SearchProps) => {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "ArrowDown") {
+      setFocusedIndex((prevIndex) =>
+        prevIndex < searchResults.length - 1 ? prevIndex + 1 : prevIndex
+      );
+    } else if (e.key === "ArrowUp") {
+      setFocusedIndex((prevIndex) =>
+        prevIndex > 0 ? prevIndex - 1 : prevIndex
+      );
+    } else if (e.key === "Enter" && focusedIndex >= 0) {
+      router.push(
+        `/product/${formatProductName(searchResults[focusedIndex].name)}`
+      );
+      setShowResults(false);
+      setIsSearchOpen(false);
+    }
+  };
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -63,6 +90,7 @@ const Search = ({ allProducts }: SearchProps) => {
   useEffect(() => {
     if (isSearchOpen) {
       document.body.style.overflow = "hidden";
+      inputRef.current?.focus();
     } else {
       document.body.style.overflow = "auto";
     }
@@ -77,8 +105,10 @@ const Search = ({ allProducts }: SearchProps) => {
             placeholder="Search products..."
             value={searchTerm}
             onChange={handleChange}
+            onKeyDown={handleKeyDown}
             className="w-full focus:outline-none"
             onClick={() => setIsSearchOpen(true)}
+            ref={inputRef}
           />
           <SearchIcon
             size={24}
@@ -94,9 +124,17 @@ const Search = ({ allProducts }: SearchProps) => {
                 No results found
               </div>
             ) : (
-              searchResults.map((product) => (
-                <Link key={product.id} href={`/product/${product.name}`}>
-                  <div className="p-4 border-b hover:bg-gray-200 border-gray-300">
+              searchResults.map((product, index) => (
+                <Link
+                  key={product.id}
+                  href={`/product/${formatProductName(product.name)}`}
+                  onClick={() => setShowResults(false)}
+                >
+                  <div
+                    className={`p-4 border-b hover:bg-gray-200 border-gray-300 ${
+                      focusedIndex === index ? "bg-gray-200" : ""
+                    }`}
+                  >
                     {product.name}
                   </div>
                 </Link>
@@ -124,7 +162,9 @@ const Search = ({ allProducts }: SearchProps) => {
               placeholder="Search products..."
               value={searchTerm}
               onChange={handleChange}
+              onKeyDown={handleKeyDown}
               className="w-full lg:w-48 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring focus:border-blue-300"
+              ref={inputRef}
             />
             {showResults && (
               <div className="absolute mt-2 w-full bg-white border border-gray-300 rounded-xl shadow-md z-50">
@@ -133,9 +173,20 @@ const Search = ({ allProducts }: SearchProps) => {
                     No results found
                   </div>
                 ) : (
-                  searchResults.map((product) => (
-                    <Link key={product.id} href={`/product/${product.name}`}>
-                      <div className="p-4 border-b hover:bg-gray-200 border-gray-300">
+                  searchResults.map((product, index) => (
+                    <Link
+                      key={product.id}
+                      href={`/product/${formatProductName(product.name)}`}
+                      onClick={() => {
+                        setIsSearchOpen(false);
+                        setShowResults(false);
+                      }}
+                    >
+                      <div
+                        className={`p-4 border-b hover:bg-gray-200 border-gray-300 ${
+                          focusedIndex === index ? "bg-gray-200" : ""
+                        }`}
+                      >
                         {product.name}
                       </div>
                     </Link>
@@ -149,12 +200,10 @@ const Search = ({ allProducts }: SearchProps) => {
               <FlameIcon size={20} className="mr-2" /> Popular Searches
             </h3>
             <div className="space-y-2 flex flex-col overflow-auto max-lg:min-h-96 lg:text-lg lg:py-4 lg:px-6 lg:space-y-4">
-              {" "}
-              {/* Updated this line */}
               {popularSearches.map((item) => (
                 <Link
                   key={item.name}
-                  href={`/product/${item.link.replace(/\s+/g, "-")}`}
+                  href={`/product/${formatProductName(item.link)}`}
                   onClick={() => setIsSearchOpen(false)}
                   className="flex flex-wrap w-full"
                 >

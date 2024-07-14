@@ -197,9 +197,13 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({
         className="flex flex-col items-start space-y-1"
         onClick={handleClick}
       >
-        <p className="font-semibold text-sm text-gray-600">
-          {data.name.includes("100")
-            ? `${data.name.split("100")[0]}100%${data.name.split("100")[1]}`
+        <p className="font-semibold text-xs sm:text-xs text-gray-600">
+          {data.subname && data.subname.length > 0
+            ? data.subname.includes("100")
+              ? data.subname.replace("100", "100%")
+              : data.subname
+            : data.name.includes("100")
+            ? data.name.replace("100", "100%")
             : data.name}
         </p>
         <p className="text-xs text-blue-600">{data.category?.name}</p>
