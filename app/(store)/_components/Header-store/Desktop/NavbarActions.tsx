@@ -1,7 +1,7 @@
 import { LoginButton } from "@/components/Auth/AuthUi/LoginButton";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
-import { Heart, ShoppingBag } from "lucide-react";
+import { Heart, ShoppingCart } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -57,7 +57,7 @@ const NavbarActions = ({ userId }: NavbarActionsProps) => {
           onClick={() => router.push(`/cart?reload=${Date.now()}`)}
           className="flex items-center rounded-full px-2 py-2 lg:bg-black lg:text-white bg-transparent text-black"
         >
-          <ShoppingBag className="lg:h-5 lg:w-5 h-6 w-6" />
+          <ShoppingCart className="lg:h-5 lg:w-5 h-6 w-6" />
         </Button>
 
         <Button
@@ -75,7 +75,7 @@ const NavbarActions = ({ userId }: NavbarActionsProps) => {
         onClick={() => router.push(`/cart?reload=${Date.now()}`)}
         className="flex items-center rounded-full px-2 py-2 lg:bg-black lg:text-white bg-transparent text-black"
       >
-        <ShoppingBag className="lg:h-5 lg:w-5 h-6 w-6" />
+        <ShoppingCart className="lg:h-5 lg:w-5 h-6 w-6" />
         {cartlength > 0 && (
           <span className="ml-2 text-xs font-medium lg:text-white text-black w-6 text-center">
             {cartlength}

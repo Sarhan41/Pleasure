@@ -9,6 +9,22 @@ export const publicRoutes = [
   "/product/:id",
   "/cart",
   "/cart/checkout",
+  "/collections/:id",
+  "/collections/:id/:slug",
+  "/collections/:slug",
+  "/product/:slug",
+  "/product/:id",
+  "/collections",
+  "/search",
+  "/auth/login",
+  "/auth/register",
+  "/auth/reset",
+  "/auth/new-password",
+  "/auth/error",
+  "/auth/verify",
+  "/auth/new-verification",
+  "/collections*", // Added for prefix matching
+  "/product*", // Added for prefix matching
 ];
 
 /**
@@ -21,7 +37,7 @@ export const authRoutes = [
   "/auth/register",
   "/auth/error",
   "/auth/reset",
-  "/auth/new-password"
+  "/auth/new-password",
 ];
 
 /**
@@ -35,8 +51,6 @@ export const apiAuthPrefix = "/api/auth";
  * The default redirect path after logging in
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = "/my-profile/settings";
+export const DEFAULT_LOGIN_REDIRECT = "/";
 
-export const ADMIN_ROUTES = [
-  "/dashboard"
-]
+export const ADMIN_ROUTES = ["/dashboard"];

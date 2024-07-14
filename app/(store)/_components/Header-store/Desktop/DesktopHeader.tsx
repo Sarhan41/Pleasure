@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import MainNav from "./MainNav";
 import Image from "next/image";
-import UserLogin from "./UserLogin";
+import UserLogin from "./Userlogin/UserLogin";
 import NavbarActions from "./NavbarActions";
 import Search from "./Search";
 import { HeaderProps } from "../Header";
@@ -65,7 +65,7 @@ const DesktopHeader = ({ categories, allProducts, UserId }: HeaderProps) => {
         </div>
 
         {/* User icon, cart, and wishlist */}
-        <div className="flex items-center mr-4">
+        <div className="flex items-center mr-36">
           <UserLogin userId={UserId} />
           <NavbarActions userId={UserId} />
         </div>
