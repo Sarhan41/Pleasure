@@ -1,6 +1,7 @@
 import { currentUser } from "@/lib/auth";
 import CheckoutHeader from "../(store)/_components/Header-store/Checkout";
 import { Navbar } from "./_components/navbar";
+import { CardWrapper } from "@/components/Auth/AuthUi/CardWrapper";
 
 interface ProtectedLayoutProps {
   children: React.ReactNode;
@@ -9,6 +10,23 @@ interface ProtectedLayoutProps {
 const ProtectedLayout = async ({ children }: ProtectedLayoutProps) => {
   const user = await currentUser();
   const userId = user?.id;
+
+  if (!user) {
+    return (
+      <>
+        <CheckoutHeader userId={" "} />
+        <div className=" flex  h-screen w-screen justify-center items-center ">
+          <CardWrapper
+            headerLabel="You are Not Logged IN"
+            backButtonLabel="Back to login"
+            backButtonHref="/auth/login"
+          >
+            {" "}
+          </CardWrapper>
+        </div>
+      </>
+    );
+  }
 
   return (
     <div className="h-fit w-screen flex flex-col items-center justify-center mb-20">

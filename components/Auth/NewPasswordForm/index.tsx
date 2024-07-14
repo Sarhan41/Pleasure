@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast"; // Import toast
 
 import { NewPasswordSchema } from "@/schemas";
 import { Input } from "@/components/ui/input";
@@ -18,36 +19,39 @@ import {
 } from "@/components/ui/form";
 import { CardWrapper } from "@/components/Auth/AuthUi/CardWrapper";
 import { Button } from "@/components/ui/button";
-import {
-  FormError,
-  FormSuccess,
-} from "@/components/Auth/AuthUi/Form-Error-Success";
 import { newPassword } from "@/actions/auth/new-password";
 
 export const NewPasswordForm = () => {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
 
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof NewPasswordSchema>>({
     resolver: zodResolver(NewPasswordSchema),
     defaultValues: {
       password: "",
+      confirmPassword: "",
     },
   });
 
   const onSubmit = (values: z.infer<typeof NewPasswordSchema>) => {
-    setError("");
-    setSuccess("");
-
     startTransition(() => {
-      newPassword(values, token).then((data) => {
-        setError(data?.error);
-        setSuccess(data?.success);
-      });
+      newPassword({ password: values.password, confirmPassword:values.confirmPassword }, token)
+        .then((data) => {
+          if (data?.error) {
+            form.reset();
+            toast.error(data.error);
+          }
+
+          if (data?.success) {
+            form.reset();
+            toast.success(data.success);
+          }
+        })
+        .catch(() => {
+          toast.error("Something went wrong");
+        });
     });
   };
 
@@ -79,9 +83,26 @@ export const NewPasswordForm = () => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={isPending}
+                      placeholder="******"
+                      type="password"
+                      showPasswordButton
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
-          <FormError message={error} />
-          <FormSuccess message={success} />
           <Button disabled={isPending} type="submit" className="w-full">
             Reset password
           </Button>
