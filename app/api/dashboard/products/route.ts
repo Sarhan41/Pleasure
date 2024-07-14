@@ -19,6 +19,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const {
       name,
+      subname,
       categoryId,
       colorId,
       sizeId,
@@ -58,6 +59,7 @@ export async function POST(req: Request) {
     const product = await db.product.create({
       data: {
         name,
+        subname,
         categoryId,
         colors: {
           createMany: {

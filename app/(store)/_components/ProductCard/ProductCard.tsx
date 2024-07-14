@@ -207,8 +207,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
         onClick={handleClick}
       >
         <p className="font-semibold text-xs sm:text-xs text-gray-600">
-          {data.name.includes("100")
-            ? `${data.name.split("100")[0]}100%${data.name.split("100")[1]}`
+          {data.subname && data.subname.length > 0
+            ? data.subname.includes("100")
+              ? data.subname.replace("100", "100%")
+              : data.subname
+            : data.name.includes("100")
+            ? data.name.replace("100", "100%")
             : data.name}
         </p>
         <p className="text-xs text-gray-500">{data.category?.name}</p>

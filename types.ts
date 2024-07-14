@@ -33,6 +33,7 @@ export interface Product {
   category: Category;
   categoryId: string;
   name: string;
+  subname?: string | null;
   isFeatured: boolean;
   isArchived: boolean;
   createdAt: Date;
