@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { AlertModal } from "@/app/(admin)/_components/Alert-modal";
-import ImageUpload from "@/components/ui/image-upload";
+import ImageUpload from "./Image-upload-drag-fix";
 import {
   Select,
   SelectContent,
@@ -33,6 +33,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  SelectIcon,
+  SelectItemIndicator,
+  SelectItemText,
+  SelectViewport,
+} from "@radix-ui/react-select";
+import { CheckIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -81,6 +88,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const title = initialData ? "Edit Product" : "Create Product";
   const description = initialData ? "Edit your Product" : "Add a new Product";
@@ -208,14 +220,15 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   <ImageUpload
                     value={field.value.map((image) => image.url)}
                     disabled={loading}
-                    onChange={(url) =>
-                      field.onChange([...field.value, { url }])
+                    onChange={(urls) =>
+                      field.onChange(urls.map((url) => ({ url })))
                     }
                     onRemove={(url) =>
                       field.onChange([
                         ...field.value.filter((current) => current.url !== url),
                       ])
                     }
+                    isDraggable={true} // Enable drag-and-drop for this form
                   />
                 </FormControl>
                 <FormMessage />
@@ -462,24 +475,51 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                               ])
                             }
                           />
-                          <select
-                            className="w-[200px] p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                          <Select
                             value={colorId.link}
-                            onChange={(e) =>
+                            onValueChange={(value) =>
                               field.onChange([
                                 ...field.value.slice(0, index),
-                                { ...colorId, link: e.target.value },
+                                { ...colorId, link: value },
                                 ...field.value.slice(index + 1),
                               ])
                             }
                           >
-                            <option value="">Select a product</option>
-                            {products.map((product) => (
-                              <option key={product.id} value={product.name}>
-                                {product.name}
-                              </option>
-                            ))}
-                          </select>
+                            <SelectTrigger className="w-[200px] p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+                              <SelectValue placeholder="Select a product" />
+                              <SelectIcon>
+                                <ChevronDownIcon />
+                              </SelectIcon>
+                            </SelectTrigger>
+                            <SelectContent>
+                              <div className="p-2">
+                                <input
+                                  type="text"
+                                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                                  placeholder="Search products..."
+                                  value={searchTerm}
+                                  onChange={(e) =>
+                                    setSearchTerm(e.target.value)
+                                  }
+                                />
+                              </div>
+                              <SelectViewport>
+                                {filteredProducts.map((product) => (
+                                  <SelectItem
+                                    key={product.id}
+                                    value={product.name}
+                                  >
+                                    <SelectItemText>
+                                      {product.name}
+                                    </SelectItemText>
+                                    <SelectItemIndicator>
+                                      {/* <CheckIcon /> */}
+                                    </SelectItemIndicator>
+                                  </SelectItem>
+                                ))}
+                              </SelectViewport>
+                            </SelectContent>
+                          </Select>
 
                           <Button
                             type="button"
