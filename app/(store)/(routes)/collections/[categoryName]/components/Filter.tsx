@@ -15,7 +15,6 @@ interface FilterProps {
 
 const Filter: React.FC<FilterProps> = ({ data, valueKey, name }) => {
   const searchParams = useSearchParams();
-  console.log(searchParams);
   const router = useRouter();
 
   const selectedValues = searchParams.getAll(valueKey);
@@ -44,7 +43,6 @@ const Filter: React.FC<FilterProps> = ({ data, valueKey, name }) => {
       { skipNull: true }
     );
 
-    // router.push(url);
     router.push(url, { scroll: false });
   };
 
@@ -54,7 +52,6 @@ const Filter: React.FC<FilterProps> = ({ data, valueKey, name }) => {
       <hr className="my-4" />
       <div className="flex flex-wrap gap-2">
         {data.map((filter) => (
-          // @ts-ignore
           <div key={filter.id} className="flex items-center ">
             <Button
               className={cn(

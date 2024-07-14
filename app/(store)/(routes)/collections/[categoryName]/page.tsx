@@ -67,16 +67,13 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
   const finalProducts = filteredProductsByColor.filter((product) => {
     if (!sizeForMatch) return true;
     if (sizeForMatch) {
-      const productSizes =
-        product.sizes.length > 0
-          ? product.sizes.map((size) => size.name).join(",") // Join sizes into a string
-          : null;
+      const productSizes = product.sizes.length > 0 ? product.sizes : null;
       if (!productSizes) return false; // If product has no size, discard it
 
-      // Check if any of the sizes in the product are included in the sizeForMatch array
-      const productSizesArray = productSizes.split(","); // Convert product sizes string to an array
-      const matches = productSizesArray.some((size) =>
-        sizeForMatch.includes(size.trim())
+      // Check if any of the sizes in the product are included in the sizeForMatch array and have a quantity greater than 0
+      const matches = productSizes.some(
+        (size) =>
+          sizeForMatch.includes(size.name.trim()) && Number(size.quantity) > 0
       );
 
       return matches;
@@ -100,10 +97,6 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
   return (
     <div className="bg-white">
       <Container>
-        {/* {
-        
-        category && <Billboard data={{ imageUrl: category?.imageUrl ?? '' }} />
-        } */}
         <div className="px-4 sm:px-6 lg:px-8 pb-24">
           <div className="lg:flex lg:justify-between lg:items-start">
             <div className="hidden lg:block w-1/5">
