@@ -1,5 +1,6 @@
-import { XIcon } from "lucide-react";
+import React from "react";
 import { Transition } from "@headlessui/react";
+import { XIcon } from "lucide-react";
 import Link from "next/link";
 
 interface SidebarProps {
@@ -8,22 +9,21 @@ interface SidebarProps {
   categories: { id: string; name: string }[];
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, categories }) => {
+const Sidebar: React.FC<SidebarProps> = ({
+  isOpen,
+  toggleSidebar,
+  categories,
+}) => {
   return (
-    <Transition
-      show={isOpen}
-      enter="transition ease-out duration-300"
-      enterFrom="transform -translate-x-full"
-      enterTo="transform translate-x-0"
-      leave="transition ease-in duration-300"
-      leaveFrom="transform translate-x-0"
-      leaveTo="transform -translate-x-full"
-    >
-      <div className="fixed inset-0 z-50 flex">
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50"
-          onClick={toggleSidebar}
-        ></div>
+    <Transition show={isOpen} as="div" className="fixed inset-0 z-50 flex">
+      <Transition.Child
+        enter="transition ease-out duration-300"
+        enterFrom="transform -translate-x-full"
+        enterTo="transform translate-x-0"
+        leave="transition ease-in duration-300"
+        leaveFrom="transform translate-x-0"
+        leaveTo="transform -translate-x-full"
+      >
         <div className="relative flex flex-col w-64 bg-white shadow-lg h-screen z-50">
           <div className="flex items-center justify-between p-4 border-b">
             <h2 className="text-lg font-semibold">Categories</h2>
@@ -48,7 +48,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, categories }) 
             </nav>
           </div>
         </div>
-      </div>
+      </Transition.Child>
     </Transition>
   );
 };
