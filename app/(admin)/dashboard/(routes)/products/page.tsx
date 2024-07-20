@@ -32,7 +32,6 @@ const ProductsPage = async () => {
     createdAt: format(item.createdAt, "MMM do, yyyy"),
   }));
 
-  console.log(formattedProducts)
 
   return (
     <div className="  flex-col">
