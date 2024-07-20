@@ -17,7 +17,7 @@ const FirstRowUser = ({
   toggleSidebar,
 }: FirstRowUserProps) => {
   return (
-    <div className="flex flex-col items-center p-4 border-b border-gray-200 bg-white shadow-md">
+    <div className="flex flex-col items-center p-4 border-b border-gray-200 bg-white shadow-md sticky top-0 z-50">
       <div className="flex w-full items-center justify-between">
         <h1 className="text-lg font-bold text-gray-800">
           {userName ? (
