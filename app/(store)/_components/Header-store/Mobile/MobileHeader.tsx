@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { HeaderProps } from "../Header";
 import { MenuIcon } from "lucide-react";
-import Sidebar from "./Sidebar";
+import Sidebar from "./Sidebar/Sidebar";
 import NavbarActions from "../Desktop/NavbarActions";
 import Search from "../Desktop/Search";
 
@@ -11,16 +11,12 @@ export default function MobileHeaderIndex({
   categories,
   allProducts,
   UserId,
+  UserName,
 }: HeaderProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  const closeSidebar = (e: React.MouseEvent) => {
-    if (e.target !== e.currentTarget) return;
-    setIsSidebarOpen(false);
   };
 
   return (
@@ -29,35 +25,34 @@ export default function MobileHeaderIndex({
         <div onClick={toggleSidebar} className="cursor-pointer mr-2">
           <MenuIcon size={24} />
         </div>
-
         <div className="flex items-center justify-center">
-          <Link
-            href="/"
-            className="flex items-center overflow-hidden justify-center gap-2"
-          >
-            <Image
-              src="/logo-text.png"
-              height={40}
-              width={150}
-              alt="Pleasure"
-              className="object-cover"
-            />
+          <Link href="/" className="flex items-center overflow-hidden justify-center gap-2">
+            <Image src="/logo-text.png" height={40} width={150} alt="Pleasure" className="object-cover" />
           </Link>
         </div>
-
         <div className="flex items-center space-x-4">
           <Search allProducts={allProducts} />
           <NavbarActions userId={UserId} />
         </div>
       </header>
 
-      <div className="relative z-40" onClick={closeSidebar}>
-        <Sidebar
-          isOpen={isSidebarOpen}
-          toggleSidebar={toggleSidebar}
-          categories={categories}
-        />
-      </div>
+      {isSidebarOpen && (
+        <div>
+          <div
+            className="fixed inset-0 bg-black bg-opacity-80 z-50"
+            style={{ width: "100vw", height: "100vh" }}
+            onClick={toggleSidebar}
+          />
+          <Sidebar
+            isOpen={isSidebarOpen}
+            toggleSidebar={toggleSidebar}
+            // @ts-ignore
+            categories={categories}
+            userId={UserId}
+            userName={UserName}
+          />
+        </div>
+      )}
     </div>
   );
 }

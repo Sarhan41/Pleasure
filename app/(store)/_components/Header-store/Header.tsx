@@ -10,9 +10,10 @@ export interface HeaderProps {
   categories: Category[];
   allProducts: Product[];
   UserId: string | undefined;
+  UserName: string | undefined | null;
 }
 
-const Header = ({ categories, allProducts, UserId }: HeaderProps) => {
+const Header = ({ categories, allProducts, UserId, UserName }: HeaderProps) => {
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const pathname = usePathname();
 
@@ -44,6 +45,7 @@ const Header = ({ categories, allProducts, UserId }: HeaderProps) => {
           categories={categories}
           allProducts={allProducts}
           UserId={UserId}
+          UserName={UserName}
         />
       </div>
       <div className="max-lg:hidden ">
@@ -51,6 +53,7 @@ const Header = ({ categories, allProducts, UserId }: HeaderProps) => {
           categories={categories}
           allProducts={allProducts}
           UserId={UserId}
+          UserName={UserName}
         />
       </div>
     </header>

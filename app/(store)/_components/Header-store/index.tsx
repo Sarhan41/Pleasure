@@ -6,6 +6,7 @@ export default async function DesktopHeaderIndex() {
   const User = await currentUser();
 
   const userId = User?.id;
+  const UserName = User?.name;
 
   const categories = await db.category.findMany({
     include: {
@@ -24,6 +25,6 @@ export default async function DesktopHeaderIndex() {
   const AllProducts = await db.product.findMany({});
 
   return (
-    <Header categories={categories} allProducts={AllProducts} UserId={userId} />
+    <Header categories={categories} allProducts={AllProducts} UserId={userId} UserName={UserName} />
   );
 }
