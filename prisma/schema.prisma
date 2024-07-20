@@ -31,6 +31,7 @@ model User {
   orders                Order[]
   reviews               Review[]
   Address               Address[]
+  usedCoupons           UsedCoupon[]
 }
 
 model Address {
@@ -261,6 +262,8 @@ model Order {
   updatedAt  DateTime    @updatedAt
   userId     String
   user       User        @relation(fields: [userId], references: [id])
+  couponId   String?
+  coupon     Coupon?     @relation(fields: [couponId], references: [id])
 }
 
 model OrderItem {
@@ -283,7 +286,7 @@ model OrderItem {
 model OrderIemColor {
   id          String    @id @default(uuid())
   orderItemId String
-  orderItem   OrderItem @relation(fields: [orderItemId], references: [id])
+  orderItem   OrderItem @relation(fields: [orderItemId], references: [id], onDelete: Cascade)
   value       String
   name        String
   createdAt   DateTime  @default(now())
@@ -324,4 +327,35 @@ model ImagesBlog {
   updatedAt DateTime @updatedAt
 
   @@index([blogId])
+}
+
+model Coupon {
+  id                 String       @id @default(cuid())
+  code               String       @unique
+  discountType       DiscountType
+  discountValue      Int
+  minimumOrderAmount Int?
+  usageLimit         Int
+  remainingUses      Int
+  isActive           Boolean      @default(true)
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  usedCoupons        UsedCoupon[]
+  Order              Order[]
+}
+
+model UsedCoupon {
+  id       String   @id @default(cuid())
+  couponId String
+  coupon   Coupon   @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  usedAt   DateTime @default(now())
+
+  @@unique([couponId, userId])
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FLAT
 }
