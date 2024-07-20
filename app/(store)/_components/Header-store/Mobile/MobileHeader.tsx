@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { HeaderProps } from "../Header";
 import { MenuIcon } from "lucide-react";
-import Sidebar from "./Sidebar";
+import Sidebar from "./Sidebar/Sidebar";
 import NavbarActions from "../Desktop/NavbarActions";
 import Search from "../Desktop/Search";
 
@@ -11,6 +11,7 @@ export default function MobileHeaderIndex({
   categories,
   allProducts,
   UserId,
+  UserName,
 }: HeaderProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -24,22 +25,11 @@ export default function MobileHeaderIndex({
         <div onClick={toggleSidebar} className="cursor-pointer mr-2">
           <MenuIcon size={24} />
         </div>
-
         <div className="flex items-center justify-center">
-          <Link
-            href="/"
-            className="flex items-center overflow-hidden justify-center gap-2"
-          >
-            <Image
-              src="/logo-text.png"
-              height={40}
-              width={150}
-              alt="Pleasure"
-              className="object-cover"
-            />
+          <Link href="/" className="flex items-center overflow-hidden justify-center gap-2">
+            <Image src="/logo-text.png" height={40} width={150} alt="Pleasure" className="object-cover" />
           </Link>
         </div>
-
         <div className="flex items-center space-x-4">
           <Search allProducts={allProducts} />
           <NavbarActions userId={UserId} />
@@ -56,7 +46,10 @@ export default function MobileHeaderIndex({
           <Sidebar
             isOpen={isSidebarOpen}
             toggleSidebar={toggleSidebar}
+            // @ts-ignore
             categories={categories}
+            userId={UserId}
+            userName={UserName}
           />
         </div>
       )}

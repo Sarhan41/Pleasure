@@ -8,7 +8,7 @@ import NavbarActions from "./NavbarActions";
 import Search from "./Search";
 import { HeaderProps } from "../Header";
 
-const DesktopHeader = ({ categories, allProducts, UserId }: HeaderProps) => {
+const DesktopHeader = ({ categories, allProducts, UserId, UserName }: HeaderProps) => {
   return (
     <>
       {/* Top Row */}
@@ -66,7 +66,7 @@ const DesktopHeader = ({ categories, allProducts, UserId }: HeaderProps) => {
 
         {/* User icon, cart, and wishlist */}
         <div className="flex items-center mr-36">
-          <UserLogin userId={UserId} />
+          <UserLogin userId={UserId} userName={UserName}/>
           <NavbarActions userId={UserId} />
         </div>
       </div>

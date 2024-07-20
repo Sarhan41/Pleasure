@@ -17,9 +17,10 @@ import Dialog from "./components/dialog";
 
 interface UserLoginProps {
   userId: string | undefined;
+  userName: string | undefined | null;
 }
 
-const UserLogin = ({ userId }: UserLoginProps) => {
+const UserLogin = ({ userId, userName }: UserLoginProps) => {
   return (
     <div className=" w-fit z-40 relative">
       <NavigationMenu>
@@ -31,7 +32,12 @@ const UserLogin = ({ userId }: UserLoginProps) => {
               </Link>
             </NavigationMenuTrigger>
             <NavigationMenuContent className="w-full md:w-80 px-4  py-6 bg-white border border-gray-200 rounded-lg shadow-lg  z-50 ">
-              <h2 className="text-lg font-bold mb-1">Welcome to the store</h2>
+              <h2 className="text-lg font-bold mb-1">
+                Welcome to the store, <span className="text-primary font-extrabold">
+                  
+                  {userName}
+                  </span>
+              </h2>
               <p className="text-sm text-gray-600 mb-2">
                 Access your pleasure account
               </p>
