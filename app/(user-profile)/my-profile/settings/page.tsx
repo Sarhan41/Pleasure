@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useTransition, useState } from "react";
+import { useTransition, useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 
 import { Switch } from "@/components/ui/switch";
@@ -48,8 +48,8 @@ const SettingsPage = () => {
       name: user?.name || undefined,
       email: user?.email || undefined,
       role: user?.role || undefined,
-      isTwoFactorEnabled: user?.isTwoFactorEnabled || undefined,
-      isForNewsletter: user?.isForNewsletter || false,
+      isTwoFactorEnabled: user?.isTwoFactorEnabled ?? undefined,
+      isForNewsletter: user?.isForNewsletter ?? undefined,
     },
   });
 
@@ -69,6 +69,8 @@ const SettingsPage = () => {
         .catch(() => setError("Something went wrong!"));
     });
   };
+
+  if (user) console.log(user);
 
   return (
     <Card className="w-[600px] max-sm:w-[400px] max-xs:w-[250px]">
@@ -181,6 +183,7 @@ const SettingsPage = () => {
                 />
               )}
             </div>
+
             <FormField
               control={form.control}
               name="isForNewsletter"
