@@ -35,6 +35,7 @@ export const RegisterForm = () => {
       email: "",
       password: "",
       name: "",
+      isAllowForNewsletter: true,
     },
   });
 
@@ -109,6 +110,28 @@ export const RegisterForm = () => {
                       type="password"
                       showPasswordButton
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="isAllowForNewsletter"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <label className="flex items-center space-x-2">
+                      <Input
+                        type="checkbox"
+                        {...field}
+                        checked={field.value}
+                        onChange={field.onChange}
+                        disabled={isPending}
+                        value={field.value ? "true" : "false"}
+                      />
+                      <span>Receive updates via email</span>
+                    </label>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

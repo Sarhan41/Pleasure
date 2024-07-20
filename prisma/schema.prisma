@@ -25,6 +25,7 @@ model User {
   accounts              Account[]
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
+  isForNewsletter       Boolean                @default(true)
   Wishlist              Wishlist[]
   CartItems             CartItems[]
   orders                Order[]
