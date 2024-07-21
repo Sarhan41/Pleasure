@@ -78,9 +78,9 @@ const Footer: React.FC = () => {
     { text: "Home", route: "/" },
     { text: "blog", route: "/blog" },
     { text: "About Us", route: "/about" },
-    { text: "Contact Us", route: "/contact" },
+    { text: "Order Track", route: "/order-tracking" },
     { text: "Return Policy", route: "/return-policy" },
-    { text: "Terms & Conditions", route: "/return-policy" },
+    { text: "Terms & Conditions", route: "/terms" },
   ];
 
   const SocialLinks = [
@@ -178,7 +178,7 @@ const Footer: React.FC = () => {
             </h1>
             <div className="text-white flex flex-col gap-4">
               <div>
-                <p className="mb-2">Contact us: contact@pleasure.com</p>
+                <p className="mb-2">Contact us: contact@pleasure.fashion</p>
                 <p className="mb-2">Phone: +91 8155085865</p>
                 <div className="flex gap-4">
                   {SocialLinks.map((link, index) => (
