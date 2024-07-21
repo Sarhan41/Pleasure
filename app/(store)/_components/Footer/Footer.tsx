@@ -79,8 +79,8 @@ const Footer: React.FC = () => {
     { text: "blog", route: "/blog" },
     { text: "About Us", route: "/about" },
     { text: "Contact Us", route: "/contact" },
-    { text: "Privacy Policy", route: "/privacy" },
-    { text: "Terms & Conditions", route: "/terms" },
+    { text: "Return Policy", route: "/return-policy" },
+    { text: "Terms & Conditions", route: "/return-policy" },
   ];
 
   const SocialLinks = [
