@@ -38,26 +38,26 @@ const OrderTracking = () => {
               <div>
                 <h3 className="font-semibold">How can I track my order?</h3>
                 <p>
-                  = Enter your order number above and click the "Track" button.
+                  Enter your order number above and click the &quot;Track&quot; button.
                   You will see the current status and estimated delivery date.
                 </p>
               </div>
               <div>
                 <h3 className="font-semibold">
-                  What if I don't have my order number?
+                  What if I don&apos;t have my order number?
                 </h3>
                 <p>
-                  = You can find your order number in the confirmation email
+                  You can find your order number in the confirmation email
                   sent to you after your purchase. If you cannot find it, please
-                  contact our support team.{" "}
-                </p>{" "}
+                  contact our support team.
+                </p>
               </div>
               <div>
                 <h3 className="font-semibold">
                   Can I change my shipping address?
                 </h3>
                 <p>
-                  = Once your order has been shipped, we cannot change the
+                  Once your order has been shipped, we cannot change the
                   shipping address. Please contact us as soon as possible if you
                   need to make changes before shipment.
                 </p>

@@ -11,7 +11,7 @@ const AboutUs = () => {
           </h1>
           <div className="mt-4 text-lg space-y-6">
             <p>
-              Welcome to our PLEASURE's site where we sell high-quality ladies'
+              Welcome to our PLEASURE&apos;s site where we sell high-quality ladies&apos;
               undergarments. Our mission is to provide the best products and
               customer service.
             </p>
