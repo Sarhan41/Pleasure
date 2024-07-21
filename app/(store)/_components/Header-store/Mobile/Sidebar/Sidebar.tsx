@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Transition } from "@headlessui/react";
-import { ChevronDownIcon, ChevronRightIcon } from "lucide-react";
 import FirstRowUser from "./FirstRowUser";
-import Link from "next/link";
 import SecondRowCategory from "./SecondRowCategory";
 
 interface SidebarProps {
@@ -17,7 +15,6 @@ interface SidebarProps {
   userName: string | null | undefined;
 }
 
-// Utility function to get the first three words and format with category
 const getFormattedProductName = (productName: string, categoryName: string) => {
   const words = productName.split(" ").slice(0, 3).join(" ");
   return `${words} ${categoryName}`;
@@ -34,20 +31,14 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      document.body.classList.add("no-scroll");
-    } else {
-      document.body.classList.remove("no-scroll");
-    }
-    return () => {
-      document.body.classList.remove("no-scroll");
-    };
-  }, [isOpen]);
-  useEffect(() => {
-    if (isOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
+
+    return () => {
+      document.body.style.overflow = ""; // Cleanup to ensure overflow is reset
+    };
   }, [isOpen]);
 
   const handleCategoryClick = (categoryName: string) => {
@@ -59,10 +50,11 @@ const Sidebar: React.FC<SidebarProps> = ({
   return (
     <Transition
       appear={true}
+
       show={isOpen}
       className={`fixed inset-0 z-50 flex`}
       enter="transition ease-out duration-300"
-      enterFrom="transform -translate-x-full"
+      enterFrom="transform -translate-x-full "
       enterTo="transform translate-x-0"
       leave="transition ease-in duration-300"
       leaveFrom="transform translate-x-0"
@@ -78,7 +70,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               userId={userId}
             />
           </div>
-          {/* //category div */}
+          {/* category div */}
           <div className="flex flex-col h-full ">
             <SecondRowCategory
               handleCategoryClick={handleCategoryClick}

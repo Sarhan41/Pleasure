@@ -26,7 +26,7 @@ export const CouponClient: React.FC<CouponClientProps> = ({ data }) => {
           title={`Coupons (${data.length})`}
           description="Manage coupons for your store"
         />
-        <Button onClick={() => router.push(`/dashboard/coupon/new`)}>
+        <Button onClick={() => router.push(`/dashboard/coupons/new`)}>
           <Plus className="mr-2 h-4 w-4" />
           Add New
         </Button>
