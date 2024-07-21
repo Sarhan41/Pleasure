@@ -1,0 +1,116 @@
+import { NextResponse } from "next/server";
+import { db } from "@/lib/db";
+import { currentRole, currentUser } from "@/lib/auth";
+
+export async function GET(
+  req: Request,
+  { params }: { params: { couponId: string } }
+) {
+  try {
+    if (!params.couponId) {
+      return new NextResponse("Coupon Id is required", { status: 400 });
+    }
+
+    const coupon = await db.coupon.findUnique({
+      where: {
+        id: params.couponId,
+      },
+    });
+
+    return NextResponse.json(coupon);
+  } catch (error) {
+    console.log("[COUPON_GET]", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
+
+export async function PATCH(
+  req: Request,
+  { params }: { params: { couponId: string } }
+) {
+  try {
+    const user = await currentUser();
+    const role = await currentRole();
+
+    if (!user) {
+      return new NextResponse("Unauthenticated", { status: 401 });
+    }
+
+    if (role !== "ADMIN") {
+      return new NextResponse("Unauthorized", { status: 403 });
+    }
+
+    const body = await req.json();
+
+    const {
+      code,
+      discountType,
+      discountValue,
+      minimumOrderAmount,
+      usageLimit,
+      remainingUses,
+      isActive,
+    } = body;
+
+    if (!code) {
+      return new NextResponse("Code is required", { status: 400 });
+    }
+
+    if (!params.couponId) {
+      return new NextResponse("Coupon Id is required", { status: 400 });
+    }
+
+    const coupon = await db.coupon.update({
+      where: {
+        id: params.couponId,
+      },
+      data: {
+        code,
+        discountType: discountType === "PERCENTAGE" ? "PERCENTAGE" : "FLAT",
+        discountValue,
+        minimumOrderAmount,
+        usageLimit,
+        remainingUses,
+        isActive,
+      },
+    });
+
+    return NextResponse.json(coupon);
+  } catch (error) {
+    console.log("[COUPON_PATCH]", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { couponId: string } }
+) {
+  try {
+    const user = await currentUser();
+    const role = await currentRole();
+
+    if (!user) {
+      return new NextResponse("Unauthenticated", { status: 401 });
+    }
+
+    if (role !== "ADMIN") {
+      return new NextResponse("Unauthorized", { status: 403 });
+    }
+
+    if (!params.couponId) {
+      return new NextResponse("Coupon Id is required", { status: 400 });
+    }
+
+    const coupon = await db.coupon.delete({
+      where: {
+        id: params.couponId,
+      },
+    });
+
+    return NextResponse.json(coupon);
+  } catch (error) {
+    console.log("[COUPON_DELETE]", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}

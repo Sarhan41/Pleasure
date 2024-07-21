@@ -48,7 +48,12 @@ export function MainNav({
     {
       href: `/dashboard/blog/create`,
       label: "blog",
-      active: pathname === `/dashboard/blog/create`,
+      active: pathname === `/dashboard/blog`,
+    },
+    {
+      href: `/dashboard/coupon`,
+      label: "coupon",
+      active: pathname === `/dashboard/coupon`,
     },
     {
       href: `/dashboard/users`,
