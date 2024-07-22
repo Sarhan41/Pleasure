@@ -11,9 +11,10 @@ export async function POST(request: NextRequest) {
 
     let discount = 0;
     let couponId = null;
+    let coupon = null;
 
     if (couponCode) {
-      const coupon = await db.coupon.findUnique({
+      coupon = await db.coupon.findUnique({
         where: { code: couponCode },
       });
 
@@ -81,7 +82,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    if (couponId) {
+    if (coupon && couponId) {
       await db.coupon.update({
         where: { id: couponId },
         data: { remainingUses: coupon.remainingUses - 1 },
