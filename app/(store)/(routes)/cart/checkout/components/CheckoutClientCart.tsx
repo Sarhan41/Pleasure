@@ -48,7 +48,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
   const [razorpayReady, setRazorpayReady] = useState(false);
   const { discount, couponId } = useDiscountStore(); // Get discount and couponId from the store
 
-  console.log('Coupon ID from store:', couponId); // Debugging log for couponId
+  console.log("Coupon ID from store:", couponId); // Debugging log for couponId
 
   useEffect(() => {
     let total = 0;
@@ -119,7 +119,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
       isPaid: paymentMethod === "razorpay",
       userId: user?.id,
       addressId: AddressId,
-      couponId, // Ensure couponId is passed here
+      couponId: couponId || null, // Ensure couponId is optional
       products: products.map((product) => ({
         productId: product.productId,
         price: product.discountedPrice
@@ -135,7 +135,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
       })),
     };
 
-    console.log('Order Payload:', orderPayload); // Debugging log for orderPayload
+    console.log("Order Payload:", orderPayload); // Debugging log for orderPayload
 
     if (paymentMethod === "razorpay") {
       if (!idRef.current) {

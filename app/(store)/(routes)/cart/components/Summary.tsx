@@ -65,7 +65,7 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
   };
 
   const onCheckout = () => {
-    router.push(`/cart/checkout?reload=${Date.now()}`);
+    window.open(`/cart/checkout?reload=${Date.now()}`, "_blank");
   };
 
   const isCheckoutPage = pathname.includes("checkout");
