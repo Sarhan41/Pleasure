@@ -114,6 +114,11 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
       header: "Status",
     },
     {
+      accessorKey: "couponCode",
+      header: "Coupon Code",
+      cell: (info) => (info.getValue() === "No Coupon" ? "No" : info.getValue()),
+    },
+    {
       id: "details",
       header: "Details",
       cell: ({ row }) => (
@@ -139,6 +144,9 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
                 <div>
                   <span className="font-semibold">Total Payment:</span> ₹
                   {row.original.totalPayment}
+                </div>
+                <div>
+                  <span className="font-semibold">Coupon Code:</span> {row.original.couponCode}
                 </div>
                 <div>
                   <span className="font-semibold">Paid:</span> {row.original.isPaid ? "Yes" : "No"}
