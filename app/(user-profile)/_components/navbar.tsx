@@ -33,7 +33,9 @@ export const Navbar = () => {
           asChild
           variant={pathname === "/my-profile/settings" ? "default" : "outline"}
         >
-          <Link href="/my-profile/settings">Settings</Link>
+          <a href={`/my-profile/settings?reload=${Date.now()}`}>
+            Settings
+          </a>
         </Button>
       </div>
       <UserButton />

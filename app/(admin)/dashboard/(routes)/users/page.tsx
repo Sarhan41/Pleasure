@@ -23,6 +23,7 @@ const UsersPage = async () => {
     name: item.name || "",
     role: item.role,
     email: item.email || "",
+    newsletter: item.isForNewsletter,
   }));
 
   return (

@@ -12,6 +12,9 @@ export default async function CartPage() {
   const user = await currentUser();
   const UserId = user?.id;
 
+
+
+
   const CartProducts = await db.cartItems.findMany({
     where: {
       userId: UserId,
@@ -79,6 +82,7 @@ export default async function CartPage() {
             <Summary
               prices={pricesForSummary}
               quantities={quantitiesForSummary}
+              userId={UserId}
             />
           </div>
         </div>

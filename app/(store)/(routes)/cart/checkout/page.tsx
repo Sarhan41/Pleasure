@@ -30,9 +30,8 @@ export default async function CartCheckoutPage() {
   const quantitiesForSummaryAndAccordion = CartProducts.map(
     (item) => item.quantity
   );
-  const pricesForSummaryAndAccordion = CartProducts.map((item) =>
-    parseFloat(item.price)
-  );
+  const pricesForSummaryAndAccordion = CartProducts.map((item) => parseFloat(item.discountedPrice ? item.discountedPrice : item.price));
+
 
   if (CartProducts.length === 0) {
     return (

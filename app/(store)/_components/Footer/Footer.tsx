@@ -21,37 +21,56 @@ const Footer: React.FC = () => {
 
   const footerLinks = {
     "Sport Bras": [
-      { text: "white ", route: "/product/White" },
-      { text: "Link 2", route: "/link2" },
-      { text: "Link 3", route: "/link3" },
-      { text: "red", route: "/product/Red-Suit" },
+      {
+        text: "Hot Pink",
+        route:
+          "Hot Pink White Skin Black Red Maroon Grey Cotton Spandex Stretchable Womens Sports Bra (Pack of 2) Buy Any 3 Pcs",
+      },
+      { text: "Purple Maroon", route: "Spandex Purple Maroon Sports Bra" },
+      { text: "Blue Printed", route: "Blue Printed Designer Sports Bra" },
     ],
     Panties: [
       {
         text: "Julia",
         route:
-          "/product/Hipster Modal Cotton Panties In Red Violet Ruby Pink (Pack Of 3) JULIA",
+          "Hipster Modal Cotton Panties In Red Violet Ruby Pink (Pack Of 3) JULIA",
       },
       {
         text: "Berly",
         route:
-          "/product/Hipster-Midrise-Modal-Stretch-Stripe-Panties-In-Red-Black-Rani-Pink-(Pack-of-3)-BERLY",
+          "Hipster Midrise Modal Stretch Stripe Panties In Red Black Rani Pink (Pack of 3) BERLY",
       },
       {
         text: "Pearl",
         route:
-          "product/High-Waist-Full-Coverage-Printed-in-Dark-Grey-Navy-Blue-Maroon-Panties-(pack-of-3)-100-Cotton-PEARL",
+          "High Waist Full Coverage Printed in Dark Grey Navy Blue Maroon Panties (pack of 3) 100 Cotton PEARL",
       },
     ],
     NightSuit: [
-      { text: "Link X", route: "/linkX" },
-      { text: "Link Y", route: "/linkY" },
-      { text: "Link Z", route: "/linkZ" },
+      {
+        text: "White",
+        route:
+          "/Hipster Modal Cotton Panties In Red Violet Ruby Pink (Pack Of 3) JULIA",
+      },
+      {
+        text: "Pink",
+        route:
+          "Hipster Midrise Modal Stretch Stripe Panties In Red Black Rani Pink (Pack of 3) BERLY",
+      },
+      {
+        text: "Grey",
+        route:
+          "High Waist Full Coverage Printed in Dark Grey Navy Blue Maroon Panties (pack of 3) 100 Cotton PEARL",
+      },
     ],
     "Active Wear": [
-      { text: "Link Alpha", route: "/linkAlpha" },
-      { text: "Link Beta", route: "/linkBeta" },
-      { text: "Link Gamma", route: "/linkGamma" },
+      {
+        text: "Hot Pink",
+        route:
+          "Hot Pink White Skin Black Red Maroon Grey Cotton Spandex Stretchable Womens Sports Bra (Pack of 2) Buy Any 3 Pcs",
+      },
+      { text: "Purple Maroon", route: "Spandex Purple Maroon Sports Bra" },
+      { text: "Blue Printed", route: "Blue Printed Designer Sports Bra" },
     ],
   };
 
@@ -59,8 +78,8 @@ const Footer: React.FC = () => {
     { text: "Home", route: "/" },
     { text: "blog", route: "/blog" },
     { text: "About Us", route: "/about" },
-    { text: "Contact Us", route: "/contact" },
-    { text: "Privacy Policy", route: "/privacy" },
+    { text: "Order Track", route: "/order-tracking" },
+    { text: "Return Policy", route: "/return-policy" },
     { text: "Terms & Conditions", route: "/terms" },
   ];
 
@@ -114,7 +133,10 @@ const Footer: React.FC = () => {
                 <ul className="text-secondary">
                   {links.map((link, index) => (
                     <li key={index} className="mb-2 hover:text-primary">
-                      <Link href={link.route} passHref>
+                      <Link
+                        href={`/product/${link.route.replace(/\s+/g, "-")}`}
+                        passHref
+                      >
                         {link.text}
                       </Link>
                     </li>
@@ -140,11 +162,12 @@ const Footer: React.FC = () => {
           {/* Address */}
           <div>
             <div>
-
-            <h1 className="text-white border-b-2 mb-4 border-primary">
-              REGISTERED OFFICE ADDRESS
-            </h1>
-            <h1 className="text-base font-bold uppercase text-white">Pleasure</h1>
+              <h1 className="text-white border-b-2 mb-4 border-primary">
+                REGISTERED OFFICE ADDRESS
+              </h1>
+              <h1 className="text-base font-bold uppercase text-white">
+                Pleasure
+              </h1>
             </div>
             <p className="text-gray-200">{Address}</p>
           </div>
@@ -155,7 +178,7 @@ const Footer: React.FC = () => {
             </h1>
             <div className="text-white flex flex-col gap-4">
               <div>
-                <p className="mb-2">Contact us: contact@pleasure.com</p>
+                <p className="mb-2">Contact us: contact@pleasure.fashion</p>
                 <p className="mb-2">Phone: +91 8155085865</p>
                 <div className="flex gap-4">
                   {SocialLinks.map((link, index) => (

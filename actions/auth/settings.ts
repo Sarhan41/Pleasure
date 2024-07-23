@@ -16,17 +16,17 @@ export const settings = async (
   const user = await currentUser();
 
   if (!user) {
-    return { error: "Unauthorized" }
+    return { error: "Unauthorized" };
   }
 
   if (!user.id) {
-    return { error: "Unauthorized" }
+    return { error: "Unauthorized" };
   }
 
   const dbUser = await getUserById(user.id);
 
   if (!dbUser) {
-    return { error: "Unauthorized" }
+    return { error: "Unauthorized" };
   }
 
   if (user.isOAuth) {
@@ -40,7 +40,7 @@ export const settings = async (
     const existingUser = await getUserByEmail(values.email);
 
     if (existingUser && existingUser.id !== user.id) {
-      return { error: "Email already in use!" }
+      return { error: "Email already in use!" };
     }
 
     const verificationToken = await generateVerificationToken(
@@ -48,7 +48,7 @@ export const settings = async (
     );
     await sendVerificationEmail(
       verificationToken.email,
-      verificationToken.token,
+      verificationToken.token
     );
 
     return { success: "Verification email sent!" };
@@ -57,7 +57,7 @@ export const settings = async (
   if (values.password && values.newPassword && dbUser.password) {
     const passwordsMatch = await bcrypt.compare(
       values.password,
-      dbUser.password,
+      dbUser.password
     );
 
     if (!passwordsMatch) {
@@ -66,7 +66,7 @@ export const settings = async (
 
     const hashedPassword = await bcrypt.hash(
       values.newPassword,
-      10,
+      10
     );
     values.password = hashedPassword;
     values.newPassword = undefined;
@@ -76,10 +76,9 @@ export const settings = async (
     where: { id: dbUser.id },
     data: {
       ...values,
+      
     }
   });
 
-  
-
-  return { success: "Settings Updated!" }
-}
+  return { success: "Settings Updated!" };
+};

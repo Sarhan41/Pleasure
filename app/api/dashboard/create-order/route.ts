@@ -2,12 +2,32 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
 export async function POST(request: NextRequest) {
-  const { orderId, total, status, isPaid, userId, addressId, products } = await request.json();
+  const { orderId, total, status, isPaid, userId, addressId, products, couponCode } = await request.json();
 
   try {
     if (!orderId) {
       throw new Error("Order ID is missing");
     }
+
+    let discount = 0;
+    let couponId = null;
+    let coupon = null;
+
+    if (couponCode) {
+      coupon = await db.coupon.findUnique({
+        where: { code: couponCode },
+      });
+
+      if (coupon && coupon.isActive && coupon.remainingUses > 0) {
+        discount = coupon.discountType === "PERCENTAGE" 
+          ? (total * coupon.discountValue) / 100 
+          : coupon.discountValue;
+
+        couponId = coupon.id;
+      }
+    }
+
+    const finalTotal = total - discount;
 
     const productDetails = await db.product.findMany({
       where: {
@@ -50,7 +70,7 @@ export async function POST(request: NextRequest) {
     const order = await db.order.create({
       data: {
         id: orderId,
-        total: parseInt(total, 10),
+        total: finalTotal,
         status: status,
         isPaid: isPaid,
         userId: userId,
@@ -58,8 +78,23 @@ export async function POST(request: NextRequest) {
         orderItems: {
           create: orderItemsData,
         },
+        couponId: couponId,
       },
     });
+
+    if (coupon && couponId) {
+      await db.coupon.update({
+        where: { id: couponId },
+        data: { remainingUses: coupon.remainingUses - 1 },
+      });
+
+      await db.usedCoupon.create({
+        data: {
+          couponId: couponId,
+          userId: userId,
+        },
+      });
+    }
 
     await db.cartItems.deleteMany({
       where: {
@@ -67,9 +102,12 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({ order }, { status: 201 });
+    return NextResponse.json({ order }, { status: 200 });
   } catch (error) {
-    console.log("[ORDER_CREATE]", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    console.error(error);
+    return NextResponse.json(
+      { error: "Something went wrong, please try again." },
+      { status: 500 }
+    );
   }
 }

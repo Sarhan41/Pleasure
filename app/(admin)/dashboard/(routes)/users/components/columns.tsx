@@ -8,6 +8,7 @@ export type UserColumn = {
   name: string;
   role: string;
   email: string;
+  newsletter: boolean;
 };
 
 export const columns: ColumnDef<UserColumn>[] = [
@@ -22,6 +23,10 @@ export const columns: ColumnDef<UserColumn>[] = [
   {
     accessorKey: "email",
     header: "Email",
+  },
+  {
+    accessorKey: "newsletter",
+    header: "Newsletter",
   },
   {
     id: "actions",

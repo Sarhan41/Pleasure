@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useTransition, useState } from "react";
+import { useTransition, useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 
 import { Switch } from "@/components/ui/switch";
@@ -30,8 +30,7 @@ import {
 import { UserRole } from "@prisma/client";
 import Link from "next/link";
 import { LogoutButton } from "@/components/Auth/AuthUi/LogoutButton";
-import { ExitIcon } from "@radix-ui/react-icons";
-import { CheckCircledIcon } from "@radix-ui/react-icons";
+import { ExitIcon, CheckCircledIcon } from "@radix-ui/react-icons";
 
 const SettingsPage = () => {
   const user = useCurrentUser();
@@ -49,7 +48,8 @@ const SettingsPage = () => {
       name: user?.name || undefined,
       email: user?.email || undefined,
       role: user?.role || undefined,
-      isTwoFactorEnabled: user?.isTwoFactorEnabled || undefined,
+      isTwoFactorEnabled: user?.isTwoFactorEnabled ?? undefined,
+      isForNewsletter: user?.isForNewsletter ?? undefined,
     },
   });
 
@@ -69,6 +69,8 @@ const SettingsPage = () => {
         .catch(() => setError("Something went wrong!"));
     });
   };
+
+  if (user) console.log(user);
 
   return (
     <Card className="w-[600px] max-sm:w-[400px] max-xs:w-[250px]">
@@ -181,6 +183,28 @@ const SettingsPage = () => {
                 />
               )}
             </div>
+
+            <FormField
+              control={form.control}
+              name="isForNewsletter"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                  <div className="space-y-0.5">
+                    <FormLabel>Newsletter Subscription</FormLabel>
+                    <FormDescription>
+                      Receive updates and promotions via email
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      disabled={isPending}
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
             <FormError message={error} />
             <FormSuccess message={success} />
             <Button disabled={isPending} type="submit">

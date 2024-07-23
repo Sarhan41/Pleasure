@@ -4,6 +4,7 @@ import * as React from "react";
 import { Carousel, CarouselContent, CarouselItem } from "./carousel";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 
 interface BillboardProps {
   data: {
@@ -22,7 +23,7 @@ const Billboard: React.FC<BillboardProps> = ({ data }) => {
       if (part.startsWith('"') && part.endsWith('"')) {
         return (
           <span key={index} className="relative">
-         <span className="text-transparent bg-gradient-to-r from-pink-500 via-yellow-600 to-red-900 bg-clip-text hover:from-yellow-500 hover:via-orange-600 hover:to-pink-900 transition duration-300 ease-in-out">
+            <span className="text-transparent bg-gradient-to-r from-pink-500 via-yellow-600 to-red-900 bg-clip-text hover:from-yellow-500 hover:via-orange-600 hover:to-pink-900 transition duration-300 ease-in-out">
               {part.slice(1, -1)}
             </span>
           </span>
@@ -31,30 +32,22 @@ const Billboard: React.FC<BillboardProps> = ({ data }) => {
       return part;
     });
   };
-  
-  
+
   return (
-    <Carousel
-      className="mt-8 lg:mt-16 relative"
-      autoPlayInterval={4000}
-      hideArrows
-    >
+    <Carousel className="mt-8 lg:mt-16 relative" autoPlayInterval={4000} hideArrows>
       <CarouselContent>
         {data.map((item, index) => (
           <CarouselItem key={index}>
             <div className="p-4 sm:p-6 w-full flex justify-center lg:p-8 overflow-hidden cursor-pointer">
-              <Link
-                href={`/collections/${item.link.replace(/\s+/g, "-")}`}
-                passHref
-                className="w-full h-full"
-              >
-                <div
-                  style={{
-                    backgroundImage: `url(${item.imageUrl})`,
-                    backgroundSize: "cover",
-                  }}
-                  className="relative w-full h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[80vh] rounded-xl overflow-hidden shadow-2xl transform transition-transform duration-500 hover:scale-105 bg-center max-sm:bg-left"
-                >
+              <Link href={`/collections/${item.link.replace(/\s+/g, "-")}`} passHref className="w-full h-full">
+                <div className="relative w-full h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[80vh] rounded-xl overflow-hidden shadow-2xl transform transition-transform duration-500 hover:scale-105 max-sm:bg-left">
+                  <Image
+                    src={item.imageUrl}
+                    alt={item.name}
+                    objectFit="cover"
+                    fill
+                    className="rounded-xl bg-gradient-to-b from-black/70 via-black/50 to-black/30"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/30 flex flex-col justify-center lg:justify-end items-center lg:items-end text-center lg:text-right text-white space-y-4 lg:space-y-6 p-4 sm:p-6 lg:p-10">
                     <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight drop-shadow-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 bg-clip-text text-transparent">
                       {item.title && highlightText(item.title)}
