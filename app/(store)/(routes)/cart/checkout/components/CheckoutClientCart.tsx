@@ -48,8 +48,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
   const [razorpayReady, setRazorpayReady] = useState(false);
   const { discount, couponId } = useDiscountStore(); // Get discount and couponId from the store
 
-  console.log(couponId)
-
+  console.log('Coupon ID from store:', couponId); // Debugging log for couponId
 
   useEffect(() => {
     let total = 0;
@@ -120,7 +119,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
       isPaid: paymentMethod === "razorpay",
       userId: user?.id,
       addressId: AddressId,
-      couponId,
+      couponId, // Ensure couponId is passed here
       products: products.map((product) => ({
         productId: product.productId,
         price: product.discountedPrice
@@ -135,6 +134,8 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
         sizeSKU: product.SKUvalue,
       })),
     };
+
+    console.log('Order Payload:', orderPayload); // Debugging log for orderPayload
 
     if (paymentMethod === "razorpay") {
       if (!idRef.current) {
@@ -188,7 +189,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
       }
     } else if (paymentMethod === "cod") {
       try {
-        console.log("order creation , it's coupon id is ", couponId)
+        console.log("order creation, coupon id is ", couponId); // Debugging log for couponId in COD
         await axios.post("/api/dashboard/create-order", orderPayload);
         toast.success("Order placed successfully. Pay cash on delivery.");
         router.push("/orders/success");
@@ -253,12 +254,16 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
                   ? "Please wait, payment getting verified..."
                   : !razorpayReady && paymentMethod === "razorpay"
                   ? "Loading Razorpay..."
-                  : paymentMethod === "razorpay"
-                  ? "Pay Now"
                   : "Place Order"}
               </Button>
             </form>
           </CardContent>
+          <CardFooter className="text-center text-sm flex flex-col">
+            By placing your order, you agree to our{" "}
+            <Link href="/terms" className="underline">
+              Terms and Conditions
+            </Link>
+          </CardFooter>
         </Card>
       </section>
     </>

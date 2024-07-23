@@ -2,7 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
 export async function POST(request: NextRequest) {
-  const { orderId, total, status, isPaid, userId, addressId, products, couponCode } = await request.json();
+  const {
+    orderId,
+    total,
+    status,
+    isPaid,
+    userId,
+    addressId,
+    products,
+    couponCode,
+    couponId, // Make sure to destructure couponId from the request payload
+  } = await request.json();
 
   try {
     if (!orderId) {
@@ -10,7 +20,7 @@ export async function POST(request: NextRequest) {
     }
 
     let discount = 0;
-    let couponId = null;
+    let finalCouponId = couponId; // Use finalCouponId to avoid shadowing
     let coupon = null;
 
     if (couponCode) {
@@ -19,11 +29,12 @@ export async function POST(request: NextRequest) {
       });
 
       if (coupon && coupon.isActive && coupon.remainingUses > 0) {
-        discount = coupon.discountType === "PERCENTAGE" 
-          ? (total * coupon.discountValue) / 100 
-          : coupon.discountValue;
+        discount =
+          coupon.discountType === "PERCENTAGE"
+            ? (total * coupon.discountValue) / 100
+            : coupon.discountValue;
 
-        couponId = coupon.id;
+        finalCouponId = coupon.id; // Update finalCouponId if couponCode is found
       }
     }
 
@@ -32,7 +43,9 @@ export async function POST(request: NextRequest) {
     const productDetails = await db.product.findMany({
       where: {
         id: {
-          in: products.map((product: { productId: string }) => product.productId),
+          in: products.map(
+            (product: { productId: string }) => product.productId
+          ),
         },
       },
       select: {
@@ -47,7 +60,9 @@ export async function POST(request: NextRequest) {
     }
 
     const orderItemsData = products.map((product: any) => {
-      const productDetail = productDetails.find((p) => p.id === product.productId);
+      const productDetail = productDetails.find(
+        (p) => p.id === product.productId
+      );
       if (!productDetail) {
         throw new Error(`Product with id ${product.productId} not found`);
       }
@@ -78,19 +93,19 @@ export async function POST(request: NextRequest) {
         orderItems: {
           create: orderItemsData,
         },
-        couponId: couponId, // Add couponId here
+        couponId: finalCouponId, // Use finalCouponId here
       },
     });
 
-    if (coupon && couponId) {
+    if (coupon && finalCouponId) {
       await db.coupon.update({
-        where: { id: couponId },
+        where: { id: finalCouponId },
         data: { remainingUses: coupon.remainingUses - 1 },
       });
 
       await db.usedCoupon.create({
         data: {
-          couponId: couponId,
+          couponId: finalCouponId,
           userId: userId,
         },
       });
