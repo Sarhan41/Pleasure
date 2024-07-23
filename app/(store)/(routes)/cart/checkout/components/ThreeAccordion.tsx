@@ -62,7 +62,7 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({
             user ? "bg-gray-200 text-gray-700" : "bg-white text-gray-900"
           } transition-colors duration-300`}
         >
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-4">
             {user && <FaCheckCircle size={24} className="text-green-600" />}
             <h1 className="font-bold text-xl md:text-3xl sm:text-2xl xs:text-xl">
               1. Login
@@ -111,16 +111,19 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({
         className="rounded-xl overflow-hidden mx-4 md:mx-12 my-4 shadow-lg"
       >
         <AccordionTrigger className="flex justify-between px-4 md:px-8 py-4 items-center bg-white text-gray-900 transition-colors duration-300">
-          {selectedAddress && (
-            <FaCheckCircle size={24} className="text-green-600" />
-          )}
-
-          <h1 className="font-bold text-xl md:text-3xl">2. Shipping Address</h1>
-          {selectedAddress ? (
-            <p className="text-gray-600">{selectedAddress?.phone}</p>
-          ) : (
-            ""
-          )}
+          <div className="flex items-center space-x-4">
+            {selectedAddress && (
+              <FaCheckCircle size={24} className="text-green-600 no-rotate" />
+            )}
+            <h1 className="font-bold text-xl md:text-3xl">
+              2. Shipping Address
+            </h1>
+            {selectedAddress ? (
+              <p className="text-gray-600">{selectedAddress?.phone}</p>
+            ) : (
+              ""
+            )}
+          </div>
         </AccordionTrigger>
         <AccordionContent>
           <div className="p-4 md:p-8 bg-gray-50 rounded-b-xl">
