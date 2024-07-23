@@ -13,7 +13,7 @@ const Description = ({
 
   // Split the data into individual specifications
   const specifications = description
-    .split("   ")
+    .split(/\s*\n\s*|\s{3,}/) // Splits on newlines or three or more spaces
     .map((spec) => spec.trim())
     .filter((spec) => spec);
 
