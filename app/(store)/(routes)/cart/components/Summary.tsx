@@ -19,8 +19,14 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [orderTotal, setOrderTotal] = useState<number>(0);
-  const { couponCode, discount, setCouponCode, setDiscount, setCouponId } =
-    useDiscountStore();
+  const {
+    couponCode,
+    discount,
+    setCouponCode,
+    setDiscount,
+    couponId,
+    setCouponId,
+  } = useDiscountStore();
 
   useEffect(() => {
     let total = 0;
@@ -31,6 +37,11 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
   }, [prices, quantities]);
 
   const onApplyCoupon = async () => {
+    if (couponId) {
+      toast.error("A coupon code has already been applied.");
+      return;
+    }
+
     try {
       const response = await axios.post("/api/dashboard/coupons/applyCoupon", {
         couponCode,
@@ -46,6 +57,7 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
       } else {
         const errorData = response.data;
         toast.error(errorData.error);
+        return;
       }
     } catch (error) {
       toast.error("Failed to apply coupon. Please try again.");
