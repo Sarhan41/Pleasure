@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
 import axios from "axios";
 import { Input } from "@/components/ui/input";
+import { useDiscountStore } from "@/hooks/store/use-discount-state";
 
 interface SummaryProps {
   prices: number[];
@@ -18,8 +19,14 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [orderTotal, setOrderTotal] = useState<number>(0);
-  const [couponCode, setCouponCode] = useState<string>("");
-  const [discount, setDiscount] = useState<number>(0);
+  const {
+    couponCode,
+    discount,
+    setCouponCode,
+    setDiscount,
+    couponId,
+    setCouponId,
+  } = useDiscountStore();
 
   useEffect(() => {
     let total = 0;
@@ -30,6 +37,11 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
   }, [prices, quantities]);
 
   const onApplyCoupon = async () => {
+    if (couponId) {
+      toast.error("A coupon code has already been applied.");
+      return;
+    }
+
     try {
       const response = await axios.post("/api/dashboard/coupons/applyCoupon", {
         couponCode,
@@ -40,18 +52,20 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
       if (response.status === 200) {
         const data = response.data;
         setDiscount(data.discountValue);
+        setCouponId(data.couponId); // Set the coupon ID in the state
         toast.success("Coupon applied successfully!");
       } else {
         const errorData = response.data;
         toast.error(errorData.error);
+        return;
       }
     } catch (error) {
       toast.error("Failed to apply coupon. Please try again.");
     }
   };
 
-  const onCheckout = async () => {
-    router.push(`/cart/checkout?reload=${Date.now()}`);
+  const onCheckout = () => {
+    window.open(`/cart/checkout?reload=${Date.now()}`, "_blank");
   };
 
   const isCheckoutPage = pathname.includes("checkout");

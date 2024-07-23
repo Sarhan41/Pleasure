@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 
 export async function POST(req: NextRequest) {
   try {
-    const { couponCode, orderTotal } = await req.json();
+    const { couponCode, orderTotal, userId } = await req.json();
 
     if (!couponCode) {
       return NextResponse.json(
@@ -23,12 +23,26 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const hasUsedCoupon = await db.usedCoupon.findFirst({
+      where: { couponId: coupon.id, userId: userId },
+    });
+
+    if (hasUsedCoupon) {
+      return NextResponse.json(
+        { error: "This coupon code has already been used." },
+        { status: 400 }
+      );
+    }
+
     const discountValue =
       coupon.discountType === "PERCENTAGE"
         ? (orderTotal * coupon.discountValue) / 100
         : coupon.discountValue;
 
-    return NextResponse.json({ discountValue }, { status: 200 });
+    return NextResponse.json(
+      { discountValue, couponId: coupon.id },
+      { status: 200 }
+    );
   } catch (error) {
     console.log("[Apply_Coupon_POST]", error);
 

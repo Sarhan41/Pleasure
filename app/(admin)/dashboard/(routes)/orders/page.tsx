@@ -10,6 +10,7 @@ const fetchOrders = async () => {
     include: {
       address: true,
       user: true,
+      coupon: true, // Include coupon information
       orderItems: {
         include: {
           product: {
@@ -53,6 +54,7 @@ const fetchOrders = async () => {
     createdAt: format(order.createdAt, "MMM do, yyyy"),
     totalPayment: order.total,
     status: order.status,
+    couponCode: order.coupon ? order.coupon.code : "No Coupon", // Add coupon code information
   }));
 
   return formattedOrders;

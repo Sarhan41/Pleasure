@@ -12,9 +12,6 @@ export default async function CartPage() {
   const user = await currentUser();
   const UserId = user?.id;
 
-
-
-
   const CartProducts = await db.cartItems.findMany({
     where: {
       userId: UserId,
@@ -42,7 +39,7 @@ export default async function CartPage() {
 
   if (!CartProducts || CartProducts.length === 0) {
     return (
-      <div className="h-screen w-screen flex justify-center items-center flex-col gap-6">
+      <div className="h-screen w-screen flex flex-col justify-center items-center gap-6">
         <h1 className="text-2xl font-bold text-center my-6">
           Your cart is empty, Please Add Some Products.
         </h1>
@@ -56,18 +53,20 @@ export default async function CartPage() {
   }
 
   const quantitiesForSummary = CartProducts.map((item) => item.quantity);
-  const pricesForSummary = CartProducts.map((item) => parseFloat(item.discountedPrice ? item.discountedPrice : item.price));
+  const pricesForSummary = CartProducts.map((item) =>
+    parseFloat(item.discountedPrice ? item.discountedPrice : item.price)
+  );
 
   return (
     <div className="bg-white w-full mt-36 px-10">
       <Container>
-        <div className="px-8 py-8 mt-6 sm:px-6 lg:px-24 flex justify-between items-center w-full">
+        <div className="px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center w-full">
           <h1 className="text-4xl font-bold text-black">Your Cart</h1>
           <ClearIcon />
         </div>
-        <div className="mt-4 lg:grid gap-4 lg:grid-cols-12 lg:items-start gap-x-12">
+        <div className="mt-4 grid gap-4 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-7">
-            <ul className="">
+            <ul >
               {CartProducts.map((item) => (
                 <CartItem
                   key={item.id}
@@ -78,7 +77,7 @@ export default async function CartPage() {
               ))}
             </ul>
           </div>
-          <div className="w-96">
+          <div className="w-96 lg:col-span-5">
             <Summary
               prices={pricesForSummary}
               quantities={quantitiesForSummary}

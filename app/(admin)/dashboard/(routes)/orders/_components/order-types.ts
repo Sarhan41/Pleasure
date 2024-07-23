@@ -25,4 +25,5 @@ export interface OrderColumn {
   totalPayment: number;
   status: string;
   items: OrderItem[];
+  couponCode: string; // Add coupon code
 }

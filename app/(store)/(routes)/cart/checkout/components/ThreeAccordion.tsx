@@ -47,6 +47,10 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({
     setOpenItem("item-3");
   };
 
+  const handleToggle = (value: string) => {
+    setOpenItem((prev) => (prev === value ? "" : value));
+  };
+
   return (
     <Accordion
       type="single"
@@ -55,14 +59,16 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({
     >
       <AccordionItem
         value="item-1"
+        isOpen={openItem === "item-1"}
         className="rounded-xl overflow-hidden mx-4 md:mx-12 my-4 shadow-lg"
       >
         <AccordionTrigger
           className={`flex px-4 md:px-8 py-4 justify-between items-center ${
             user ? "bg-gray-200 text-gray-700" : "bg-white text-gray-900"
           } transition-colors duration-300`}
+          onClick={() => handleToggle("item-1")}
         >
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-4">
             {user && <FaCheckCircle size={24} className="text-green-600" />}
             <h1 className="font-bold text-xl md:text-3xl sm:text-2xl xs:text-xl">
               1. Login
@@ -108,19 +114,26 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({
 
       <AccordionItem
         value="item-2"
+        isOpen={openItem === "item-2"}
         className="rounded-xl overflow-hidden mx-4 md:mx-12 my-4 shadow-lg"
       >
-        <AccordionTrigger className="flex justify-between px-4 md:px-8 py-4 items-center bg-white text-gray-900 transition-colors duration-300">
-          {selectedAddress && (
-            <FaCheckCircle size={24} className="text-green-600" />
-          )}
-
-          <h1 className="font-bold text-xl md:text-3xl">2. Shipping Address</h1>
-          {selectedAddress ? (
-            <p className="text-gray-600">{selectedAddress?.phone}</p>
-          ) : (
-            ""
-          )}
+        <AccordionTrigger
+          className="flex justify-between px-4 md:px-8 py-4 items-center bg-white text-gray-900 transition-colors duration-300"
+          onClick={() => handleToggle("item-2")}
+        >
+          <div className="flex items-center space-x-4">
+            {selectedAddress && (
+              <FaCheckCircle size={24} className="text-green-600 no-rotate" />
+            )}
+            <h1 className="font-bold text-xl md:text-3xl">
+              2. Shipping Address
+            </h1>
+            {selectedAddress ? (
+              <p className="text-gray-600">{selectedAddress?.phone}</p>
+            ) : (
+              ""
+            )}
+          </div>
         </AccordionTrigger>
         <AccordionContent>
           <div className="p-4 md:p-8 bg-gray-50 rounded-b-xl">
@@ -164,9 +177,13 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({
 
       <AccordionItem
         value="item-3"
+        isOpen={openItem === "item-3"}
         className="rounded-xl overflow-hidden mx-4 md:mx-12 my-4 shadow-lg"
       >
-        <AccordionTrigger className="flex justify-between px-4 md:px-8 py-4 items-center bg-white text-gray-900 transition-colors duration-300">
+        <AccordionTrigger
+          className="flex justify-between px-4 md:px-8 py-4 items-center bg-white text-gray-900 transition-colors duration-300"
+          onClick={() => handleToggle("item-3")}
+        >
           <h1 className="font-bold text-xl md:text-3xl">3. Payment</h1>
         </AccordionTrigger>
         <AccordionContent>
