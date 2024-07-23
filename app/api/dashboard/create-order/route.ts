@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
         orderItems: {
           create: orderItemsData,
         },
-        couponId: couponId,
+        couponId: couponId, // Add couponId here
       },
     });
 

@@ -14,6 +14,7 @@ import { ExtendedUser } from "@/next-auth";
 import toast from "react-hot-toast";
 import { CartItems } from "@prisma/client";
 import Link from "next/link";
+import { useDiscountStore } from "@/hooks/store/use-discount-state";
 
 interface CartItemWithColors extends CartItems {
   color: { value: string; name: string }[];
@@ -45,16 +46,17 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
   const idRef = useRef<string | null>(null);
   const [orderTotal, setOrderTotal] = useState<number>(0);
   const [razorpayReady, setRazorpayReady] = useState(false);
+  const { discount, couponId } = useDiscountStore(); // Get discount and couponId from the store
 
   useEffect(() => {
     let total = 0;
     for (let i = 0; i < prices.length; i++) {
       total += prices[i] * quantities[i];
     }
-    const calculatedOrderTotal = total + total * 0.05 + 29;
+    const calculatedOrderTotal = total - discount + total * 0.05 + 29; // Apply discount here
     setOrderTotal(calculatedOrderTotal);
     console.log(`Order Total Calculated: ${calculatedOrderTotal}`);
-  }, [prices, quantities]);
+  }, [prices, quantities, discount]);
 
   const createOrderId = useCallback(async () => {
     try {
@@ -108,6 +110,29 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
       }
     }
 
+    const orderPayload = {
+      orderId: idRef.current,
+      total: orderTotal,
+      status: "Pending",
+      isPaid: paymentMethod === "razorpay",
+      userId: user?.id,
+      addressId: AddressId,
+      couponId: couponId, // Include couponId in the payload
+      products: products.map((product) => ({
+        productId: product.productId,
+        price: product.discountedPrice
+          ? product.discountedPrice
+          : product.price,
+        quantity: product.quantity,
+        size: product.sizeName,
+        color: product.color.map((color: any) => ({
+          value: color.value,
+          name: color.name,
+        })),
+        sizeSKU: product.SKUvalue,
+      })),
+    };
+
     if (paymentMethod === "razorpay") {
       if (!idRef.current) {
         await createOrderId();
@@ -138,25 +163,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
             setVerifying(false);
             if (res.isOk) {
               toast.success(res.message);
-              await axios.post("/api/dashboard/create-order", {
-                orderId: idRef.current,
-                total: orderTotal,
-                status: "Pending",
-                isPaid: true,
-                userId: user?.id,
-                addressId: AddressId,
-                products: products.map((product) => ({
-                  productId: product.productId,
-                  price: product.price,
-                  quantity: product.quantity,
-                  size: product.sizeName,
-                  color: product.color.map((color: any) => ({
-                    value: color.value,
-                    name: color.name,
-                  })),
-                  sizeSKU: product.SKUvalue,
-                })),
-              });
+              await axios.post("/api/dashboard/create-order", orderPayload);
               router.push("/orders/success");
             } else {
               toast.error(res.message);
@@ -178,25 +185,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
       }
     } else if (paymentMethod === "cod") {
       try {
-        await axios.post("/api/dashboard/create-order", {
-          orderId: idRef.current,
-          total: orderTotal,
-          status: "Pending",
-          isPaid: false,
-          userId: user?.id,
-          addressId: AddressId,
-          products: products.map((product) => ({
-            productId: product.productId,
-            price: product.price,
-            quantity: product.quantity,
-            size: product.sizeName,
-            color: product.color.map((color: any) => ({
-              value: color.value,
-              name: color.name,
-            })),
-            sizeSKU: product.SKUvalue,
-          })),
-        });
+        await axios.post("/api/dashboard/create-order", orderPayload);
         toast.success("Order placed successfully. Pay cash on delivery.");
         router.push("/orders/success");
       } catch (error) {

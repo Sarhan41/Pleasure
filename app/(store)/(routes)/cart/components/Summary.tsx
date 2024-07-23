@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
 import axios from "axios";
 import { Input } from "@/components/ui/input";
+import { useDiscountStore } from "@/hooks/store/use-discount-state";
 
 interface SummaryProps {
   prices: number[];
@@ -18,8 +19,8 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [orderTotal, setOrderTotal] = useState<number>(0);
-  const [couponCode, setCouponCode] = useState<string>("");
-  const [discount, setDiscount] = useState<number>(0);
+  const { couponCode, discount, setCouponCode, setDiscount } =
+    useDiscountStore();
 
   useEffect(() => {
     let total = 0;
@@ -50,7 +51,7 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
     }
   };
 
-  const onCheckout = async () => {
+  const onCheckout = () => {
     router.push(`/cart/checkout?reload=${Date.now()}`);
   };
 
