@@ -19,7 +19,7 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [orderTotal, setOrderTotal] = useState<number>(0);
-  const { couponCode, discount, setCouponCode, setDiscount } =
+  const { couponCode, discount, setCouponCode, setDiscount, setCouponId } =
     useDiscountStore();
 
   useEffect(() => {
@@ -41,6 +41,7 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
       if (response.status === 200) {
         const data = response.data;
         setDiscount(data.discountValue);
+        setCouponId(data.couponId); // Set the coupon ID in the state
         toast.success("Coupon applied successfully!");
       } else {
         const errorData = response.data;

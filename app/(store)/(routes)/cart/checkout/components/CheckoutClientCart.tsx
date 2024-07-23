@@ -48,6 +48,9 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
   const [razorpayReady, setRazorpayReady] = useState(false);
   const { discount, couponId } = useDiscountStore(); // Get discount and couponId from the store
 
+  console.log(couponId)
+
+
   useEffect(() => {
     let total = 0;
     for (let i = 0; i < prices.length; i++) {
@@ -117,7 +120,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
       isPaid: paymentMethod === "razorpay",
       userId: user?.id,
       addressId: AddressId,
-      couponId: couponId, // Include couponId in the payload
+      couponId,
       products: products.map((product) => ({
         productId: product.productId,
         price: product.discountedPrice
@@ -185,6 +188,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
       }
     } else if (paymentMethod === "cod") {
       try {
+        console.log("order creation , it's coupon id is ", couponId)
         await axios.post("/api/dashboard/create-order", orderPayload);
         toast.success("Order placed successfully. Pay cash on delivery.");
         router.push("/orders/success");

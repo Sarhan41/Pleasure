@@ -28,7 +28,10 @@ export async function POST(req: NextRequest) {
         ? (orderTotal * coupon.discountValue) / 100
         : coupon.discountValue;
 
-    return NextResponse.json({ discountValue }, { status: 200 });
+    return NextResponse.json(
+      { discountValue, couponId: coupon.id },
+      { status: 200 }
+    );
   } catch (error) {
     console.log("[Apply_Coupon_POST]", error);
 
