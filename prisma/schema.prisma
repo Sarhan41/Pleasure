@@ -357,5 +357,5 @@ model UsedCoupon {
 
 enum DiscountType {
   PERCENTAGE
-  Flat
+  FLAT
 }
