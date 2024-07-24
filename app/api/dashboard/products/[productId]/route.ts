@@ -57,6 +57,7 @@ export async function PATCH(
       isFeatured,
       isArchived,
       description,
+      additionalInfo,
       isNew,
     } = body;
 
@@ -102,6 +103,7 @@ export async function PATCH(
           deleteMany: {},
         },
         description,
+        additionalInfo,
         isFeatured,
         isArchived,
         isNew,
@@ -119,6 +121,7 @@ export async function PATCH(
           },
         },
         description: description,
+        additionalInfo: additionalInfo,
         colors: {
           createMany: {
             data: colorId.map(
