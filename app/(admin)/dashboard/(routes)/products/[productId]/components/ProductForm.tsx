@@ -47,6 +47,7 @@ const formSchema = z.object({
   images: z.object({ url: z.string() }).array(),
   categoryId: z.string().min(1),
   description: z.string().min(1).optional(),
+  additionalInfo: z.string().min(1).optional(),
   colorId: z
     .object({ name: z.string(), hex: z.string(), link: z.string().optional() })
     .array(),
@@ -117,6 +118,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             discountedprice: size.discountedprice || "",
           })),
           description: initialData.description || "",
+          additionalInfo: initialData.additionalInfo || "",
           subname: initialData.subname || "",
         }
       : {
@@ -138,6 +140,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           isArchived: false,
           isNew: false,
           description: "",
+          additionalInfo: "",
         },
   });
 
@@ -325,6 +328,27 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 )}
               />
             </div>
+            <div>
+              <FormField
+                control={form.control}
+                name="additionalInfo"
+                render={({ field }) => (
+                  <FormItem className="max-sm:w-[30vw]  w-[22vw] ">
+                    <FormLabel>Additinal Information</FormLabel>
+                    <FormControl className="w-full">
+                      <Input
+                        disabled={loading}
+                        placeholder="Product Additional Information"
+                        {...field}
+                        className="w-full"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div></div>
             <div className="flex flex-col gap-12">
               <FormField
                 control={form.control}

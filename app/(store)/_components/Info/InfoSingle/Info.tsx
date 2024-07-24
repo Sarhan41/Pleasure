@@ -3,7 +3,6 @@
 import { MouseEventHandler, useEffect, useState } from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
-import Currency from "@/components/Store/Currency";
 import { Size } from "@/types";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -27,9 +26,9 @@ import IconButton from "@/components/Store/IconButton";
 import { FaWhatsapp } from "react-icons/fa";
 import SizeChart from "../SizeChart";
 import { Product as ProductType } from "@/types";
-import Description from "../Description";
 import { MotionSpan } from "@/constant/MotionElements";
 import { calculateDiscountPercentage } from "@/lib/calculateDiscountedPrice";
+import MainExtraDetails from "../ExtraDetails/MainDetails";
 
 interface InfoProps {
   data: ProductType;
@@ -652,10 +651,12 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
       */}
 
       <div className="mt-8">
-        <h3 className="font-bold text-lg md:text-xl text-black border-b-2 border-primary w-fit p-2 mb-4">
-          Description
-        </h3>
-        <Description description={data.description} SKU={sizeSku} />
+       
+        <MainExtraDetails
+          description={data.description}
+          additionalInfo={data.additionalInfo}
+          SKU={sizeSku}
+        />
       </div>
       {/* 
           // ! Reviews Divs Will Be Added Here

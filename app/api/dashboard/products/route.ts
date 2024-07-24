@@ -27,14 +27,13 @@ export async function POST(req: Request) {
       isFeatured,
       isArchived,
       description,
+      additionalInfo,
       isNew,
     } = body;
 
     if (!name) {
       return new NextResponse("Name is required ", { status: 400 });
     }
-
-   
 
     if (!categoryId) {
       return new NextResponse("Category id is required ", { status: 400 });
@@ -52,10 +51,6 @@ export async function POST(req: Request) {
       return new NextResponse("images is required ", { status: 400 });
     }
 
-    if (!description) {
-      return new NextResponse("Description is required ", { status: 400 });
-    }
-   
     const product = await db.product.create({
       data: {
         name,
@@ -73,23 +68,22 @@ export async function POST(req: Request) {
           },
         },
         description: description,
+        additionalInfo: additionalInfo,
         sizes: {
           createMany: {
             data: sizeId.map(
               (size: {
                 name: string;
-                SKUvalue: string ;
+                SKUvalue: string;
                 quantity: string;
                 price: string;
                 discountedprice: string;
-
               }) => ({
                 name: size.name,
                 SKUvalue: size.SKUvalue,
                 quantity: size.quantity,
                 price: size.price,
                 discountedprice: size.discountedprice,
-                
               })
             ),
           },
@@ -111,6 +105,8 @@ export async function POST(req: Request) {
     return new NextResponse("Internal error", { status: 500 });
   }
 }
+
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const categoryId = searchParams.get("categoryId") || undefined;

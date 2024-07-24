@@ -165,6 +165,7 @@ model Product {
   CartItems   CartItems[]
   reviews     Review[]
   description String?
+  additionalInfo String?
 
   @@index([categoryId])
 }

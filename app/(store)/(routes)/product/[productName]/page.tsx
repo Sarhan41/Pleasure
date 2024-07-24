@@ -6,6 +6,8 @@ import { RelatedProductList } from "@/app/(store)/_components/RelatedItemsList";
 import Container from "@/components/Store/container";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface ProductPageProps {
   params: {
@@ -44,11 +46,21 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
     },
   });
 
-  if (!product) {
+  if (!product || product.isArchived) {
     return (
-      <div className="h-full w-full flex justify-center items-center">
-        Loading...
+      <section className="h-screen flex flex-col justify-center items-center">
+      <div className="text-center">
+        <h1 className="font-bold text-6xl text-gray-900">404</h1>
+        <p className="font-semibold text-3xl text-gray-700 my-8">
+          Oops! This Product could not be found.
+        </p>
       </div>
+      <Button>
+        <Link className="text-white font-semibold" href="/">
+          Go to Home
+        </Link>
+      </Button>
+    </section>
     );
   }
 

@@ -39,6 +39,7 @@ export interface Product {
   createdAt: Date;
   updatedAt: Date;
   description?: string | null;
+  additionalInfo?: string | null;
   images: Image[];
   sizes: Size[];
   colors: Color[];
