@@ -39,12 +39,12 @@ export default async function CartPage() {
 
   if (!CartProducts || CartProducts.length === 0) {
     return (
-      <div className="h-screen w-screen flex flex-col justify-center items-center gap-6">
-        <h1 className="text-2xl font-bold text-center my-6">
-          Your cart is empty, Please Add Some Products.
+      <div className="h-screen w-screen flex flex-col justify-center items-center gap-6 px-4">
+        <h1 className="text-xl sm:text-2xl font-bold text-center my-6">
+          Your cart is empty. Please add some products.
         </h1>
-        <Button>
-          <Link className="text-white font-semibold" href="/">
+        <Button className="text-white font-semibold bg-blue-500 hover:bg-blue-600">
+          <Link href="/" className="text-white font-semibold">
             Go to Home
           </Link>
         </Button>
