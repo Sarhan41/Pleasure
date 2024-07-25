@@ -33,9 +33,11 @@ const SecondRowCategory = ({
             className="flex items-center justify-between w-full px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-primary-100 transition-colors duration-200"
             onClick={() => handleCategoryClick(category.name)}
           >
-            <div className="flex items-center gap-2 text-primary-600">
-              {category.name}
-            </div>
+            <Link href={`/collections/${category.name.replace(/\s+/g, "-")}`}>
+              <div className="flex items-center gap-2 text-primary-600">
+                {category.name}
+              </div>
+            </Link>
             {expandedCategory === category.name ? (
               <ChevronDownIcon size={20} className="text-primary-600" />
             ) : (
