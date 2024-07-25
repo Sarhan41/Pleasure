@@ -124,6 +124,8 @@ model TwoFactorConfirmation {
   @@unique([userId])
 }
 
+// Store Models
+
 model Category {
   id          String    @id @default(uuid())
   products    Product[] @relation("CategoryToProduct")

@@ -46,7 +46,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(cartItem);
   } catch (error) {
-    console.log("[CARTITEMS_POST]", error);
+    console.log("[CARTITEMS_POST_PACK]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }

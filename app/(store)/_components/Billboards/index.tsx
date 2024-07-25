@@ -34,17 +34,24 @@ const Billboard: React.FC<BillboardProps> = ({ data }) => {
   };
 
   return (
-    <Carousel className="mt-8 lg:mt-16 relative" autoPlayInterval={4000} hideArrows>
+    <Carousel
+      className="mt-8 lg:mt-16 relative"
+      autoPlayInterval={4000}
+      hideArrows
+    >
       <CarouselContent>
         {data.map((item, index) => (
           <CarouselItem key={index}>
             <div className="p-4 sm:p-6 w-full flex justify-center lg:p-8 overflow-hidden cursor-pointer">
-              <Link href={`/collections/${item.link.replace(/\s+/g, "-")}`} passHref className="w-full h-full">
+              <Link
+                href={`/collections/${item.link.replace(/\s+/g, "-")}`}
+                passHref
+                className="w-full h-full"
+              >
                 <div className="relative w-full h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[80vh] rounded-xl overflow-hidden shadow-2xl transform transition-transform duration-500 hover:scale-105 max-sm:bg-left">
                   <Image
                     src={item.imageUrl}
                     alt={item.name}
-                    objectFit="cover"
                     fill
                     className="rounded-xl bg-gradient-to-b from-black/70 via-black/50 to-black/30"
                   />
