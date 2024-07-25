@@ -38,9 +38,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
     previewModal.onOpen(data, userId);
   };
 
-  //Add to cart After selecting size from product card
-  // @ts-ignore
-  const handleSizeSelect = async (size) => {
+  const handleSizeSelect = async (size: ProductType["sizes"][number]) => {
+    if (!userId) {
+      return toast.error("Please login to add to cart");
+    }
+
     setSelectedSize(size);
     setIsModalOpen(false);
 
@@ -48,40 +50,35 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
       const response = await axios.get("/api/dashboard/cartItems");
       const cartItems = response.data;
 
-      if (!userId) {
-        return toast.error("Please login to add to cart");
-      }
-
       const foundItem = cartItems.find(
         (item: {
+          id: string;
           productId: string;
           userId: string;
           sizeName: string;
-          color: string;
+          color?: { value: string; name: string }[]; // Made color optional
+          quantity: number;
         }) =>
           item.productId === data.id &&
           item.userId === userId &&
-          item.sizeName === selectedSize?.name
-        // &&
-        // item.color === selectedColor
+          item.sizeName === size.name
       );
 
-      if (selectedSize === null) {
+      if (size === null) {
         toast.error("Please select a size");
         return;
       }
 
       if (!foundItem) {
-        await axios.post("/api/dashboard/cartItems", {
-          id: data.id,
+        await axios.post("/api/dashboard/cartItems/card", {
+          productId: data.id,
           quantity: 1,
           userId,
-          sizeName: selectedSize?.name,
-          price: selectedSize?.price,
-          SKUvalue: selectedSize?.SKUvalue,
-          discountedPrice: selectedSize?.discountedprice,
+          sizeName: selectedSize.name,
+          price: selectedSize.price,
+          SKUvalue: selectedSize.SKUvalue,
+          discountedPrice: size.discountedprice,
           category: data.category?.name,
-          // color: selectedColor,
         });
         toast.success("Added to cart");
       } else {
@@ -145,6 +142,27 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
     data.sizes[0].price,
     data.sizes[0].discountedprice
   );
+
+  const handleAddToCart = () => {
+    // Check if any color is not "#111"
+    const hasNonDefaultColor = data.colors.some(
+      (color) => color.value !== "#111"
+    );
+
+    if (data.name.toLowerCase().includes("pack of") && !hasNonDefaultColor) {
+      // If the product name contains "pack of" and all colors are "#111", open the size selection modal
+      setIsModalOpen(true);
+    } else if (
+      hasNonDefaultColor ||
+      data.name.toLowerCase().includes("pack of")
+    ) {
+      // If any color is not "#111" or the product name contains "pack of", handle the click (e.g., redirect or show another modal)
+      handleClick();
+    } else {
+      // If all colors are "#111" and the product name does not contain "pack of", open the size selection modal
+      setIsModalOpen(true);
+    }
+  };
 
   return (
     // Parent Div
@@ -236,7 +254,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
           )}
         </div>
         <Button
-          onClick={() => setIsModalOpen(true)}
+          onClick={handleAddToCart}
           className="   rounded-full bg-blue-600 transition hover:bg-primary "
         >
           Add To Cart

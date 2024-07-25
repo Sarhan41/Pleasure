@@ -39,12 +39,12 @@ export default async function CartPage() {
 
   if (!CartProducts || CartProducts.length === 0) {
     return (
-      <div className="h-screen w-screen flex flex-col justify-center items-center gap-6">
-        <h1 className="text-2xl font-bold text-center my-6">
-          Your cart is empty, Please Add Some Products.
+      <div className="h-screen w-screen flex flex-col justify-center items-center gap-6 px-4">
+        <h1 className="text-xl sm:text-2xl font-bold text-center my-6">
+          Your cart is empty. Please add some products.
         </h1>
-        <Button>
-          <Link className="text-white font-semibold" href="/">
+        <Button className="text-white font-semibold bg-blue-500 hover:bg-blue-600">
+          <Link href="/" className="text-white font-semibold">
             Go to Home
           </Link>
         </Button>
@@ -58,15 +58,20 @@ export default async function CartPage() {
   );
 
   return (
-    <div className="bg-white w-full mt-36 px-10">
+    <div className="bg-white w-full   px-4 sm:px-6 lg:px-10 overflow-x-hidden">
       <Container>
-        <div className="px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center w-full">
-          <h1 className="text-4xl font-bold text-black">Your Cart</h1>
-          <ClearIcon />
+        <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 flex flex-row justify-between items-center w-full">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-black mb-2 sm:mb-0">
+            Your Cart
+          </h1>
+          <div className="mt-2 mr-12 sm:mt-0">
+            <ClearIcon />
+          </div>
         </div>
-        <div className="mt-4 grid gap-4 lg:grid-cols-12 lg:items-start">
+
+        <div className="mt-4 mr-8 grid gap-4 grid-cols-1 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-7">
-            <ul >
+            <ul className="space-y-4 ">
               {CartProducts.map((item) => (
                 <CartItem
                   key={item.id}
@@ -77,7 +82,7 @@ export default async function CartPage() {
               ))}
             </ul>
           </div>
-          <div className="w-96 lg:col-span-5">
+          <div className="w-96 ml-4 md:ml-8 lg:col-span-5 mt-4">
             <Summary
               prices={pricesForSummary}
               quantities={quantitiesForSummary}

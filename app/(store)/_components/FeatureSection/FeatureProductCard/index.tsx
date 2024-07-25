@@ -39,7 +39,11 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({
     previewModal.onOpen(data, userId);
   };
 
-  const handleSizeSelect = async (size: any) => {
+  const handleSizeSelect = async (size: ProductType["sizes"][number]) => {
+    if (!userId) {
+      return toast.error("Please login to add to cart");
+    }
+
     setSelectedSize(size);
     setIsModalOpen(false);
 
@@ -47,36 +51,34 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({
       const response = await axios.get("/api/dashboard/cartItems");
       const cartItems = response.data;
 
-      if (!userId) {
-        return toast.error("Please login to add to cart");
-      }
-
       const foundItem = cartItems.find(
         (item: {
+          id: string;
           productId: string;
           userId: string;
           sizeName: string;
-          color: string;
+          color?: { value: string; name: string }[]; // Made color optional
+          quantity: number;
         }) =>
           item.productId === data.id &&
           item.userId === userId &&
-          item.sizeName === selectedSize?.name
+          item.sizeName === size.name
       );
 
-      if (selectedSize === null) {
+      if (size === null) {
         toast.error("Please select a size");
         return;
       }
 
       if (!foundItem) {
-        await axios.post("/api/dashboard/cartItems", {
-          id: data.id,
+        await axios.post("/api/dashboard/cartItems/card", {
+          productId: data.id,
           quantity: 1,
           userId,
-          sizeName: selectedSize?.name,
-          price: selectedSize?.price,
-          SKUvalue: selectedSize?.SKUvalue,
-          discountedPrice: selectedSize?.discountedprice,
+          sizeName: selectedSize.name,
+          price: selectedSize.price,
+          SKUvalue: selectedSize.SKUvalue,
+          discountedPrice: size.discountedprice,
           category: data.category?.name,
         });
         toast.success("Added to cart");
@@ -139,6 +141,28 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({
     data.sizes[0].price,
     data.sizes[0].discountedprice
   );
+
+  const handleAddToCart = () => {
+    // Check if any color is not "#111"
+    const hasNonDefaultColor = data.colors.some(
+      (color) => color.value !== "#111"
+    );
+
+    if (data.name.toLowerCase().includes("pack of") && !hasNonDefaultColor) {
+      // If the product name contains "pack of" and all colors are "#111", open the size selection modal
+      setIsModalOpen(true);
+    } else if (
+      hasNonDefaultColor ||
+      data.name.toLowerCase().includes("pack of")
+    ) {
+      // If any color is not "#111" or the product name contains "pack of", handle the click (e.g., redirect or show another modal)
+      handleClick();
+    } else {
+      // If all colors are "#111" and the product name does not contain "pack of", open the size selection modal
+      setIsModalOpen(true);
+    }
+  };
+
   return (
     <div className="relative overflow-hidden bg-white w-full sm:w-80 group cursor-pointer rounded-2xl border border-gray-200 shadow-lg p-3 space-y-2 transition-transform transform hover:scale-105">
       <div
@@ -227,7 +251,7 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({
           )}
         </div>
         <Button
-          onClick={() => setIsModalOpen(true)}
+          onClick={handleAddToCart}
           className="rounded-full bg-blue-600 text-white px-4 py-2 transition hover:bg-blue-500"
         >
           Add To Cart

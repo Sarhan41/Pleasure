@@ -14,7 +14,6 @@ export async function POST(req: Request) {
     const {
       productId,
       sizeName,
-      color,
       price,
       quantity,
       SKUvalue,
@@ -35,18 +34,12 @@ export async function POST(req: Request) {
         SKUvalue: SKUvalue,
         discountedPrice: discountedPrice,
         category: category,
-        color: {
-          create: color.map((c: { value: string; name: string }) => ({
-            value: c.value,
-            name: c.name,
-          })),
-        },
       },
     });
 
     return NextResponse.json(cartItem);
   } catch (error) {
-    console.log("[CARTITEMS_POST_SINGLE]", error);
+    console.log("[CARTITEMS_POST_CARD]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }

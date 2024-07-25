@@ -11,7 +11,6 @@ import { useRouter } from "next/navigation";
 import Currency from "@/components/Store/Currency";
 import IconButton from "@/components/Store/IconButton";
 import axios from "axios";
-import { CartItems } from "@prisma/client";
 
 interface CartItemProps {
   data: CartItemWithColors & { product: Product };
@@ -82,33 +81,40 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
         </div>
       )}
 
-      <li className="relative flex py-4 border rounded-lg my-4 justify-between items-center border-primary px-4">
-        <div className="absolute top-2 right-2">
-          <IconButton
-            onClick={() => removeItem(cartId)}
-            icon={<X size={15} />}
+      <li className="relative flex flex-row py-2 border rounded-lg my-2 justify-between items-center border-primary px-2 space-x-2">
+        <div className="absolute h-fit w-fit top-1 right-1">
+          <X height={3} width={3}
+            className="h-4 w-4 p-1  rounded-full flex items-center justify-center bg-white border shadow-md  hover:scale-110 transition"
+            onClick={() => removeItem(data.id)}
           />
         </div>
-        <div className="relative h-24 w-24 rounded-md overflow-hidden sm:h-32 sm:w-32 cursor-pointer">
+        <div className="relative h-20 w-16 sm:h-24 items-center flex  sm:w-20 rounded-md overflow-hidden cursor-pointer">
           <Image
             onClick={onProductClick}
-            fill
+            height={80}
+            width={60}
             src={data.product.images[0].url}
             alt={data.product.name}
-            className="object-cover object-center"
+            className="object-cover object-top rounded-md"
           />
         </div>
-        <div className="flex flex-1 flex-col ml-4 sm:ml-6">
+        <div className="flex flex-1 flex-col ml-2 sm:ml-3">
           <p
             onClick={onProductClick}
-            className="text-lg cursor-pointer font-semibold text-black hover:text-primary"
+            className="text-[10px] sm:text-sm cursor-pointer font-medium text-black hover:text-primary"
           >
-            {data.product.name}
+            {data.product.subname && data.product.subname.length > 0
+              ? data.product.subname.includes("100")
+                ? data.product.subname.replace("100", "100%")
+                : data.product.subname
+              : data.product.name.includes("100")
+              ? data.product.name.replace("100", "100%")
+              : data.product.name}
           </p>
-          <div className="flex items-center mt-2">
+          <div className="flex flex-row items-start sm:items-center mt-1 sm:mt-2 space-x-2">
             {data.color && (
-              <div>
-                <p className="text-sm text-gray-500">
+              <div className="flex items-center space-x-1">
+                <p className="text-xs text-gray-500">
                   Colors: {data.color.map((color) => color.name).join(", ")}
                 </p>
                 <div className="flex space-x-1">
@@ -116,40 +122,43 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
                     <span
                       key={idx}
                       style={{ backgroundColor: color.value }}
-                      className="block h-4 w-4 rounded-sm border border-gray-600"
+                      className="block h-3 w-3 rounded-sm border border-gray-600"
                     />
                   ))}
                 </div>
               </div>
             )}
-            <div className="flex">
-              <h1 className="border font-bold px-4 py-2 mt-2">
-                <span className="font-medium">Size :</span> {data.sizeName}
+            <div className="flex items-center  space-x-1">
+              <h1 className=" font-light px-1 sm:flex py-0.5 text-[10px] sm:text-xs">
+                <span className="font-medium hidden mr-1 sm:flex">Size:</span>{" "}
+                {data.sizeName}
               </h1>
-              <h1 className=" font-light px-4 py-2 mt-2">
-                <span className="font-normal">Category :</span> {data.category}
+              <h1 className="font-light px-1 py-0.5 sm:flex text-[10px] sm:text-xs">
+                <span className="font-medium mr-1 hidden sm:flex">
+                  Category:
+                </span>{" "}
+                {data.category}
               </h1>
             </div>
           </div>
         </div>
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center">
+        <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1">
             {data.quantity > 1 && (
               <IconButton
                 onClick={onMinusClick}
-                icon={<MinusIcon size={15} />}
+                icon={<MinusIcon size={12} />}
               />
             )}
-            <span className="mx-2">{data.quantity}</span>
-            <IconButton onClick={onPlusClick} icon={<PlusIcon size={15} />} />
+            <span className="mx-1 text-xs ">{data.quantity}</span>
+            <IconButton onClick={onPlusClick} icon={<PlusIcon size={12} />} />
           </div>
-          {/* <Currency value={price} discountedValue={data?.discountedPrice} /> */}
-          <div className="font-semibold">
+          <div className="font-semibold text-right text-sm">
             ₹
             {data.discountedPrice ? (
               <>
                 {data.discountedPrice}
-                <span className="line-through ml-4 text-gray-500">
+                <span className="line-through ml-2 text-gray-500 text-xs">
                   {data.price}
                 </span>
               </>
