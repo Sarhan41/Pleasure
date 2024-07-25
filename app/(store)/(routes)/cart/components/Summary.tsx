@@ -97,7 +97,7 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
       </div>
       {!isCheckoutPage && (
         <div className="mt-4">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-red-500">
             Discount Codes are added at checkout.
           </p>
         </div>
