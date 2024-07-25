@@ -88,7 +88,7 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
             icon={<X size={12} />}
           />
         </div>
-        <div className="relative h-16 w-16 sm:h-20 sm:w-20 rounded-md overflow-hidden cursor-pointer">
+        <div className="relative h-16 w-16 sm:h-20 items-center flex  sm:w-20 rounded-md overflow-hidden cursor-pointer">
           <Image
             onClick={onProductClick}
             height={80}
@@ -128,12 +128,12 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
                 </div>
               </div>
             )}
-            <div className="flex items-center space-x-1">
-              <h1 className="border font-bold px-1 py-0.5 text-xs sm:text-sm">
-                <span className="font-medium">Size:</span> {data.sizeName}
+            <div className="flex items-center  space-x-1">
+              <h1 className=" font-light px-1 sm:flex py-0.5 text-[10px] sm:text-xs">
+                <span className="font-medium hidden mr-1 sm:flex">Size:</span> {data.sizeName}
               </h1>
-              <h1 className="font-light px-1 py-0.5 text-xs sm:text-sm">
-                <span className="font-normal">Category:</span> {data.category}
+              <h1 className="font-light px-1 py-0.5 sm:flex text-[10px] sm:text-xs">
+                <span className="font-medium mr-1 hidden sm:flex">Category:</span> {data.category}
               </h1>
             </div>
           </div>

@@ -58,15 +58,19 @@ export default async function CartPage() {
   );
 
   return (
-    <div className="bg-white w-full mt-36 px-10">
+    <div className="bg-white w-full mt-12 px-4 sm:px-6 lg:px-10">
       <Container>
-        <div className="px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center w-full">
-          <h1 className="text-4xl font-bold text-black">Your Cart</h1>
-          <ClearIcon />
+        <div className="px-4 py-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center w-full">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-black">
+            Your Cart
+          </h1>
+          <div className="mt-4 sm:mt-0">
+            <ClearIcon />
+          </div>
         </div>
-        <div className="mt-4 grid gap-4 lg:grid-cols-12 lg:items-start">
+        <div className="mt-4 grid gap-4 grid-cols-1 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-7">
-            <ul >
+            <ul className="space-y-4 mx-2">
               {CartProducts.map((item) => (
                 <CartItem
                   key={item.id}
@@ -77,7 +81,7 @@ export default async function CartPage() {
               ))}
             </ul>
           </div>
-          <div className="w-96 lg:col-span-5">
+          <div className="w-96 lg:col-span-5 mt-4">
             <Summary
               prices={pricesForSummary}
               quantities={quantitiesForSummary}
