@@ -18,7 +18,6 @@ const ClearIcon = () => {
       toast.success("Cart cleared successfully!");
       router.refresh();
       router.push(`/cart?reload=${Date.now()}`);
-      setLoading(false);
     } catch (error) {
       console.error("[CLEAR_CART]", error);
       toast.error("Failed to clear the cart. Please try again.");
@@ -30,16 +29,17 @@ const ClearIcon = () => {
   return (
     <>
       {loading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-15 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-25 z-50">
           <ClipLoader size={50} color={"#FFC0CB"} loading={loading} />
         </div>
       )}
       <div
-        className="flex items-center justify-center p-3 cursor-pointer gap-3 border-2 border-primary rounded-md hover:bg-primary hover:text-white transition-colors duration-200"
+        className="flex items-center justify-center p-2 sm:p-3 cursor-pointer gap-2 sm:gap-3 border-2 border-primary rounded-md hover:bg-primary hover:text-white transition-colors duration-200"
         onClick={onClick}
+        aria-label="Clear Cart"
       >
-        <Trash2Icon className="h-5 w-5" />
-        <h3 className="text-lg font-semibold">Clear Cart</h3>
+        <Trash2Icon className="h-4 sm:h-5 w-4 sm:w-5" />
+        <h3 className="text-sm sm:text-lg font-semibold">Clear Cart</h3>
       </div>
     </>
   );

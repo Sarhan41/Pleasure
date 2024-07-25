@@ -69,50 +69,52 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
   };
 
   const isCheckoutPage = pathname.includes("checkout");
-
   return (
-    <div className="mt-8 rounded-lg min-w-full bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8 shadow-md">
-      <h2 className="text-lg font-medium text-gray-900">Order Summary</h2>
+    <div className="mt-8 rounded-lg max-md:w-fit md:min-w-full bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8 shadow-md">
+      <h2 className="text-lg font-medium text-gray-900 sm:text-xl md:text-2xl lg:text-3xl">
+        Order Summary
+      </h2>
       <div className="mt-6 space-y-4">
-        <div className="flex items-center w-full justify-between">
-          <div className="text-base font-medium text-gray-900">Sub Total</div>
+        <div className="flex items-center w-full justify-between text-sm sm:text-base md:text-lg lg:text-base">
+          <div className="font-medium text-gray-900">Sub Total</div>
           <Currency value={orderTotal} />
         </div>
-        <div className="flex items-center w-full justify-between border-t border-gray-200 pt-4">
-          <div className="text-base font-medium text-gray-900">Discount</div>
+        <div className="flex items-center w-full justify-between border-t border-gray-200 pt-4 text-sm sm:text-base md:text-lg lg:text-base">
+          <div className="font-medium text-gray-900">Discount</div>
           <Currency value={discount} />
         </div>
-        <div className="flex items-center w-full justify-between border-t border-gray-200 pt-4">
-          <div className="text-base font-medium text-gray-900">Tax</div>
+        <div className="flex items-center w-full justify-between border-t border-gray-200 pt-4 text-sm sm:text-base md:text-lg lg:text-base">
+          <div className="font-medium text-gray-900">Tax</div>
           <Currency value={orderTotal * 0.05} />
         </div>
-        <div className="flex items-center justify-between border-t border-gray-200 pt-4">
-          <div className="text-base font-medium text-gray-900">Shipping</div>
+        <div className="flex items-center justify-between border-t border-gray-200 pt-4 text-sm sm:text-base md:text-lg lg:text-base">
+          <div className="font-medium text-gray-900">Shipping</div>
           <Currency value={29} />
         </div>
-        <div className="flex items-center justify-between border-t border-gray-200 pt-4">
-          <div className="text-base font-medium text-gray-900">You Pay</div>
+        <div className="flex items-center justify-between border-t border-gray-200 pt-4 text-sm sm:text-base md:text-lg lg:text-base">
+          <div className="font-medium text-gray-900">You Pay</div>
           <Currency value={orderTotal - discount + orderTotal * 0.05 + 29} />
         </div>
       </div>
       {!isCheckoutPage && (
-        <div className="mt-4">
-          <p className="text-sm text-red-500">
-            Discount Codes are added at checkout.
-          </p>
+        <div className="mt-4 text-sm sm:text-base">
+          <p className="text-red-500">Discount Codes are added at checkout.</p>
         </div>
       )}
 
       {isCheckoutPage && (
-        <div className="mt-4 flex gap-4">
+        <div className="mt-4 flex flex-col sm:flex-row gap-4">
           <Input
             type="text"
             value={couponCode}
             onChange={(e) => setCouponCode(e.target.value)}
-            className="flex-1 p-2 border border-gray-300 rounded-l"
+            className="flex-1 p-2 border border-gray-300 rounded-l text-sm sm:text-base"
             placeholder="Enter coupon code"
           />
-          <Button onClick={onApplyCoupon} className="bg-primary text-white">
+          <Button
+            onClick={onApplyCoupon}
+            className="bg-primary text-white text-sm sm:text-base"
+          >
             Apply Coupon
           </Button>
         </div>
@@ -122,7 +124,7 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
         <Button
           disabled={prices.length === 0}
           onClick={onCheckout}
-          className="w-full mt-6 bg-pink-600 text-white hover:bg-pink-700"
+          className="w-full mt-6 bg-pink-600 text-white hover:bg-pink-700 text-sm sm:text-base"
         >
           Checkout
         </Button>

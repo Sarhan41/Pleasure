@@ -82,26 +82,26 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
       )}
 
       <li className="relative flex flex-row py-2 border rounded-lg my-2 justify-between items-center border-primary px-2 space-x-2">
-        <div className="absolute top-1 right-1">
-          <IconButton
-            onClick={() => removeItem(cartId)}
-            icon={<X size={12} />}
+        <div className="absolute h-fit w-fit top-1 right-1">
+          <X height={3} width={3}
+            className="h-4 w-4 p-1  rounded-full flex items-center justify-center bg-white border shadow-md  hover:scale-110 transition"
+            onClick={() => removeItem(data.id)}
           />
         </div>
-        <div className="relative h-16 w-16 sm:h-20 items-center flex  sm:w-20 rounded-md overflow-hidden cursor-pointer">
+        <div className="relative h-20 w-16 sm:h-24 items-center flex  sm:w-20 rounded-md overflow-hidden cursor-pointer">
           <Image
             onClick={onProductClick}
             height={80}
             width={60}
             src={data.product.images[0].url}
             alt={data.product.name}
-            className="object-cover object-center"
+            className="object-cover object-top rounded-md"
           />
         </div>
         <div className="flex flex-1 flex-col ml-2 sm:ml-3">
           <p
             onClick={onProductClick}
-            className="text-xs sm:text-sm cursor-pointer font-medium text-black hover:text-primary"
+            className="text-[10px] sm:text-sm cursor-pointer font-medium text-black hover:text-primary"
           >
             {data.product.subname && data.product.subname.length > 0
               ? data.product.subname.includes("100")
@@ -130,10 +130,14 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
             )}
             <div className="flex items-center  space-x-1">
               <h1 className=" font-light px-1 sm:flex py-0.5 text-[10px] sm:text-xs">
-                <span className="font-medium hidden mr-1 sm:flex">Size:</span> {data.sizeName}
+                <span className="font-medium hidden mr-1 sm:flex">Size:</span>{" "}
+                {data.sizeName}
               </h1>
               <h1 className="font-light px-1 py-0.5 sm:flex text-[10px] sm:text-xs">
-                <span className="font-medium mr-1 hidden sm:flex">Category:</span> {data.category}
+                <span className="font-medium mr-1 hidden sm:flex">
+                  Category:
+                </span>{" "}
+                {data.category}
               </h1>
             </div>
           </div>
