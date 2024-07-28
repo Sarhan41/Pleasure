@@ -1,10 +1,9 @@
 "use client";
 
 import usePreviewModal from "@/hooks/store/use-preview-modal";
-import InfoSingle from "@/app/(store)/_components/Info/InfoSingle/Info";
-import InfoPack from "@/app/(store)/_components/Info/InfoPack/Info"; // Import the new Info component for pack of products
 import Modal from "@/components/Store/Modal";
-import Gallery from "../Gallery";
+import Gallery from "../Gallery/Gallery-Modal";
+import InfoModal from "../Info/InfoModal/Info";
 
 const PreviewModal = ({ userId }: { userId?: string }) => {
   const previewModal = usePreviewModal();
@@ -23,11 +22,7 @@ const PreviewModal = ({ userId }: { userId?: string }) => {
           <Gallery images={product.images} />
         </div>
         <div className="sm:col-span-8 lg:col-span-7 ml-10">
-          {isPackOfProduct ? (
-            <InfoPack data={product} userId={userId} />
-          ) : (
-            <InfoSingle data={product} userId={userId} />
-          )}
+          <InfoModal data={product} userId={userId}   />
         </div>
       </div>
     </Modal>
