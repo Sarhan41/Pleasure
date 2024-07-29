@@ -35,7 +35,7 @@ interface InfoProps {
   userId?: string;
 }
 
-const InfoModal: React.FC<InfoProps> = ({ data, userId }) => {
+const Info: React.FC<InfoProps> = ({ data, userId }) => {
   const [selectedSize, setSelectedSize] = useState<Size | null>(null);
 
   const packMatch = data.name.match(/\(pack of (\d+)\)/i);
@@ -234,20 +234,6 @@ const InfoModal: React.FC<InfoProps> = ({ data, userId }) => {
 
   return (
     <div>
-      {/* =============================================
-            Div For Closing Share Popup
-          =============================================
-      */}
-      {(isSharePopupOpen1 || isSharePopupOpen2) && (
-        <div
-          className="fixed inset-0 bg-transparent bg-opacity-50 z-40"
-          onClick={() => {
-            setIsSharePopupOpen1(false);
-            setIsSharePopupOpen2(false);
-          }}
-        />
-      )}
-
       {/* =============================================
         Name Of The Product
          =============================================
@@ -605,36 +591,6 @@ const InfoModal: React.FC<InfoProps> = ({ data, userId }) => {
           =============================================
        */}
       <div className="flex items-center mt-6 gap-x-3 relative">
-        <div className="border-primary border-2 rounded-full">
-          <IconButton
-            onClick={handleShareButtonClick1}
-            icon={<Share2Icon size={20} className="text-gray-600" />}
-          />
-        </div>
-        {isSharePopupOpen1 && (
-          <div className="absolute bg-white border border-gray-300 rounded-md p-2 mt-2 bottom-12 shadow-lg z-50">
-            <button
-              onClick={handleShareViaWhatsApp}
-              className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md w-full"
-            >
-              <FaWhatsapp size={20} className="text-green-500" />
-              <span>Share via WhatsApp</span>
-            </button>
-            <button
-              onClick={handleCopyLink}
-              className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md w-full"
-            >
-              <Link size={20} className="text-gray-600" />
-              <span>Copy Link</span>
-            </button>
-          </div>
-        )}
-        <div className="border-primary border-2 rounded-full">
-          <IconButton
-            onClick={onAddToWishList}
-            icon={<Heart size={20} className="text-gray-600" />}
-          />
-        </div>
         <div>
           <Button
             onClick={onAddToCart}
@@ -650,14 +606,13 @@ const InfoModal: React.FC<InfoProps> = ({ data, userId }) => {
          =============================================
       */}
 
-      <div className="mt-8">
-       
+      {/* <div className="mt-8">
         <MainExtraDetails
           description={data.description}
           additionalInfo={data.additionalInfo}
           SKU={sizeSku}
         />
-      </div>
+      </div> */}
       {/* 
           // ! Reviews Divs Will Be Added Here
 */}
@@ -668,36 +623,6 @@ const InfoModal: React.FC<InfoProps> = ({ data, userId }) => {
       */}
 
       <div className="mt-10 flex items-center gap-x-6  py-7shadow-2xl shadow-gray-600 w-full justify-center relative">
-        <div className="border-primary border-2 rounded-full">
-          <IconButton
-            onClick={handleShareButtonClick2}
-            icon={<Share2Icon size={20} className="text-gray-600" />}
-          />
-        </div>
-        {isSharePopupOpen2 && (
-          <div className="absolute bg-white border border-gray-300 rounded-md bottom-12 p-2 mt-2 shadow-lg z-50">
-            <button
-              onClick={handleShareViaWhatsApp}
-              className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md w-full"
-            >
-              <FaWhatsapp size={20} className="text-green-500" />
-              <span>Share via WhatsApp</span>
-            </button>
-            <button
-              onClick={handleCopyLink}
-              className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md w-full"
-            >
-              <Link size={20} className="text-gray-600" />
-              <span>Copy Link</span>
-            </button>
-          </div>
-        )}
-        <div className="border-primary border-2 rounded-full">
-          <IconButton
-            onClick={onAddToWishList}
-            icon={<Heart size={20} className="text-gray-600" />}
-          />
-        </div>
         <div>
           <Button
             onClick={onAddToCart}
@@ -711,4 +636,4 @@ const InfoModal: React.FC<InfoProps> = ({ data, userId }) => {
   );
 };
 
-export default InfoModal;
+export default Info;
