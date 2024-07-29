@@ -223,13 +223,13 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
          ==============================================
       */}
       <h1 className="text-xl md:text-2xl font-bold text-gray-900 border-b-2 pb-4">
-          {data.subname && data.subname.length > 0
-            ? data.subname.includes("100")
-              ? data.subname.replace("100", "100%")
-              : data.subname
-            : data.name.includes("100")
-            ? data.name.replace("100", "100%")
-            : data.name}
+        {data.subname && data.subname.length > 0
+          ? data.subname.includes("100")
+            ? data.subname.replace("100", "100%")
+            : data.subname
+          : data.name.includes("100")
+          ? data.name.replace("100", "100%")
+          : data.name}
       </h1>
       {/* =============================================
            Div For Price And SKU
@@ -620,8 +620,11 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
       */}
 
       <div className="mt-8">
-       
-        <MainExtraDetails description={data.description} additionalInfo={data.additionalInfo} SKU={sizeSku} />
+        <MainExtraDetails
+          description={data.description}
+          additionalInfo={data.additionalInfo}
+          SKU={sizeSku}
+        />
       </div>
       {/* 
           // ! Reviews Divs Will Be Added Here
@@ -632,7 +635,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           =============================================
       */}
 
-      <div className="mt-10 flex items-center gap-x-6  py-7shadow-2xl shadow-gray-600 w-full justify-center relative">
+      <div className="mt-10 flex flex-wrap items-center gap-x-6 py-7 shadow-2xl shadow-gray-600 w-full justify-center relative">
         <div className="border-primary border-2 rounded-full">
           <IconButton
             onClick={handleShareButtonClick2}
@@ -663,14 +666,15 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             icon={<Heart size={20} className="text-gray-600" />}
           />
         </div>
-        <div>
+        <div className="w-full sm:w-auto flex justify-center">
           <Button
             onClick={onAddToCart}
-            className="flex items-center gap-x-2 w-60"
+            className="flex items-center gap-x-2 w-full sm:w-60"
           >
             Add To Cart
           </Button>
         </div>
+    
       </div>
     </div>
   );
