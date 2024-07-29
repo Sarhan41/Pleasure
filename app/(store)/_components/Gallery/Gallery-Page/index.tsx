@@ -74,14 +74,14 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
                 images.map((image, index) => (
                   <CarouselItem key={image.id}>
                     <div
-                      className="border-4 relative h-[600px] w-[400px] sm:ml-24"
+                      className="border-4 relative h-60 w-full sm:h-[600px] sm:w-[400px] sm:ml-24"
                       onClick={() => openFullScreen(index)}
                     >
                       <Image
                         fill
                         src={images?.[hoveredImageIndex]?.url ?? image?.url}
                         alt="Image"
-                        className="object-cover object-center h-full w-full"
+                        className="max-xs:object-contain object-cover object-center h-full w-full"
                       />
                     </div>
                   </CarouselItem>
@@ -102,10 +102,7 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
             <Carousel>
               <CarouselContent>
                 <CarouselItem>
-                  <div
-                    className="h-screen w-screen flex justify-center items-center"
-                    onClick={goToPreviousImage}
-                  >
+                  <div className="h-screen w-screen flex justify-center items-center">
                     <Image
                       fill
                       src={images?.[selectedImageIndex]?.url ?? ""}
@@ -115,8 +112,14 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
                   </div>
                 </CarouselItem>
               </CarouselContent>
-              <CarouselPrevious className="max-sm:hidden absolute top-1/2 left-4 transform -translate-y-1/2" />
-              <CarouselNext className="max-sm:hidden absolute top-1/2 right-4 transform -translate-y-1/2" />
+              <CarouselPrevious
+                className="max-sm:hidden absolute top-1/2 left-4 transform -translate-y-1/2"
+                onClick={goToPreviousImage}
+              />
+              <CarouselNext
+                className="max-sm:hidden absolute top-1/2 right-4 transform -translate-y-1/2"
+                onClick={goToNextImage}
+              />
             </Carousel>
           </div>
         </div>

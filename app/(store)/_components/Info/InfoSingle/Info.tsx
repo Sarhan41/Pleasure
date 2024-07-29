@@ -21,6 +21,7 @@ import {
   PlusIcon,
   Share2Icon,
   Link,
+  ShoppingCartIcon,
 } from "lucide-react";
 import IconButton from "@/components/Store/IconButton";
 import { FaWhatsapp } from "react-icons/fa";
@@ -651,7 +652,6 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
       */}
 
       <div className="mt-8">
-       
         <MainExtraDetails
           description={data.description}
           additionalInfo={data.additionalInfo}
@@ -698,13 +698,11 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             icon={<Heart size={20} className="text-gray-600" />}
           />
         </div>
-        <div>
-          <Button
+        <div className="border-primary border-2 rounded-full">
+        <IconButton
             onClick={onAddToCart}
-            className="flex items-center gap-x-2 w-60"
-          >
-            Add To Cart
-          </Button>
+            icon={<ShoppingCartIcon size={20} className="text-gray-600" />}
+          />
         </div>
       </div>
     </div>

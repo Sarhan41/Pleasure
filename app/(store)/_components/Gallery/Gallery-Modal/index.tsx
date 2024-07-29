@@ -63,7 +63,7 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
                         fill
                         src={image.url}
                         alt="Image"
-                        className="object-contain object-center h-full w-full"
+                        className="sm:object-contain object-center h-full w-full"
                       />
                     </div>
                   </CarouselItem>
@@ -73,7 +73,10 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
         </div>
       </div>
       {isFullScreen && (
-        <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-90">
+        <div
+          className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-90"
+          onClick={closeFullScreen}
+        >
           <div className="relative">
             <button
               className="absolute top-0 right-0 m-4 text-white text-xl z-50"

@@ -29,6 +29,7 @@ import { Product as ProductType } from "@/types";
 import { MotionSpan } from "@/constant/MotionElements";
 import { calculateDiscountPercentage } from "@/lib/calculateDiscountedPrice";
 import MainExtraDetails from "../ExtraDetails/MainDetails";
+import usePreviewModal from "@/hooks/store/use-preview-modal";
 
 interface InfoProps {
   data: ProductType;
@@ -57,6 +58,8 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
   const router = useRouter();
 
   const categoryName = data.category.name;
+
+  const {onClose} = usePreviewModal();
 
   useEffect(() => {
     if (data?.colors?.length === 1) {
@@ -244,53 +247,68 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           data.name.replace("100", "100%")}
       </h1>
       <div className="mt-3 flex items-end gap-4 justify-between flex-wrap">
-  <div className="font-medium bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-400 p-3 rounded-lg w-full sm:w-auto">
-    <div className="text-lg md:text-xl text-gray-900 flex flex-wrap gap-1 sm:gap-2">
-      {data.sizes.map((size, index) => (
-        <div key={size.name} className="flex flex-col items-start">
-          <span
-            className={`text-sm md:text-base text-black font-semibold border-2 border-gray-500 rounded-md p-1 cursor-pointer ${
-              selectedSize?.name === size.name
-                ? "bg-gray-600 text-white"
-                : "hover:bg-primary hover:text-white"
-            }`}
-            onClick={() => handleSizeSelection(size)}
-          >
-            {size.name}
-          </span>
-          {sizeError && selectedSize === null && (
-            <span className="text-red-700 text-xs">Please select a size</span>
-          )}
+        <div className="font-medium bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-400 p-3 rounded-lg w-full sm:w-auto">
+          <div className="text-lg md:text-xl text-gray-900 flex flex-wrap gap-1 sm:gap-2">
+            {data.sizes.map((size, index) => (
+              <div key={size.name} className="flex flex-col items-start">
+                <span
+                  className={`text-sm md:text-base text-black font-semibold border-2 border-gray-500 rounded-md p-1 cursor-pointer ${
+                    selectedSize?.name === size.name
+                      ? "bg-gray-600 text-white"
+                      : "hover:bg-primary hover:text-white"
+                  }`}
+                  onClick={() => handleSizeSelection(size)}
+                >
+                  {size.name}
+                </span>
+                {sizeError && selectedSize === null && (
+                  <span className="text-red-700 text-xs">
+                    Please select a size
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-col my-3 sm:my-4 gap-x-2 sm:gap-x-4">
+            <div className="flex items-center border border-gray-300 rounded-md w-fit p-1 md:p-2">
+              <button
+                onClick={decrementQuantity}
+                className="flex justify-center items-center w-7 h-7 rounded-md bg-gray-100 hover:bg-gray-200 focus:outline-none"
+              >
+                <MinusIcon className="h-3 w-3" />
+              </button>
+              <span className="mx-1 md:mx-2 text-sm md:text-base">
+                {quantity}
+              </span>
+
+              <button
+                onClick={incrementQuantity}
+                className="flex justify-center items-center w-7 h-7 rounded-md bg-gray-100 hover:bg-gray-200 focus:outline-none"
+              >
+                <PlusIcon className="h-3 w-3" />
+              </button>
+            </div>
+          </div>
+          <div className="mt-2 flex flex-col sm:flex-row gap-2 items-center">
+            <Button onClick={onAddToCart} className="w-full sm:w-auto">
+              Add to Cart
+            </Button>
+            <Button onClick={onAddToWishList} className="w-full sm:w-auto">
+              <Heart className="mr-1 sm:mr-2" /> Wishlist
+            </Button>
+            <Button
+              onClick={() =>
+              {
+                onClose();
+                router.push(`/product/${data.name.replace(/ /g, "-")}`);
+              }}
+              className="w-full sm:w-auto"
+            >
+              Product
+            </Button>
+          </div>
         </div>
-      ))}
-    </div>
-    <div className="flex flex-col my-3 sm:my-4 gap-x-2 sm:gap-x-4">
-      <div className="flex items-center border border-gray-300 rounded-md w-fit p-1 md:p-2">
-        <button
-          onClick={decrementQuantity}
-          className="flex justify-center items-center w-7 h-7 rounded-md bg-gray-100 hover:bg-gray-200 focus:outline-none"
-        >
-          <MinusIcon className="h-3 w-3" />
-        </button>
-        <span className="mx-1 md:mx-2 text-sm md:text-base">{quantity}</span>
-
-        <button
-          onClick={incrementQuantity}
-          className="flex justify-center items-center w-7 h-7 rounded-md bg-gray-100 hover:bg-gray-200 focus:outline-none"
-        >
-          <PlusIcon className="h-3 w-3" />
-        </button>
       </div>
-    </div>
-    <div className="mt-2 flex flex-col sm:flex-row gap-2 items-center">
-      <Button onClick={onAddToCart} className="w-full sm:w-auto">Add to Cart</Button>
-      <Button onClick={onAddToWishList} className="w-full sm:w-auto">
-        <Heart className="mr-1 sm:mr-2" /> Wishlist
-      </Button>
-    </div>
-  </div>
-</div>
-
     </div>
   );
 };
