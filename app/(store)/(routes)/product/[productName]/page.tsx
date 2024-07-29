@@ -1,4 +1,4 @@
-import Gallery from "@/app/(store)/_components/Gallery";
+import Gallery from "@/app/(store)/_components/Gallery/Gallery-Page";
 import InfoSingle from "@/app/(store)/_components/Info/InfoSingle/Info";
 import InfoPack from "@/app/(store)/_components/Info/InfoPack/Info"; // Import the new Info component for pack of products
 import ProductList from "@/app/(store)/_components/ProductList/ProductList";
