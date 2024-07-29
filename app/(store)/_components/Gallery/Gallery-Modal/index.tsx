@@ -49,31 +49,22 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
   return (
     <div>
       <div className="flex flex-col sm:flex-row sm:items-start sm:gap-4 lg:gap-6">
-        <div className="hidden sm:flex sm:flex-col sm:gap-2 lg:gap-3">
-          {images &&
-            images.map((image, index) => (
-              <div
-                key={image.id}
-                className="relative h-20 w-20 sm:h-28 sm:w-28 mb-1 rounded-lg overflow-hidden cursor-pointer hover:border-primary"
-                onClick={() => openFullScreen(index)}
-              >
-                <Image
-                  fill
-                  src={image.url}
-                  alt="Image"
-                  className="object-cover object-center h-full w-full"
-                />
-              </div>
-            ))}
-        </div>
         <div className="w-full ">
           <Carousel>
-          <CarouselContent>
+            <CarouselContent>
               {images &&
                 images.map((image, index) => (
                   <CarouselItem key={image.id}>
-                    <div className="relative h-60 w-full cursor-pointer" onClick={() => openFullScreen(index)}>
-                      <Image fill src={image.url} alt="Image" className="object-cover object-center h-full w-full" />
+                    <div
+                      className="relative h-60 w-full cursor-pointer"
+                      onClick={() => openFullScreen(index)}
+                    >
+                      <Image
+                        fill
+                        src={image.url}
+                        alt="Image"
+                        className="object-contain object-center h-full w-full"
+                      />
                     </div>
                   </CarouselItem>
                 ))}

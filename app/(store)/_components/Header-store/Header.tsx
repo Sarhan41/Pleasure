@@ -33,7 +33,7 @@ const Header = ({ categories, allProducts, UserId, UserName }: HeaderProps) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  if(isOpen) return null;
+  // if(isOpen) return null;
 
   const isCheckOutPage = pathname.includes("/checkout");
   if (isCheckOutPage) return <CheckoutHeader userId={UserId} />;
