@@ -86,6 +86,11 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
       return toast.error("Please login to add to cart");
     }
 
+    if (data.name.toLowerCase().includes("pack of")) {
+      router.push(`/product/${data.name.replace(/ /g, "-")}`);
+      return;
+    }
+
     if (selectedSize === null) {
       toast.error("Please select a size");
       setSizeError(true);
@@ -234,402 +239,55 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
 
   return (
     <div>
-      {/* =============================================
-        Name Of The Product
-         =============================================
-      */}
       <h1 className="text-xl md:text-2xl font-bold text-gray-900 border-b-2 pb-4">
-        {data.subname && data.subname.length > 0
-          ? data.subname.includes("100")
-            ? data.subname.replace("100", "100%")
-            : data.subname
-          : data.name.includes("100")
-          ? data.name.replace("100", "100%")
-          : data.name}
+        {data.subname?.replace("100", "100%") ||
+          data.name.replace("100", "100%")}
       </h1>
-      {/* =============================================
-           Div For Price And SKU
-          =============================================
-      */}
       <div className="mt-3 flex items-end gap-4 justify-between">
-        {/* =============================================
-            Price
-          =============================================
-      */}
         <div className="font-medium bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-400 p-4 rounded-lg">
-          <div className="text-xl md:text-2xl text-gray-900 flex items-center">
-            {!selectedSize ? (
-              data.sizes[0].discountedprice ? (
-                <div className="flex flex-col md:flex-row items-start md:items-center">
-                  <div className="flex items-center">
-                    <MotionSpan
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5 }}
-                      className="text-gray-500 text-sm md:text-lg line-through mr-2"
-                    >
-                      ₹{data.sizes[0].price}
-                    </MotionSpan>
-                    <MotionSpan
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.5 }}
-                      className="text-black ml-1 text-xl md:text-3xl"
-                    >
-                      ₹{data.sizes[0].discountedprice}
-                    </MotionSpan>
-                  </div>
-                  <div className="flex items-center md:ml-2 md:mt-0 mt-2">
-                    <MotionSpan
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 1 }}
-                      className="md:ml-2 text-sm md:text-lg text-pink-700"
-                    >
-                      (
-                      {calculateDiscountPercentage(
-                        data.sizes[0].price,
-                        data.sizes[0].discountedprice
-                      )}
-                      % OFF)
-                    </MotionSpan>
-                    {data.name.toLowerCase().includes("pack of") && (
-                      <MotionSpan
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 1.5 }}
-                        className="ml-2 text-xs md:text-sm text-gray-600 uppercase"
-                      >
-                        {data.name.match(/pack of \d+/i)}
-                      </MotionSpan>
-                    )}
-                  </div>
-                </div>
-              ) : (
-                <MotionSpan
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="text-gray-500 text-sm md:text-lg line-through mr-2"
+          <div className="text-xl md:text-2xl text-gray-900 flex flex-wrap gap-2 sm:gap-4">
+            {data.sizes.map((size, index) => (
+              <div key={size.name} className="flex flex-col items-start">
+                <span
+                  className={`text-sm md:text-base text-black font-semibold border-2 border-gray-500 rounded-md p-2 cursor-pointer ${
+                    selectedSize?.name === size.name
+                      ? "bg-gray-600 text-white"
+                      : "hover:bg-primary hover:text-white"
+                  }`}
+                  onClick={() => handleSizeSelection(size)}
                 >
-                  ₹{data.sizes[0].price}
-                </MotionSpan>
-              )
-            ) : data.sizes[0].discountedprice ? (
-              <div className="flex flex-col md:flex-row items-start md:items-center">
-                <div className="flex items-center">
-                  <MotionSpan
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="text-gray-500 text-sm md:text-lg line-through mr-2"
-                  >
-                    ₹{selectedSize.price}
-                  </MotionSpan>
-                  <MotionSpan
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.5 }}
-                    className="text-black ml-1 text-xl md:text-3xl"
-                  >
-                    ₹{selectedSize.discountedprice}
-                  </MotionSpan>
-                </div>
-                <div className="flex items-center md:ml-2 md:mt-0 mt-2">
-                  <MotionSpan
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 1 }}
-                    className="md:ml-2 text-sm md:text-lg text-pink-700"
-                  >
-                    (
-                    {calculateDiscountPercentage(
-                      selectedSize.price,
-                      selectedSize.discountedprice
-                    )}
-                    % OFF)
-                  </MotionSpan>
-                  {data.name.toLowerCase().includes("pack of") && (
-                    <MotionSpan
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 1.5 }}
-                      className="ml-2 text-xs md:text-sm text-gray-600 uppercase"
-                    >
-                      {data.name.match(/pack of \d+/i)}
-                    </MotionSpan>
-                  )}
-                </div>
+                  {size.name}
+                </span>
+                {sizeError && selectedSize === null && (
+                  <span className="text-red-700">Please select a size</span>
+                )}
               </div>
-            ) : (
-              <MotionSpan
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="text-gray-500 text-sm md:text-lg line-through mr-2"
+            ))}
+          </div>
+          <div className="flex flex-col my-4 sm:my-8 gap-x-4">
+            <div className="flex items-center border border-gray-300 rounded-md w-fit p-1 md:p-2">
+              <button
+                onClick={decrementQuantity}
+                className="flex justify-center items-center w-8 h-8 rounded-md bg-gray-100 hover:bg-gray-200 focus:outline-none"
               >
-                ₹{selectedSize.price}
-              </MotionSpan>
-            )}
-          </div>
-        </div>
+                <MinusIcon className="h-4 w-4" />
+              </button>
+              <span className="mx-2 md:mx-4">{quantity}</span>
 
-        {/* =================================================================
-            SKUValue
-            =================================================================
-         */}
-      </div>
-
-      <div className="flex flex-col my-4 gap-y-4">
-        {/* =============================================
-             Div For Available Sizes
-             =============================================
-
-        */}
-
-        <div className="flex gap-4 flex-col">
-          <h3 className="font-semibold text-base md:text-lg text-black">
-            {" "}
-            Available sizes:
-          </h3>
-
-          <div className="flex gap-4">
-            {data?.sizes
-              ?.sort((a, b) =>
-                Number(a.quantity) === 0 ? 1 : Number(b.quantity) === 0 ? -1 : 0
-              )
-              .map((size) => (
-                <div key={size.name} className="flex flex-col relative">
-                  <span
-                    key={size.name}
-                    className={`text-xs md:text-base text-black ${
-                      selectedSize !== size && "hover:bg-primary"
-                    } hover:text-white hover:cursor-pointer font-semibold border-2 border-gray-500 rounded-md p-1 md:p-2 ${
-                      selectedSize === size ? "bg-gray-600 text-white" : ""
-                    } ${sizeError && "border-red-700"} ${
-                      Number(size.quantity) === 0
-                        ? "border-gray-400 text-gray-400 cursor-not-allowed relative"
-                        : ""
-                    }`}
-                    onClick={() =>
-                      Number(size.quantity) > 0 && handleSizeSelection(size)
-                    }
-                  >
-                    {size.name}
-                  </span>
-                  {Number(size.quantity) === 0 && (
-                    <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
-                      <svg
-                        className="absolute w-full h-full text-gray-400"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <line x1="1" y1="1" x2="23" y2="23" />
-                      </svg>
-                    </div>
-                  )}
-                  {selectedSize === size && Number(size.quantity) > 0 && (
-                    <h3 className="text-gray-900">
-                      {Number(size.quantity) < 5
-                        ? `${size.quantity} left`
-                        : Number(size.quantity) < 10
-                        ? "Only a few left!"
-                        : null}
-                    </h3>
-                  )}
-                </div>
-              ))}
-          </div>
-
-          {sizeError && (
-            <span className="text-red-900">Please select a size</span>
-          )}
-        </div>
-
-        {/*   =============================================
-              Div For Size Chart
-              ============================================= 
-        
-        */}
-
-        <div>
-          <h3
-            onClick={handleSizeChartOpen}
-            className="font-semibold text-sm md:text-base text-primary cursor-pointer w-fit hover:underline"
-          >
-            Size Chart
-          </h3>
-          <Dialog open={isSizeChartOpen} onOpenChange={handleSizeChartClose}>
-            <DialogOverlay className="absolute inset-0 flex items-center min-h-screen min-w-screen justify-center bg-black opacity-50">
-              <DialogContent className="absolute transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg">
-                <SizeChart categoryName={categoryName} />
-                <DialogClose asChild>
-                  <button className="absolute top-4 right-4">
-                    <Cross2Icon className="h-4 w-4" />
-                  </button>
-                </DialogClose>
-              </DialogContent>
-            </DialogOverlay>
-          </Dialog>
-        </div>
-
-        {/* =============================================
-            Div For Quantity 
-            =============================================
-
-        */}
-
-        <div className="flex flex-col gap-x-4">
-          <h3 className="font-semibold text-base md:text-lg text-black">
-            Qty:
-          </h3>
-
-          <div className="flex items-center border border-gray-300 rounded-md w-fit p-1 md:p-2">
-            <button
-              onClick={decrementQuantity}
-              className="flex justify-center items-center w-8 h-8 rounded-md bg-gray-100 hover:bg-gray-200 focus:outline-none"
-            >
-              <MinusIcon className="h-4 w-4" />
-            </button>
-            <span className="mx-2 md:mx-4">{quantity}</span>
-
-            <button
-              onClick={incrementQuantity}
-              className="flex justify-center items-center w-8 h-8 rounded-md bg-gray-100 hover:bg-gray-200 focus:outline-none"
-            >
-              <PlusIcon className="h-4 w-4" />
-            </button>
-          </div>
-        </div>
-
-        {/* Colors */}
-        <div className="mt-6 flex flex-col gap-y-4">
-          {data?.colors?.some((color) => color.value !== "#111") && (
-            <h3 className="font-semibold text-base md:text-lg text-black">
-              Colors:
-            </h3>
-          )}
-          <div className="flex flex-row gap-x-4 mt-2">
-            {data?.colors?.map((color) => {
-              const handleClick = () => {
-                if (color.toLink) {
-                  const productName = color.toLink?.replace(/ /g, "-");
-                  router.push(`/product/${productName}`);
-                }
-                handleColorSelection(color.value);
-              };
-
-              if (color.value !== "#111") {
-                return (
-                  <div key={color.name} onClick={handleClick}>
-                    <div
-                      className="h-6 w-6 md:h-8 md:w-8 rounded-full border border-gray-900 relative"
-                      style={{ backgroundColor: color.value }}
-                    >
-                      {selectedColors.includes(color.value) && (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <svg
-                            className="w-4 h-4 text-gray-400"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              }
-              return null;
-            })}
-          </div>
-        </div>
-
-        {/* Selected Colors */}
-        {selectedColors.length > 0 && isSelectedColorHidden === false && (
-          <div className="mt-4 flex flex-col gap-y-4">
-            <h3 className="font-semibold text-base md:text-lg text-black">
-              Selected Colors:
-            </h3>
-
-            <div className="flex flex-row gap-x-2 flex-wrap mt-2">
-              {selectedColors.map((color, index) => (
-                <div key={index} className="relative">
-                  <div
-                    className="h-6 w-6 md:h-8 md:w-8 rounded-full border border-gray-900"
-                    style={{ backgroundColor: color }}
-                  />
-
-                  <span
-                    onClick={() => {
-                      const newSelectedColors = [...selectedColors];
-                      newSelectedColors.splice(index, 1);
-                      setSelectedColors(newSelectedColors);
-                    }}
-                    className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full cursor-pointer text-xs md:text-sm"
-                  >
-                    &times;
-                  </span>
-                </div>
-              ))}
+              <button
+                onClick={incrementQuantity}
+                className="flex justify-center items-center w-8 h-8 rounded-md bg-gray-100 hover:bg-gray-200 focus:outline-none"
+              >
+                <PlusIcon className="h-4 w-4" />
+              </button>
             </div>
           </div>
-        )}
-      </div>
-
-      {/* =============================================
-          Div For Add To Cart And Add To Wishlist and Share 1
-          =============================================
-       */}
-      <div className="flex items-center mt-6 gap-x-3 relative">
-        <div>
-          <Button
-            onClick={onAddToCart}
-            className="flex items-center gap-x-2 w-40 md:w-60"
-          >
-            Add To Cart
-          </Button>
-        </div>
-      </div>
-
-      {/* =============================================
-           Div For Description
-         =============================================
-      */}
-
-      {/* <div className="mt-8">
-        <MainExtraDetails
-          description={data.description}
-          additionalInfo={data.additionalInfo}
-          SKU={sizeSku}
-        />
-      </div> */}
-      {/* 
-          // ! Reviews Divs Will Be Added Here
-*/}
-
-      {/* =============================================
-          Div For Add To Cart And Add To Wishlist and Share 2
-          =============================================
-      */}
-
-      <div className="mt-10 flex items-center gap-x-6  py-7shadow-2xl shadow-gray-600 w-full justify-center relative">
-        <div>
-          <Button
-            onClick={onAddToCart}
-            className="flex items-center gap-x-2 w-60"
-          >
-            Add To Cart
-          </Button>
+          <div className="mt-3 flex gap-2 items-center">
+            <Button onClick={onAddToCart}>Add to Cart</Button>
+            <Button onClick={onAddToWishList}>
+              <Heart className="mr-2" /> Wishlist
+            </Button>
+          </div>
         </div>
       </div>
     </div>

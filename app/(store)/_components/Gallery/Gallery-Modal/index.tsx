@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import {
   Carousel,
@@ -47,16 +48,14 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
 
   return (
     <div>
-      <div className="lg:flex">
-        <div className="max-lg:hidden mr-8 flex flex-col">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:gap-4 lg:gap-6">
+        <div className="hidden sm:flex sm:flex-col sm:gap-2 lg:gap-3">
           {images &&
             images.map((image, index) => (
               <div
                 key={image.id}
-                className="border-4 relative h-20 w-20 sm:h-28 mb-1 sm:w-28 rounded-lg overflow-hidden cursor-pointer hover:border-primary"
+                className="relative h-20 w-20 sm:h-28 sm:w-28 mb-1 rounded-lg overflow-hidden cursor-pointer hover:border-primary"
                 onClick={() => openFullScreen(index)}
-                onMouseEnter={() => setHoveredImageIndex(index)}
-                onMouseLeave={() => setHoveredImageIndex(-1)}
               >
                 <Image
                   fill
@@ -67,22 +66,14 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
               </div>
             ))}
         </div>
-        <div className="lg:w-4/5">
+        <div className="w-full ">
           <Carousel>
-            <CarouselContent>
+          <CarouselContent>
               {images &&
                 images.map((image, index) => (
                   <CarouselItem key={image.id}>
-                    <div
-                      className="border-4 relative h-[600px] w-[400px] sm:ml-24"
-                      onClick={() => openFullScreen(index)}
-                    >
-                      <Image
-                        fill
-                        src={images?.[hoveredImageIndex]?.url ?? image?.url}
-                        alt="Image"
-                        className="object-cover object-center h-full w-full"
-                      />
+                    <div className="relative h-60 w-full cursor-pointer" onClick={() => openFullScreen(index)}>
+                      <Image fill src={image.url} alt="Image" className="object-cover object-center h-full w-full" />
                     </div>
                   </CarouselItem>
                 ))}
@@ -115,8 +106,8 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
                   </div>
                 </CarouselItem>
               </CarouselContent>
-              <CarouselPrevious className="max-sm:hidden absolute top-1/2 left-4 transform -translate-y-1/2" />
-              <CarouselNext className="max-sm:hidden absolute top-1/2 right-4 transform -translate-y-1/2" />
+              <CarouselPrevious className="absolute top-1/2 left-4 transform -translate-y-1/2" />
+              <CarouselNext className="absolute top-1/2 right-4 transform -translate-y-1/2" />
             </Carousel>
           </div>
         </div>

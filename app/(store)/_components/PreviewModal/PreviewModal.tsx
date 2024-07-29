@@ -15,11 +15,11 @@ const PreviewModal = ({ userId }: { userId?: string }) => {
 
   return (
     <Modal open={previewModal.isOpen} onClose={previewModal.onClose}>
-      <div className="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8 z-[100000] pl-4">
-        <div className="sm:col-span-4 lg:col-span-5 ml-2">
-          <Gallery images={product.images} />
+      <div className="flex flex-col items-start w-full gap-4 p-4 sm:flex-row sm:gap-6 lg:gap-8">
+        <div className="flex-1 sm:w-1/2 lg:w-2/5">
+          <Gallery images={product.images.slice(0,3)} />
         </div>
-        <div className="sm:col-span-8 lg:col-span-7 ml-10">
+        <div className="flex-1 sm:w-1/2 lg:w-3/5">
           <InfoModal data={product} userId={userId} />
         </div>
       </div>
