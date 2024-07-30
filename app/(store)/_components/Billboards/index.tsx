@@ -16,6 +16,8 @@ interface BillboardProps {
   }[];
 }
 
+import { handleImageLoad } from "@/lib/handleImageLoad";
+
 const Billboard: React.FC<BillboardProps> = ({ data }) => {
   const highlightText = (text: string) => {
     const parts = text.split(/("[^"]+")/g);
@@ -52,8 +54,10 @@ const Billboard: React.FC<BillboardProps> = ({ data }) => {
                   <Image
                     src={item.imageUrl}
                     alt={item.name}
-                    fill
-                    className="rounded-xl place-self-center object-cover bg-gradient-to-b from-black/70 via-black/50 to-black/30"
+         fill
+                    
+                    priority
+                    className="rounded-xl object-cover bg-gradient-to-b from-black/70 via-black/50 to-black/30"
                   />
                   <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/30 flex flex-col justify-center lg:justify-end items-center lg:items-end text-center lg:text-right text-white space-y-4 lg:space-y-6 p-4 sm:p-6 lg:p-10">
                     <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight drop-shadow-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 bg-clip-text text-transparent">
