@@ -71,7 +71,14 @@ export interface Order {
   orderItems: OrderItem[];
 }
 
-
 export interface CartItemWithColors extends CartItems {
   color: { value: string; name: string }[];
+}
+
+export interface Billboard {
+  imageUrl: string;
+  name: string;
+  title: string;
+  subtitle: string;
+  link: string;
 }
