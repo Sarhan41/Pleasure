@@ -204,10 +204,12 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
 
   return (
     <>
-      <section className="container flex flex-col justify-center items-center gap-10 py-12">
-        <Card className="max-w-[25rem] w-full">
+      <section className="container overflow-x-hidden flex flex-col justify-center items-center gap-10 py-12 px-4 md:px-0">
+        <Card className="w-full max-w-lg">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold my-4">Checkout</CardTitle>
+            <CardTitle className="text-xl md:text-2xl font-bold my-4">
+              Checkout
+            </CardTitle>
             <CardDescription>
               Please choose a payment method to complete your purchase of Rs{" "}
               {orderTotal}.

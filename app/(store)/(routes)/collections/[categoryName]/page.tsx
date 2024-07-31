@@ -16,6 +16,8 @@ interface CategoryPageProps {
   };
 }
 
+export const revalidate = 1800; // 30 minutes
+
 const CategoryPage: React.FC<CategoryPageProps> = async ({
   params,
   searchParams,

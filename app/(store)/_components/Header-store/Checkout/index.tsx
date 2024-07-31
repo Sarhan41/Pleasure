@@ -6,7 +6,7 @@ import { UserIcon } from "lucide-react";
 
 const CheckoutHeader = ({ userId }: { userId: string | undefined }) => {
   return (
-    <header className="w-full px-4 sm:px-10 lg:px-16 bg-white shadow-md z-50 transition-all duration-300">
+    <header className="w-full px-4 sm:px-10 lg:px-16 bg-white shadow-md z-50 transition-all duration-300 overflow-x-hidden">
       <div className="flex flex-col lg:flex-row items-center justify-between py-2">
         <div className="flex items-center justify-center">
           <Link href="/" className="flex items-center gap-4">

@@ -60,20 +60,20 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({
       <AccordionItem
         value="item-1"
         isOpen={openItem === "item-1"}
-        className="rounded-xl overflow-hidden mx-4 md:mx-12 my-4 shadow-lg"
+        className="rounded-xl overflow-hidden mx-2 md:mx-12 my-4 shadow-lg"
       >
         <AccordionTrigger
-          className={`flex px-4 md:px-8 py-4 justify-between items-center ${
+          className={`flex flex-col md:flex-row px-4 md:px-8 py-4 justify-between items-center ${
             user ? "bg-gray-200 text-gray-700" : "bg-white text-gray-900"
           } transition-colors duration-300`}
           onClick={() => handleToggle("item-1")}
         >
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 text-xs">
             {user && <FaCheckCircle size={24} className="text-green-600" />}
-            <h1 className="font-bold text-xl md:text-3xl sm:text-2xl xs:text-xl">
+            <h1 className="font-bold text-xs md:text-2xl sm:text-xl ">
               1. Login
             </h1>
-            {user ? <p className="text-gray-600">{user.email}</p> : ""}
+            {user && <p className="text-gray-600">{user.email}</p>}
           </div>
         </AccordionTrigger>
         <AccordionContent>
@@ -92,7 +92,7 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({
               <LoginButton asChild mode="modal">
                 <Button
                   variant="outline"
-                  className="border-primary w-fit hover:bg-primary z-50 hover:text-white"
+                  className="border-primary w-full md:w-fit hover:bg-primary hover:text-white"
                   size="lg"
                 >
                   Sign in
@@ -102,7 +102,7 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-primary w-fit hover:bg-primary z-50 hover:text-white"
+                  className="border-primary w-full md:w-fit hover:bg-primary hover:text-white"
                 >
                   Sign up
                 </Button>
@@ -115,23 +115,21 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({
       <AccordionItem
         value="item-2"
         isOpen={openItem === "item-2"}
-        className="rounded-xl overflow-hidden mx-4 md:mx-12 my-4 shadow-lg"
+        className="rounded-xl overflow-hidden mx-2 md:mx-12 my-4 shadow-lg"
       >
         <AccordionTrigger
-          className="flex justify-between px-4 md:px-8 py-4 items-center bg-white text-gray-900 transition-colors duration-300"
+          className="flex flex-col md:flex-row justify-between px-4 md:px-8 py-4 items-center bg-white text-gray-900 transition-colors duration-300"
           onClick={() => handleToggle("item-2")}
         >
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center text-xs space-x-4">
             {selectedAddress && (
               <FaCheckCircle size={24} className="text-green-600 no-rotate" />
             )}
-            <h1 className="font-bold text-xl md:text-3xl">
+            <h1 className="font-bold w-fit  text-xs md:text-2xl sm:text-xl xs:text-xs">
               2. Shipping Address
             </h1>
-            {selectedAddress ? (
+            {selectedAddress && (
               <p className="text-gray-600">{selectedAddress?.phone}</p>
-            ) : (
-              ""
             )}
           </div>
         </AccordionTrigger>
@@ -163,10 +161,8 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({
                 </div>
               ))}
               <Button
-                onClick={() => {
-                  router.push("/my-profile/address");
-                }}
-                className="mt-4"
+                onClick={() => router.push("/my-profile/address")}
+                className="mt-4 w-full md:w-auto"
               >
                 Add New Address
               </Button>
@@ -178,24 +174,25 @@ const ThreeAccordion: React.FC<ThreeAccordionProps> = ({
       <AccordionItem
         value="item-3"
         isOpen={openItem === "item-3"}
-        className="rounded-xl overflow-hidden mx-4 md:mx-12 my-4 shadow-lg"
+        className="rounded-xl overflow-hidden mx-2 md:mx-12 my-4 shadow-lg"
       >
         <AccordionTrigger
-          className="flex justify-between px-4 md:px-8 py-4 items-center bg-white text-gray-900 transition-colors duration-300"
+          className="flex flex-col md:flex-row justify-between px-4 md:px-8 py-4 items-center bg-white text-gray-900 transition-colors duration-300"
           onClick={() => handleToggle("item-3")}
         >
-          <h1 className="font-bold text-xl md:text-3xl">3. Payment</h1>
+          <h1 className="font-bold text-lg md:text-2xl sm:text-xl xs:text-lg">
+            3. Payment
+          </h1>
         </AccordionTrigger>
         <AccordionContent>
           <div className="p-4 md:p-8 bg-gray-50 rounded-b-xl">
             {!selectedAddress ? (
               <div className="flex flex-col justify-center items-center w-full gap-3">
-                <p className="text-center  text-base text-gray-700">
+                <p className="text-center text-base text-gray-700">
                   Please select a shipping address to proceed to payment.
                 </p>
               </div>
             ) : (
-              // <div>hello please checkout</div>
               <CheckoutClientCart
                 user={user}
                 prices={prices}

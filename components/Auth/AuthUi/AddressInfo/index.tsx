@@ -18,14 +18,14 @@ interface AddressInfoProps {
 export const AddressInfo = ({ addresses, label }: AddressInfoProps) => {
   return (
     <div className="flex flex-col w-full mt-2 space-y-4 px-4">
-      <div className="flex justify-between   mb-4">
-        <h2 className="text-3xl font-semibold">{label}</h2>
-        <div className="flex gap-4 max-sm:flex-col">
+      <div className="flex flex-col md:flex-row justify-between mb-4">
+        <h2 className="text-2xl md:text-3xl font-serif font-semibold">{label}</h2>
+        <div className="flex flex-col sm:flex-row gap-4 mt-4 md:mt-0">
           <Link href="/my-profile/address/new">
-            <Button>Add Address</Button>
+            <Button className="w-full sm:w-auto">Add Address</Button>
           </Link>
           <Link href={`/cart/checkout?reload=${Date.now()}`}>
-            <Button>Go to Checkout Page</Button>
+            <Button className="w-full sm:w-auto">Go to Checkout Page</Button>
           </Link>
         </div>
       </div>
