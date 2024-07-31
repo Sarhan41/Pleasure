@@ -114,13 +114,15 @@ const Footer: React.FC = () => {
   return (
     <>
       <div className="bg-pink-500 w-full overflow-hidden flex justify-center items-center py-4 mt-24 text-center">
-        <Image
-          src="/logo-text.jpg"
-          height={48}
-          width={298}
-          alt=""
-          className="object-cover"
-        />
+        <Link href="/">
+          <Image
+            src="/logo-text.jpg"
+            height={48}
+            width={298}
+            alt=""
+            className="object-cover"
+          />
+        </Link>
       </div>
       <footer className="bg-black py-8">
         <div className="container mx-auto">
