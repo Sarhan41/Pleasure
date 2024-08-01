@@ -186,7 +186,7 @@ const Footer: React.FC = () => {
                   {SocialLinks.map((link, index) => (
                     <Link
                       target="_blank"
-                      key={index}
+                      key={`social-${index}`}
                       href={link.route}
                       className="text-white mt-4 flex gap-6"
                     >
