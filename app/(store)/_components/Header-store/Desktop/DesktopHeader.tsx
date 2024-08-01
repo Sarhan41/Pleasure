@@ -27,14 +27,14 @@ const DesktopHeader = ({ categories, allProducts, UserId, UserName }: HeaderProp
               src="/logo.jpg"
               height={48}
               width={48}
-              alt="Logo"
+              alt=""
               className="rounded-full object-cover"
             />
             <Image
               src="/logo-text.png"
               height={48}
               width={298}
-              alt="Pleasure"
+              alt=""
               className="object-cover"
             />
           </Link>

@@ -4,6 +4,8 @@ import { format } from "date-fns";
 import { OrderColumn } from "./_components/order-types";
 import { DataTable } from "./_components/DataTable";
 import { Heading } from "@/components/ui/Heading";
+import { currentRole, currentUser } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 const fetchOrders = async () => {
   const orders = await db.order.findMany({
@@ -61,6 +63,16 @@ const fetchOrders = async () => {
 };
 
 const OrdersPage = async () => {
+  const user = await currentUser();
+  const role = await currentRole();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  if (role !== "ADMIN") {
+    redirect("/my-profile");
+  }
   const orders = await fetchOrders();
 
   return (

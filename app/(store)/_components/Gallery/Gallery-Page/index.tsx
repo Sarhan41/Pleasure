@@ -61,7 +61,7 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
                 <Image
                   fill
                   src={image.url}
-                  alt="Image"
+                  alt=""
                   className="object-cover object-center h-full w-full"
                 />
               </div>
@@ -80,7 +80,7 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
                       <Image
                         fill
                         src={images?.[hoveredImageIndex]?.url ?? image?.url}
-                        alt="Image"
+                        alt=""
                         className="max-xs:object-contain object-cover object-center h-full w-full"
                       />
                     </div>
@@ -108,7 +108,7 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
                     <Image
                       fill
                       src={images?.[selectedImageIndex]?.url ?? ""}
-                      alt="Image"
+                      alt=""
                       className="object-contain"
                     />
                   </div>

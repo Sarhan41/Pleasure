@@ -1,7 +1,9 @@
 import { Heading } from "@/components/ui/Heading";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { currentRole, currentUser } from "@/lib/auth";
 import { formatter } from "@/lib/utils";
+import { redirect } from "next/navigation";
 // import { getTotalRevenue } from "@/actions/GetTotalRevenue";
 // import { getSalesCount } from "@/actions/GetSalesCount";
 // import { getStockCount } from "@/actions/GetStockCount";
@@ -14,6 +16,17 @@ const DashboardPage = async () => {
   // const salesCount = await getSalesCount(params.storeId);
   // const stockCount = await getStockCount(params.storeId);
   // const graphRevenue = await getGraphRevenue(params.storeId);
+
+  const user = await currentUser();
+  const role = await currentRole();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  if (role !== "ADMIN") {
+    redirect("/my-profile");
+  }
 
   return (
     <div className="flex-col">

@@ -62,7 +62,7 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
                       <Image
                         fill
                         src={image.url}
-                        alt="Image"
+                        alt=""
                         className="sm:object-contain object-center h-full w-full"
                       />
                     </div>
@@ -94,7 +94,7 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
                     <Image
                       fill
                       src={images?.[selectedImageIndex]?.url ?? ""}
-                      alt="Image"
+                      alt=""
                       className="object-contain"
                     />
                   </div>
