@@ -161,7 +161,7 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
                       <li key={index} className="flex items-center">
                         <Image
                           src={item.imageUrl}
-                          alt={item.productName}
+                          alt=""
                           width={50}
                           height={50}
                           className="rounded-md mr-4"

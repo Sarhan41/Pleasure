@@ -3,8 +3,21 @@ import { format } from "date-fns";
 import { db } from "@/lib/db";
 import { CouponColumn } from "./components/columns";
 import { CouponClient } from "./components/client";
+import { currentRole, currentUser } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 const CouponsPage = async () => {
+
+  const user = await currentUser();
+  const role = await currentRole();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  if (role !== "ADMIN") {
+    redirect("/my-profile");
+  }
   const coupons = await db.coupon.findMany({
     orderBy: {
       createdAt: "desc",

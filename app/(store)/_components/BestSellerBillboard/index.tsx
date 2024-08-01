@@ -27,7 +27,7 @@ const BestSellerBillboard: React.FC<BestSellerBillboardProps> = ({
         <Link area-label="Link" href={`/collections/${data.name.replace(/\s+/g, "-")}`} passHref>
           <Image
             src={data.imageUrl}
-            alt={data.name}
+            alt={""}
             fill
             className="rounded-3xl objext-cover shadow-lg transform transition-transform duration-500 hover:scale-105"
           />

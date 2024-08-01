@@ -14,14 +14,14 @@ const CheckoutHeader = ({ userId }: { userId: string | undefined }) => {
               src="/logo.jpg"
               height={48}
               width={58}
-              alt="Logo"
+              alt=""
               className="rounded-full object-cover hidden sm:block"
             />
             <Image
               src="/logo-text.png"
               height={10}
               width={200}
-              alt="Pleasure"
+              alt=""
               className="object-cover"
             />
           </Link>

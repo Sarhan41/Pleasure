@@ -94,7 +94,7 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
             height={80}
             width={60}
             src={data.product.images[0].url}
-            alt={data.product.name}
+            alt={""}
             className="object-cover object-top rounded-md"
           />
         </div>

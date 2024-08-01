@@ -3,8 +3,21 @@ import { format } from "date-fns";
 import { CategoryClient } from "./components/client";
 import { db } from "@/lib/db";
 import { CategoryColumn } from "./components/columns";
+import { currentRole, currentUser } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 const CategoriesPage = async () => {
+
+  const user = await currentUser();
+  const role = await currentRole();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  if (role !== "ADMIN") {
+    redirect("/my-profile");
+  }
   const categories = await db.category.findMany({
     orderBy: {
       createdAt: "desc",

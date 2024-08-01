@@ -27,7 +27,7 @@ export default function MobileHeaderIndex({
         </div>
         <div className="flex items-center justify-center">
           <Link area-label="Link" href="/" className="flex items-center overflow-hidden justify-center gap-2">
-            <Image src="/logo-text.png" height={40} width={150} alt="Pleasure" className="object-cover" />
+            <Image src="/logo-text.png" height={40} width={150} alt="" className="object-cover" />
           </Link>
         </div>
         <div className="flex items-center space-x-4">
