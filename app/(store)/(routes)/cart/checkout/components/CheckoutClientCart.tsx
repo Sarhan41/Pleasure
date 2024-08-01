@@ -262,7 +262,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
           </CardContent>
           <CardFooter className="text-center text-sm flex flex-col">
             By placing your order, you agree to our{" "}
-            <Link href="/terms" className="underline">
+            <Link area-label="Link" href="/terms" className="underline">
               Terms and Conditions
             </Link>
           </CardFooter>

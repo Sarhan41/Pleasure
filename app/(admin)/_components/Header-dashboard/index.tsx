@@ -10,7 +10,7 @@ const HeaderDashboard = () => {
       <div className="border-b">
         <div className="flex h-16 items-center px-4 ">
           <div className="hidden md:flex">
-            <Link href="/dashboard">
+            <Link area-label="Link" href="/dashboard">
               <StoreIcon className="h-5 w-5" />
             </Link>
           </div>

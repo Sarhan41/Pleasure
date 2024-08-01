@@ -9,7 +9,7 @@ const CheckoutHeader = ({ userId }: { userId: string | undefined }) => {
     <header className="w-full px-4 sm:px-10 lg:px-16 bg-white shadow-md z-50 transition-all duration-300 overflow-x-hidden">
       <div className="flex flex-col lg:flex-row items-center justify-between py-2">
         <div className="flex items-center justify-center">
-          <Link href="/" className="flex items-center gap-4">
+          <Link area-label="Link" href="/" className="flex items-center gap-4">
             <Image
               src="/logo.jpg"
               height={48}
@@ -28,7 +28,7 @@ const CheckoutHeader = ({ userId }: { userId: string | undefined }) => {
         </div>
         <div className="flex gap-2 mt-2 lg:mt-0">
           <div className="text-center">
-            <Link href="/my-profile">
+            <Link area-label="Link" href="/my-profile">
               <UserIcon size={48} className="p-2 border-r-2" />
             </Link>
           </div>

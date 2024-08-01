@@ -27,7 +27,7 @@ const UserLogin = ({ userId, userName }: UserLoginProps) => {
         <NavigationMenuList>
           <NavigationMenuItem>
             <NavigationMenuTrigger className="bg-black data-[state=open]:bg-black data-[active]:bg-black  hover:bg-black pr-5  text-white ">
-              <Link href="/my-profile">
+              <Link area-label="Link" href="/my-profile">
                 <FaUser className="h-5 w-5 max-sm:h-4 max-sm:w-4  text-white bg-black " />
               </Link>
             </NavigationMenuTrigger>
@@ -44,7 +44,7 @@ const UserLogin = ({ userId, userName }: UserLoginProps) => {
               <div className="flex flex-col md:flex-row gap-4 md:gap-10 mt-4 justify-between  z-50 ">
                 {userId ? (
                   <div className="flex flex-col gap-8">
-                    <Link href="/my-profile">
+                    <Link area-label="Link" href="/my-profile">
                       <Button
                         size="lg"
                         variant="outline"
@@ -53,7 +53,7 @@ const UserLogin = ({ userId, userName }: UserLoginProps) => {
                         My Profile
                       </Button>
                     </Link>
-                    <Link href="/wishlist">
+                    <Link area-label="Link" href="/wishlist">
                       <Button
                         size="lg"
                         variant="outline"
@@ -62,7 +62,7 @@ const UserLogin = ({ userId, userName }: UserLoginProps) => {
                         Wishlist
                       </Button>
                     </Link>
-                    <Link href="/my-profile/orders">
+                    <Link area-label="Link" href="/my-profile/orders">
                       <Button
                         size="lg"
                         variant="outline"

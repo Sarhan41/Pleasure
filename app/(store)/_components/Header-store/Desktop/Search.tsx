@@ -125,7 +125,7 @@ const Search = ({ allProducts }: SearchProps) => {
               </div>
             ) : (
               searchResults.map((product, index) => (
-                <Link
+                <Link area-label="Link"
                   key={product.id}
                   href={`/product/${formatProductName(product.name)}`}
                   onClick={() => setShowResults(false)}
@@ -174,7 +174,7 @@ const Search = ({ allProducts }: SearchProps) => {
                   </div>
                 ) : (
                   searchResults.map((product, index) => (
-                    <Link
+                    <Link area-label="Link"
                       key={product.id}
                       href={`/product/${formatProductName(product.name)}`}
                       onClick={() => {
@@ -201,7 +201,7 @@ const Search = ({ allProducts }: SearchProps) => {
             </h3>
             <div className="space-y-2 flex flex-col overflow-auto max-lg:min-h-96 lg:text-lg lg:py-4 lg:px-6 lg:space-y-4">
               {popularSearches.map((item) => (
-                <Link
+                <Link area-label="Link"
                   key={item.name}
                   href={`/product/${formatProductName(item.link)}`}
                   onClick={() => setIsSearchOpen(false)}

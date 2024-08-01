@@ -33,7 +33,7 @@ const SecondRowCategory = ({
             className="flex items-center justify-between w-full px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-primary-100 transition-colors duration-200"
             onClick={() => handleCategoryClick(category.name)}
           >
-            <Link href={`/collections/${category.name.replace(/\s+/g, "-")}`}>
+            <Link area-label="Link" href={`/collections/${category.name.replace(/\s+/g, "-")}`}>
               <div className="flex items-center gap-2 text-primary-600">
                 {category.name}
               </div>
@@ -49,7 +49,7 @@ const SecondRowCategory = ({
               {category.products.slice(0, 8).map((product, index) => (
                 <React.Fragment key={product.id}>
                   <div className="flex">
-                    <Link
+                    <Link area-label="Link"
                       href={`/product/${product.name.replace(/\s+/g, "-")}`}
                       className="block px-3 py-1 text-base font-medium text-gray-600 rounded-md hover:bg-primary-100 transition-colors duration-200"
                       onClick={toggleSidebar}

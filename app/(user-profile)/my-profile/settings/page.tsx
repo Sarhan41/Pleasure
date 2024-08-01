@@ -215,7 +215,7 @@ const SettingsPage = () => {
           <div className="flex max-xs:flex-col gap-5 mt-5">
             {user?.role === UserRole.ADMIN && (
               <Button className="w-fit">
-                <Link href="/dashboard">Go To Dashboard</Link>
+                <Link area-label="Link" href="/dashboard">Go To Dashboard</Link>
               </Button>
             )}
             <LogoutButton>

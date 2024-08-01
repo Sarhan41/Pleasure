@@ -81,7 +81,7 @@ export function MainNav({
             </DropdownMenuLabel>
 
             {NavLinks.map((route) => (
-              <Link key={route.href} href={route.href}>
+              <Link area-label="Link" key={route.href} href={route.href}>
                 <DropdownMenuItem
                   className={cn(
                     "text-sm font-medium transition-colors ",
@@ -101,7 +101,7 @@ export function MainNav({
       {/* Navigation Links */}
       <div className="hidden sm:flex space-x-2 md:space-x-4 lg:space-x-6 items-center">
         {NavLinks.map((route) => (
-          <Link
+          <Link area-label="Link"
             key={route.href}
             href={route.href}
             className={cn(

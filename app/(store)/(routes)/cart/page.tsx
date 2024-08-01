@@ -44,7 +44,7 @@ export default async function CartPage() {
           Your cart is empty. Please add some products.
         </h1>
         <Button className="text-white font-semibold bg-blue-500 hover:bg-blue-600">
-          <Link href="/" className="text-white font-semibold">
+          <Link area-label="Link" href="/" className="text-white font-semibold">
             Go to Home
           </Link>
         </Button>

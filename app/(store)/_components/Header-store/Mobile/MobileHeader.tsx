@@ -26,7 +26,7 @@ export default function MobileHeaderIndex({
           <MenuIcon size={24} />
         </div>
         <div className="flex items-center justify-center">
-          <Link href="/" className="flex items-center overflow-hidden justify-center gap-2">
+          <Link area-label="Link" href="/" className="flex items-center overflow-hidden justify-center gap-2">
             <Image src="/logo-text.png" height={40} width={150} alt="Pleasure" className="object-cover" />
           </Link>
         </div>

@@ -24,7 +24,7 @@ export default function RootLayout({
           <div className="mt-32">{children}</div>
           <Footer />
           {/* WhatsApp Button */}
-          <Link
+          <Link area-label="Link"
             href="https://wa.me/+918155085865" // Replace with your phone number
             className="fixed bottom-4 right-4 z-50 bg-green-500 text-white p-3 rounded-full shadow-lg"
             target="_blank"
