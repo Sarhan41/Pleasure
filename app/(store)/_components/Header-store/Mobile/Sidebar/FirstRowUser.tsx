@@ -42,7 +42,7 @@ const FirstRowUser = ({
       <div className="flex flex-col gap-4 mt-4 w-full">
         {userId ? (
           <div className="flex flex-col gap-4 w-full">
-            <Link href="/my-profile" onClick={toggleSidebar}>
+            <Link area-label="Link" href="/my-profile" onClick={toggleSidebar}>
               <Button
                 size="lg"
                 variant="outline"
@@ -51,7 +51,7 @@ const FirstRowUser = ({
                 My Profile
               </Button>
             </Link>
-            <Link href="/wishlist" onClick={toggleSidebar}>
+            <Link area-label="Link" href="/wishlist" onClick={toggleSidebar}>
               <Button
                 size="lg"
                 variant="outline"
@@ -60,7 +60,7 @@ const FirstRowUser = ({
                 Wishlist
               </Button>
             </Link>
-            <Link href="/my-profile/orders" onClick={toggleSidebar}>
+            <Link area-label="Link" href="/my-profile/orders" onClick={toggleSidebar}>
               <Button
                 size="lg"
                 variant="outline"

@@ -34,6 +34,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled}
         ref={ref}
         {...props}
+        area-label="Button"
+
       >
         {children}
         <div></div>

@@ -9,7 +9,7 @@ export default function PaymentVerifyPage() {
             <CheckCircle2 size={80} className='text-primary animate-pulse '/>
 			<p className='text-2xl sm:text-4xl text-center '>Thank You for Purchasing our product</p>
 			<Button asChild variant={'outline'} className='border-primary hover:bg-primary border-2 hover:text-white w-40'>
-				<Link href={'/my-profile/orders'}>Go to Orders </Link>
+				<Link area-label="Link" href={'/my-profile/orders'}>Go to Orders </Link>
 			</Button>
 		</section>
 	);

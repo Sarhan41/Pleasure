@@ -114,7 +114,7 @@ const Footer: React.FC = () => {
   return (
     <>
       <div className="bg-pink-500 w-full overflow-hidden flex justify-center items-center py-4 mt-24 text-center">
-        <Link href="/">
+        <Link area-label="Link" href="/">
           <Image
             src="/logo-text.jpg"
             height={48}
@@ -135,7 +135,7 @@ const Footer: React.FC = () => {
                 <ul className="text-secondary">
                   {links.map((link, index) => (
                     <li key={index} className="mb-2 hover:text-primary">
-                      <Link
+                      <Link area-label="Link"
                         href={`/product/${link.route.replace(/\s+/g, "-")}`}
                         passHref
                       >
@@ -153,7 +153,7 @@ const Footer: React.FC = () => {
               <ul className="text-secondary">
                 {QuickLinks.map((link, index) => (
                   <li key={index} className="mb-2 hover:text-primary">
-                    <Link href={link.route}>{link.text}</Link>
+                    <Link area-label="Link" href={link.route}>{link.text}</Link>
                   </li>
                 ))}
               </ul>
@@ -184,9 +184,9 @@ const Footer: React.FC = () => {
                 <p className="mb-2">Phone: +91 8155085865</p>
                 <div className="flex gap-4">
                   {SocialLinks.map((link, index) => (
-                    <Link
+                    <Link area-label="Link"
                       target="_blank"
-                      key={index}
+                      key={`social-${index}`}
                       href={link.route}
                       className="text-white mt-4 flex gap-6"
                     >

@@ -594,7 +594,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
               onClick={handleCopyLink}
               className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md w-full"
             >
-              <Link size={20} className="text-gray-600" />
+              <Link area-label="Link" size={20} className="text-gray-600" />
               <span>Copy Link</span>
             </button>
           </div>
@@ -656,7 +656,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
               onClick={handleCopyLink}
               className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md w-full"
             >
-              <Link size={20} className="text-gray-600" />
+              <Link area-label="Link" size={20} className="text-gray-600" />
               <span>Copy Link</span>
             </button>
           </div>

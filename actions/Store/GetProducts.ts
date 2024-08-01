@@ -29,6 +29,7 @@ export const getSuggestedProducts = cache(async (categoryId: string, productId: 
   const suggestedProducts = await db.product.findMany({
     where: {
       categoryId: categoryId,
+      isArchived: false,
     },
     include: {
       category: true,

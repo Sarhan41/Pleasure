@@ -21,10 +21,10 @@ export const AddressInfo = ({ addresses, label }: AddressInfoProps) => {
       <div className="flex flex-col md:flex-row justify-between mb-4">
         <h2 className="text-2xl md:text-3xl font-serif font-semibold">{label}</h2>
         <div className="flex flex-col sm:flex-row gap-4 mt-4 md:mt-0">
-          <Link href="/my-profile/address/new">
+          <Link area-label="Link" href="/my-profile/address/new">
             <Button className="w-full sm:w-auto">Add Address</Button>
           </Link>
-          <Link href={`/cart/checkout?reload=${Date.now()}`}>
+          <Link area-label="Link" href={`/cart/checkout?reload=${Date.now()}`}>
             <Button className="w-full sm:w-auto">Go to Checkout Page</Button>
           </Link>
         </div>
@@ -44,7 +44,7 @@ export const AddressInfo = ({ addresses, label }: AddressInfoProps) => {
             <CardHeader className="flex items-center justify-between p-4">
               <p className="text-lg font-medium">Address {index + 1}</p>
               <div className="flex space-x-2">
-                <Link href={`/my-profile/address/${address.id}`}>
+                <Link area-label="Link" href={`/my-profile/address/${address.id}`}>
                   <Button variant="outline" size="sm">
                     <Pencil1Icon className="h-4 w-4" />
                   </Button>

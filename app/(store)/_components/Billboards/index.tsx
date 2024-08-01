@@ -45,7 +45,7 @@ const Billboard: React.FC<BillboardProps> = ({ data }) => {
         {data.map((item, index) => (
           <CarouselItem key={index}>
             <div className="p-4 sm:p-6 w-full flex justify-center lg:p-8 overflow-hidden cursor-pointer">
-              <Link
+              <Link area-label="Link"
                 href={`/collections/${item.link.replace(/\s+/g, "-")}`}
                 passHref
                 className="w-full h-full"
