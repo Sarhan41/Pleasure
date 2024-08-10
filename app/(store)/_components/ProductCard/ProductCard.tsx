@@ -117,10 +117,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
       if (existing) {
         return toast.error("Item already exists in wishlist");
       } else {
-        await axios.post("/api/dashboard/wishlist", {
-          productId: data.id,
-          userId,
-        });
+        await axios.post("/api/dashboard/wishlist", { id: data.id, userId });
         toast.success("Added to wishlist");
       }
     } catch (error) {
