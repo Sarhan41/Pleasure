@@ -503,7 +503,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
               const handleClick = () => {
                 if (color.toLink) {
                   const productName = color.toLink?.replace(/ /g, "-");
-                  router.push(`/product/${productName}`);
+                  window.open(`/product/${productName}`, "_blank");
                 }
                 handleColorSelection(color.value);
               };

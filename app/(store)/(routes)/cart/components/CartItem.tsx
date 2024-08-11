@@ -38,7 +38,7 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
   const onProductClick = () => {
     const productName = data.product.name.replace(/\s+/g, "-");
 
-    router.push(`/product/${productName}`);
+    window.open(`/product/${productName}`, '_blank');
   };
 
   const onPlusClick = async () => {

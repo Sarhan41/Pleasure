@@ -21,7 +21,7 @@ const WishListItem: React.FC<WishListItemProps> = ({ data, wishlistId }) => {
   const router = useRouter();
 
   const onProductClick = () => {
-    router.push(`/product/${data.name}`);
+    window.open(`/product/${data.name}`, '_blank');
   };
 
   const removeItem = async (id: string) => {

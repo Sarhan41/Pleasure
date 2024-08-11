@@ -28,7 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
   const handleClick = () => {
     const productName = data?.name.replace(/\s+/g, "-");
     if (!isModalOpen) {
-      router.push(`/product/${productName}`);
+      window.open(`/product/${productName}`, '_blank');
     }
   };
 
