@@ -10,7 +10,7 @@ interface SidebarProps {
   categories: {
     id: string;
     name: string;
-    products: { id: string; name: string }[];
+    products: { id: string; name: string, subname:string; }[];
   }[];
   userId: string | null | undefined;
   userName: string | null | undefined;

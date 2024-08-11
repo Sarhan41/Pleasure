@@ -13,7 +13,7 @@ interface SecondRowCategoryProps {
   categories: {
     id: string;
     name: string;
-    products: { id: string; name: string }[];
+    products: { id: string; name: string; subname: string | null }[];
   }[];
 }
 
@@ -28,13 +28,13 @@ const SecondRowCategory = ({
     <div className="flex-1 overflow-y-auto p-4">
       {categories.map((category) => (
         <div key={category.id} className="mb-2">
-          <div className=" flex items-center justify-between w-full px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-primary-100 transition-colors duration-200">
+          <div className="flex items-center justify-between w-full px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-primary-100 transition-colors duration-200">
             <Link
-              area-label="Link"
+              aria-label="Link"
               href={`/collections/${category.name.replace(/\s+/g, "-")}`}
               onClick={toggleSidebar}
             >
-              <div className="flex items-center gap-2 text-primary-600">
+              <div className="flex items-center gap-2 ">
                 {category.name}
               </div>
             </Link>
@@ -43,9 +43,9 @@ const SecondRowCategory = ({
               onClick={() => handleCategoryClick(category.name)}
             >
               {expandedCategory === category.name ? (
-                <ChevronDownIcon size={20} className="text-primary-600" />
+                <ChevronDownIcon size={20} className="text-primary" />
               ) : (
-                <ChevronRightIcon size={20} className="text-primary-600" />
+                <ChevronRightIcon size={20} className="text-primary" />
               )}
             </button>
           </div>
@@ -56,14 +56,20 @@ const SecondRowCategory = ({
                 <React.Fragment key={product.id}>
                   <div className="flex">
                     <Link
-                      area-label="Link"
+                      aria-label="Link"
                       href={`/product/${product.name.replace(/\s+/g, "-")}`}
                       className="block px-3 py-1 text-base font-medium text-gray-600 rounded-md hover:bg-primary-100 transition-colors duration-200"
                       onClick={toggleSidebar}
                     >
                       <div className="flex gap-2">
                         <ChevronRightIcon className="w-4 h-4 text-primary" />
-                        {getFormattedProductName(product.name, category.name)}
+                        {/* Display subname if available, otherwise use getFormattedProductName */}
+                        {product.subname
+                          ? product.subname
+                          : getFormattedProductName(
+                              product.name,
+                              category.name
+                            )}
                       </div>
                     </Link>
                     {(index + 1) % 3 === 0 && (

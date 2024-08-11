@@ -13,6 +13,7 @@ export default async function DesktopHeaderIndex() {
       products: {
         select: {
           name: true,
+          subname: true,
         },
 
         orderBy: {
