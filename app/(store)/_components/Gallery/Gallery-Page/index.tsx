@@ -81,7 +81,7 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
                         fill
                         src={images?.[hoveredImageIndex]?.url ?? image?.url}
                         alt=""
-                        className="max-xs:object-contain object-cover object-center h-full w-full"
+                        className="max-sm:object-contain object-cover object-center h-full w-full"
                       />
                     </div>
                   </CarouselItem>

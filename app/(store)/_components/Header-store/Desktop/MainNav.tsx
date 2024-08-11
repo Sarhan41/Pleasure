@@ -66,7 +66,8 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
         <div className="hidden lg:flex space-x-4">
           <div className="flex space-x-4">
             <div className="flex gap-4 ">
-              <Link area-label="Link"
+              <Link
+                aria-label="Link"
                 href="/"
                 className={cn(
                   "transition-colors duration-300 text-sm mt-0.5 font-bold hover:text-pink-300  uppercase",
@@ -82,7 +83,8 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
                   onMouseEnter={() => handleCategoryHover(category.name)}
                   onMouseLeave={() => handleCategoryHover("")}
                 >
-                  <Link area-label="Link"
+                  <Link
+                    aria-label="Link"
                     className={cn(
                       "transition-colors duration-300 text-sm font-bold hover:text-pink-300  uppercase",
                       pathname === `/category/${category.name}`
@@ -103,7 +105,10 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
                       <div className="grid grid-cols-3 gap-4 pb-24">
                         {category?.products?.map((product, index) => (
                           <React.Fragment key={product.id}>
-                            <Link area-label="Link"
+                            <Link
+                              aria-label="Link"
+                              target="_blank"
+                              rel="noopener noreferrer"
                               href={`/product/${product.name.replace(
                                 /\s+/g,
                                 "-"
@@ -114,10 +119,13 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
                             >
                               <ChevronRightIcon className="w-4 h-4 text-pink-500" />
                               <span className="font-semibold">
-                                {getFormattedProductName(
-                                  product.name,
-                                  category.name
-                                )}
+                                {/* Display subname if available, otherwise use getFormattedProductName */}
+                                {product.subname
+                                  ? product.subname
+                                  : getFormattedProductName(
+                                      product.name,
+                                      category.name
+                                    )}
                               </span>
                             </Link>
                             {(index + 1) % 3 === 0 && (
@@ -161,7 +169,8 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
                 )}
                 onClick={() => handleCategoryClick(category)}
               >
-                <Link area-label="Link"
+                <Link
+                  aria-label="Link"
                   className={cn(
                     "transition-colors duration-300 hover:text-pink-300 font-medium uppercase",
                     pathname === `/collections/${category.name}`

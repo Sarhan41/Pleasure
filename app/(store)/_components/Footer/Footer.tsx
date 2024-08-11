@@ -6,7 +6,7 @@ import {
   FaWhatsapp as Whatsapp,
   FaFacebook as Facebook,
   FaInstagram as Instagram,
-  FaPinterest,
+  // FaPinterest, // Commented out as per request
 } from "react-icons/fa";
 import { SiRazorpay } from "react-icons/si"; // Razorpay icon
 
@@ -76,7 +76,7 @@ const Footer: React.FC = () => {
 
   const QuickLinks = [
     { text: "Home", route: "/" },
-    { text: "blog", route: "/blog" },
+    { text: "Blog", route: "/blog" },
     { text: "About Us", route: "/about" },
     { text: "Order Track", route: "/order-tracking" },
     { text: "Return Policy", route: "/return-policy" },
@@ -99,22 +99,48 @@ const Footer: React.FC = () => {
       route: "www.instagram.com",
       icon: <Instagram className="h-8 w-8 hover:text-primary" />,
     },
-    {
-      text: "Pinterest",
-      route: "www.pinterest.com",
-      icon: <FaPinterest className="h-8 w-8 hover:text-primary" />,
-    },
-    {
-      text: "Twitter",
-      route: "/www.X.com",
-      icon: <TwitterLogoIcon className="h-8 w-8 hover:text-primary" />,
-    },
+    // Commented out as per request
+    // {
+    //   text: "Pinterest",
+    //   route: "www.pinterest.com",
+    //   icon: <FaPinterest className="h-8 w-8 hover:text-primary" />,
+    // },
+    // {
+    //   text: "Twitter",
+    //   route: "/www.X.com",
+    //   icon: <TwitterLogoIcon className="h-8 w-8 hover:text-primary" />,
+    // },
   ];
 
   return (
     <>
+      {/* <div>
+        {Object.entries(footerLinks).map(([category, links]) => (
+          <div key={category} className="m-2">
+            <h2 className="text-white text-lg font-semibold mb-4 border-t-2 border-b-2 border-primary">
+              {category}
+            </h2>
+            <ul className="text-secondary">
+              {links.map((link, index) => (
+                <li key={index} className="mb-2 hover:text-primary">
+                  <Link
+                    aria-label="Link"
+                    href={`/product/${link.route.replace(/\s+/g, "-")}`}
+                    passHref
+                      target="_blank"
+  rel="noopener noreferrer"
+                  >
+                    {link.text}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div> */}
+
       <div className="bg-pink-500 w-full overflow-hidden flex justify-center items-center py-4 mt-24 text-center">
-        <Link area-label="Link" href="/">
+        <Link aria-label="Link" href="/">
           <Image
             src="/logo-text.jpg"
             height={48}
@@ -126,86 +152,74 @@ const Footer: React.FC = () => {
       </div>
       <footer className="bg-black py-8">
         <div className="container mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-y-6 md:gap-x-12">
-            {Object.entries(footerLinks).map(([category, links]) => (
-              <div key={category} className="m-2">
-                <h2 className="text-white text-lg font-semibold mb-4 border-t-2 border-b-2 border-primary">
-                  {category}
-                </h2>
-                <ul className="text-secondary">
-                  {links.map((link, index) => (
-                    <li key={index} className="mb-2 hover:text-primary">
-                      <Link area-label="Link"
-                        href={`/product/${link.route.replace(/\s+/g, "-")}`}
-                        passHref
-                      >
-                        {link.text}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <div className="grid grid-cols-1 w-full md:grid-cols-2 lg:grid-cols-3 gap-y-6 md:gap-x-12 lg:gap-x-">
+            {/* Quick Links */}
             <div className="m-2">
-              <h2 className="text-white text-lg font-semibold mb-4 border-t-2 border-b-2 border-primary">
+              <h2 className="text-white w-fit text-lg font-semibold mb-4 border-t-2 border-b-2 border-primary">
                 Quick Links
               </h2>
               <ul className="text-secondary">
                 {QuickLinks.map((link, index) => (
                   <li key={index} className="mb-2 hover:text-primary">
-                    <Link area-label="Link" href={link.route}>{link.text}</Link>
+                    <Link aria-label="Link" href={link.route}>
+                      {link.text}
+                    </Link>
                   </li>
                 ))}
               </ul>
             </div>
-          </div>
-        </div>
-        <div className="flex justify-between mx-12 max-sm:flex-col gap-12 border-t-2 mt-8 p-8 border-primary items-start">
-          {/* Address */}
-          <div>
-            <div>
-              <h1 className="text-white border-b-2 mb-4 border-primary">
-                REGISTERED OFFICE ADDRESS
-              </h1>
-              <h1 className="text-base font-bold uppercase text-white">
-                Pleasure
-              </h1>
-            </div>
-            <p className="text-gray-200">{Address}</p>
-          </div>
-          {/* Support */}
-          <div>
-            <h1 className="text-white border-b-2 mb-4 border-primary">
-              SUPPORT
-            </h1>
-            <div className="text-white flex flex-col gap-4">
-              <div>
-                <p className="mb-2">Contact us: contact@pleasure.fashion</p>
-                <p className="mb-2">Phone: +91 8155085865</p>
-                <div className="flex gap-4">
+            {/* Support */}
+            <div className="m-2 lg:ml-96">
+              <h2 className="text-white text-lg font-semibold mb-4 w-fit border-t-2 border-b-2 border-primary">
+                Support
+              </h2>
+              <div className="text-secondary w-full">
+                <p className="mb-2 lg:whitespace-nowrap">
+                  Contact us: contact@pleasure.fashion
+                </p>
+                <p className="mb-2 lg:whitespace-nowrap">
+                  Phone: +91 8155085865
+                </p>
+                <div className="flex gap-4 mt-4">
                   {SocialLinks.map((link, index) => (
-                    <Link area-label="Link"
+                    <Link
+                      aria-label="Link"
                       target="_blank"
                       key={`social-${index}`}
                       href={link.route}
-                      className="text-white mt-4 flex gap-6"
+                      className="text-white flex gap-6"
                     >
-                      {link.icon} {/* Here, the icon is added */}
+                      {link.icon}
                     </Link>
                   ))}
                 </div>
               </div>
-              {/* // */}
             </div>
+            {/* Additional Section (if any) */}
+            {/* ... */}
           </div>
-          {/* Details */}
-
-          {/* Payment Options */}
-          <div className="text-white">
-            <h1 className="border-b-2 mb-4 border-primary">PAYMENT OPTIONS</h1>
-            <div className="flex items-center gap-2">
-              <SiRazorpay className="h-8 w-8" />
-              <span>Razorpay</span>
+          <div className="mt-12 border-t-2 pt-8 border-primary">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-6 md:gap-x-12 lg:gap-x-">
+              {/* Registered Office Address */}
+              <div>
+                <h1 className="text-white border-b-2 w-fit mb-4 border-primary">
+                  REGISTERED OFFICE ADDRESS
+                </h1>
+                <h1 className="text-base font-bold uppercase text-white">
+                  Pleasure
+                </h1>
+                <p className="text-gray-200">{Address}</p>
+              </div>
+              {/* Payment Options */}
+              <div className="text-white lg:ml-96 w-full max-sm:mt-4">
+                <h1 className="border-b-2 mb-4 w-fit border-primary">
+                  PAYMENT OPTIONS
+                </h1>
+                <div className="flex items-center gap-2">
+                  <SiRazorpay className="h-8 w-8" />
+                  <span>Razorpay</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

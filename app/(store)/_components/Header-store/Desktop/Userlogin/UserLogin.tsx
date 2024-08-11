@@ -33,10 +33,8 @@ const UserLogin = ({ userId, userName }: UserLoginProps) => {
             </NavigationMenuTrigger>
             <NavigationMenuContent className="w-full md:w-80 px-4  py-6 bg-white border border-gray-200 rounded-lg shadow-lg  z-50 ">
               <h2 className="text-lg font-bold mb-1">
-                Welcome to the store, <span className="text-primary font-extrabold">
-                  
-                  {userName}
-                  </span>
+                Welcome to the store,{" "}
+                <span className="text-primary font-extrabold">{userName}</span>
               </h2>
               <p className="text-sm text-gray-600 mb-2">
                 Access your pleasure account
@@ -69,6 +67,15 @@ const UserLogin = ({ userId, userName }: UserLoginProps) => {
                         className="border-primary hover:bg-primary hover:text-white z-50 w-full"
                       >
                         My Orders
+                      </Button>
+                    </Link>
+                    <Link area-label="Link" href="/order-tracking">
+                      <Button
+                        size="lg"
+                        variant="outline"
+                        className="border-primary hover:bg-primary hover:text-white w-full"
+                      >
+                        Track My Order
                       </Button>
                     </Link>
                     <LogoutButton>

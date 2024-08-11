@@ -533,7 +533,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
               const handleClick = () => {
                 if (color.toLink) {
                   const productName = color.toLink?.replace(/ /g, "-");
-                  router.push(`/product/${productName}`);
+                  window.open(`/product/${productName}`, "_blank");
                 }
                 handleColorSelection(color.value);
               };
@@ -699,7 +699,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           />
         </div>
         <div className="border-primary border-2 rounded-full">
-        <IconButton
+          <IconButton
             onClick={onAddToCart}
             icon={<ShoppingCartIcon size={20} className="text-gray-600" />}
           />

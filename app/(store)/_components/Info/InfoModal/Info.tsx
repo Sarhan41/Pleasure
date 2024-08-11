@@ -59,7 +59,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
 
   const categoryName = data.category.name;
 
-  const {onClose} = usePreviewModal();
+  const { onClose } = usePreviewModal();
 
   useEffect(() => {
     if (data?.colors?.length === 1) {
@@ -90,7 +90,8 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
     }
 
     if (data.name.toLowerCase().includes("pack of")) {
-      router.push(`/product/${data.name.replace(/ /g, "-")}`);
+      const productName = data.name.replace(/ /g, "-");
+      window.open(`/product/${productName}`, "_blank");
       return;
     }
 
@@ -297,10 +298,10 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
               <Heart className="mr-1 sm:mr-2" /> Wishlist
             </Button>
             <Button
-              onClick={() =>
-              {
+              onClick={() => {
                 onClose();
-                router.push(`/product/${data.name.replace(/ /g, "-")}`);
+                const productName = data.name.replace(/ /g, "-");
+               window.open(`/product/${productName}`, "_blank");
               }}
               className="w-full sm:w-auto"
             >

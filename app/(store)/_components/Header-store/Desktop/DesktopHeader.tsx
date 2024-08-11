@@ -14,8 +14,8 @@ const DesktopHeader = ({ categories, allProducts, UserId, UserName }: HeaderProp
       {/* Top Row */}
       <div className="flex justify-between py-2 items-center w-full px-4 text-xs text-gray-600 ">
         {/* Left Side */}
-        <div className="flex font-mono text-[10px] border-b  space-x-4 pl-2 self-start ">
-          <span>Free Returns</span>
+        <div className="flex font-mono text-[10px] border-b uppercase  space-x-4 pl-2 self-start ">
+          {/* <span>Free Returns</span> */}
           <span>100% Privacy</span>
           <span>Cash On Delivery</span>
           <span>Free Shipping*</span>

@@ -13,7 +13,7 @@ interface SecondRowCategoryProps {
   categories: {
     id: string;
     name: string;
-    products: { id: string; name: string }[];
+    products: { id: string; name: string; subname: string | null }[];
   }[];
 }
 
@@ -26,37 +26,50 @@ const SecondRowCategory = ({
 }: SecondRowCategoryProps) => {
   return (
     <div className="flex-1 overflow-y-auto p-4">
-      <h2 className="text-lg font-semibold text-gray-800 mb-4">Categories</h2>
       {categories.map((category) => (
         <div key={category.id} className="mb-2">
-          <button
-            className="flex items-center justify-between w-full px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-primary-100 transition-colors duration-200"
-            onClick={() => handleCategoryClick(category.name)}
-          >
-            <Link area-label="Link" href={`/collections/${category.name.replace(/\s+/g, "-")}`}>
-              <div className="flex items-center gap-2 text-primary-600">
-                {category.name}
-              </div>
+          <div className="flex items-center justify-between w-full px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-primary-100 transition-colors duration-200">
+            <Link
+              aria-label="Link"
+              href={`/collections/${category.name.replace(/\s+/g, "-")}`}
+              onClick={toggleSidebar}
+            >
+              <div className="flex items-center gap-2 ">{category.name}</div>
             </Link>
-            {expandedCategory === category.name ? (
-              <ChevronDownIcon size={20} className="text-primary-600" />
-            ) : (
-              <ChevronRightIcon size={20} className="text-primary-600" />
-            )}
-          </button>
+            <button
+              className=""
+              onClick={() => handleCategoryClick(category.name)}
+            >
+              {expandedCategory === category.name ? (
+                <ChevronDownIcon size={20} className="text-primary" />
+              ) : (
+                <ChevronRightIcon size={20} className="text-primary" />
+              )}
+            </button>
+          </div>
+
           {expandedCategory === category.name && (
             <div className="pl-8 mt-2 max-h-60 overflow-y-auto">
               {category.products.slice(0, 8).map((product, index) => (
                 <React.Fragment key={product.id}>
                   <div className="flex">
-                    <Link area-label="Link"
+                    <Link
+                      aria-label="Link"
                       href={`/product/${product.name.replace(/\s+/g, "-")}`}
                       className="block px-3 py-1 text-base font-medium text-gray-600 rounded-md hover:bg-primary-100 transition-colors duration-200"
                       onClick={toggleSidebar}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <div className="flex gap-2">
                         <ChevronRightIcon className="w-4 h-4 text-primary" />
-                        {getFormattedProductName(product.name, category.name)}
+                        {/* Display subname if available, otherwise use getFormattedProductName */}
+                        {product.subname
+                          ? product.subname
+                          : getFormattedProductName(
+                              product.name,
+                              category.name
+                            )}
                       </div>
                     </Link>
                     {(index + 1) % 3 === 0 && (
