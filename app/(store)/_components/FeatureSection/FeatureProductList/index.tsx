@@ -31,18 +31,23 @@ export const FeaturedProductList: React.FC<FeaturedProductListProps> = ({
     }
   });
 
-  // Sort products by the occurrence of their category, majority category first
+  // Sort items by the frequency of their categories
   const sortedItems = items.sort((a, b) => {
     return categoryCount[b.category.name] - categoryCount[a.category.name];
   });
 
-  // Take the first 6 products
-  const selectedItems = sortedItems.slice(0, 12);
+  // Separate items into two groups: one for the most frequent category, and one for the rest
+  const primaryCategory = sortedItems[0].category.name;
+  const primaryCategoryItems = sortedItems.filter(
+    (item) => item.category.name === primaryCategory
+  );
+  const otherCategoryItems = sortedItems.filter(
+    (item) => item.category.name !== primaryCategory
+  );
 
-  // Split selectedItems into two halves
-  const halfIndex = Math.ceil(selectedItems.length / 2);
-  const firstHalf = selectedItems.slice(0, halfIndex);
-  const secondHalf = selectedItems.slice(halfIndex);
+  // Combine the first 6 items of the primary category and the first 6 of the others
+  const firstCarouselItems = primaryCategoryItems.slice(0, 6);
+  const secondCarouselItems = otherCategoryItems.slice(0, 6);
 
   return (
     <div className="p-3 space-y-8">
@@ -53,7 +58,7 @@ export const FeaturedProductList: React.FC<FeaturedProductListProps> = ({
         hideArrows
       >
         <CarouselContent className="flex">
-          {firstHalf.map((item) => (
+          {firstCarouselItems.map((item) => (
             <div key={item.id} className="w-full sm:w-1/2 md:w-1/3 px-2">
               <CarouselItem>
                 <FeaturedProductCard data={item} userId={userId} />
@@ -69,7 +74,7 @@ export const FeaturedProductList: React.FC<FeaturedProductListProps> = ({
         hideArrows
       >
         <CarouselContent className="flex">
-          {secondHalf.map((item) => (
+          {secondCarouselItems.map((item) => (
             <div key={item.id} className="w-full sm:w-1/2 md:w-1/3 px-2">
               <CarouselItem>
                 <FeaturedProductCard data={item} userId={userId} />
