@@ -127,6 +127,8 @@ const Footer: React.FC = () => {
                     aria-label="Link"
                     href={`/product/${link.route.replace(/\s+/g, "-")}`}
                     passHref
+                      target="_blank"
+  rel="noopener noreferrer"
                   >
                     {link.text}
                   </Link>
@@ -175,7 +177,9 @@ const Footer: React.FC = () => {
                 <p className="mb-2 lg:whitespace-nowrap">
                   Contact us: contact@pleasure.fashion
                 </p>
-                <p className="mb-2 lg:whitespace-nowrap">Phone: +91 8155085865</p>
+                <p className="mb-2 lg:whitespace-nowrap">
+                  Phone: +91 8155085865
+                </p>
                 <div className="flex gap-4 mt-4">
                   {SocialLinks.map((link, index) => (
                     <Link

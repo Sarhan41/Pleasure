@@ -100,7 +100,13 @@ const MyProfileOrdersPage = async () => {
               {order.items.map((item, index) => {
                 const productName = item.productName.replace(/\s+/g, "-");
                 return (
-                  <Link area-label="Link" href={`/product/${productName}`} key={index}>
+                  <Link
+                    area-label="Link"
+                    href={`/product/${productName}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    key={index}
+                  >
                     <li className="py-4 w-fit flex items-center">
                       <Image
                         src={item.imageUrl}

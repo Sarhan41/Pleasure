@@ -34,9 +34,7 @@ const SecondRowCategory = ({
               href={`/collections/${category.name.replace(/\s+/g, "-")}`}
               onClick={toggleSidebar}
             >
-              <div className="flex items-center gap-2 ">
-                {category.name}
-              </div>
+              <div className="flex items-center gap-2 ">{category.name}</div>
             </Link>
             <button
               className=""
@@ -60,6 +58,8 @@ const SecondRowCategory = ({
                       href={`/product/${product.name.replace(/\s+/g, "-")}`}
                       className="block px-3 py-1 text-base font-medium text-gray-600 rounded-md hover:bg-primary-100 transition-colors duration-200"
                       onClick={toggleSidebar}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <div className="flex gap-2">
                         <ChevronRightIcon className="w-4 h-4 text-primary" />

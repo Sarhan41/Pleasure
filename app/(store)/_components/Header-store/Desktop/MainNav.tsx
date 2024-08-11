@@ -107,6 +107,8 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
                           <React.Fragment key={product.id}>
                             <Link
                               aria-label="Link"
+                              target="_blank"
+                              rel="noopener noreferrer"
                               href={`/product/${product.name.replace(
                                 /\s+/g,
                                 "-"
