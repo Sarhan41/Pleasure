@@ -124,7 +124,7 @@ const Footer: React.FC = () => {
               {links.map((link, index) => (
                 <li key={index} className="mb-2 hover:text-primary">
                   <Link
-                    area-label="Link"
+                    aria-label="Link"
                     href={`/product/${link.route.replace(/\s+/g, "-")}`}
                     passHref
                   >
@@ -138,7 +138,7 @@ const Footer: React.FC = () => {
       </div> */}
 
       <div className="bg-pink-500 w-full overflow-hidden flex justify-center items-center py-4 mt-24 text-center">
-        <Link area-label="Link" href="/">
+        <Link aria-label="Link" href="/">
           <Image
             src="/logo-text.jpg"
             height={48}
@@ -149,76 +149,77 @@ const Footer: React.FC = () => {
         </Link>
       </div>
       <footer className="bg-black py-8">
-  <div className="container mx-auto">
-    <div className="grid grid-cols-1 w-full md:grid-cols-2 lg:grid-cols-3 gap-y-6 md:gap-x-12 lg:gap-x-">
-      {/* Quick Links */}
-      <div className="m-2">
-        <h2 className="text-white w-fit text-lg font-semibold mb-4 border-t-2 border-b-2 border-primary">
-          Quick Links
-        </h2>
-        <ul className="text-secondary">
-          {QuickLinks.map((link, index) => (
-            <li key={index} className="mb-2 hover:text-primary">
-              <Link aria-label="Link" href={link.route}>
-                {link.text}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-      {/* Support */}
-      <div className="m-2 lg:ml-64 ">
-        <h2 className="text-white text-lg font-semibold mb-4 w-fit border-t-2 border-b-2 border-primary">
-          Support
-        </h2>
-        <div className="text-secondary w-full ">
-          <p className="mb-2 w-full">Contact us: contact@pleasure.fashion</p>
-          <p className="mb-2">Phone: +91 8155085865</p>
-          <div className="flex gap-4 mt-4">
-            {SocialLinks.map((link, index) => (
-              <Link
-                aria-label="Link"
-                target="_blank"
-                key={`social-${index}`}
-                href={link.route}
-                className="text-white flex gap-6"
-              >
-                {link.icon}
-              </Link>
-            ))}
+        <div className="container mx-auto">
+          <div className="grid grid-cols-1 w-full md:grid-cols-2 lg:grid-cols-3 gap-y-6 md:gap-x-12 lg:gap-x-">
+            {/* Quick Links */}
+            <div className="m-2">
+              <h2 className="text-white w-fit text-lg font-semibold mb-4 border-t-2 border-b-2 border-primary">
+                Quick Links
+              </h2>
+              <ul className="text-secondary">
+                {QuickLinks.map((link, index) => (
+                  <li key={index} className="mb-2 hover:text-primary">
+                    <Link aria-label="Link" href={link.route}>
+                      {link.text}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {/* Support */}
+            <div className="m-2 lg:ml-96">
+              <h2 className="text-white text-lg font-semibold mb-4 w-fit border-t-2 border-b-2 border-primary">
+                Support
+              </h2>
+              <div className="text-secondary w-full">
+                <p className="mb-2 lg:whitespace-nowrap">
+                  Contact us: contact@pleasure.fashion
+                </p>
+                <p className="mb-2 lg:whitespace-nowrap">Phone: +91 8155085865</p>
+                <div className="flex gap-4 mt-4">
+                  {SocialLinks.map((link, index) => (
+                    <Link
+                      aria-label="Link"
+                      target="_blank"
+                      key={`social-${index}`}
+                      href={link.route}
+                      className="text-white flex gap-6"
+                    >
+                      {link.icon}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+            {/* Additional Section (if any) */}
+            {/* ... */}
+          </div>
+          <div className="mt-12 border-t-2 pt-8 border-primary">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-6 md:gap-x-12 lg:gap-x-">
+              {/* Registered Office Address */}
+              <div>
+                <h1 className="text-white border-b-2 w-fit mb-4 border-primary">
+                  REGISTERED OFFICE ADDRESS
+                </h1>
+                <h1 className="text-base font-bold uppercase text-white">
+                  Pleasure
+                </h1>
+                <p className="text-gray-200">{Address}</p>
+              </div>
+              {/* Payment Options */}
+              <div className="text-white lg:ml-96 w-full max-sm:mt-4">
+                <h1 className="border-b-2 mb-4 w-fit border-primary">
+                  PAYMENT OPTIONS
+                </h1>
+                <div className="flex items-center gap-2">
+                  <SiRazorpay className="h-8 w-8" />
+                  <span>Razorpay</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      {/* Additional Section (if any) */}
-      {/* ... */}
-    </div>
-    <div className="mt-12 border-t-2 pt-8 border-primary">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-6 md:gap-x-12 lg:gap-x-">
-        {/* Registered Office Address */}
-        <div>
-          <h1 className="text-white border-b-2 w-fit mb-4 border-primary">
-            REGISTERED OFFICE ADDRESS
-          </h1>
-          <h1 className="text-base font-bold uppercase text-white">
-            Pleasure
-          </h1>
-          <p className="text-gray-200">{Address}</p>
-        </div>
-        {/* Payment Options */}
-        <div className="text-white lg:ml-64">
-          <h1 className="border-b-2 mb-4 w-fit border-primary">
-            PAYMENT OPTIONS
-          </h1>
-          <div className="flex items-center gap-2">
-            <SiRazorpay className="h-8 w-8" />
-            <span>Razorpay</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</footer>
-
+      </footer>
     </>
   );
 };
