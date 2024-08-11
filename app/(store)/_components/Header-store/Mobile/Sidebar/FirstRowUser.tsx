@@ -32,7 +32,6 @@ const FirstRowUser = ({
             </>
           )}
         </h1>
-       
       </div>
       <div className="flex flex-col gap-4 mt-4 w-full">
         {userId ? (
@@ -55,13 +54,30 @@ const FirstRowUser = ({
                 Wishlist
               </Button>
             </Link>
-            <Link area-label="Link" href="/my-profile/orders" onClick={toggleSidebar}>
+            <Link
+              area-label="Link"
+              href="/my-profile/orders"
+              onClick={toggleSidebar}
+            >
               <Button
                 size="lg"
                 variant="outline"
                 className="border-primary hover:bg-primary hover:text-white w-full"
               >
                 My Orders
+              </Button>
+            </Link>
+            <Link
+              area-label="Link"
+              href="/order-tracking"
+              onClick={toggleSidebar}
+            >
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-primary hover:bg-primary hover:text-white w-full"
+              >
+                Track My Order
               </Button>
             </Link>
             <LogoutButton>
