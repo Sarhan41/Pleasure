@@ -127,7 +127,7 @@ const Footer: React.FC = () => {
       <footer className="bg-black py-8">
         <div className="container mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-y-6 md:gap-x-12">
-            {Object.entries(footerLinks).map(([category, links]) => (
+            {/* {Object.entries(footerLinks).map(([category, links]) => (
               <div key={category} className="m-2">
                 <h2 className="text-white text-lg font-semibold mb-4 border-t-2 border-b-2 border-primary">
                   {category}
@@ -145,7 +145,7 @@ const Footer: React.FC = () => {
                   ))}
                 </ul>
               </div>
-            ))}
+            ))} */}
             <div className="m-2">
               <h2 className="text-white text-lg font-semibold mb-4 border-t-2 border-b-2 border-primary">
                 Quick Links
