@@ -32,12 +32,7 @@ const FirstRowUser = ({
             </>
           )}
         </h1>
-        <button
-          className="p-2 rounded-full hover:bg-gray-200 focus:outline-none"
-          onClick={toggleSidebar}
-        >
-          <XIcon size={24} className="text-gray-700" />
-        </button>
+       
       </div>
       <div className="flex flex-col gap-4 mt-4 w-full">
         {userId ? (

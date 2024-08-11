@@ -26,7 +26,6 @@ const SecondRowCategory = ({
 }: SecondRowCategoryProps) => {
   return (
     <div className="flex-1 overflow-y-auto p-4">
-      <h2 className="text-lg font-semibold text-gray-800 mb-4">Categories</h2>
       {categories.map((category) => (
         <div key={category.id} className="mb-2">
           <div className=" flex items-center justify-between w-full px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-primary-100 transition-colors duration-200">
