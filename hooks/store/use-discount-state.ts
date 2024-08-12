@@ -8,6 +8,7 @@ interface DiscountState {
   setCouponCode: (code: string) => void;
   setDiscount: (discount: number) => void;
   setCouponId: (id: string | null) => void;
+  reset: () => void; // Add a reset method
 }
 
 export const useDiscountStore = create<DiscountState>((set) => ({
@@ -29,5 +30,11 @@ export const useDiscountStore = create<DiscountState>((set) => ({
       localStorage.removeItem('couponId');
     }
     set({ couponId });
+  },
+  reset: () => {
+    localStorage.removeItem('couponCode');
+    localStorage.removeItem('discount');
+    localStorage.removeItem('couponId');
+    set({ couponCode: "", discount: 0, couponId: null });
   },
 }));

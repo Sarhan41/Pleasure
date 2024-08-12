@@ -46,7 +46,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
   const idRef = useRef<string | null>(null);
   const [orderTotal, setOrderTotal] = useState<number>(0);
   const [razorpayReady, setRazorpayReady] = useState(false);
-  const { discount, couponId } = useDiscountStore(); // Get discount and couponId from the store
+  const { discount, couponId,reset } = useDiscountStore(); // Get discount and couponId from the store
 
   console.log("Coupon ID from store:", couponId); // Debugging log for couponId
 
@@ -169,6 +169,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
               toast.success(res.message);
               await axios.post("/api/dashboard/create-order", orderPayload);
               router.push("/orders/success");
+              reset(); 
             } else {
               toast.error(res.message);
             }
