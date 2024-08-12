@@ -15,6 +15,7 @@ import toast from "react-hot-toast";
 import { CartItems } from "@prisma/client";
 import Link from "next/link";
 import { useDiscountStore } from "@/hooks/store/use-discount-state";
+import { calculateOrderTotal } from "@/app/(store)/(routes)/cart/function/calculateOrderTotal";
 
 interface CartItemWithColors extends CartItems {
   color: { value: string; name: string }[];
@@ -51,13 +52,7 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
   console.log("Coupon ID from store:", couponId); // Debugging log for couponId
 
   useEffect(() => {
-    let total = 0;
-    for (let i = 0; i < prices.length; i++) {
-      total += prices[i] * quantities[i];
-    }
-    const calculatedOrderTotal = total - discount + total * 0.05 + 29; // Apply discount here
-    setOrderTotal(calculatedOrderTotal);
-    console.log(`Order Total Calculated: ${calculatedOrderTotal}`);
+    setOrderTotal(calculateOrderTotal(prices, quantities, discount));
   }, [prices, quantities, discount]);
 
   const createOrderId = useCallback(async () => {
