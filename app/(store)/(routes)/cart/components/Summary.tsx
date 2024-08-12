@@ -43,12 +43,21 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
   } = useDiscountStore();
 
   useEffect(() => {
+    const storedDiscount = localStorage.getItem("discount");
+    const storedCouponCode = localStorage.getItem("couponCode");
+    const storedCouponId = localStorage.getItem("couponId");
+
+    if (storedDiscount && storedCouponCode && storedCouponId) {
+      setDiscount(Number(storedDiscount));
+      setCouponCode(storedCouponCode);
+      setCouponId(storedCouponId);
+    }
     let total = 0;
     for (let i = 0; i < prices.length; i++) {
       total += prices[i] * quantities[i];
     }
     setOrderTotal(total);
-  }, [prices, quantities]);
+  }, [prices, quantities, discount]);
 
   useEffect(() => {
     // Fetching active coupons from the database
@@ -68,6 +77,10 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
   const onApplyCoupon = async () => {
     if (couponId) {
       toast.error("A coupon code has already been applied.");
+      return;
+    }
+    if (couponCode === localStorage.getItem("couponCode")) {
+      toast.error("This coupon is already applied.");
       return;
     }
 

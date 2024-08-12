@@ -11,10 +11,23 @@ interface DiscountState {
 }
 
 export const useDiscountStore = create<DiscountState>((set) => ({
-  couponCode: "",
-  discount: 0,
-  couponId: null,
-  setCouponCode: (couponCode) => set({ couponCode }),
-  setDiscount: (discount) => set({ discount }),
-  setCouponId: (couponId) => set({ couponId }),
+  couponCode: localStorage.getItem('couponCode') || "",
+  discount: Number(localStorage.getItem('discount')) || 0,
+  couponId: localStorage.getItem('couponId') || null,
+  setCouponCode: (couponCode) => {
+    localStorage.setItem('couponCode', couponCode);
+    set({ couponCode });
+  },
+  setDiscount: (discount) => {
+    localStorage.setItem('discount', discount.toString());
+    set({ discount });
+  },
+  setCouponId: (couponId) => {
+    if (couponId) {
+      localStorage.setItem('couponId', couponId);
+    } else {
+      localStorage.removeItem('couponId');
+    }
+    set({ couponId });
+  },
 }));
