@@ -5,6 +5,7 @@ import Summary from "../components/Summary";
 import CheckoutClientCart from "./components/CheckoutClientCart";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import SummaryCheckout from "./components/SummaryCheckout";
 
 export default async function CartCheckoutPage() {
   const user = await currentUser();
@@ -73,7 +74,7 @@ export default async function CartCheckoutPage() {
       </div>
       <div className="max-lg:w-full flex justify-center items-center">
         <div className="w-96 ">
-          <Summary
+          <SummaryCheckout
             prices={pricesForSummaryAndAccordion}
             quantities={quantitiesForSummaryAndAccordion}
           />
