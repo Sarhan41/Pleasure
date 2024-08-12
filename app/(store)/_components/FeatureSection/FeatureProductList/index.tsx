@@ -17,13 +17,39 @@ export const FeaturedProductList: React.FC<FeaturedProductListProps> = ({
   items,
   userId,
 }) => {
-  const halfIndex = Math.ceil(items.length / 2);
-  const firstHalf = items.slice(0, halfIndex);
-  const secondHalf = items.slice(halfIndex);
+  if (items.length === 0) {
+    return <NoResults />;
+  }
 
-  return items.length === 0 ? (
-    <NoResults />
-  ) : (
+  // Group products by category and count occurrences
+  const categoryCount: { [key: string]: number } = {};
+  items.forEach((item) => {
+    if (categoryCount[item.category.name]) {
+      categoryCount[item.category.name]++;
+    } else {
+      categoryCount[item.category.name] = 1;
+    }
+  });
+
+  // Sort items by the frequency of their categories
+  const sortedItems = items.sort((a, b) => {
+    return categoryCount[b.category.name] - categoryCount[a.category.name];
+  });
+
+  // Separate items into two groups: one for the most frequent category, and one for the rest
+  const primaryCategory = sortedItems[0].category.name;
+  const primaryCategoryItems = sortedItems.filter(
+    (item) => item.category.name === primaryCategory
+  );
+  const otherCategoryItems = sortedItems.filter(
+    (item) => item.category.name !== primaryCategory
+  );
+
+  // Combine the first 6 items of the primary category and the first 6 of the others
+  const firstCarouselItems = primaryCategoryItems.slice(0, 6);
+  const secondCarouselItems = otherCategoryItems.slice(0, 6);
+
+  return (
     <div className="p-3 space-y-8">
       <Carousel
         opts={{ containScroll: "trimSnaps" }}
@@ -32,7 +58,7 @@ export const FeaturedProductList: React.FC<FeaturedProductListProps> = ({
         hideArrows
       >
         <CarouselContent className="flex">
-          {firstHalf.map((item, index) => (
+          {firstCarouselItems.map((item) => (
             <div key={item.id} className="w-full sm:w-1/2 md:w-1/3 px-2">
               <CarouselItem>
                 <FeaturedProductCard data={item} userId={userId} />
@@ -48,7 +74,7 @@ export const FeaturedProductList: React.FC<FeaturedProductListProps> = ({
         hideArrows
       >
         <CarouselContent className="flex">
-          {secondHalf.map((item, index) => (
+          {secondCarouselItems.map((item) => (
             <div key={item.id} className="w-full sm:w-1/2 md:w-1/3 px-2">
               <CarouselItem>
                 <FeaturedProductCard data={item} userId={userId} />
