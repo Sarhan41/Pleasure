@@ -40,6 +40,7 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
     setDiscount,
     couponId,
     setCouponId,
+    reset,
   } = useDiscountStore();
 
   useEffect(() => {
@@ -79,11 +80,11 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
       toast.error("A coupon code has already been applied.");
       return;
     }
+  
     if (couponCode === localStorage.getItem("couponCode")) {
-      toast.error("This coupon is already applied.");
-      return;
+      reset(); // Reset the store and local storage if the same code is applied again.
     }
-
+  
     setLoading(true); // Start loading spinner
     try {
       const response = await axios.post("/api/dashboard/coupons/applyCoupon", {
@@ -91,11 +92,12 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
         orderTotal,
         userId,
       });
-
+  
       if (response.status === 200) {
         const data = response.data;
         setDiscount(data.discountValue);
         setCouponId(data.couponId);
+        setCouponCode(couponCode); // Store the new coupon code
         toast.success("Coupon applied successfully!");
         setIsDialogOpen(false);
       } else {
@@ -108,6 +110,7 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
       setLoading(false); // Stop loading spinner
     }
   };
+  
 
   const onCheckout = () => {
     window.open(`/cart/checkout?reload=${Date.now()}`, "_blank");
@@ -174,71 +177,77 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
       </div>
 
       {!isCheckoutPage && (
-        <div className="mt-8">
-          <h3 className="text-xl font-semibold text-gray-900 mb-4">Offers</h3>
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <p className="text-indigo-600 cursor-pointer text-sm hover:underline">
-                Have a discount code? Apply here
-              </p>
-            </DialogTrigger>
-            <DialogContent className="rounded-lg shadow-xl p-6 bg-white">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-6">
-                Apply Coupon Code
-              </h2>
-              <Input
-                type="text"
-                value={couponCode}
-                onChange={(e) => setCouponCode(e.target.value)}
-                onKeyDown={handleKeyPress}
-                className="w-full p-3 border border-gray-300 rounded-md text-sm mb-4"
-                placeholder="Enter coupon code"
-              />
-              <Button
-                onClick={onApplyCoupon}
-                className="w-full bg-gradient-to-r from-green-500 to-teal-500 text-white text-lg font-medium py-3 rounded-md shadow-lg transition-all transform hover:scale-105"
-                disabled={loading}
-              >
-                {loading ? "Applying..." : "Apply Coupon"}
-              </Button>
-              <div className="mt-6">
-                <p className="text-sm text-gray-700 mb-2">Available Coupons:</p>
-                <ul className="space-y-4">
-                  {coupons.map((coupon) => (
-                    <li
-                      key={coupon.id}
-                      className="border border-gray-300 p-4 rounded-md shadow-sm bg-gray-50"
-                    >
-                      <div className="font-mono text-lg text-primary font-semibold">
-                        {coupon.code}
-                      </div>
-                      <div className="text-sm text-gray-600 mt-1">
-                        {coupon.discountType === "PERCENTAGE"
-                          ? `${coupon.discountValue}% off`
-                          : `₹${coupon.discountValue} off`}
-                        {coupon.minimumOrderAmount &&
-                          ` on orders over ₹${coupon.minimumOrderAmount}`}
-                      </div>
-                      {coupon.code.startsWith("Hello50") && (
-                        <div className="text-sm text-gray-500 mt-2 font-light">
-                          First order discount! Enjoy a special offer on your
-                          first purchase over ₹{coupon.minimumOrderAmount}.
-                        </div>
-                      )}
-                      <Button
-                        onClick={() => handleCouponClick(coupon.code)}
-                        className="mt-2 w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-medium py-2 rounded-md shadow-sm transition-all transform hover:scale-105"
-                      >
-                        Apply This Coupon
-                      </Button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </DialogContent>
-          </Dialog>
+  <div className="mt-8">
+    <h3 className="text-xl font-semibold text-gray-900 mb-4">Offers</h3>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <DialogTrigger asChild>
+        <p className="text-indigo-600 cursor-pointer text-sm hover:underline">
+          Have a discount code? Apply here
+        </p>
+      </DialogTrigger>
+      <DialogContent
+        className="rounded-lg shadow-xl p-6 bg-white max-w-md mx-auto"
+        style={{ maxHeight: '70vh' }}
+      >
+        <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+          Apply Coupon Code
+        </h2>
+        <div className="sticky top-0 bg-white z-10 pb-4">
+          <Input
+            type="text"
+            value={couponCode}
+            onChange={(e) => setCouponCode(e.target.value)}
+            onKeyDown={handleKeyPress}
+            className="w-full p-3 border border-gray-300 rounded-md text-sm mb-4"
+            placeholder="Enter coupon code"
+          />
+          <Button
+            onClick={onApplyCoupon}
+            className="w-full bg-gradient-to-r from-green-500 to-teal-500 text-white text-lg font-medium py-3 rounded-md shadow-lg transition-all transform hover:scale-105"
+            disabled={loading}
+          >
+            {loading ? "Applying..." : "Apply Coupon"}
+          </Button>
         </div>
-      )}
+        <div className="mt-6">
+          <p className="text-sm text-gray-700 mb-2">Available Coupons:</p>
+          <ul className="space-y-4 overflow-y-auto max-h-[30vh]">
+            {coupons.map((coupon) => (
+              <li
+                key={coupon.id}
+                className="border border-gray-300 p-4 rounded-md shadow-sm bg-gray-50"
+              >
+                <div className="font-mono text-lg text-primary font-semibold">
+                  {coupon.code}
+                </div>
+                <div className="text-sm text-gray-600 mt-1">
+                  {coupon.discountType === "PERCENTAGE"
+                    ? `${coupon.discountValue}% off`
+                    : `₹${coupon.discountValue} off`}
+                  {coupon.minimumOrderAmount &&
+                    ` on orders over ₹${coupon.minimumOrderAmount}`}
+                </div>
+                {coupon.code.startsWith("Hello50") && (
+                  <div className="text-sm text-gray-500 mt-2 font-light">
+                    First order discount! Enjoy a special offer on your first
+                    purchase over ₹{coupon.minimumOrderAmount}.
+                  </div>
+                )}
+                <Button
+                  onClick={() => handleCouponClick(coupon.code)}
+                  className="mt-2 w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-medium py-2 rounded-md shadow-sm transition-all transform hover:scale-105"
+                >
+                  Apply This Coupon
+                </Button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </DialogContent>
+    </Dialog>
+  </div>
+)}
+
     </div>
   );
 };
