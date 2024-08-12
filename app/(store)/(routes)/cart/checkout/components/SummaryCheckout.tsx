@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import Currency from "@/components/Store/Currency";
 import { useDiscountStore } from "@/hooks/store/use-discount-state";
-import { calculateOrderTotal } from "@/app/(store)/(routes)/cart/function/calculateOrderTotal";
 
 interface SummaryCheckoutProps {
   prices: number[];
@@ -18,8 +17,12 @@ const SummaryCheckout: React.FC<SummaryCheckoutProps> = ({
   const { discount } = useDiscountStore();
 
   useEffect(() => {
-    setOrderTotal(calculateOrderTotal(prices, quantities, discount));
-  }, [prices, quantities, discount]);
+    let total = 0;
+    for (let i = 0; i < prices.length; i++) {
+      total += prices[i] * quantities[i];
+    }
+    setOrderTotal(total);
+  }, [prices, quantities]);
 
   return (
     <div className="rounded-lg bg-white px-6 py-8 sm:p-8 lg:col-span-5 lg:p-10 shadow-lg">
@@ -31,10 +34,10 @@ const SummaryCheckout: React.FC<SummaryCheckoutProps> = ({
           <Currency value={orderTotal} />
         </div>
 
-        <div className="flex items-center justify-between border-t border-gray-200 pt-4 text-base font-medium text-gray-900 mb-4">
-          <div>Discount</div>
-          <Currency value={discount} />
-        </div>
+          <div className="flex items-center justify-between border-t border-gray-200 pt-4 text-base font-medium text-gray-900 mb-4">
+            <div>Discount</div>
+            <Currency value={discount} />
+          </div>
 
         <div className="flex items-center justify-between border-t border-gray-200 pt-4 text-base font-medium text-gray-900 mb-4">
           <div>Estimated Tax</div>

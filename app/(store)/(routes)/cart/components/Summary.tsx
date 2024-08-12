@@ -9,7 +9,6 @@ import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { useDiscountStore } from "@/hooks/store/use-discount-state";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
-import { calculateOrderTotal } from "@/app/(store)/(routes)/cart/function/calculateOrderTotal";
 
 interface Coupon {
   id: string;
@@ -44,8 +43,12 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
   } = useDiscountStore();
 
   useEffect(() => {
-    setOrderTotal(calculateOrderTotal(prices, quantities, discount));
-  }, [prices, quantities, discount]);
+    let total = 0;
+    for (let i = 0; i < prices.length; i++) {
+      total += prices[i] * quantities[i];
+    }
+    setOrderTotal(total);
+  }, [prices, quantities]);
 
   useEffect(() => {
     // Fetching active coupons from the database
@@ -98,16 +101,6 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
   };
 
   const isCheckoutPage = pathname.includes("checkout");
-
-  const handleCouponClick = (code: string) => {
-    setCouponCode(code);
-  };
-
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      onApplyCoupon();
-    }
-  };
 
   return (
     <div className="max-sm:mt-8 rounded-lg max-md:w-fit md:min-w-full bg-white px-6 py-8 sm:p-8 lg:col-span-5 lg:mt-0 lg:p-10 shadow-lg">
@@ -174,7 +167,6 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
                 type="text"
                 value={couponCode}
                 onChange={(e) => setCouponCode(e.target.value)}
-                onKeyDown={handleKeyPress}
                 className="w-full p-3 border border-gray-300 rounded-md text-sm mb-4"
                 placeholder="Enter coupon code"
               />
@@ -203,22 +195,12 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
                         {coupon.minimumOrderAmount &&
                           ` on orders over ₹${coupon.minimumOrderAmount}`}
                       </div>
-                      {coupon.code.startsWith("Hello") && (
+                      {coupon.code.startsWith("Hello50") && (
                         <div className="text-sm text-gray-500 mt-2 font-light">
-                          First order discount! Enjoy a special offer{" "}
-                          {coupon.discountType === "PERCENTAGE"
-                            ? `${coupon.discountValue}% off`
-                            : `₹${coupon.discountValue} off`}{" "}
-                          on your first purchase over ₹
-                          {coupon.minimumOrderAmount}.
+                          First order discount! Enjoy a special offer on your
+                          first purchase over ₹{coupon.minimumOrderAmount}.
                         </div>
                       )}
-                      <Button
-                        onClick={() => handleCouponClick(coupon.code)}
-                        className="mt-2 w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-medium py-2 rounded-md shadow-sm transition-all transform hover:scale-105"
-                      >
-                        Apply This Coupon
-                      </Button>
                     </li>
                   ))}
                 </ul>
