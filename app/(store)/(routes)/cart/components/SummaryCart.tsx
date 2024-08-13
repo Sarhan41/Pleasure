@@ -25,7 +25,7 @@ interface SummaryProps {
   userId?: string | undefined;
 }
 
-const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
+const CartSummary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [orderTotal, setOrderTotal] = useState<number>(0);
@@ -252,4 +252,4 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
   );
 };
 
-export default Summary;
+export default CartSummary;

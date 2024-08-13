@@ -1,11 +1,10 @@
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import ThreeAccordion from "./components/ThreeAccordion";
-import Summary from "../components/Summary";
+import Summary from "../components/SummaryCart";
 import CheckoutClientCart from "./components/CheckoutClientCart";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import SummaryCheckout from "./components/SummaryCheckout";
 
 export default async function CartCheckoutPage() {
   const user = await currentUser();
@@ -24,15 +23,15 @@ export default async function CartCheckoutPage() {
     include: {
       product: true,
       color: true,
-      
     },
   });
 
   const quantitiesForSummaryAndAccordion = CartProducts.map(
     (item) => item.quantity
   );
-  const pricesForSummaryAndAccordion = CartProducts.map((item) => parseFloat(item.discountedPrice ? item.discountedPrice : item.price));
-
+  const pricesForSummaryAndAccordion = CartProducts.map((item) =>
+    parseFloat(item.discountedPrice ? item.discountedPrice : item.price)
+  );
 
   if (CartProducts.length === 0) {
     return (
@@ -41,7 +40,9 @@ export default async function CartCheckoutPage() {
           Your cart is empty, Please Add Some Products.
         </h1>
         <Button>
-          <Link area-label="Link" href={`/cart?reload=${Date.now()}`}>Go to Cart Page</Link>
+          <Link area-label="Link" href={`/cart?reload=${Date.now()}`}>
+            Go to Cart Page
+          </Link>
         </Button>
         <Button>
           <Link area-label="Link" className="text-white font-semibold" href="/">
@@ -55,7 +56,8 @@ export default async function CartCheckoutPage() {
   return (
     <div className="bg-white w-full  px-10 flex justify-between max-lg:flex-col max-lg:justify-center">
       <div className="flex-[0.75]">
-        <Link area-label="Link"
+        <Link
+          area-label="Link"
           href="/cart"
           className="text-end w-full flex justify-end
         "
@@ -74,7 +76,7 @@ export default async function CartCheckoutPage() {
       </div>
       <div className="max-lg:w-full flex justify-center items-center">
         <div className="w-96 ">
-          <SummaryCheckout
+          <Summary
             prices={pricesForSummaryAndAccordion}
             quantities={quantitiesForSummaryAndAccordion}
           />
