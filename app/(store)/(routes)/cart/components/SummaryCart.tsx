@@ -222,7 +222,7 @@ const CartSummary: React.FC<SummaryProps> = ({
                   <ClipLoader size={50} color={"#FFC0CB"} loading={loading} />
                   <span>Loading the current offers...</span>
                 </div>
-              ) : (
+              ) : coupons.length > 0 ? (
                 <ul className="space-y-4 overflow-y-auto max-h-[30vh]">
                   {coupons.map((coupon) => (
                     <li
@@ -258,6 +258,10 @@ const CartSummary: React.FC<SummaryProps> = ({
                     </li>
                   ))}
                 </ul>
+              ) : (
+                <p className="text-xl text-gray-700 text-center">
+                  No coupons available at the moment.
+                </p>
               )}
             </div>
           </DialogContent>

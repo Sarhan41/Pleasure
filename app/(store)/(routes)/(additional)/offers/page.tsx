@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { ClipLoader } from "react-spinners";
 
 interface Coupon {
   id: string;
@@ -42,9 +43,10 @@ const OffersPage: React.FC = () => {
         </h1>
         <div className="space-y-8">
           {loading ? (
-            <p className="text-xl text-gray-700 text-center">
-              Loading offers...
-            </p>
+            <div className="flex items-center justify-center space-x-2 text-gray-500">
+              <ClipLoader size={50} color={"#FFC0CB"} loading={loading} />
+              <span>Loading the current offers...</span>
+            </div>
           ) : coupons.length > 0 ? (
             coupons.map((coupon) => (
               <div
