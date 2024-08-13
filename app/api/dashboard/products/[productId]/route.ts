@@ -20,6 +20,8 @@ export async function GET(
         images: true,
         category: true,
         colors: true,
+        colorNames: true,
+        sizes: true,
       },
     });
 
@@ -60,6 +62,7 @@ export async function PATCH(
       additionalInfo,
       isNew,
       isColorNameVisible,
+      colorNames,
     } = body;
 
     if (!name) {
@@ -95,6 +98,9 @@ export async function PATCH(
         subname,
         categoryId,
         colors: {
+          deleteMany: {},
+        },
+        colorNames: {
           deleteMany: {},
         },
         sizes: {
@@ -133,6 +139,13 @@ export async function PATCH(
                 toLink: color.link,
               })
             ),
+          },
+        },
+        colorNames: {
+          createMany: {
+            data: colorNames.map((color: { name: string }) => ({
+              name: color.name,
+            })),
           },
         },
         sizes: {

@@ -249,7 +249,6 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           }}
         />
       )}
-
       {/* =============================================
         Name Of The Product
          =============================================
@@ -395,7 +394,6 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             =================================================================
          */}
       </div>
-
       <div className="flex flex-col my-4 gap-y-4">
         {/* =============================================
              Div For Available Sizes
@@ -569,21 +567,21 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             })}
           </div>
         </div>
-          {/* Colors Name if Visible */}
+        {/* Colors Name if Visible */}
 
-          {data?.isColorNameVisible && (
-          <div className="mt-4 flex flex-col gap-y-4">
+        {data?.isColorNameVisible && (
+          <div className=" flex flex-col -mt-8 gap-y-4">
             <h3 className="font-semibold text-base md:text-lg text-black">
               Colors:
             </h3>
             <div className="flex flex-wrap gap-2">
-              {data.colors
+              {data.colorNames
                 .filter((color) => color.name.toLowerCase() !== "none") // Filter out "none"
                 .map((color, index) => (
                   <div
                     key={index}
                     className="px-3 py-1 border rounded-lg text-sm font-medium"
-                    style={{ borderColor: color.value, color: color.value }} // Assuming color has a hex property
+                    // style={{ borderColor: color.value, color: color.value }} // Assuming color has a hex property
                   >
                     {color.name}
                   </div>
@@ -623,7 +621,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           </div>
         )}
       </div>
-
+      
       {/* =============================================
           Div For Add To Cart And Add To Wishlist and Share 1
           =============================================
@@ -668,12 +666,10 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           </Button>
         </div>
       </div>
-
       {/* =============================================
            Div For Description
          =============================================
       */}
-
       <div className="mt-8">
         <MainExtraDetails
           description={data.description}
@@ -684,12 +680,10 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
       {/* 
           // ! Reviews Divs Will Be Added Here
 */}
-
       {/* =============================================
           Div For Add To Cart And Add To Wishlist and Share 2
           =============================================
       */}
-
       <div className="mt-10 flex items-center gap-x-6  py-7shadow-2xl shadow-gray-600 w-full justify-center relative">
         <div className="border-primary border-2 rounded-full">
           <IconButton

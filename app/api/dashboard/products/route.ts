@@ -30,6 +30,7 @@ export async function POST(req: Request) {
       additionalInfo,
       isNew,
       isColorNameVisible,
+      colorNames,
     } = body;
 
     if (!name) {
@@ -66,6 +67,13 @@ export async function POST(req: Request) {
                 toLink: color.link,
               })
             ),
+          },
+        },
+        colorNames: {
+          createMany: {
+            data: colorNames.map((color: { name: string }) => ({
+              name: color.name,
+            })),
           },
         },
         description: description,
@@ -108,7 +116,6 @@ export async function POST(req: Request) {
   }
 }
 
-
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const categoryId = searchParams.get("categoryId") || undefined;
@@ -128,6 +135,7 @@ export async function GET(req: Request) {
         category: true,
         colors: true,
         sizes: true,
+        colorNames: true,
       },
       orderBy: {
         createdAt: "desc",

@@ -539,18 +539,18 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         {/* Colors Name if Visible */}
 
         {data?.isColorNameVisible && (
-          <div className="mt-4 flex flex-col gap-y-4">
+          <div className=" flex flex-col -mt-8 gap-y-4">
             <h3 className="font-semibold text-base md:text-lg text-black">
               Colors:
             </h3>
             <div className="flex flex-wrap gap-2">
-              {data.colors
+              {data.colorNames
                 .filter((color) => color.name.toLowerCase() !== "none") // Filter out "none"
                 .map((color, index) => (
                   <div
                     key={index}
                     className="px-3 py-1 border rounded-lg text-sm font-medium"
-                    style={{ borderColor: color.value, color: color.value }} // Assuming color has a hex property
+                    // style={{ borderColor: color.value, color: color.value }} // Assuming color has a hex property
                   >
                     {color.name}
                   </div>

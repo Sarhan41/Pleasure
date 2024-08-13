@@ -29,7 +29,7 @@ export interface Color {
 }
 
 export interface colorName{
-  Name: string;
+  name: string;
 }
 
 export interface Product {

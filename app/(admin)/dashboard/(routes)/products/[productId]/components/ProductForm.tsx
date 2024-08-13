@@ -3,7 +3,14 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Category, Color, Image, Product, Size } from "@prisma/client";
+import {
+  Category,
+  Color,
+  ColorName,
+  Image,
+  Product,
+  Size,
+} from "@prisma/client";
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -51,6 +58,7 @@ const formSchema = z.object({
   colorId: z
     .object({ name: z.string(), hex: z.string(), link: z.string().optional() })
     .array(),
+  colorNames: z.object({ name: z.string() }).array(),
   sizeId: z
     .object({
       name: z.string(),
@@ -74,6 +82,7 @@ interface ProductFormProps {
     | (Product & {
         images: Image[];
         colors: Color[];
+        colorNames: ColorName[];
         sizes: Size[];
       })
     | null;
@@ -111,6 +120,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             hex: color.value,
             link: color.toLink || "",
           })),
+          colorNames: initialData.colorNames.map((colorName) => ({
+            name: colorName.name || "",
+          })),
           sizeId: initialData.sizes.map((size) => ({
             name: size.name || "",
             SKUvalue: size.SKUvalue || "",
@@ -128,6 +140,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           images: [],
           categoryId: "",
           colorId: [{ name: "", hex: "#000000", link: "" }],
+          colorNames: [
+            {
+              name: "",
+            },
+          ],
           sizeId: [
             {
               name: "",
@@ -573,6 +590,58 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       className=""
                     >
                       Add Color
+                    </Button>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="colorNames"
+                render={({ field }) => (
+                  <FormItem className="max-sm:w-[35vw] w-[22vw] ">
+                    <FormLabel>Color Names</FormLabel>
+                    <div className="space-y-2">
+                      {field.value.map((color, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center space-x-2"
+                        >
+                          <Input
+                            className="w-[250px]"
+                            placeholder="Color Name"
+                            value={color.name}
+                            onChange={(e) =>
+                              field.onChange([
+                                ...field.value.slice(0, index),
+                                { ...color, name: e.target.value },
+                                ...field.value.slice(index + 1),
+                              ])
+                            }
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={() =>
+                              field.onChange([
+                                ...field.value.slice(0, index),
+                                ...field.value.slice(index + 1),
+                              ])
+                            }
+                          >
+                            X
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                    <Button
+                      type="button"
+                      onClick={() =>
+                        field.onChange([...field.value, { name: "" }])
+                      }
+                      className=""
+                    >
+                      Add Color Name
                     </Button>
                     <FormMessage />
                   </FormItem>
