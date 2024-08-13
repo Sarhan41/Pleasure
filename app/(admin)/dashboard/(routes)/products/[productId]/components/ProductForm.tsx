@@ -61,6 +61,7 @@ const formSchema = z.object({
     })
     .array(),
 
+  isColorNameVisible: z.boolean().default(false).optional(),
   isNew: z.boolean().default(false).optional(),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
@@ -139,6 +140,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           isFeatured: false,
           isArchived: false,
           isNew: false,
+          isColorNameVisible: false,
           description: "",
           additionalInfo: "",
         },
@@ -577,7 +579,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 )}
               />
 
-              <div className="flex gap-12 max-lg:flex-col justify-between w-full ">
+              <div className="flex gap-12 max-lg:flex-col flex-wrap justify-between w-full ">
                 <FormField
                   control={form.control}
                   name="isArchived"
@@ -635,6 +637,27 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                         <FormLabel>New</FormLabel>
                         <FormDescription>
                           This product will appear on the New page
+                        </FormDescription>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="isColorNameVisible"
+                  render={({ field }) => (
+                    <FormItem className=" flex flex-row space-x-3 space-y-0 rounded-md border p-4 items-start">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>Color Name Visible?</FormLabel>
+                        <FormDescription>
+                          Color Name will be visible on the product page
                         </FormDescription>
                       </div>
                       <FormMessage />

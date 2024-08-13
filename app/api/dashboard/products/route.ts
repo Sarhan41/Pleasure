@@ -29,6 +29,7 @@ export async function POST(req: Request) {
       description,
       additionalInfo,
       isNew,
+      isColorNameVisible,
     } = body;
 
     if (!name) {
@@ -96,6 +97,7 @@ export async function POST(req: Request) {
         isFeatured,
         isArchived,
         isNew,
+        isColorNameVisible,
       },
     });
 

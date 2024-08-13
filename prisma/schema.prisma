@@ -157,6 +157,7 @@ model Product {
   isFeatured  Boolean     @default(false)
   isNew       Boolean     @default(false)
   isArchived  Boolean     @default(false)
+  isColorNameVisible Boolean @default(false)
   images      Image[]
   colors      Color[]
   sizes       Size[]
@@ -168,7 +169,6 @@ model Product {
   reviews     Review[]
   description String?
   additionalInfo String?
-  colorNameVisible Boolean @default(false)
 
   @@index([categoryId])
 }

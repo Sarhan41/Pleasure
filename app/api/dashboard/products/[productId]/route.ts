@@ -59,6 +59,7 @@ export async function PATCH(
       description,
       additionalInfo,
       isNew,
+      isColorNameVisible,
     } = body;
 
     if (!name) {
@@ -107,6 +108,7 @@ export async function PATCH(
         isFeatured,
         isArchived,
         isNew,
+        isColorNameVisible,
       },
     });
 
