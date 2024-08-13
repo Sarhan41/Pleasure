@@ -19,11 +19,6 @@ export const useDiscountStore = create<DiscountState>((set) => ({
   setDiscount: (discount) => set({ discount }),
   setCouponId: (couponId) => set({ couponId }),
   reset: () => {
-    localStorage.removeItem('couponCode');
-    localStorage.removeItem('discount');
-    localStorage.removeItem('couponId');
     set({ couponCode: "", discount: 0, couponId: null });
   },
-
 }));
-

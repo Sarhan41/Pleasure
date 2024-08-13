@@ -11,7 +11,11 @@ interface SummaryProps {
   userId?: string | undefined;
 }
 
-const SummaryCheckout: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
+const SummaryCheckout: React.FC<SummaryProps> = ({
+  prices,
+  quantities,
+  userId,
+}) => {
   const [orderTotal, setOrderTotal] = useState<number>(0);
   const { discount } = useDiscountStore();
 
@@ -33,21 +37,31 @@ const SummaryCheckout: React.FC<SummaryProps> = ({ prices, quantities, userId })
           <div className="font-medium text-gray-900">Sub Total</div>
           <Currency value={orderTotal} />
         </div>
-        <div className="flex items-center w-full justify-between border-t border-gray-200 pt-4 text-sm sm:text-base md:text-lg lg:text-base">
-          <div className="font-medium text-gray-900">Discount</div>
-          <Currency value={discount} />
-        </div>
+        {discount > 0 && (
+          <div className="flex items-center w-full justify-between border-t border-gray-200 pt-4 text-sm sm:text-base md:text-lg lg:text-base">
+            <div className="font-medium text-gray-900">Discount</div>
+            <Currency value={discount} />
+          </div>
+        )}
+
         <div className="flex items-center w-full justify-between border-t border-gray-200 pt-4 text-sm sm:text-base md:text-lg lg:text-base">
           <div className="font-medium text-gray-900">Tax</div>
-          <Currency value={orderTotal * 0.05} />
+          <Currency value={Math.round(orderTotal * 0.05)} />
         </div>
         <div className="flex items-center justify-between border-t border-gray-200 pt-4 text-sm sm:text-base md:text-lg lg:text-base">
           <div className="font-medium text-gray-900">Shipping</div>
-          <Currency value={29} />
+          <Currency value={orderTotal > 500 ? 0 : 50} />
         </div>
         <div className="flex items-center justify-between border-t border-gray-200 pt-4 text-sm sm:text-base md:text-lg lg:text-base">
           <div className="font-medium text-gray-900">You Pay</div>
-          <Currency value={orderTotal - discount + orderTotal * 0.05 + 29} />
+          <Currency
+            value={
+              orderTotal -
+              discount +
+              Math.round(orderTotal * 0.05) +
+              (orderTotal > 500 ? 0 : 50)
+            }
+          />
         </div>
       </div>
     </div>

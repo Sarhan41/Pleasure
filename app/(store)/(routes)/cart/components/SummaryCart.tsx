@@ -4,9 +4,11 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import Currency from "@/components/Store/Currency";
 import { Button } from "@/components/ui/button";
+import { usePathname, useRouter } from "next/navigation";
 import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { useDiscountStore } from "@/hooks/store/use-discount-state";
+import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import Link from "next/link";
 
 interface Coupon {
@@ -24,7 +26,13 @@ interface SummaryProps {
   userId?: string | undefined;
 }
 
-const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
+const CartSummary: React.FC<SummaryProps> = ({
+  prices,
+  quantities,
+  userId,
+}) => {
+  const router = useRouter();
+  const pathname = usePathname();
   const [orderTotal, setOrderTotal] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
   const [coupons, setCoupons] = useState<Coupon[]>([]); // Fetch coupons state
@@ -47,10 +55,10 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
       total += prices[i] * quantities[i];
     }
     setOrderTotal(total);
-  }, [prices, quantities]);
+  }, [prices, quantities, discount]);
 
   useEffect(() => {
-    // Fetch active coupons from the database
+    // Fetching active coupons from the database
     const fetchCoupons = async () => {
       try {
         const response = await axios.get(
@@ -65,14 +73,7 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
   }, []);
 
   const onApplyCoupon = async () => {
-    if (couponId) {
-      const errorMessage = "A coupon code has already been applied.";
-      setError(errorMessage);
-      toast.error(errorMessage);
-      return;
-    }
-
-    if (couponCode === localStorage.getItem("couponCode")) {
+    if (couponCode || discount > 0 || couponId) {
       reset(); // Reset the store and local storage if the same code is applied again.
     }
 
@@ -88,7 +89,7 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
         const data = response.data;
         setDiscount(data.discountValue);
         setCouponId(data.couponId);
-        setCouponCode(couponCode);
+        setCouponCode(couponCode); // Store the new coupon code
         toast.success("Coupon applied successfully!");
         setIsDialogOpen(false);
         setError(null); // Clear any previous errors
@@ -114,106 +115,140 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
+      if (!couponCode.trim()) {
+        const errorMessage = "Coupon code is required.";
+        setError(errorMessage);
+        toast.error(errorMessage);
+        return;
+      }
       onApplyCoupon();
     }
   };
 
   return (
-    <div className="max-sm:mt-8 rounded-lg max-md:w-fit md:min-w-full bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8 shadow-md">
-      <h2 className="text-lg font-medium text-gray-900 sm:text-xl md:text-2xl lg:text-3xl">
-        Order Summary
-      </h2>
-      <div className="mt-6 space-y-4">
-        <div className="flex items-center w-full justify-between text-sm sm:text-base md:text-lg lg:text-base">
-          <div className="font-medium text-gray-900">Sub Total</div>
+    <div className="max-sm:mt-8 rounded-lg max-md:w-fit md:min-w-full  bg-white px-6 py-8 sm:p-8 lg:col-span-5 lg:mt-0 lg:p-10 shadow-lg">
+      <Link href="/cart/checkout">
+        <Button
+          disabled={prices.length === 0}
+          className="w-full mb-6 bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:from-indigo-600 hover:to-purple-500 text-base font-semibold py-2 rounded-md shadow-xl transition-all transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-300"
+        >
+          Proceed to Checkout
+        </Button>
+      </Link>
+
+      <div className="border max-sm:justify-center w-full flex flex-col border-gray-200 p-4 rounded-lg">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Order Summary</h2>
+
+        <div className="flex items-center justify-between text-sm font-medium text-gray-900 mb-3">
+          <div>Sub Total</div>
           <Currency value={orderTotal} />
         </div>
-        <div className="flex items-center w-full justify-between border-t border-gray-200 pt-4 text-sm sm:text-base md:text-lg lg:text-base">
-          <div className="font-medium text-gray-900">Discount</div>
-          <Currency value={discount} />
+
+        {discount > 0 && (
+          <div className="flex items-center justify-between border-t border-gray-200 pt-3 text-sm font-medium text-gray-900 mb-3">
+            <div>Discount</div>
+            <Currency value={discount} />
+          </div>
+        )}
+
+        <div className="flex items-center justify-between border-t border-gray-200 pt-3 text-sm font-medium text-gray-900 mb-3">
+          <div>Estimated Tax</div>
+          <Currency value={Math.round(orderTotal * 0.05)} />
         </div>
-        <div className="flex items-center w-full justify-between border-t border-gray-200 pt-4 text-sm sm:text-base md:text-lg lg:text-base">
-          <div className="font-medium text-gray-900">Tax</div>
-          <Currency value={orderTotal * 0.05} />
+
+        <div className="flex items-center justify-between border-t border-gray-200 pt-3 text-sm font-medium text-gray-900 mb-3">
+          <div>Shipping</div>
+          <Currency value={orderTotal > 500 ? 0 : 50} />
         </div>
-        <div className="flex items-center justify-between border-t border-gray-200 pt-4 text-sm sm:text-base md:text-lg lg:text-base">
-          <div className="font-medium text-gray-900">Shipping</div>
-          <Currency value={29} />
-        </div>
-        <div className="flex items-center justify-between border-t border-gray-200 pt-4 text-sm sm:text-base md:text-lg lg:text-base">
-          <div className="font-medium text-gray-900">You Pay</div>
-          <Currency value={orderTotal - discount + orderTotal * 0.05 + 29} />
+
+        <div className="border-t border-gray-200 pt-3 text-lg font-extrabold text-gray-900 flex justify-between">
+          <div>You Pay</div>
+          <Currency
+            value={
+              orderTotal -
+              discount +
+              Math.round(orderTotal * 0.05) +
+              (orderTotal > 500 ? 0 : 50)
+            }
+          />
         </div>
       </div>
-
-      <div className="mt-4 flex flex-col sm:flex-row gap-4">
-        <Input
-          type="text"
-          value={couponCode}
-          onChange={(e) => setCouponCode(e.target.value)}
-          className={`flex-1 p-2 border ${
-            error ? "border-red-500" : "border-gray-300"
-          } rounded-l text-sm sm:text-base`}
-          placeholder="Enter coupon code"
-          onKeyDown={handleKeyPress}
-        />
-        <Button
-          onClick={onApplyCoupon}
-          className="bg-primary text-white text-sm sm:text-base"
-          disabled={loading}
-        >
-          {loading ? "Applying..." : "Apply Coupon"}
-        </Button>
-      </div>
-
-      {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
 
       <div className="mt-8">
         <h3 className="text-xl font-semibold text-gray-900 mb-4">Offers</h3>
-        <Button onClick={() => setIsDialogOpen(true)} className="text-indigo-600 text-sm">
-          Have a discount code? Apply here
-        </Button>
-        {isDialogOpen && (
-          <div className="mt-4 p-4 bg-white rounded-lg shadow-lg">
-            <h4 className="text-lg font-medium text-gray-900 mb-4">
-              Available Coupons:
-            </h4>
-            <ul className="space-y-2">
-              {coupons.map((coupon) => (
-                <li key={coupon.id} className="border p-2 rounded-md">
-                  <div className="font-mono text-lg text-primary font-semibold">
-                    {coupon.code}
-                  </div>
-                  <div className="text-sm text-gray-600 mt-1">
-                    {coupon.discountType === "PERCENTAGE"
-                      ? `${coupon.discountValue}% off`
-                      : `₹${coupon.discountValue} off`}
-                    {coupon.minimumOrderAmount &&
-                      ` on orders over ₹${coupon.minimumOrderAmount}`}
-                  </div>
-                  <Button
-                    onClick={() => handleCouponClick(coupon.code)}
-                    className="mt-2 w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-medium py-2 rounded-md shadow-sm transition-all transform hover:scale-105"
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <p className="text-indigo-600 cursor-pointer text-sm hover:underline">
+              Have a discount code? Apply here
+            </p>
+          </DialogTrigger>
+          <DialogContent
+            className="rounded-lg shadow-xl p-6 bg-white max-w-md mx-auto"
+            style={{ maxHeight: "70vh" }}
+          >
+            <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+              Apply Coupon Code
+            </h2>
+            <div className="sticky top-0 bg-white z-10 pb-4">
+              <Input
+                type="text"
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value)}
+                onKeyDown={handleKeyPress}
+                className="w-full p-3 border border-gray-300 rounded-md text-sm mb-4"
+                placeholder="Enter coupon code"
+              />
+              <Button
+                onClick={onApplyCoupon}
+                className="w-full bg-gradient-to-r from-green-500 to-teal-500 text-white text-lg font-medium py-3 rounded-md shadow-lg transition-all transform hover:scale-105"
+                disabled={loading}
+              >
+                {loading ? "Applying..." : "Apply Coupon"}
+              </Button>
+            </div>
+            <div className="mt-6">
+              <p className="text-sm text-gray-700 mb-2">Available Coupons:</p>
+              <ul className="space-y-4 overflow-y-auto max-h-[30vh]">
+                {coupons.map((coupon) => (
+                  <li
+                    key={coupon.id}
+                    className="border border-gray-300 p-4 rounded-md shadow-sm bg-gray-50"
                   >
-                    Apply This Coupon
-                  </Button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+                    <div className="font-mono text-lg text-primary font-semibold">
+                      {coupon.code}
+                    </div>
+                    <div className="text-sm text-gray-600 mt-1">
+                      {coupon.discountType === "PERCENTAGE"
+                        ? `${coupon.discountValue}% off`
+                        : `₹${coupon.discountValue} off`}
+                      {coupon.minimumOrderAmount &&
+                        ` on orders over ₹${coupon.minimumOrderAmount}`}
+                    </div>
+                    {coupon.code.startsWith("Hello50") && (
+                      <div className="text-sm text-gray-500 mt-2 font-light">
+                        First order discount! Enjoy a special offer{" "}
+                        {coupon.discountType === "PERCENTAGE"
+                          ? `${coupon.discountValue}% off`
+                          : `₹${coupon.discountValue} off`}{" "}
+                        on your first purchase over ₹{coupon.minimumOrderAmount}
+                        .
+                      </div>
+                    )}
+                    <Button
+                      onClick={() => handleCouponClick(coupon.code)}
+                      className="mt-2 w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-medium py-2 rounded-md shadow-sm transition-all transform hover:scale-105"
+                    >
+                      Apply This Coupon
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
-
-      <Link href="/cart/checkout" className="text-sm text-blue-500 mt-4">
-        <Button
-          disabled={prices.length === 0}
-          className="w-full mt-6 bg-pink-600 text-white hover:bg-pink-700 text-sm sm:text-base"
-        >
-          Checkout
-        </Button>
-      </Link>
     </div>
   );
 };
 
-export default Summary;
+export default CartSummary;

@@ -55,7 +55,13 @@ const CheckoutClientCart: React.FC<CheckoutClientCartProps> = ({
     for (let i = 0; i < prices.length; i++) {
       total += prices[i] * quantities[i];
     }
-    const calculatedOrderTotal = total - discount + total * 0.05 + 29; // Apply discount here
+
+    const discountAmount = discount; // Apply the discount
+    const taxAmount = Math.round(total * 0.05); // Calculate tax as 5% of the total
+    const shippingFee = total > 500 ? 0 : 50; // Shipping is free if total > 500, otherwise 50
+
+    const calculatedOrderTotal =
+      total - discountAmount + taxAmount + shippingFee;
     setOrderTotal(calculatedOrderTotal);
     console.log(`Order Total Calculated: ${calculatedOrderTotal}`);
   }, [prices, quantities, discount]);
