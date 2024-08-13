@@ -9,6 +9,15 @@ import { Input } from "@/components/ui/input";
 import { useDiscountStore } from "@/hooks/store/use-discount-state";
 import Link from "next/link";
 
+interface Coupon {
+  id: string;
+  code: string;
+  discountType: string;
+  discountValue: number;
+  minimumOrderAmount?: number;
+  isActive: boolean;
+}
+
 interface SummaryProps {
   prices: number[];
   quantities: number[];
@@ -17,7 +26,11 @@ interface SummaryProps {
 
 const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
   const [orderTotal, setOrderTotal] = useState<number>(0);
-  const [error, setError] = useState<string | null>(null); // Error state
+  const [error, setError] = useState<string | null>(null);
+  const [coupons, setCoupons] = useState<Coupon[]>([]); // Fetch coupons state
+  const [loading, setLoading] = useState<boolean>(false); // Loading state for applying coupon
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false); // State to manage dialog open/close
+
   const {
     couponCode,
     discount,
@@ -25,6 +38,7 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
     setDiscount,
     couponId,
     setCouponId,
+    reset,
   } = useDiscountStore();
 
   useEffect(() => {
@@ -35,6 +49,21 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
     setOrderTotal(total);
   }, [prices, quantities]);
 
+  useEffect(() => {
+    // Fetch active coupons from the database
+    const fetchCoupons = async () => {
+      try {
+        const response = await axios.get(
+          "/api/dashboard/coupons/getActiveCoupons"
+        );
+        setCoupons(response.data);
+      } catch (error) {
+        toast.error("Failed to fetch coupons.");
+      }
+    };
+    fetchCoupons();
+  }, []);
+
   const onApplyCoupon = async () => {
     if (couponId) {
       const errorMessage = "A coupon code has already been applied.";
@@ -43,6 +72,11 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
       return;
     }
 
+    if (couponCode === localStorage.getItem("couponCode")) {
+      reset(); // Reset the store and local storage if the same code is applied again.
+    }
+
+    setLoading(true); // Start loading spinner
     try {
       const response = await axios.post("/api/dashboard/coupons/applyCoupon", {
         couponCode,
@@ -53,8 +87,10 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
       if (response.status === 200) {
         const data = response.data;
         setDiscount(data.discountValue);
-        setCouponId(data.couponId); // Set the coupon ID in the state
+        setCouponId(data.couponId);
+        setCouponCode(couponCode);
         toast.success("Coupon applied successfully!");
+        setIsDialogOpen(false);
         setError(null); // Clear any previous errors
       } else {
         const errorData = response.data.error;
@@ -67,6 +103,18 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
         "Failed to apply coupon. Please try again.";
       setError(errorMessage); // Set error state
       toast.error(errorMessage); // Display a generic error message if no specific error is available
+    } finally {
+      setLoading(false); // Stop loading spinner
+    }
+  };
+
+  const handleCouponClick = (code: string) => {
+    setCouponCode(code);
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      onApplyCoupon();
     }
   };
 
@@ -107,16 +155,54 @@ const Summary: React.FC<SummaryProps> = ({ prices, quantities, userId }) => {
             error ? "border-red-500" : "border-gray-300"
           } rounded-l text-sm sm:text-base`}
           placeholder="Enter coupon code"
+          onKeyDown={handleKeyPress}
         />
         <Button
           onClick={onApplyCoupon}
           className="bg-primary text-white text-sm sm:text-base"
+          disabled={loading}
         >
-          Apply Coupon
+          {loading ? "Applying..." : "Apply Coupon"}
         </Button>
       </div>
 
       {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+
+      <div className="mt-8">
+        <h3 className="text-xl font-semibold text-gray-900 mb-4">Offers</h3>
+        <Button onClick={() => setIsDialogOpen(true)} className="text-indigo-600 text-sm">
+          Have a discount code? Apply here
+        </Button>
+        {isDialogOpen && (
+          <div className="mt-4 p-4 bg-white rounded-lg shadow-lg">
+            <h4 className="text-lg font-medium text-gray-900 mb-4">
+              Available Coupons:
+            </h4>
+            <ul className="space-y-2">
+              {coupons.map((coupon) => (
+                <li key={coupon.id} className="border p-2 rounded-md">
+                  <div className="font-mono text-lg text-primary font-semibold">
+                    {coupon.code}
+                  </div>
+                  <div className="text-sm text-gray-600 mt-1">
+                    {coupon.discountType === "PERCENTAGE"
+                      ? `${coupon.discountValue}% off`
+                      : `₹${coupon.discountValue} off`}
+                    {coupon.minimumOrderAmount &&
+                      ` on orders over ₹${coupon.minimumOrderAmount}`}
+                  </div>
+                  <Button
+                    onClick={() => handleCouponClick(coupon.code)}
+                    className="mt-2 w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-medium py-2 rounded-md shadow-sm transition-all transform hover:scale-105"
+                  >
+                    Apply This Coupon
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
 
       <Link href="/cart/checkout" className="text-sm text-blue-500 mt-4">
         <Button

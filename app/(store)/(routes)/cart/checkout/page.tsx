@@ -55,7 +55,7 @@ export default async function CartCheckoutPage() {
   }
 
   return (
-    <div className="bg-white w-full  px-10 flex justify-between max-lg:flex-col max-lg:justify-center">
+    <div className="bg-white w-full  px-10 flex justify-between max-lg:flex-col max-lg:justify-center -mt-16">
       <div className="flex-[0.75]">
         <Link
           area-label="Link"
@@ -75,7 +75,7 @@ export default async function CartCheckoutPage() {
           products={CartProducts}
         />
       </div>
-      <div className="max-lg:w-full flex justify-center items-center">
+      <div className="max-lg:w-full flex justify-center items-start lg:mt-12">
         <div className="w-96 ">
           <SummaryCheckout
             prices={pricesForSummaryAndAccordion}
