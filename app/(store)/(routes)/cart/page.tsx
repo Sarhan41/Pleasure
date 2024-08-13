@@ -34,6 +34,8 @@ export default async function CartPage() {
           },
         },
       },
+      color: true,
+      
     },
   });
 
