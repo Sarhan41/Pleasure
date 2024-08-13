@@ -1,9 +1,8 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
+import { db } from "@/lib/db";
 
 interface Coupon {
   id: string;
@@ -14,26 +13,23 @@ interface Coupon {
   isActive: boolean;
 }
 
-const OffersPage: React.FC = () => {
-  const [coupons, setCoupons] = useState<Coupon[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const fetchCoupons = async () => {
-      try {
-        const response = await axios.get(
-          "/api/dashboard/coupons/getActiveCoupons"
-        );
-        setCoupons(response.data);
-      } catch (error) {
-        toast.error("Failed to fetch coupons.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCoupons();
-  }, []);
+const OffersPage: React.FC = async () => {
+  const coupons = await db.coupon.findMany({
+    where: {
+      isActive: true,
+      remainingUses: {
+        gt: 0, // Ensure there are remaining uses
+      },
+    },
+    select: {
+      id: true,
+      code: true,
+      discountType: true,
+      discountValue: true,
+      minimumOrderAmount: true,
+      isActive: true,
+    },
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 flex items-center justify-center py-12 px-6">
@@ -42,12 +38,7 @@ const OffersPage: React.FC = () => {
           Available Offers
         </h1>
         <div className="space-y-8">
-          {loading ? (
-            <div className="flex items-center justify-center space-x-2 text-gray-500">
-              <ClipLoader size={50} color={"#FFC0CB"} loading={loading} />
-              <span>Loading the current offers...</span>
-            </div>
-          ) : coupons.length > 0 ? (
+          {coupons.length > 0 ? (
             coupons.map((coupon) => (
               <div
                 key={coupon.id}
