@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { useDiscountStore } from "@/hooks/store/use-discount-state";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import Link from "next/link";
+import { ClipLoader } from "react-spinners";
 
 interface Coupon {
   id: string;
@@ -58,8 +59,8 @@ const CartSummary: React.FC<SummaryProps> = ({
   }, [prices, quantities, discount]);
 
   useEffect(() => {
-    // Fetching active coupons from the database
     const fetchCoupons = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(
           "/api/dashboard/coupons/getActiveCoupons"
@@ -67,6 +68,8 @@ const CartSummary: React.FC<SummaryProps> = ({
         setCoupons(response.data);
       } catch (error) {
         toast.error("Failed to fetch coupons.");
+      } finally {
+        setLoading(false);
       }
     };
     fetchCoupons();
@@ -208,41 +211,49 @@ const CartSummary: React.FC<SummaryProps> = ({
             </div>
             <div className="mt-6">
               <p className="text-sm text-gray-700 mb-2">Available Coupons:</p>
-              <ul className="space-y-4 overflow-y-auto max-h-[30vh]">
-                {coupons.map((coupon) => (
-                  <li
-                    key={coupon.id}
-                    className="border border-gray-300 p-4 rounded-md shadow-sm bg-gray-50"
-                  >
-                    <div className="font-mono text-lg text-primary font-semibold">
-                      {coupon.code}
-                    </div>
-                    <div className="text-sm text-gray-600 mt-1">
-                      {coupon.discountType === "PERCENTAGE"
-                        ? `${coupon.discountValue}% off`
-                        : `₹${coupon.discountValue} off`}
-                      {coupon.minimumOrderAmount &&
-                        ` on orders over ₹${coupon.minimumOrderAmount}`}
-                    </div>
-                    {coupon.code.startsWith("Hello50") && (
-                      <div className="text-sm text-gray-500 mt-2 font-light">
-                        First order discount! Enjoy a special offer{" "}
+
+              {loading ? (
+                <div className="flex items-center justify-center space-x-2 text-gray-500">
+                  <ClipLoader size={50} color={"#FFC0CB"} loading={loading} />
+                  <span>Loading the current offers...</span>
+                </div>
+              ) : (
+                <ul className="space-y-4 overflow-y-auto max-h-[30vh]">
+                  {coupons.map((coupon) => (
+                    <li
+                      key={coupon.id}
+                      className="border border-gray-300 p-4 rounded-md shadow-sm bg-gray-50"
+                    >
+                      <div className="font-mono text-lg text-primary font-semibold">
+                        {coupon.code}
+                      </div>
+                      <div className="text-sm text-gray-600 mt-1">
                         {coupon.discountType === "PERCENTAGE"
                           ? `${coupon.discountValue}% off`
-                          : `₹${coupon.discountValue} off`}{" "}
-                        on your first purchase over ₹{coupon.minimumOrderAmount}
-                        .
+                          : `₹${coupon.discountValue} off`}
+                        {coupon.minimumOrderAmount &&
+                          ` on orders over ₹${coupon.minimumOrderAmount}`}
                       </div>
-                    )}
-                    <Button
-                      onClick={() => handleCouponClick(coupon.code)}
-                      className="mt-2 w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-medium py-2 rounded-md shadow-sm transition-all transform hover:scale-105"
-                    >
-                      Apply This Coupon
-                    </Button>
-                  </li>
-                ))}
-              </ul>
+                      {coupon.code.startsWith("Hello50") && (
+                        <div className="text-sm text-gray-500 mt-2 font-light">
+                          First order discount! Enjoy a special offer{" "}
+                          {coupon.discountType === "PERCENTAGE"
+                            ? `${coupon.discountValue}% off`
+                            : `₹${coupon.discountValue} off`}{" "}
+                          on your first purchase over ₹
+                          {coupon.minimumOrderAmount}.
+                        </div>
+                      )}
+                      <Button
+                        onClick={() => handleCouponClick(coupon.code)}
+                        className="mt-2 w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-medium py-2 rounded-md shadow-sm transition-all transform hover:scale-105"
+                      >
+                        Apply This Coupon
+                      </Button>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </DialogContent>
         </Dialog>
