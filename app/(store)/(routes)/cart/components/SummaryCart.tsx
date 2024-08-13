@@ -175,6 +175,11 @@ const CartSummary: React.FC<SummaryProps> = ({
             }
           />
         </div>
+        {orderTotal < 500 && (
+          <div className="text-sm text-red-500 mt-4">
+            <p>Free shipping on orders over ₹500</p>
+          </div>
+        )}
       </div>
 
       <div className="mt-8">
