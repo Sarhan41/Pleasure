@@ -37,7 +37,8 @@ const CartSummary: React.FC<SummaryProps> = ({
   const [orderTotal, setOrderTotal] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
   const [coupons, setCoupons] = useState<Coupon[]>([]); // Fetch coupons state
-  const [loading, setLoading] = useState<boolean>(false); // Loading state for applying coupon
+  const [loading, setLoading] = useState<boolean>(false); // Loading state for Fetchin coupon
+  const [applying, setApplying] = useState<boolean>(false); // Loading state for Applying coupon
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false); // State to manage dialog open/close
 
   const {
@@ -80,7 +81,7 @@ const CartSummary: React.FC<SummaryProps> = ({
       reset(); // Reset the store and local storage if the same code is applied again.
     }
 
-    setLoading(true); // Start loading spinner
+    setApplying(true); // Start loading spinner
     try {
       const response = await axios.post("/api/dashboard/coupons/applyCoupon", {
         couponCode,
@@ -108,7 +109,7 @@ const CartSummary: React.FC<SummaryProps> = ({
       setError(errorMessage); // Set error state
       toast.error(errorMessage); // Display a generic error message if no specific error is available
     } finally {
-      setLoading(false); // Stop loading spinner
+      setApplying(false); // Stop loading spinner
     }
   };
 
@@ -209,9 +210,9 @@ const CartSummary: React.FC<SummaryProps> = ({
               <Button
                 onClick={onApplyCoupon}
                 className="w-full bg-gradient-to-r from-green-500 to-teal-500 text-white text-lg font-medium py-3 rounded-md shadow-lg transition-all transform hover:scale-105"
-                disabled={loading}
+                disabled={applying}
               >
-                {loading ? "Applying..." : "Apply Coupon"}
+                {applying ? "Applying..." : "Apply Coupon"}
               </Button>
             </div>
             <div className="mt-6">
