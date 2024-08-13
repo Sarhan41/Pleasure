@@ -31,6 +31,7 @@ export const getFeaturedProducts = cache(async () => {
       images: true,
       sizes: true,
       colors: true,
+      colorNames: true,
     },
   });
   return featuredProducts;

@@ -37,6 +37,7 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({ params }) => {
       colors: true,
       category: true,
       images: true,
+      colorNames: true,
     },
   });
 

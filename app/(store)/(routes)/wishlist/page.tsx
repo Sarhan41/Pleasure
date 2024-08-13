@@ -15,6 +15,7 @@ export default async function WishPage() {
       product: {
         include: {
           category: true,
+          colorNames: true,
           images: { select: { url: true, id: true, productId: true } },
           colors: { select: { name: true, value: true, toLink: true } },
           sizes: {
