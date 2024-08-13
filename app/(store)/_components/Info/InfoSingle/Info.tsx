@@ -95,7 +95,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
     }
 
     if (
-      data.colors.some((color) => color.value !== "#111") ||
+      data.colors.some((color) => color.value !== "#111") &&
       selectedColors.length === 0
     ) {
       toast.error("Please select a color");
