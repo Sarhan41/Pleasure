@@ -10,7 +10,6 @@ import {
   getFeaturedProducts,
 } from "@/actions/Store/GetEverythingHomePage";
 
-
 export const revalidate = 1800; // 30 minutes
 
 const categoryOrder = [

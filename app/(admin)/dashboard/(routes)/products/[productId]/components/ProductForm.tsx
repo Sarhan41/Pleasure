@@ -3,7 +3,14 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Category, Color, Image, Product, Size } from "@prisma/client";
+import {
+  Category,
+  Color,
+  ColorName,
+  Image,
+  Product,
+  Size,
+} from "@prisma/client";
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -51,6 +58,7 @@ const formSchema = z.object({
   colorId: z
     .object({ name: z.string(), hex: z.string(), link: z.string().optional() })
     .array(),
+  colorNames: z.object({ name: z.string() }).array(),
   sizeId: z
     .object({
       name: z.string(),
@@ -61,6 +69,7 @@ const formSchema = z.object({
     })
     .array(),
 
+  isColorNameVisible: z.boolean().default(false).optional(),
   isNew: z.boolean().default(false).optional(),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
@@ -73,6 +82,7 @@ interface ProductFormProps {
     | (Product & {
         images: Image[];
         colors: Color[];
+        colorNames: ColorName[];
         sizes: Size[];
       })
     | null;
@@ -110,6 +120,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             hex: color.value,
             link: color.toLink || "",
           })),
+          colorNames: initialData.colorNames.map((colorName) => ({
+            name: colorName.name || "",
+          })),
           sizeId: initialData.sizes.map((size) => ({
             name: size.name || "",
             SKUvalue: size.SKUvalue || "",
@@ -127,6 +140,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           images: [],
           categoryId: "",
           colorId: [{ name: "", hex: "#000000", link: "" }],
+          colorNames: [
+            {
+              name: "",
+            },
+          ],
           sizeId: [
             {
               name: "",
@@ -139,6 +157,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           isFeatured: false,
           isArchived: false,
           isNew: false,
+          isColorNameVisible: false,
           description: "",
           additionalInfo: "",
         },
@@ -576,8 +595,60 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="colorNames"
+                render={({ field }) => (
+                  <FormItem className="max-sm:w-[35vw] w-[22vw] ">
+                    <FormLabel>Color Names</FormLabel>
+                    <div className="space-y-2">
+                      {field.value.map((color, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center space-x-2"
+                        >
+                          <Input
+                            className="w-[250px]"
+                            placeholder="Color Name"
+                            value={color.name}
+                            onChange={(e) =>
+                              field.onChange([
+                                ...field.value.slice(0, index),
+                                { ...color, name: e.target.value },
+                                ...field.value.slice(index + 1),
+                              ])
+                            }
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={() =>
+                              field.onChange([
+                                ...field.value.slice(0, index),
+                                ...field.value.slice(index + 1),
+                              ])
+                            }
+                          >
+                            X
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                    <Button
+                      type="button"
+                      onClick={() =>
+                        field.onChange([...field.value, { name: "" }])
+                      }
+                      className=""
+                    >
+                      Add Color Name
+                    </Button>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              <div className="flex gap-12 max-lg:flex-col justify-between w-full ">
+              <div className="flex gap-12 max-lg:flex-col flex-wrap justify-between w-full ">
                 <FormField
                   control={form.control}
                   name="isArchived"
@@ -635,6 +706,27 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                         <FormLabel>New</FormLabel>
                         <FormDescription>
                           This product will appear on the New page
+                        </FormDescription>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="isColorNameVisible"
+                  render={({ field }) => (
+                    <FormItem className=" flex flex-row space-x-3 space-y-0 rounded-md border p-4 items-start">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>Color Name Visible?</FormLabel>
+                        <FormDescription>
+                          Color Name will be visible on the product page
                         </FormDescription>
                       </div>
                       <FormMessage />

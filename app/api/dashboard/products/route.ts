@@ -29,6 +29,8 @@ export async function POST(req: Request) {
       description,
       additionalInfo,
       isNew,
+      isColorNameVisible,
+      colorNames,
     } = body;
 
     if (!name) {
@@ -67,6 +69,13 @@ export async function POST(req: Request) {
             ),
           },
         },
+        colorNames: {
+          createMany: {
+            data: colorNames.map((color: { name: string }) => ({
+              name: color.name,
+            })),
+          },
+        },
         description: description,
         additionalInfo: additionalInfo,
         sizes: {
@@ -96,6 +105,7 @@ export async function POST(req: Request) {
         isFeatured,
         isArchived,
         isNew,
+        isColorNameVisible,
       },
     });
 
@@ -105,7 +115,6 @@ export async function POST(req: Request) {
     return new NextResponse("Internal error", { status: 500 });
   }
 }
-
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -126,6 +135,7 @@ export async function GET(req: Request) {
         category: true,
         colors: true,
         sizes: true,
+        colorNames: true,
       },
       orderBy: {
         createdAt: "desc",

@@ -41,6 +41,7 @@ const ProductsPage = async () => {
     size: item.sizes.map((size) => size.name).join(", "),
     colorName: item.colors.map((color) => color.name).join(", "),
     colorHex: item.colors.map((color) => color.value).join(", "),
+    colorNameVisible: item.isColorNameVisible,
     createdAt: format(item.createdAt, "MMM do, yyyy"),
   }));
 

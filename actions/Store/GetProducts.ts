@@ -10,6 +10,7 @@ export const getProduct = cache(async (productName: string) => {
       category: true,
       images: { select: { url: true, id: true, productId: true } },
       colors: { select: { name: true, value: true, toLink: true } },
+      colorNames: { select: { name: true } },
       sizes: {
         select: {
           name: true,
@@ -33,6 +34,7 @@ export const getSuggestedProducts = cache(async (categoryId: string, productId: 
     },
     include: {
       category: true,
+      colorNames: true,
       images: { select: { url: true, id: true, productId: true } },
       colors: { select: { name: true, value: true, toLink: true } },
       sizes: true,

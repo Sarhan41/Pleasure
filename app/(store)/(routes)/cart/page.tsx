@@ -2,7 +2,7 @@ import Container from "@/components/Store/container";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import CartItem from "./components/CartItem";
-import Summary from "./components/Summary";
+import Summary from "./components/SummaryCart";
 import toast from "react-hot-toast";
 import ClearIcon from "./components/ClearIcon";
 import { Button } from "@/components/ui/button";

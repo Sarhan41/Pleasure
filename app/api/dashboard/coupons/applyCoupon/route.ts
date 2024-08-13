@@ -23,6 +23,20 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (coupon.minimumOrderAmount && !orderTotal) {
+      return NextResponse.json(
+        { error: "Order total is required." },
+        { status: 400 }
+      );
+    }
+
+    if (coupon.minimumOrderAmount && orderTotal < coupon.minimumOrderAmount) {
+      return NextResponse.json(
+        { error: "Minimum order amount not met." },
+        { status: 400 }
+      );
+    }
+
     const hasUsedCoupon = await db.usedCoupon.findFirst({
       where: { couponId: coupon.id, userId: userId },
     });

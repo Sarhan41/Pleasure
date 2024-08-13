@@ -32,6 +32,7 @@ import Description from "../ExtraDetails/Description";
 import { MotionSpan } from "@/constant/MotionElements";
 import { calculateDiscountPercentage } from "@/lib/calculateDiscountedPrice";
 import MainExtraDetails from "../ExtraDetails/MainDetails";
+import { getColorHexByName } from "@/lib/getColorHexByName";
 
 interface InfoProps {
   data: ProductType;
@@ -208,7 +209,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             Div For Closing Share Popup
           =============================================
       */}
-
+      {/* Info Pack */}
       {(isSharePopupOpen1 || isSharePopupOpen2) && (
         <div
           className="fixed inset-0 bg-transparent bg-opacity-50 z-40"
@@ -218,7 +219,6 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           }}
         />
       )}
-
       {/* =============================================
         Name Of The Product
          ==============================================
@@ -364,7 +364,6 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             =================================================================
          */}
       </div>
-
       <div className="flex flex-col my-4 gap-y-4">
         {/* =============================================
              Div For Available Sizes
@@ -538,6 +537,32 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           </div>
         </div>
 
+        {/* Colors Name if Visible */}
+
+        {data?.isColorNameVisible && (
+          <div className="flex flex-col -mt-8 gap-y-4">
+            <h3 className="font-semibold text-base md:text-lg text-black">
+              Colors:
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {data.colorNames
+                .filter((color) => color.name.toLowerCase() !== "none") // Filter out "none"
+                .map((color, index) => (
+                  <div
+                    key={index}
+                    className="px-3 py-1 border rounded-lg text-sm font-medium"
+                    style={{
+                      borderColor: getColorHexByName(color.name),
+                      color: getColorHexByName(color.name),
+                    }} // Dynamically set border and text color based on color name
+                  >
+                    {color.name}
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
+
         {/* Selected Colors */}
         {selectedColors.length > 0 && (
           <div className="mt-4 flex flex-col gap-y-4">
@@ -569,7 +594,6 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           </div>
         )}
       </div>
-
       {/* =============================================
           Div For Add To Cart And Add To Wishlist and Share 1
           =============================================
@@ -614,12 +638,10 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           </Button>
         </div>
       </div>
-
       {/* =============================================
            Div For Description
          =============================================
       */}
-
       <div className="mt-8">
         <MainExtraDetails
           description={data.description}
@@ -630,12 +652,10 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
       {/* 
           // ! Reviews Divs Will Be Added Here
 */}
-
       {/* =============================================
           Div For Add To Cart And Add To Wishlist and Share 2
           =============================================
       */}
-
       <div className="mt-10 flex items-center gap-x-6  py-7shadow-2xl shadow-gray-600 w-full justify-center relative">
         <div className="border-primary border-2 rounded-full">
           <IconButton

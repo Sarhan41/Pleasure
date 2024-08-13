@@ -20,6 +20,8 @@ export async function GET(
         images: true,
         category: true,
         colors: true,
+        colorNames: true,
+        sizes: true,
       },
     });
 
@@ -59,6 +61,8 @@ export async function PATCH(
       description,
       additionalInfo,
       isNew,
+      isColorNameVisible,
+      colorNames,
     } = body;
 
     if (!name) {
@@ -96,6 +100,9 @@ export async function PATCH(
         colors: {
           deleteMany: {},
         },
+        colorNames: {
+          deleteMany: {},
+        },
         sizes: {
           deleteMany: {},
         },
@@ -107,6 +114,7 @@ export async function PATCH(
         isFeatured,
         isArchived,
         isNew,
+        isColorNameVisible,
       },
     });
 
@@ -131,6 +139,13 @@ export async function PATCH(
                 toLink: color.link,
               })
             ),
+          },
+        },
+        colorNames: {
+          createMany: {
+            data: colorNames.map((color: { name: string }) => ({
+              name: color.name,
+            })),
           },
         },
         sizes: {

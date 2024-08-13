@@ -82,7 +82,7 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
       )}
 
       <li className="relative flex flex-row py-2 border rounded-lg my-2 justify-between items-center border-primary px-2 space-x-2">
-        <div className="absolute h-fit w-fit top-1 right-1">
+        <div className="absolute cursor-pointer h-fit w-fit top-1 right-1">
           <X height={3} width={3}
             className="h-4 w-4 p-1  rounded-full flex items-center justify-center bg-white border shadow-md  hover:scale-110 transition"
             onClick={() => removeItem(data.id)}

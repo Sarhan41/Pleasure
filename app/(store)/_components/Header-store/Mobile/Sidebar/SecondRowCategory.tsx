@@ -26,6 +26,18 @@ const SecondRowCategory = ({
 }: SecondRowCategoryProps) => {
   return (
     <div className="flex-1 overflow-y-auto p-4">
+      {/* Home Link */}
+      <div className="mb-2">
+        <Link
+          aria-label="Link"
+          href="/"
+          onClick={toggleSidebar}
+          className="flex items-center justify-between w-full px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-primary-100 transition-colors duration-200"
+        >
+          <div className="flex items-center gap-2">Home</div>
+        </Link>
+      </div>
+
       {categories.map((category) => (
         <div key={category.id} className="mb-2">
           <div className="flex items-center justify-between w-full px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-primary-100 transition-colors duration-200">
@@ -82,6 +94,18 @@ const SecondRowCategory = ({
           )}
         </div>
       ))}
+
+      {/* Offers Link */}
+      <div className="mt-4">
+        <Link
+          aria-label="Link"
+          href="/offers"
+          onClick={toggleSidebar}
+          className="flex items-center justify-between w-full px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-primary-100 transition-colors duration-200"
+        >
+          <div className="flex items-center gap-2">Offers</div>
+        </Link>
+      </div>
     </div>
   );
 };
