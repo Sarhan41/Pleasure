@@ -32,6 +32,7 @@ import Description from "../ExtraDetails/Description";
 import { MotionSpan } from "@/constant/MotionElements";
 import { calculateDiscountPercentage } from "@/lib/calculateDiscountedPrice";
 import MainExtraDetails from "../ExtraDetails/MainDetails";
+import { getColorHexByName } from "@/lib/getColorHexByName";
 
 interface InfoProps {
   data: ProductType;
@@ -539,7 +540,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         {/* Colors Name if Visible */}
 
         {data?.isColorNameVisible && (
-          <div className=" flex flex-col -mt-8 gap-y-4">
+          <div className="flex flex-col -mt-8 gap-y-4">
             <h3 className="font-semibold text-base md:text-lg text-black">
               Colors:
             </h3>
@@ -550,7 +551,10 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                   <div
                     key={index}
                     className="px-3 py-1 border rounded-lg text-sm font-medium"
-                    // style={{ borderColor: color.value, color: color.value }} // Assuming color has a hex property
+                    style={{
+                      borderColor: getColorHexByName(color.name),
+                      color: getColorHexByName(color.name),
+                    }} // Dynamically set border and text color based on color name
                   >
                     {color.name}
                   </div>
