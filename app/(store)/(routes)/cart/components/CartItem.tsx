@@ -114,7 +114,7 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
               : data.product.name}
           </p>
           <div className="flex flex-row items-start sm:items-center mt-1 sm:mt-2 space-x-2">
-            {data.color && (
+            {data.color.length > 0 && (
               <div className="flex flex-row items-start sm:items-center mt-1 sm:mt-2 space-x-2">
                 <div className="flex items-center space-x-1">
                   <h1 className="font-light px-1 sm:flex py-0.5 text-[10px] sm:text-xs">
