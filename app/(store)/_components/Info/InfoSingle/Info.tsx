@@ -239,6 +239,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             Div For Closing Share Popup
           =============================================
       */}
+      Info Single
       {(isSharePopupOpen1 || isSharePopupOpen2) && (
         <div
           className="fixed inset-0 bg-transparent bg-opacity-50 z-40"
@@ -568,6 +569,28 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             })}
           </div>
         </div>
+          {/* Colors Name if Visible */}
+
+          {data?.isColorNameVisible && (
+          <div className="mt-4 flex flex-col gap-y-4">
+            <h3 className="font-semibold text-base md:text-lg text-black">
+              Colors:
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {data.colors
+                .filter((color) => color.name.toLowerCase() !== "none") // Filter out "none"
+                .map((color, index) => (
+                  <div
+                    key={index}
+                    className="px-3 py-1 border rounded-lg text-sm font-medium"
+                    style={{ borderColor: color.value, color: color.value }} // Assuming color has a hex property
+                  >
+                    {color.name}
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
 
         {/* Selected Colors */}
         {selectedColors.length > 0 && isSelectedColorHidden === false && (

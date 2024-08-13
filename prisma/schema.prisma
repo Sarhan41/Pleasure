@@ -149,28 +149,40 @@ model Billboard {
 }
 
 model Product {
-  id          String      @id @default(uuid())
-  categoryId  String
-  category    Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  name        String
-  subname     String?
-  isFeatured  Boolean     @default(false)
-  isNew       Boolean     @default(false)
-  isArchived  Boolean     @default(false)
-  isColorNameVisible Boolean @default(false)
-  images      Image[]
-  colors      Color[]
-  sizes       Size[]
-  orderItems  OrderItem[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  Wishlist    Wishlist[]
-  CartItems   CartItems[]
-  reviews     Review[]
-  description String?
-  additionalInfo String?
+  id                 String      @id @default(uuid())
+  categoryId         String
+  category           Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  name               String
+  subname            String?
+  isFeatured         Boolean     @default(false)
+  isNew              Boolean     @default(false)
+  isArchived         Boolean     @default(false)
+  isColorNameVisible Boolean     @default(false)
+  images             Image[]
+  colors             Color[]
+  colorNames         ColorName[]
+  sizes              Size[]
+  orderItems         OrderItem[]
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  Wishlist           Wishlist[]
+  CartItems          CartItems[]
+  reviews            Review[]
+  description        String?
+  additionalInfo     String?
 
   @@index([categoryId])
+}
+
+model ColorName {
+  id        String   @id @default(uuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
 }
 
 model Color {

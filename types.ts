@@ -28,6 +28,10 @@ export interface Color {
   toLink?: string | null;
 }
 
+export interface colorName{
+  Name: string;
+}
+
 export interface Product {
   id: string;
   category: Category;
@@ -43,8 +47,12 @@ export interface Product {
   images: Image[];
   sizes: Size[];
   colors: Color[];
+  colorNames: colorName[];
   isNew: boolean;
+  isColorNameVisible: boolean;
 }
+
+
 
 export interface OrderItem {
   id: string;
