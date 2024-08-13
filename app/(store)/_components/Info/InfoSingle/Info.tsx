@@ -94,6 +94,14 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
       return;
     }
 
+    if (
+      data.colors.some((color) => color.value !== "#111") ||
+      selectedColors.length === 0
+    ) {
+      toast.error("Please select a color");
+      return;
+    }
+
     try {
       const response = await axios.get("/api/dashboard/cartItems");
       const cartItems = response.data;
@@ -240,7 +248,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             Div For Closing Share Popup
           =============================================
       */}
-      {/* Info Single */}
+      Info Single
       {(isSharePopupOpen1 || isSharePopupOpen2) && (
         <div
           className="fixed inset-0 bg-transparent bg-opacity-50 z-40"
@@ -534,8 +542,9 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
                 if (color.toLink) {
                   const productName = color.toLink?.replace(/ /g, "-");
                   window.open(`/product/${productName}`, "_blank");
+                } else {
+                  handleColorSelection(color.value);
                 }
-                handleColorSelection(color.value);
               };
 
               if (color.value !== "#111") {
