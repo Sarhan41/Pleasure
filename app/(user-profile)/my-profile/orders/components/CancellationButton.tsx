@@ -33,11 +33,10 @@ const CancellationButton: React.FC<CancellationButtonProps> = ({ orderId }) => {
 
   const handleCancelOrder = async () => {
     try {
-      await axios.patch("/api/dashboard/cancle-order", {
+      await axios.patch("/api/dashboard/cancel-order", {
         orderId,
         cancellationReason,
       });
-
       toast.success("Order cancelled successfully");
     } catch (error) {
       toast.error("Failed to cancel the order");
@@ -76,7 +75,7 @@ const CancellationButton: React.FC<CancellationButtonProps> = ({ orderId }) => {
             placeholder="Enter cancellation reason"
             value={cancellationReason}
             onChange={(e) => setCancellationReason(e.target.value)}
-            className="w-full border border-gray-300 rounded-md p-2 mb-4"
+            className="w-full border border-gray-300 rounded-lg p-2 mb-4"
           />
           <DialogFooter>
             <button
