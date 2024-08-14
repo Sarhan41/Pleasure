@@ -32,6 +32,9 @@ import Image from "next/image";
 import DownloadPdfButtonAdmin, {
   generatePdf,
 } from "./DownloadPDFButtonForAdmin";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface DataTableProps<TData> {
   data: TData[];
@@ -285,6 +288,8 @@ export function DataTable<TData extends OrderColumn>({
     getPaginationRowModel: getPaginationRowModel(),
   });
 
+  const router = useRouter();
+
   const handleBulkPrint = () => {
     const selectedOrderIds = Object.keys(selectedOrders).filter(
       (key) => selectedOrders[key]
@@ -305,6 +310,31 @@ export function DataTable<TData extends OrderColumn>({
     });
   };
 
+  const handleBulkDelete = async () => {
+    const selectedOrderIds = Object.keys(selectedOrders).filter(
+      (key) => selectedOrders[key]
+    );
+
+    if (selectedOrderIds.length === 0) {
+      console.error("No orders selected for deletion.");
+      return;
+    }
+
+    try {
+      await axios.delete("/api/dashboard/order/delete-order", {
+        data: {
+          orderIds: selectedOrderIds,
+        },
+      });
+      router.refresh();
+      toast.success("Selected orders deleted successfully");
+      router.push(`/dashboard/orders?reload=${Date.now()}`);
+    } catch (error) {
+      console.error("Error deleting orders:", error);
+      toast.error("Failed to delete selected orders");
+    }
+  };
+
   return (
     <div>
       <div className="flex items-center py-4">
@@ -317,12 +347,28 @@ export function DataTable<TData extends OrderColumn>({
           className="max-w-sm"
         />
       </div>
-      <Button
-        onClick={handleBulkPrint}
-        disabled={Object.keys(selectedOrders).length === 0}
-      >
-        Print Selected Invoices
-      </Button>
+      <div className="flex gap-4 mb-2">
+        {/* <Button
+          onClick={() => {
+            table.clearColumnFilters();
+          }}
+        >
+          Clear Filters
+        </Button> */}
+        <Button
+          onClick={handleBulkPrint}
+          disabled={Object.keys(selectedOrders).length === 0}
+        >
+          Print Selected Invoices
+        </Button>
+        <Button
+          onClick={handleBulkDelete}
+          disabled={Object.keys(selectedOrders).length === 0}
+        >
+          Delete Selected Orders
+        </Button>
+      </div>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>

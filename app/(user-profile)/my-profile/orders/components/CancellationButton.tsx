@@ -36,7 +36,7 @@ const CancellationButton: React.FC<CancellationButtonProps> = ({ orderId }) => {
 
   const handleCancelOrder = async () => {
     try {
-      await axios.patch("/api/dashboard/cancel-order", {
+      await axios.patch("/api/dashboard/order/cancel-order", {
         orderId,
         cancellationReason,
       });
