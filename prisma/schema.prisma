@@ -280,6 +280,9 @@ model Order {
   user       User        @relation(fields: [userId], references: [id])
   couponId   String?
   coupon     Coupon?     @relation(fields: [couponId], references: [id])
+  canceled  Boolean     @default(false)
+  cancellationReason String?
+  canceledAt DateTime?
 }
 
 model OrderItem {
