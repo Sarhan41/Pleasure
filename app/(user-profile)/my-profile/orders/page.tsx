@@ -3,9 +3,8 @@ import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import Image from "next/image";
 import Link from "next/link";
-import DownloadPdfButton from "./DownloadPDFButton";
 import { redirect } from "next/navigation";
-import OrderItem from "./OrderItem";
+import OrderItem from "./components/OrderItem";
 
 const MyProfileOrdersPage = async () => {
   const user = await currentUser();

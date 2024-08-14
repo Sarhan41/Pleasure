@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import DownloadPdfButton from "./DownloadPDFButton";
+import CancellationButton from "./CancellationButton";
 
 interface OrderItemProps {
   id: string;
@@ -76,8 +77,11 @@ const OrderItem: React.FC<OrderItemComponentProps> = ({ order, userName }) => {
           );
         })}
       </ul>
+      <div className="flex">
+
       <DownloadPdfButton order={order} userName={userName} />
       <CancellationButton />
+      </div>
     </div>
   );
 };

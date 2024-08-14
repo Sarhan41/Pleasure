@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
   try {
     const order = await db.order.update({
       where: { id: orderId },
-      data: { status: "Cancelled" },
+      data: { status: "Cancelled", canceledAt: new Date(), canceled: true },
     });
 
     return NextResponse.json({ order }, { status: 200 });
