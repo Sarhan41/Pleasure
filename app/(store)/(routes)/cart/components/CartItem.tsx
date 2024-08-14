@@ -38,7 +38,7 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
   const onProductClick = () => {
     const productName = data.product.name.replace(/\s+/g, "-");
 
-    window.open(`/product/${productName}`, '_blank');
+    window.open(`/product/${productName}`, "_blank");
   };
 
   const onPlusClick = async () => {
@@ -83,7 +83,9 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
 
       <li className="relative flex flex-row py-2 border rounded-lg my-2 justify-between items-center border-primary px-2 space-x-2">
         <div className="absolute cursor-pointer h-fit w-fit top-1 right-1">
-          <X height={3} width={3}
+          <X
+            height={3}
+            width={3}
             className="h-4 w-4 p-1  rounded-full flex items-center justify-center bg-white border shadow-md  hover:scale-110 transition"
             onClick={() => removeItem(data.id)}
           />
@@ -112,19 +114,24 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
               : data.product.name}
           </p>
           <div className="flex flex-row items-start sm:items-center mt-1 sm:mt-2 space-x-2">
-            {data.color && (
-              <div className="flex items-center space-x-1">
-                <p className="text-xs text-gray-500">
-                  Colors: {data.color.map((color) => color.name).join(", ")}
-                </p>
-                <div className="flex space-x-1">
-                  {data.color.map((color, idx) => (
-                    <span
-                      key={idx}
-                      style={{ backgroundColor: color.value }}
-                      className="block h-3 w-3 rounded-sm border border-gray-600"
-                    />
-                  ))}
+            {data.color.length > 0 && (
+              <div className="flex flex-row items-start sm:items-center mt-1 sm:mt-2 space-x-2">
+                <div className="flex items-center space-x-1">
+                  <h1 className="font-light px-1 sm:flex py-0.5 text-[10px] sm:text-xs">
+                    <span className="font-medium hidden mr-1 sm:flex">
+                      Colors:
+                    </span>
+                    {/* {data.color.map((color) => color.name).join(", ")} */}
+                  </h1>
+                  <div className="flex space-x-1">
+                    {data.color.map((color, idx) => (
+                      <span
+                        key={idx}
+                        style={{ backgroundColor: color.value }}
+                        className="block h-3 w-3 rounded-sm border border-gray-600"
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             )}

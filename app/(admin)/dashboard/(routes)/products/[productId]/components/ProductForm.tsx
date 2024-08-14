@@ -523,7 +523,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                             onValueChange={(value) =>
                               field.onChange([
                                 ...field.value.slice(0, index),
-                                { ...colorId, link: value },
+                                {
+                                  ...colorId,
+                                  link: value === "none" ? "" : value,
+                                },
                                 ...field.value.slice(index + 1),
                               ])
                             }
@@ -547,6 +550,15 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                                 />
                               </div>
                               <SelectViewport>
+                                {/* Option to deselect the product */}
+                                <SelectItem value="none">
+                                  <SelectItemText>None</SelectItemText>
+                                  <SelectItemIndicator>
+                                    {/* <CheckIcon /> */}
+                                  </SelectItemIndicator>
+                                </SelectItem>
+
+                                {/* Existing product options */}
                                 {filteredProducts.map((product) => (
                                   <SelectItem
                                     key={product.id}

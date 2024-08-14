@@ -26,4 +26,6 @@ export interface OrderColumn {
   status: string;
   items: OrderItem[];
   couponCode: string; // Add coupon code
+  canceledAt: string | null | undefined;
+  cancellationReason: string;
 }

@@ -29,15 +29,24 @@ import { OrderColumn } from "./order-types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import DownloadPdfButtonAdmin, { generatePdf } from "./DownloadPDFButtonForAdmin";
+import DownloadPdfButtonAdmin, {
+  generatePdf,
+} from "./DownloadPDFButtonForAdmin";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface DataTableProps<TData> {
   data: TData[];
 }
 
-export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TData>) {
+export function DataTable<TData extends OrderColumn>({
+  data,
+}: DataTableProps<TData>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [selectedOrders, setSelectedOrders] = useState<Record<string, boolean>>({});
+  const [selectedOrders, setSelectedOrders] = useState<Record<string, boolean>>(
+    {}
+  );
   const [isAllSelected, setIsAllSelected] = useState(false);
 
   useEffect(() => {
@@ -112,11 +121,23 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
     {
       accessorKey: "status",
       header: "Status",
+      cell: ({ row }) => (
+        <span
+          className={
+            row.original.status === "Cancelled"
+              ? "text-red-600 font-semibold"
+              : ""
+          }
+        >
+          {row.original.status}
+        </span>
+      ),
     },
     {
       accessorKey: "couponCode",
       header: "Coupon Code",
-      cell: (info) => (info.getValue() === "No Coupon" ? "No" : info.getValue()),
+      cell: (info) =>
+        info.getValue() === "No Coupon" ? "No" : info.getValue(),
     },
     {
       id: "details",
@@ -126,77 +147,112 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
           <DialogTrigger asChild>
             <Button>Details</Button>
           </DialogTrigger>
-          <DialogContent className="w-full max-w-4xl p-6 rounded-lg shadow-lg">
+          <DialogContent className="w-full max-w-4xl  mx-auto p-6 rounded-lg shadow-lg overflow-y-auto max-h-[90vh]">
             <DialogTitle className="text-2xl font-semibold text-gray-900">
               Order Details
             </DialogTitle>
             <DialogDescription>
               <div className="space-y-4">
                 <div>
-                  <span className="font-semibold">Phone:</span> {row.original.phone}
+                  <span className="font-semibold">Phone:</span>{" "}
+                  {row.original.phone}
                 </div>
                 <div>
-                  <span className="font-semibold">Address:</span> {row.original.address}
+                  <span className="font-semibold">Address:</span>{" "}
+                  {row.original.address}
                 </div>
                 <div>
-                  <span className="font-semibold">Email:</span> {row.original.email}
+                  <span className="font-semibold">Email:</span>{" "}
+                  {row.original.email}
                 </div>
                 <div>
                   <span className="font-semibold">Total Payment:</span> ₹
                   {row.original.totalPayment}
                 </div>
                 <div>
-                  <span className="font-semibold">Coupon Code:</span> {row.original.couponCode}
+                  <span className="font-semibold">Coupon Code:</span>{" "}
+                  {row.original.couponCode}
                 </div>
                 <div>
-                  <span className="font-semibold">Paid:</span> {row.original.isPaid ? "Yes" : "No"}
+                  <span className="font-semibold">Paid:</span>{" "}
+                  {row.original.isPaid ? "Yes" : "No"}
                 </div>
                 <div>
-                  <span className="font-semibold">Status:</span> {row.original.status}
+                  <span className="font-semibold">Status:</span>{" "}
+                  {row.original.status}
                 </div>
+                {row.original.status === "Cancelled" && (
+                  <div>
+                    <span className="font-semibold text-red-600">
+                      Cancellation Reason:
+                    </span>{" "}
+                    {row.original.cancellationReason}
+                    <br />
+                    <span className="font-semibold text-red-600">
+                      Canceled At:
+                    </span>{" "}
+                    {row.original.canceledAt}
+                  </div>
+                )}
                 <div>
                   <span className="font-semibold">Products:</span>
-                  <ul className="space-y-2 mt-2">
-                    {row.original.items.map((item, index) => (
-                      <li key={index} className="flex items-center">
-                        <Image
-                          src={item.imageUrl}
-                          alt=""
-                          width={50}
-                          height={50}
-                          className="rounded-md mr-4"
-                        />
-                        <div>
-                          <p className="font-medium">{item.productName}</p>
-                          <p className="text-sm text-gray-500">Size: {item.size}</p>
-                          <p className="text-sm text-gray-500">SizeSKU: {item.sizeSKU}</p>
-                          {item.color && (
-                            <div>
-                              <p className="text-sm text-gray-500">
-                                Color: {item.color.map((color) => color.name).join(", ")}
-                              </p>
-                              <div className="flex space-x-1">
-                                {item.color.map((color, idx) => (
-                                  <span
-                                    key={idx}
-                                    style={{
-                                      backgroundColor: color.value,
-                                    }}
-                                    className="block h-4 w-4 rounded-sm border border-gray-600"
-                                  />
-                                ))}
+                  <div className="mt-2">
+                    <ul className="space-y-2">
+                      {row.original.items.map((item, index) => (
+                        <li key={index} className="flex items-center">
+                          <Image
+                            src={item.imageUrl}
+                            alt=""
+                            width={50}
+                            height={50}
+                            className="rounded-md mr-4"
+                          />
+                          <div>
+                            <p className="font-medium">{item.productName}</p>
+                            <p className="text-sm text-gray-500">
+                              Size: {item.size}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              SizeSKU: {item.sizeSKU}
+                            </p>
+                            {item.color && (
+                              <div>
+                                <p className="text-sm text-gray-500">
+                                  Color:{" "}
+                                  {item.color
+                                    .map((color) => color.name)
+                                    .join(", ")}
+                                </p>
+                                <div className="flex space-x-1">
+                                  {item.color.map((color, idx) => (
+                                    <span
+                                      key={idx}
+                                      style={{
+                                        backgroundColor: color.value,
+                                      }}
+                                      className="block h-4 w-4 rounded-sm border border-gray-600"
+                                    />
+                                  ))}
+                                </div>
                               </div>
-                            </div>
-                          )}
-                          <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
-                          <p className="text-sm text-gray-500">Price: ₹{item.price}</p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
+                            )}
+                            <p className="text-sm text-gray-500">
+                              Quantity: {item.quantity}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              Price: ₹{item.price}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
                 <div>
-                  <DownloadPdfButtonAdmin order={row.original} userName={row.original.userName} />
+                  <DownloadPdfButtonAdmin
+                    order={row.original}
+                    userName={row.original.userName}
+                  />
                 </div>
               </div>
             </DialogDescription>
@@ -204,12 +260,16 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
         </Dialog>
       ),
     },
+
     {
       id: "Download",
       header: "Download Invoice",
       cell: ({ row }) => (
         <div>
-          <DownloadPdfButtonAdmin order={row.original} userName={row.original.userName} />
+          <DownloadPdfButtonAdmin
+            order={row.original}
+            userName={row.original.userName}
+          />
         </div>
       ),
     },
@@ -227,6 +287,8 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+  const router = useRouter();
 
   const handleBulkPrint = () => {
     const selectedOrderIds = Object.keys(selectedOrders).filter(
@@ -248,6 +310,31 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
     });
   };
 
+  const handleBulkDelete = async () => {
+    const selectedOrderIds = Object.keys(selectedOrders).filter(
+      (key) => selectedOrders[key]
+    );
+
+    if (selectedOrderIds.length === 0) {
+      console.error("No orders selected for deletion.");
+      return;
+    }
+
+    try {
+      await axios.delete("/api/dashboard/order/delete-order", {
+        data: {
+          orderIds: selectedOrderIds,
+        },
+      });
+      router.refresh();
+      toast.success("Selected orders deleted successfully");
+      router.push(`/dashboard/orders?reload=${Date.now()}`);
+    } catch (error) {
+      console.error("Error deleting orders:", error);
+      toast.error("Failed to delete selected orders");
+    }
+  };
+
   return (
     <div>
       <div className="flex items-center py-4">
@@ -260,9 +347,28 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
           className="max-w-sm"
         />
       </div>
-      <Button onClick={handleBulkPrint} disabled={Object.keys(selectedOrders).length === 0}>
-        Print Selected Invoices
-      </Button>
+      <div className="flex gap-4 mb-2">
+        {/* <Button
+          onClick={() => {
+            table.clearColumnFilters();
+          }}
+        >
+          Clear Filters
+        </Button> */}
+        <Button
+          onClick={handleBulkPrint}
+          disabled={Object.keys(selectedOrders).length === 0}
+        >
+          Print Selected Invoices
+        </Button>
+        <Button
+          onClick={handleBulkDelete}
+          disabled={Object.keys(selectedOrders).length === 0}
+        >
+          Delete Selected Orders
+        </Button>
+      </div>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>

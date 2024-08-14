@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
 
     const discountValue =
       coupon.discountType === "PERCENTAGE"
-        ? (orderTotal * coupon.discountValue) / 100
+        ? Math.round((orderTotal * coupon.discountValue) / 100)
         : coupon.discountValue;
 
     return NextResponse.json(
