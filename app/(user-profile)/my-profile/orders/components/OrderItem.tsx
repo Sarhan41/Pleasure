@@ -80,7 +80,11 @@ const OrderItem: React.FC<OrderItemComponentProps> = ({ order, userName }) => {
       <div className="flex">
 
       <DownloadPdfButton order={order} userName={userName} />
-      <CancellationButton />
+      <CancellationButton orderId={
+        order.id
+      }
+        
+      />
       </div>
     </div>
   );

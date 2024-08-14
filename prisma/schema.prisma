@@ -281,6 +281,7 @@ model Order {
   couponId   String?
   coupon     Coupon?     @relation(fields: [couponId], references: [id])
   canceled  Boolean     @default(false)
+  cancellationReason String?
   canceledAt DateTime?
 }
 
