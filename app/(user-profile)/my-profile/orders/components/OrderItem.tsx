@@ -5,6 +5,8 @@ import CancellationButton from "./CancellationButton";
 
 interface OrderItemProps {
   id: string;
+  canceledAt?: Date | null | undefined;
+  canceled?: boolean;
   totalPayment: number;
   status: string;
   isPaid: boolean;
@@ -77,14 +79,24 @@ const OrderItem: React.FC<OrderItemComponentProps> = ({ order, userName }) => {
           );
         })}
       </ul>
+      {order.canceled && (
+        <div className="p-4 bg-red-50 border border-red-200 rounded-md mb-6">
+          <p className="text-red-600 font-semibold">Order Cancelled</p>
+          {order.canceledAt && (
+            <p className="text-red-500 text-sm">
+              {new Date(order.canceledAt).toLocaleDateString("en-US", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+          )}
+        </div>
+      )}
       <div className="flex justify-between items-center w-full">
-
-      <DownloadPdfButton order={order} userName={userName} />
-      <CancellationButton orderId={
-        order.id
-      }
-        
-      />
+        <DownloadPdfButton order={order} userName={userName} />
+        <CancellationButton orderId={order.id} />
       </div>
     </div>
   );

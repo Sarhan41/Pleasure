@@ -14,6 +14,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
 
 interface CancellationButtonProps {
   orderId: string;
@@ -23,6 +24,8 @@ const CancellationButton: React.FC<CancellationButtonProps> = ({ orderId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [cancellationReason, setCancellationReason] = useState("");
+
+  const router = useRouter();
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const openDialog = () => {
@@ -37,9 +40,11 @@ const CancellationButton: React.FC<CancellationButtonProps> = ({ orderId }) => {
         orderId,
         cancellationReason,
       });
+      router.refresh();
       toast.success("Order cancelled successfully");
+      router.push(`/my-profile/orders?reload=${Date.now()}`);
     } catch (error) {
-      toast.error("Failed to cancel the order");
+      toast.error("Failed to cancel the order, Please try again");
     } finally {
       closeDialog();
     }
