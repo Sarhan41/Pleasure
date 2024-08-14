@@ -29,9 +29,7 @@ import { OrderColumn } from "./order-types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import DownloadPdfButtonAdmin, {
-  generatePdf,
-} from "./DownloadPDFButtonForAdmin";
+import { generatePdf } from "./DownloadPDFButtonForAdmin";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -39,6 +37,16 @@ import { useRouter } from "next/navigation";
 interface DataTableProps<TData> {
   data: TData[];
 }
+
+import dynamic from "next/dynamic";
+
+// Dynamically import the component with ssr: false
+const DownloadPdfButtonAdmin = dynamic(
+  () => import("./DownloadPDFButtonForAdmin"),
+  { ssr: false }
+);
+
+export default DownloadPdfButtonAdmin;
 
 export function DataTable<TData extends OrderColumn>({
   data,
