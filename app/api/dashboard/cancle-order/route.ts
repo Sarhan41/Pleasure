@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
-export async function POST(request: NextRequest) {
+export async function PATCH(request: NextRequest) {
   const { orderId, cancellationReason } = await request.json();
 
   try {

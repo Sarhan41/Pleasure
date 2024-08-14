@@ -77,7 +77,7 @@ const OrderItem: React.FC<OrderItemComponentProps> = ({ order, userName }) => {
           );
         })}
       </ul>
-      <div className="flex">
+      <div className="flex justify-between items-center w-full">
 
       <DownloadPdfButton order={order} userName={userName} />
       <CancellationButton orderId={
