@@ -1,4 +1,3 @@
-// pages/admin/orders.tsx
 import { db } from "@/lib/db";
 import { format } from "date-fns";
 import { OrderColumn } from "./_components/order-types";
@@ -12,7 +11,7 @@ const fetchOrders = async () => {
     include: {
       address: true,
       user: true,
-      coupon: true, // Include coupon information
+      coupon: true,
       orderItems: {
         include: {
           product: {
@@ -21,7 +20,7 @@ const fetchOrders = async () => {
               images: true,
             },
           },
-          color: true, // Include color data
+          color: true,
         },
       },
     },
@@ -37,7 +36,7 @@ const fetchOrders = async () => {
       size: item.size,
       color: item.color.map((c) => ({
         value: c.value,
-        name: c.name, // Include color name
+        name: c.name,
       })),
       sizeSKU: item.sizeSKU,
       quantity: item.quantity,
@@ -56,7 +55,11 @@ const fetchOrders = async () => {
     createdAt: format(order.createdAt, "MMM do, yyyy"),
     totalPayment: order.total,
     status: order.status,
-    couponCode: order.coupon ? order.coupon.code : "No Coupon", // Add coupon code information
+    couponCode: order.coupon ? order.coupon.code : "No Coupon",
+    canceledAt: order.canceledAt
+      ? format(order.canceledAt, "MMM do, yyyy")
+      : "",
+    cancellationReason: order.cancellationReason || "",
   }));
 
   return formattedOrders;

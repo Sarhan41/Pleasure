@@ -112,6 +112,17 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
     {
       accessorKey: "status",
       header: "Status",
+      cell: ({ row }) => (
+        <span
+          className={
+            row.original.status === "Cancelled"
+              ? "text-red-600 font-semibold"
+              : ""
+          }
+        >
+          {row.original.status}
+        </span>
+      ),
     },
     {
       accessorKey: "couponCode",
@@ -154,6 +165,19 @@ export function DataTable<TData extends OrderColumn>({ data }: DataTableProps<TD
                 <div>
                   <span className="font-semibold">Status:</span> {row.original.status}
                 </div>
+                {row.original.status === "Cancelled" && (
+                  <div>
+                    <span className="font-semibold text-red-600">
+                      Cancellation Reason:
+                    </span>{" "}
+                    {row.original.cancellationReason}
+                    <br />
+                    <span className="font-semibold text-red-600">
+                      Canceled At:
+                    </span>{" "}
+                    {row.original.canceledAt}
+                  </div>
+                )}
                 <div>
                   <span className="font-semibold">Products:</span>
                   <ul className="space-y-2 mt-2">
