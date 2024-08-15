@@ -266,23 +266,23 @@ model CartColor {
 }
 
 model Order {
-  id         String      @id @default(uuid())
-  orderItems OrderItem[]
-  total      Int
-  status     String
-  pdfUrl     String?
-  isPaid     Boolean     @default(false)
-  addressId  String
-  address    Address     @relation(fields: [addressId], references: [id])
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  userId     String
-  user       User        @relation(fields: [userId], references: [id])
-  couponId   String?
-  coupon     Coupon?     @relation(fields: [couponId], references: [id])
-  canceled  Boolean     @default(false)
+  id                 String      @id @default(uuid())
+  orderItems         OrderItem[]
+  total              Int
+  status             String
+  pdfUrl             String?
+  isPaid             Boolean     @default(false)
+  addressId          String
+  address            Address     @relation(fields: [addressId], references: [id])
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  userId             String
+  user               User        @relation(fields: [userId], references: [id])
+  couponId           String?
+  coupon             Coupon?     @relation(fields: [couponId], references: [id])
+  canceled           Boolean     @default(false)
   cancellationReason String?
-  canceledAt DateTime?
+  canceledAt         DateTime?
 }
 
 model OrderItem {
@@ -315,26 +315,13 @@ model OrderIemColor {
 }
 
 model Blog {
-  id      String  @id @default(uuid())
-  title   String
-  content String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  smallImagesBlog smallImagesBlog[]
-  ImagesBlog      ImagesBlog[]
-}
-
-model smallImagesBlog {
-  id        String   @id @default(uuid())
-  blogId    String
-  blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
-  imageUrl  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([blogId])
+  id         String       @id @default(uuid())
+  name       String
+  subname    String?
+  content    String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  ImagesBlog ImagesBlog[]
 }
 
 model ImagesBlog {
