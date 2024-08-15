@@ -11,10 +11,6 @@ const BlogPage = async ({ params }: { params: { blogId: string } }) => {
     },
   });
 
-  if (!blog) {
-    return <div>Blog not found</div>;
-  }
-
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">

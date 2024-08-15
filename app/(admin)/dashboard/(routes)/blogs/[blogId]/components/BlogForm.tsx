@@ -60,7 +60,9 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
           name: initialData.name,
           subname: initialData.subname || "",
           content: initialData.content || "",
-          images: initialData.ImagesBlog.map((image) => ({ url: image.url })),
+          images: initialData.ImagesBlog.map((image) => ({
+            url: image.url,
+          })),
         }
       : {
           name: "",
@@ -78,11 +80,11 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
       } else {
         await axios.post(`/api/blog`, data);
       }
-      toast.success(toastMessage);
       router.refresh();
       router.push(`/dashboard/blogs`);
+      toast.success(toastMessage);
     } catch (error) {
-      toast.error("Something went wrong.");
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -92,9 +94,9 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
     try {
       setLoading(true);
       await axios.delete(`/api/blog/${params.blogId}`);
-      toast.success("Blog deleted.");
       router.refresh();
       router.push(`/dashboard/blogs`);
+      toast.success("Blog deleted.");
     } catch (error) {
       toast.error("Something went wrong.");
     } finally {
@@ -115,6 +117,7 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
       />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
+
         {initialData && (
           <Button
             disabled={loading}
@@ -127,6 +130,7 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
         )}
       </div>
       <Separator />
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -146,9 +150,9 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
                       field.onChange(urls.map((url) => ({ url })))
                     }
                     onRemove={(url) =>
-                      field.onChange(
-                        field.value.filter((image) => image.url !== url)
-                      )
+                      field.onChange([
+                        ...field.value.filter((current) => current.url !== url),
+                      ])
                     }
                     isDraggable={true}
                   />
@@ -157,6 +161,7 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="name"
@@ -174,6 +179,7 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="subname"
@@ -191,6 +197,7 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="content"
@@ -210,6 +217,7 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
               </FormItem>
             )}
           />
+
           <Button disabled={loading} type="submit">
             {action}
           </Button>
