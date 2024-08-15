@@ -46,7 +46,7 @@ import {
   SelectItemText,
   SelectViewport,
 } from "@radix-ui/react-select";
-import { CheckIcon, ChevronDownIcon } from "@radix-ui/react-icons";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 
 const formSchema = z.object({
   name: z.string().min(1),

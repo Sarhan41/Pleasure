@@ -1,16 +1,13 @@
 import { db } from "@/lib/db";
-import { ProductForm } from "./components/ProductForm";
+import { BlogForm } from "./components/BlogForm";
 
-const BlogPage = async ({ params }: { params: { productId: string } }) => {
-  const product = await db.product.findUnique({
+const BlogPage = async ({ params }: { params: { blogId: string } }) => {
+  const blog = await db.blogs.findUnique({
     where: {
-      id: params.productId,
+      id: params.blogId,
     },
     include: {
-      images: true,
-      colors: true,
-      sizes: true,
-      colorNames: true,
+      ImagesBlog: true,
     },
   });
 
@@ -21,8 +18,8 @@ const BlogPage = async ({ params }: { params: { productId: string } }) => {
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6 ">
-        <ProductForm
-          initialData={product}
+        <BlogForm
+          initialData={blog}
           categories={categories}
           products={products}
         />
