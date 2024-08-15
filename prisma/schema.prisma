@@ -314,11 +314,14 @@ model OrderIemColor {
   @@index([orderItemId])
 }
 
-model Blog {
+model Blogs {
   id         String       @id @default(uuid())
   name       String
   subname    String?
   content    String
+  isFeatured Boolean      @default(false)
+  isArchived Boolean      @default(false)
+  isNew      Boolean      @default(false)
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
   ImagesBlog ImagesBlog[]
@@ -327,7 +330,7 @@ model Blog {
 model ImagesBlog {
   id        String   @id @default(uuid())
   blogId    String
-  blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  blog      Blogs     @relation(fields: [blogId], references: [id], onDelete: Cascade)
   imageUrl  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
