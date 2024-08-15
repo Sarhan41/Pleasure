@@ -11,21 +11,16 @@ const BlogPage = async ({ params }: { params: { blogId: string } }) => {
     },
   });
 
-  const products = await db.product.findMany({});
-
-  const categories = await db.category.findMany({});
+  if (!blog) {
+    return <div>Blog not found</div>;
+  }
 
   return (
     <div className="flex-col">
-      <div className="flex-1 space-y-4 p-8 pt-6 ">
-        <BlogForm
-          initialData={blog}
-          categories={categories}
-          products={products}
-        />
+      <div className="flex-1 space-y-4 p-8 pt-6">
+        <BlogForm initialData={blog} />
       </div>
     </div>
-    // hello
   );
 };
 

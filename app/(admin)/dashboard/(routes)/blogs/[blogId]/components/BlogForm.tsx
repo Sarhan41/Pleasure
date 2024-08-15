@@ -23,6 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { AlertModal } from "@/app/(admin)/_components/Alert-modal";
 import ImageUpload from "./Image-upload-drag-fix";
+import { Blogs, ImagesBlog } from "@prisma/client";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -34,13 +35,11 @@ const formSchema = z.object({
 type BlogFormValues = z.infer<typeof formSchema>;
 
 interface BlogFormProps {
-  initialData: {
-    id: string;
-    name: string;
-    subname?: string;
-    content: string;
-    images: { url: string }[];
-  } | null;
+  initialData:
+    | (Blogs & {
+        ImagesBlog: { url: string }[];
+      })
+    | null;
 }
 
 export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
@@ -56,12 +55,19 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
 
   const form = useForm<BlogFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData || {
-      name: "",
-      subname: "",
-      content: "",
-      images: [],
-    },
+    defaultValues: initialData
+      ? {
+          name: initialData.name,
+          subname: initialData.subname || "",
+          content: initialData.content || "",
+          images: initialData.ImagesBlog.map((image) => ({ url: image.url })),
+        }
+      : {
+          name: "",
+          subname: "",
+          content: "",
+          images: [],
+        },
   });
 
   const onSubmit = async (data: BlogFormValues) => {
@@ -72,11 +78,11 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
       } else {
         await axios.post(`/api/blog`, data);
       }
+      toast.success(toastMessage);
       router.refresh();
       router.push(`/dashboard/blogs`);
-      toast.success(toastMessage);
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error("Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -86,9 +92,9 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
     try {
       setLoading(true);
       await axios.delete(`/api/blog/${params.blogId}`);
+      toast.success("Blog deleted.");
       router.refresh();
       router.push(`/dashboard/blogs`);
-      toast.success("Blog deleted.");
     } catch (error) {
       toast.error("Something went wrong.");
     } finally {
@@ -109,7 +115,6 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
       />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
-
         {initialData && (
           <Button
             disabled={loading}
@@ -117,12 +122,11 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
             size="sm"
             onClick={() => setOpen(true)}
           >
-            <Trash className="h-4 w-4 " />
+            <Trash className="h-4 w-4" />
           </Button>
         )}
       </div>
       <Separator />
-
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -142,9 +146,9 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
                       field.onChange(urls.map((url) => ({ url })))
                     }
                     onRemove={(url) =>
-                      field.onChange([
-                        ...field.value.filter((current) => current.url !== url),
-                      ])
+                      field.onChange(
+                        field.value.filter((image) => image.url !== url)
+                      )
                     }
                     isDraggable={true}
                   />

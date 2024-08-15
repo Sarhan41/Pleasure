@@ -331,7 +331,7 @@ model ImagesBlog {
   id        String   @id @default(uuid())
   blogId    String
   blog      Blogs     @relation(fields: [blogId], references: [id], onDelete: Cascade)
-  imageUrl  String
+  url  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
