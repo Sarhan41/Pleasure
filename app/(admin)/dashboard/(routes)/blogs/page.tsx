@@ -7,7 +7,7 @@ import { BlogColumn } from "./components/columns";
 import { currentRole, currentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
-const BlogMainPage = async () => {
+const BlogsMainPage = async () => {
   const user = await currentUser();
   const role = await currentRole();
 
@@ -45,4 +45,4 @@ const BlogMainPage = async () => {
   );
 };
 
-export default BlogMainPage;
+export default BlogsMainPage;

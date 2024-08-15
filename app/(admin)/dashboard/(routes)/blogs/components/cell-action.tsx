@@ -16,10 +16,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { AlertModal } from "@/app/(admin)/_components/Alert-modal";
 
-import { ProductColumn } from "./columns";
+import { BlogColumn } from "./columns";
 
 interface CellActionProps {
-  data: ProductColumn;
+  data: BlogColumn;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {

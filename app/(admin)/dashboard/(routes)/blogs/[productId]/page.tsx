@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { ProductForm } from "./components/ProductForm";
 
-const ProductPage = async ({ params }: { params: { productId: string } }) => {
+const BlogPage = async ({ params }: { params: { productId: string } }) => {
   const product = await db.product.findUnique({
     where: {
       id: params.productId,
@@ -32,4 +32,4 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
   );
 };
 
-export default ProductPage;
+export default BlogPage;
