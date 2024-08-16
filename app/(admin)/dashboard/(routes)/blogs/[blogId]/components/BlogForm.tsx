@@ -21,6 +21,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { AlertModal } from "@/app/(admin)/_components/Alert-modal";
 import ImageUpload from "./Image-upload-drag-fix";
 import { Blogs, ImagesBlog } from "@prisma/client";
@@ -30,6 +31,9 @@ const formSchema = z.object({
   subname: z.string().optional(),
   content: z.string().min(1),
   images: z.object({ url: z.string() }).array(),
+  isFeatured: z.boolean().optional(),
+  isNew: z.boolean().optional(),
+  isArchived: z.boolean().optional(),
 });
 
 type BlogFormValues = z.infer<typeof formSchema>;
@@ -63,12 +67,18 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
           images: initialData.ImagesBlog.map((image) => ({
             url: image.url,
           })),
+          isFeatured: initialData.isFeatured || false,
+          isNew: initialData.isNew || false,
+          isArchived: initialData.isArchived || false,
         }
       : {
           name: "",
           subname: "",
           content: "",
           images: [],
+          isFeatured: false,
+          isNew: false,
+          isArchived: false,
         },
   });
 
@@ -76,9 +86,9 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(`/api/blog/${params.blogId}`, data);
+        await axios.patch(`/api/dashboard/blog/${params.blogId}`, data);
       } else {
-        await axios.post(`/api/blog`, data);
+        await axios.post(`/api/dashboard/blog`, data);
       }
       router.refresh();
       router.push(`/dashboard/blogs`);
@@ -93,7 +103,7 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/blog/${params.blogId}`);
+      await axios.delete(`/api/dashboard/blog/${params.blogId}`);
       router.refresh();
       router.push(`/dashboard/blogs`);
       toast.success("Blog deleted.");
@@ -214,6 +224,57 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
                   />
                 </FormControl>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="isFeatured"
+            render={({ field }) => (
+              <FormItem className="flex items-center space-x-3">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    disabled={loading}
+                  />
+                </FormControl>
+                <FormLabel>Featured</FormLabel>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="isNew"
+            render={({ field }) => (
+              <FormItem className="flex items-center space-x-3">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    disabled={loading}
+                  />
+                </FormControl>
+                <FormLabel>New</FormLabel>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="isArchived"
+            render={({ field }) => (
+              <FormItem className="flex items-center space-x-3">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    disabled={loading}
+                  />
+                </FormControl>
+                <FormLabel>Archived</FormLabel>
               </FormItem>
             )}
           />
