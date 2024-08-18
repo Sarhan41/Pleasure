@@ -25,30 +25,21 @@ export const columns: ColumnDef<BlogColumn>[] = [
   {
     accessorKey: "isArchived",
     header: "Archived",
-    cell: ({ row }) => (
-      <div>{row.original.isArchived ? "Yes" : "No"}</div>
-    ),
+    cell: ({ row }) => <div>{row.original.isArchived ? "Yes" : "No"}</div>,
   },
   {
     accessorKey: "isFeatured",
     header: "Featured",
-    cell: ({ row }) => (
-      <div>{row.original.isFeatured ? "Yes" : "No"}</div>
-    ),
+    cell: ({ row }) => <div>{row.original.isFeatured ? "Yes" : "No"}</div>,
   },
   {
     accessorKey: "isNew",
     header: "New",
-    cell: ({ row }) => (
-      <div>{row.original.isNew ? "Yes" : "No"}</div>
-    ),
+    cell: ({ row }) => <div>{row.original.isNew ? "Yes" : "No"}</div>,
   },
   {
     accessorKey: "createdAt",
     header: "Date",
-    cell: ({ row }) => (
-      <div>{new Date(row.original.createdAt).toLocaleDateString()}</div>
-    ),
   },
   {
     id: "actions",

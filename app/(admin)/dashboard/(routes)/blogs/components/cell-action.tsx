@@ -37,12 +37,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/dashboard/products/${data.id}`);
+      await axios.delete(`/api/dashboard/blog/${data.id}`);
       router.refresh();
-      toast.success("Product deleted.");
+      toast.success("Blog deleted.");
     } catch (error) {
       toast.error(
-        "Make sure you removed all the references to this product before deleting it."
+        "Make sure you removed all the references to this Blog before deleting it."
       );
     } finally {
       setLoading(false);
@@ -57,7 +57,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         onConfirm={onDelete}
         loading={loading}
         name={data.name}
-        menu="Product"
+        menu="Blog"
       />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -74,7 +74,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/dashboard/products/${data.id}?reload(${Date.now()}`)
+              router.push(`/dashboard/blogs/${data.id}?reload(${Date.now()}`)
             }
           >
             <Edit className="mr-2 h-4 w-4" />
