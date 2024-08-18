@@ -6,6 +6,7 @@ import { Category, Product } from "@prisma/client";
 import MobileHeaderIndex from "./Mobile/MobileHeader";
 import DesktopHeader from "./Desktop/DesktopHeader";
 import usePreviewModal from "@/hooks/store/use-preview-modal";
+import BlogHeader from "./Blog";
 
 export interface HeaderProps {
   categories: Category[];
@@ -17,7 +18,7 @@ export interface HeaderProps {
 const Header = ({ categories, allProducts, UserId, UserName }: HeaderProps) => {
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const pathname = usePathname();
-  const {isOpen}= usePreviewModal();
+  const { isOpen } = usePreviewModal();
 
   useEffect(() => {
     let lastScrollTop = 0;
@@ -35,8 +36,11 @@ const Header = ({ categories, allProducts, UserId, UserName }: HeaderProps) => {
 
   // if(isOpen) return null;
 
+  const isBlogPage = pathname.includes("/blog");
+  if (isBlogPage) return <BlogHeader />;
+
   const isCheckOutPage = pathname.includes("/checkout");
-  if (isCheckOutPage) return <CheckoutHeader userId={UserId} />;
+  if (isCheckOutPage) return <CheckoutHeader />;
 
   return (
     <header
