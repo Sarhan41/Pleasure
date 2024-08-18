@@ -26,21 +26,6 @@ const BlogHeader = () => {
             />
           </Link>
         </div>
-        <div className="flex gap-2 mt-2 lg:mt-0">
-          <div className="text-center">
-            <Link area-label="Link" href="/my-profile">
-              <UserIcon size={48} className="p-2 border-r-2" />
-            </Link>
-          </div>
-          <div className="text-center p-2 border-r-2 text-xs">
-            FREE EXCHANGE{" "}
-          </div>
-          <div className="text-center p-2 border-r-2 text-xs">100% PRIVACY</div>
-          <div className="text-center p-2 border-r-2 text-xs">
-            CASH ON DELIVERY
-          </div>
-          <div className="text-center p-2 text-xs">FREE SHIPPING*</div>
-        </div>
       </div>
     </header>
   );
