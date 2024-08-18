@@ -20,6 +20,9 @@ const BlogsMainPage = async () => {
   }
 
   const blogs = await db.blogs.findMany({
+   include:{
+      category:true
+   },
     orderBy: {
       createdAt: "desc",
     },
@@ -29,6 +32,7 @@ const BlogsMainPage = async () => {
     id: item.id,
     name: item.name,
     subname: item.subname,
+    category: item.category.name,
     isFeatured: item.isFeatured,
     isArchived: item.isArchived,
     isNew: item.isNew,

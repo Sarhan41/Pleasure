@@ -8,13 +8,16 @@ const BlogPage = async ({ params }: { params: { blogId: string } }) => {
     },
     include: {
       ImagesBlog: true,
+      category: true,
     },
   });
+
+  const categories = await db.category.findMany({});
 
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <BlogForm initialData={blog} />
+        <BlogForm initialData={blog} categories={categories} />
       </div>
     </div>
   );

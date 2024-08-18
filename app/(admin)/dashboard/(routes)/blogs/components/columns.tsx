@@ -10,6 +10,7 @@ export type BlogColumn = {
   isArchived: boolean;
   isFeatured: boolean;
   isNew: boolean;
+  category: string;
   createdAt: string;
 };
 
@@ -21,6 +22,10 @@ export const columns: ColumnDef<BlogColumn>[] = [
   {
     accessorKey: "subname",
     header: "SubName",
+  },
+  {
+    accessorKey: "category",
+    header: "Category",
   },
   {
     accessorKey: "isArchived",

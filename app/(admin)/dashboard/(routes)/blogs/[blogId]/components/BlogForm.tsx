@@ -20,16 +20,24 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { AlertModal } from "@/app/(admin)/_components/Alert-modal";
 import ImageUpload from "./Image-upload-drag-fix";
-import { Blogs, ImagesBlog } from "@prisma/client";
+import { Blogs, Category, ImagesBlog } from "@prisma/client";
 
 const formSchema = z.object({
   name: z.string().min(1),
   subname: z.string().optional(),
   content: z.string().min(1),
+  categoryId: z.string().min(1),
   images: z.object({ url: z.string() }).array(),
   isFeatured: z.boolean().optional(),
   isNew: z.boolean().optional(),
@@ -44,9 +52,13 @@ interface BlogFormProps {
         ImagesBlog: { url: string }[];
       })
     | null;
+  categories: Category[];
 }
 
-export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
+export const BlogForm: React.FC<BlogFormProps> = ({
+  initialData,
+  categories,
+}) => {
   const params = useParams();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -61,6 +73,7 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
     resolver: zodResolver(formSchema),
     defaultValues: initialData
       ? {
+          ...initialData,
           name: initialData.name,
           subname: initialData.subname || "",
           content: initialData.content || "",
@@ -74,6 +87,7 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
       : {
           name: "",
           subname: "",
+          categoryId: "",
           content: "",
           images: [],
           isFeatured: false,
@@ -91,7 +105,7 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
         await axios.post(`/api/dashboard/blog`, data);
       }
       router.refresh();
-      router.push(`/dashboard/blogs`);
+      router.push(`/dashboard/blogs?reload(${Date.now()}`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");
@@ -105,7 +119,7 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
       setLoading(true);
       await axios.delete(`/api/dashboard/blog/${params.blogId}`);
       router.refresh();
-      router.push(`/dashboard/blogs`);
+      router.push(`/dashboard/blogs?reload(${Date.now()}`);
       toast.success("Blog deleted.");
     } catch (error) {
       toast.error("Something went wrong.");
@@ -185,6 +199,39 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
                     {...field}
                   />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="categoryId"
+            render={({ field }) => (
+              <FormItem className="max-sm:w-[35vw] w-[22vw]">
+                <FormLabel>Category</FormLabel>
+                <Select
+                  disabled={loading}
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue
+                        defaultValue={field.value}
+                        placeholder="Select a category"
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}

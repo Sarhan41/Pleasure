@@ -44,8 +44,16 @@ export async function PATCH(
     }
 
     const body = await req.json();
-    const { name, subname, content, images, isFeatured, isArchived, isNew } =
-      body;
+    const {
+      name,
+      subname,
+      content,
+      images,
+      isFeatured,
+      isArchived,
+      isNew,
+      categoryId,
+    } = body;
 
     if (!name) {
       return new NextResponse("Name is required", { status: 400 });
@@ -53,6 +61,9 @@ export async function PATCH(
 
     if (!content) {
       return new NextResponse("Content is required", { status: 400 });
+    }
+    if (!categoryId) {
+      return new NextResponse("Category id is required ", { status: 400 });
     }
 
     if (!images || !images.length) {
@@ -73,6 +84,7 @@ export async function PATCH(
         name,
         subname,
         content,
+        categoryId,
         isFeatured,
         isArchived,
         isNew,
@@ -95,6 +107,7 @@ export async function PATCH(
       },
       include: {
         ImagesBlog: true,
+        category: true,
       },
     });
 

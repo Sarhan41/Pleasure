@@ -135,6 +135,7 @@ model Category {
   description String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  Blogs       Blogs[]   @relation("CategoryToBlogs")
 }
 
 model Billboard {
@@ -319,6 +320,8 @@ model Blogs {
   name       String
   subname    String?
   content    String
+  categoryId String
+  category   Category     @relation("CategoryToBlogs", fields: [categoryId], references: [id])
   isFeatured Boolean      @default(false)
   isArchived Boolean      @default(false)
   isNew      Boolean      @default(false)
@@ -330,8 +333,8 @@ model Blogs {
 model ImagesBlog {
   id        String   @id @default(uuid())
   blogId    String
-  blog      Blogs     @relation(fields: [blogId], references: [id], onDelete: Cascade)
-  url  String
+  blog      Blogs    @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  url       String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

@@ -16,11 +16,23 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { name, subname, content, images, isArchived, isFeatured, isNew } =
-      body;
+    const {
+      name,
+      subname,
+      content,
+      images,
+      isArchived,
+      isFeatured,
+      isNew,
+      categoryId,
+    } = body;
 
     if (!name) {
       return new NextResponse("Name is required", { status: 400 });
+    }
+
+    if(!categoryId) {
+      return new NextResponse("Category is required", { status: 400 });
     }
 
     if (!content) {
@@ -39,6 +51,7 @@ export async function POST(req: Request) {
         isArchived,
         isFeatured,
         isNew,
+        categoryId,
         ImagesBlog: {
           createMany: {
             data: images.map((image: { url: string }) => ({
