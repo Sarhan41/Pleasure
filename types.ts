@@ -90,3 +90,25 @@ export interface Billboard {
   subtitle: string;
   link: string;
 }
+
+
+export interface Blog {
+  id: string;
+  name: string;
+  subname?: string | null;
+  content: string;
+  categoryId: string;
+  category: Category;
+  isFeatured: boolean;
+  isArchived: boolean;
+  isNew: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  imagesBlog: ImageBlog[];
+}
+
+export interface ImageBlog {
+  id: string;
+  blogId: string;
+  url: string;
+}

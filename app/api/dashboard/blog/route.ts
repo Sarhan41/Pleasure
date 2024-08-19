@@ -52,7 +52,7 @@ export async function POST(req: Request) {
         isFeatured,
         isNew,
         categoryId,
-        ImagesBlog: {
+        imagesBlog: {
           createMany: {
             data: images.map((image: { url: string }) => ({
               url: image.url,
@@ -81,7 +81,7 @@ export async function GET(req: Request) {
         subname: subname ? { contains: subname } : undefined,
       },
       include: {
-        ImagesBlog: true,
+        imagesBlog: true,
       },
       orderBy: {
         createdAt: "desc",

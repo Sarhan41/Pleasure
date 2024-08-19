@@ -16,7 +16,7 @@ export async function GET(
         id: params.blogId,
       },
       include: {
-        ImagesBlog: true,
+        imagesBlog: true,
       },
     });
 
@@ -88,7 +88,7 @@ export async function PATCH(
         isFeatured,
         isArchived,
         isNew,
-        ImagesBlog: {
+        imagesBlog: {
           deleteMany: {},
         },
       },
@@ -99,14 +99,14 @@ export async function PATCH(
         id: params.blogId,
       },
       data: {
-        ImagesBlog: {
+        imagesBlog: {
           createMany: {
             data: images.map((image: { url: string }) => ({ url: image.url })),
           },
         },
       },
       include: {
-        ImagesBlog: true,
+        imagesBlog: true,
         category: true,
       },
     });

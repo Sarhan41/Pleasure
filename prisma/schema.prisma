@@ -327,7 +327,7 @@ model Blogs {
   isNew      Boolean      @default(false)
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
-  ImagesBlog ImagesBlog[]
+  imagesBlog ImagesBlog[]
 }
 
 model ImagesBlog {

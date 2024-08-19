@@ -49,7 +49,7 @@ type BlogFormValues = z.infer<typeof formSchema>;
 interface BlogFormProps {
   initialData:
     | (Blogs & {
-        ImagesBlog: { url: string }[];
+        imagesBlog: { url: string }[];
       })
     | null;
   categories: Category[];
@@ -77,7 +77,7 @@ export const BlogForm: React.FC<BlogFormProps> = ({
           name: initialData.name,
           subname: initialData.subname || "",
           content: initialData.content || "",
-          images: initialData.ImagesBlog.map((image) => ({
+          images: initialData.imagesBlog.map((image) => ({
             url: image.url,
           })),
           isFeatured: initialData.isFeatured || false,

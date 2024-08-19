@@ -7,7 +7,7 @@ const BlogPage = async ({ params }: { params: { blogId: string } }) => {
       id: params.blogId,
     },
     include: {
-      ImagesBlog: true,
+      imagesBlog: true,
       category: true,
     },
   });
