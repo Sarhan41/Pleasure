@@ -43,7 +43,7 @@ const BlogPage: React.FC<BlogPageProps> = async ({ params }) => {
       <BlogContent
         content={blog.content}
         images={blog.imagesBlog.slice(1)}
-        alignments={alignments}
+        // alignments={alignments}
       />
     </section>
   );

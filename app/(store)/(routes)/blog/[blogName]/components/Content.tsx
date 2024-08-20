@@ -1,26 +1,27 @@
-// BlogContent.tsx
 "use client";
-
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
 interface BlogContentProps {
   content: string;
   images: any[];
-  alignments: string[];
 }
 
-const BlogContent: React.FC<BlogContentProps> = ({
-  content,
-  images,
-  alignments,
-}) => {
+const BlogContent: React.FC<BlogContentProps> = ({ content, images }) => {
+  const [alignments, setAlignments] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Ensure alignments are determined consistently across server and client
+    const newAlignments = images.map((_, index) =>
+      (index + 1) % 3 === 0 ? "left" : "right"
+    );
+    setAlignments(newAlignments);
+  }, [images]);
+
   const formatContent = (content: string) => {
     return content.split("\n\n").map((block, index) => {
-      block = block.replace(
-        /==([^=]+)==/g,
-        "<h2 class='text-3xl font-semibold my-6 text-primary'>$1</h2>"
-      );
+      const subtitle = /==([^=]+)==/.exec(block)?.[1];
+      block = block.replace(/==([^=]+)==/g, "");
       block = block.replace(/\*\*([^\*]+)\*\*/g, "<strong>$1</strong>");
       block = block.replace(/\/\/([^\/]+)\/\//g, "<em>$1</em>");
 
@@ -40,13 +41,20 @@ const BlogContent: React.FC<BlogContentProps> = ({
       );
 
       return (
-        <div
-          key={index}
-          className="flex flex-col md:flex-row items-center my-8 space-y-4 md:space-y-0 md:space-x-6"
-        >
-          {alignment === "left" ? imageComponent : null}
-          <p dangerouslySetInnerHTML={{ __html: block }} className="md:w-2/3" />
-          {alignment === "right" ? imageComponent : null}
+        <div key={index} className="my-8">
+          {subtitle && (
+            <h2 className="text-3xl font-semibold my-6 text-primary">
+              {subtitle}
+            </h2>
+          )}
+          <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
+            {alignment === "left" ? imageComponent : null}
+            <p
+              dangerouslySetInnerHTML={{ __html: block }}
+              className="md:w-2/3"
+            />
+            {alignment === "right" ? imageComponent : null}
+          </div>
         </div>
       );
     });
