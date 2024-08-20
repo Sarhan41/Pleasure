@@ -32,19 +32,10 @@ const BlogPage: React.FC<BlogPageProps> = async ({ params }) => {
     return <NoResults />;
   }
 
-  // Generate alignments on the server-side
-  const alignments = blog.imagesBlog.slice(1).map(() =>
-    Math.random() > 0.5 ? "left" : "right"
-  );
-
   return (
     <section className="container mx-auto px-4 sm:px-8 lg:px-12 py-10">
       <BlogHeader title={blogName} featuredImage={blog.imagesBlog[0]} />
-      <BlogContent
-        content={blog.content}
-        images={blog.imagesBlog.slice(1)}
-        // alignments={alignments}
-      />
+      <BlogContent content={blog.content} images={blog.imagesBlog.slice(1)} />
     </section>
   );
 };

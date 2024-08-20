@@ -1,3 +1,4 @@
+// BlogContent.tsx
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
@@ -20,8 +21,11 @@ const BlogContent: React.FC<BlogContentProps> = ({ content, images }) => {
 
   const formatContent = (content: string) => {
     return content.split("\n\n").map((block, index) => {
-      const subtitle = /==([^=]+)==/.exec(block)?.[1];
-      block = block.replace(/==([^=]+)==/g, "");
+      // Handle subtitles and apply formatting
+      const subtitleMatch = /==([^=]+)==/.exec(block);
+      const subtitle = subtitleMatch ? subtitleMatch[1] : null;
+
+      block = block.replace(/==([^=]+)==/g, ""); // Remove subtitle from block content
       block = block.replace(/\*\*([^\*]+)\*\*/g, "<strong>$1</strong>");
       block = block.replace(/\/\/([^\/]+)\/\//g, "<em>$1</em>");
 
@@ -42,17 +46,16 @@ const BlogContent: React.FC<BlogContentProps> = ({ content, images }) => {
 
       return (
         <div key={index} className="my-8">
-          {subtitle && (
-            <h2 className="text-3xl font-semibold my-6 text-primary">
-              {subtitle}
-            </h2>
-          )}
           <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
             {alignment === "left" ? imageComponent : null}
-            <p
-              dangerouslySetInnerHTML={{ __html: block }}
-              className="md:w-2/3"
-            />
+            <div className="md:w-2/3">
+              {subtitle && (
+                <h2 className="text-3xl font-semibold my-6 text-primary">
+                  {subtitle}
+                </h2>
+              )}
+              <p dangerouslySetInnerHTML={{ __html: block }} />
+            </div>
             {alignment === "right" ? imageComponent : null}
           </div>
         </div>
@@ -61,7 +64,7 @@ const BlogContent: React.FC<BlogContentProps> = ({ content, images }) => {
   };
 
   return (
-    <div className="content space-y-8 text-lg leading-relaxed text-gray-800">
+    <div className="content space-y-8 font-sans text-lg leading-relaxed text-gray-800">
       {formatContent(content)}
     </div>
   );

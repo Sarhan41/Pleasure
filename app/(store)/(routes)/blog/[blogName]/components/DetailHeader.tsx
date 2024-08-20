@@ -8,14 +8,12 @@ interface BlogHeaderProps {
 }
 
 const BlogHeader: React.FC<BlogHeaderProps> = ({ title, featuredImage }) => {
-  const capitalizeWords = (str: string) => {
-    return str.replace(/\b\w/g, (char) => char.toUpperCase());
-  };
+  
 
   return (
     <>
-      <h1 className="text-5xl font-extrabold mb-8 text-primary capitalize tracking-wide">
-        {capitalizeWords(title)}
+      <h1 className="text-5xl font-extrabold mb-8 text-primary uppercase  tracking-wide">
+        {title}
       </h1>
 
       {featuredImage && (
