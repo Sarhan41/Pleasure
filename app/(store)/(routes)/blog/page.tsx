@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import BlogCard from "./components/BlogCard";
+import NoResults from "@/components/Store/NoResults";
 
 const BlogsMainPage = async () => {
   const blogs = await db.blogs.findMany({
@@ -12,6 +13,10 @@ const BlogsMainPage = async () => {
       category: true,
     },
   });
+
+  if (!blogs) {
+    return <NoResults />;
+  }
 
   return (
     <section className="container mx-auto py-12 max-sm:-mt-12 ">
