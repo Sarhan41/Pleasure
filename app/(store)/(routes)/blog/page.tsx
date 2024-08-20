@@ -14,7 +14,7 @@ const BlogsMainPage = async () => {
   });
 
   return (
-    <section className="container mx-auto py-12  ">
+    <section className="container mx-auto py-12 max-sm:-mt-12 ">
       <h1 className="text-4xl max-xs:text-3xl font-extrabold text-center mb-12 text-gray-800">
         Featured Blogs
       </h1>
