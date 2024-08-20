@@ -1,22 +1,20 @@
+// BlogContent.tsx
 "use client";
-import React, { useState, useEffect } from "react";
+
+import React from "react";
 import Image from "next/image";
 
 interface BlogContentProps {
   content: string;
   images: any[];
+  alignments: string[];
 }
 
-const BlogContent: React.FC<BlogContentProps> = ({ content, images }) => {
-  const [alignments, setAlignments] = useState<string[]>([]);
-
-  useEffect(() => {
-    const newAlignments = images.map(() =>
-      Math.random() > 0.5 ? "left" : "right"
-    );
-    setAlignments(newAlignments);
-  }, [images]);
-
+const BlogContent: React.FC<BlogContentProps> = ({
+  content,
+  images,
+  alignments,
+}) => {
   const formatContent = (content: string) => {
     return content.split("\n\n").map((block, index) => {
       block = block.replace(
