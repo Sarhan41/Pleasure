@@ -26,8 +26,6 @@ const BlogHeader = () => {
             />
           </Link>
         </div>
-
-        
       </div>
     </header>
   );

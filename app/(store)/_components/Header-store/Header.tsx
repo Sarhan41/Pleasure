@@ -36,8 +36,7 @@ const Header = ({ categories, allProducts, UserId, UserName }: HeaderProps) => {
 
   // if(isOpen) return null;
 
-  const isBlogPage = pathname.includes("/blog");
-  if (isBlogPage) return <BlogHeader />;
+
 
   const isCheckOutPage = pathname.includes("/checkout");
   if (isCheckOutPage) return <CheckoutHeader />;

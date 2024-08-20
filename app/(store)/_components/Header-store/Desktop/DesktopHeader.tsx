@@ -7,8 +7,20 @@ import UserLogin from "./Userlogin/UserLogin";
 import NavbarActions from "./NavbarActions";
 import Search from "./Search";
 import { HeaderProps } from "../Header";
+import { usePathname } from "next/navigation";
+import BlogHeader from "../Blog";
 
-const DesktopHeader = ({ categories, allProducts, UserId, UserName }: HeaderProps) => {
+const DesktopHeader = ({
+  categories,
+  allProducts,
+  UserId,
+  UserName,
+}: HeaderProps) => {
+  const pathname = usePathname();
+
+  // const isBlogPage = pathname.includes("/blog");
+  // if (isBlogPage) return <BlogHeader />;
+  
   return (
     <>
       {/* Top Row */}
@@ -66,7 +78,7 @@ const DesktopHeader = ({ categories, allProducts, UserId, UserName }: HeaderProp
 
         {/* User icon, cart, and wishlist */}
         <div className="flex items-center mr-36">
-          <UserLogin userId={UserId} userName={UserName}/>
+          <UserLogin userId={UserId} userName={UserName} />
           <NavbarActions userId={UserId} />
         </div>
       </div>
