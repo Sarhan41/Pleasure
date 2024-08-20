@@ -1,7 +1,5 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import { db } from '@/lib/db';
-import BlogCard from './components/BlogCard';
+import { db } from "@/lib/db";
+import BlogCard from "./components/BlogCard";
 
 const BlogsMainPage = async () => {
   const blogs = await db.blogs.findMany({
@@ -12,18 +10,17 @@ const BlogsMainPage = async () => {
     include: {
       imagesBlog: true,
       category: true,
-      // : true, // Include the 'imagesBlog' property
     },
   });
 
   return (
-    <section className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Featured Blogs</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <section className="container mx-auto py-12 -mt-32 ">
+      <h1 className="text-4xl max-xs:text-3xl font-extrabold text-center mb-12 text-gray-800">
+        Featured Blogs
+      </h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {blogs.map((blog) => (
-          <Link key={blog.id} href={`/blog/${blog.name.replace(/\s+/g, '-')}`}>
-          <BlogCard data={blog} />
-          </Link>
+          <BlogCard key={blog.id} data={blog} />
         ))}
       </div>
     </section>
