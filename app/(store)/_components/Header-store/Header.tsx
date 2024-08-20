@@ -41,7 +41,6 @@ const Header = ({ categories, allProducts, UserId, UserName }: HeaderProps) => {
 
   const isCheckOutPage = pathname.includes("/checkout");
   if (isCheckOutPage) return <CheckoutHeader />;
-
   return (
     <header
       className={`fixed top-0 left-0 w-full bg-white shadow-md z-40 transition-transform duration-300 ${
