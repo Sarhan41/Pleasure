@@ -4,25 +4,24 @@ import Image from "next/image";
 
 interface BlogHeaderProps {
   title: string;
-  featuredImage: any;
+  featuredImage: {url: string} | null;
 }
 
 const BlogHeader: React.FC<BlogHeaderProps> = ({ title, featuredImage }) => {
-  
-
   return (
     <>
-      <h1 className="text-5xl font-extrabold mb-8 text-primary uppercase  tracking-wide">
+      <h1 className="text-5xl font-extrabold mb-8 text-primary uppercase tracking-wide">
         {title}
       </h1>
 
       {featuredImage && (
-        <div className="relative h-60 w-full sm:h-[600px] sm:w-[400px] sm:ml-24">
+        <div className="relative w-full mx-auto max-sm:h-[300px] sm:w-[400px] sm:h-[600px]">
           <Image
-            fill
             src={featuredImage.url}
             alt="Featured Image"
-            className="max-sm:object-contain object-cover object-center h-full w-full"
+            fill
+            className="object-cover object-center w-full h-full"
+            sizes="(max-width: 640px) 100vw, 50vw"
           />
         </div>
       )}
