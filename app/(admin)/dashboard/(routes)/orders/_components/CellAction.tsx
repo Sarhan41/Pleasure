@@ -34,9 +34,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         status: newStatus,
       };
 
-      await changeOrderStatus(orderData);
+      await changeOrderStatus(orderData); // Make sure this matches the server-side function
       router.refresh();
-      router.push(`/dashboard/orders?reload(${Date.now()})`);
+      router.push(`/dashboard/orders?reload=${Date.now()}`);
 
       toast.success(`Order status changed to ${newStatus}`);
     } catch (error) {

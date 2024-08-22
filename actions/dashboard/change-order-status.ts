@@ -15,7 +15,7 @@ export const changeOrderStatus = async ({ id, status }: OrderStatusProps) => {
         id: id,
       },
       data: {
-        status: status === "Completed" ? "Pending" : "Completed",
+        status: status,
       },
     });
 
