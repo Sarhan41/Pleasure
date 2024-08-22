@@ -40,6 +40,7 @@ interface DataTableProps<TData> {
 
 import dynamic from "next/dynamic";
 import { Checkbox } from "@/components/ui/checkbox";
+import { CellAction } from "./CellAction";
 
 // Dynamically import the component with ssr: false
 const DownloadPdfButtonAdmin = dynamic(
@@ -57,9 +58,14 @@ export function DataTable<TData extends OrderColumn>({
     {}
   );
   const [isAllSelected, setIsAllSelected] = useState(false);
+
   const [ispendingFilter, setisPendingFilter] = useState<boolean | undefined>(
     undefined
   );
+
+  const [isCompletedFilter, setisCompletedFilter] = useState<
+    boolean | undefined
+  >(undefined);
 
   useEffect(() => {
     setIsAllSelected(
@@ -274,16 +280,8 @@ export function DataTable<TData extends OrderColumn>({
     },
 
     {
-      id: "Download",
-      header: "Download Invoice",
-      cell: ({ row }) => (
-        <div>
-          <DownloadPdfButtonAdmin
-            order={row.original}
-            userName={row.original.userName}
-          />
-        </div>
-      ),
+      id: "actions",
+      cell: ({ row }) => <CellAction data={row.original} />,
     },
   ];
 
@@ -304,12 +302,28 @@ export function DataTable<TData extends OrderColumn>({
 
   const handleisPendingChange = (checked: boolean | undefined) => {
     setisPendingFilter(checked);
+    setisCompletedFilter(undefined);
     setColumnFilters((prev) => {
       const updatedFilters = prev.filter((filter) => filter.id !== "status");
       if (checked !== undefined) {
         updatedFilters.push({
           id: "status",
           value: checked ? "Pending" : undefined,
+        });
+      }
+      return updatedFilters;
+    });
+  };
+
+  const handleisCompletedChange = (checked: boolean | undefined) => {
+    setisCompletedFilter(checked);
+    setisPendingFilter(undefined);
+    setColumnFilters((prev) => {
+      const updatedFilters = prev.filter((filter) => filter.id !== "status");
+      if (checked !== undefined) {
+        updatedFilters.push({
+          id: "status",
+          value: checked ? "Completed" : undefined,
         });
       }
       return updatedFilters;
@@ -373,12 +387,22 @@ export function DataTable<TData extends OrderColumn>({
           className="max-w-sm"
         />
         <div className="flex items-center space-x-2">
-          <label htmlFor="newsletter-filter">Pending</label>
+          <label htmlFor="Pending-filter">Pending</label>
           <Checkbox
             id="Pending-filter"
             checked={!!ispendingFilter}
             onCheckedChange={(checked) =>
               handleisPendingChange(checked ? true : undefined)
+            }
+          />
+        </div>
+        <div className="flex items-center space-x-2">
+          <label htmlFor="Completed-filter">Completed</label>
+          <Checkbox
+            id="Completed-filter"
+            checked={!!isCompletedFilter}
+            onCheckedChange={(checked) =>
+              handleisCompletedChange(checked ? true : undefined)
             }
           />
         </div>
