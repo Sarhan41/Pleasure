@@ -32,6 +32,8 @@ model User {
   reviews               Review[]
   Address               Address[]
   usedCoupons           UsedCoupon[]
+
+  @@index([isForNewsletter])
 }
 
 model Address {
@@ -55,18 +57,26 @@ model Address {
 }
 
 model Review {
-  id        String   @id @default(cuid())
+  id        String        @id @default(cuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   productId String
-  product   Product  @relation(fields: [productId], references: [id])
+  product   Product       @relation(fields: [productId], references: [id])
+  images    ReviewImage[]
   rating    Int
   comment   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 
   @@index([userId])
   @@index([productId])
+}
+
+model ReviewImage {
+  id       String @id @default(cuid())
+  url      String // URL of the image in Cloudinary
+  reviewId String // Foreign key to review
+  review   Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
 }
 
 model Account {
@@ -173,6 +183,10 @@ model Product {
   additionalInfo     String?
 
   @@index([categoryId])
+  @@index([isFeatured])
+  @@index([isNew])
+  @@index([isArchived])
+  @@index([isColorNameVisible])
 }
 
 model ColorName {
@@ -284,26 +298,32 @@ model Order {
   canceled           Boolean     @default(false)
   cancellationReason String?
   canceledAt         DateTime?
+
+  @@index([userId])
+  @@index([couponId])
+  @@index([isPaid])
+  @@index([canceled])
+  @@index([status])
 }
 
 model OrderItem {
-  id        String          @id @default(uuid())
+  id        String           @id @default(uuid())
   name      String
   price     Int
   quantity  Int
   size      String
   sizeSKU   String
-  color     OrderIemColor[]
+  color     OrderItemColor[]
   orderId   String
-  order     Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  order     Order            @relation(fields: [orderId], references: [id], onDelete: Cascade)
   productId String
-  product   Product         @relation(fields: [productId], references: [id])
+  product   Product          @relation(fields: [productId], references: [id])
 
   @@index([orderId])
   @@index([productId])
 }
 
-model OrderIemColor {
+model OrderItemColor {
   id          String    @id @default(uuid())
   orderItemId String
   orderItem   OrderItem @relation(fields: [orderItemId], references: [id], onDelete: Cascade)
@@ -328,6 +348,8 @@ model Blogs {
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
   imagesBlog ImagesBlog[]
+
+  @@index([categoryId])
 }
 
 model ImagesBlog {
