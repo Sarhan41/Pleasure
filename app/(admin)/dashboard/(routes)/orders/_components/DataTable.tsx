@@ -33,12 +33,11 @@ import { generatePdf } from "./DownloadPDFButtonForAdmin";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 
 interface DataTableProps<TData> {
   data: TData[];
 }
-
-import dynamic from "next/dynamic";
 
 // Dynamically import the component with ssr: false
 const DownloadPdfButtonAdmin = dynamic(
@@ -56,12 +55,24 @@ export function DataTable<TData extends OrderColumn>({
     {}
   );
   const [isAllSelected, setIsAllSelected] = useState(false);
+  const [pendingFilter, setPendingFilter] = useState<boolean | undefined>(
+    undefined
+  );
+  const [completedFilter, setCompletedFilter] = useState<boolean | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     setIsAllSelected(
       data.length > 0 && Object.keys(selectedOrders).length === data.length
     );
   }, [selectedOrders, data.length]);
+
+  const filteredData = data.filter((item) => {
+    if (pendingFilter && item.status !== "Pending") return false;
+    if (completedFilter && item.status !== "Completed") return false;
+    return true;
+  });
 
   const columns: ColumnDef<TData>[] = [
     {
@@ -77,6 +88,7 @@ export function DataTable<TData extends OrderColumn>({
                 ? Object.fromEntries(data.map((order) => [order.id, true]))
                 : {}
             );
+            setIsAllSelected(checked);
           }}
         />
       ),
@@ -155,7 +167,7 @@ export function DataTable<TData extends OrderColumn>({
           <DialogTrigger asChild>
             <Button>Details</Button>
           </DialogTrigger>
-          <DialogContent className="w-full max-w-4xl  mx-auto p-6 rounded-lg shadow-lg overflow-y-auto max-h-[90vh]">
+          <DialogContent className="w-full max-w-4xl mx-auto p-6 rounded-lg shadow-lg overflow-y-auto max-h-[90vh]">
             <DialogTitle className="text-2xl font-semibold text-gray-900">
               Order Details
             </DialogTitle>
@@ -284,7 +296,7 @@ export function DataTable<TData extends OrderColumn>({
   ];
 
   const table = useReactTable({
-    data,
+    data: filteredData,
     columns,
     state: {
       columnFilters,
@@ -355,25 +367,33 @@ export function DataTable<TData extends OrderColumn>({
           className="max-w-sm"
         />
       </div>
-      <div className="flex gap-4 mb-2">
-        {/* <Button
-          onClick={() => {
-            table.clearColumnFilters();
-          }}
-        >
-          Clear Filters
-        </Button> */}
+      <div className="flex space-x-2 mb-4">
         <Button
-          onClick={handleBulkPrint}
-          disabled={Object.keys(selectedOrders).length === 0}
+          variant={pendingFilter ? "default" : "outline"}
+          onClick={() =>
+            setPendingFilter((prev) => (prev === undefined ? true : undefined))
+          }
         >
-          Print Selected Invoices
+          Show Pending Orders
         </Button>
         <Button
-          onClick={handleBulkDelete}
-          disabled={Object.keys(selectedOrders).length === 0}
+          variant={completedFilter ? "default" : "outline"}
+          onClick={() =>
+            setCompletedFilter((prev) =>
+              prev === undefined ? true : undefined
+            )
+          }
         >
-          Delete Selected Orders
+          Show Completed Orders
+        </Button>
+      </div>
+
+      <div className="space-x-4 my-4">
+        <Button onClick={handleBulkPrint} disabled={!isAllSelected}>
+          Bulk Print
+        </Button>
+        <Button onClick={handleBulkDelete} disabled={!isAllSelected}>
+          Bulk Delete
         </Button>
       </div>
 
@@ -424,6 +444,24 @@ export function DataTable<TData extends OrderColumn>({
             )}
           </TableBody>
         </Table>
+      </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
       </div>
     </div>
   );
