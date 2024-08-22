@@ -351,6 +351,15 @@ export function DataTable<TData extends OrderColumn>({
   };
 
   const handleBulkDelete = async () => {
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete all selected orders? This action is irreversible."
+    );
+
+    // If the user doesn't confirm, exit the function
+    if (!isConfirmed) {
+      return;
+    }
+
     const selectedOrderIds = Object.keys(selectedOrders).filter(
       (key) => selectedOrders[key]
     );
