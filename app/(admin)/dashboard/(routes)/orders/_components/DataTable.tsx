@@ -33,11 +33,13 @@ import { generatePdf } from "./DownloadPDFButtonForAdmin";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
 
 interface DataTableProps<TData> {
   data: TData[];
 }
+
+import dynamic from "next/dynamic";
+import { Checkbox } from "@/components/ui/checkbox";
 
 // Dynamically import the component with ssr: false
 const DownloadPdfButtonAdmin = dynamic(
@@ -55,10 +57,7 @@ export function DataTable<TData extends OrderColumn>({
     {}
   );
   const [isAllSelected, setIsAllSelected] = useState(false);
-  const [pendingFilter, setPendingFilter] = useState<boolean | undefined>(
-    undefined
-  );
-  const [completedFilter, setCompletedFilter] = useState<boolean | undefined>(
+  const [ispendingFilter, setisPendingFilter] = useState<boolean | undefined>(
     undefined
   );
 
@@ -67,12 +66,6 @@ export function DataTable<TData extends OrderColumn>({
       data.length > 0 && Object.keys(selectedOrders).length === data.length
     );
   }, [selectedOrders, data.length]);
-
-  const filteredData = data.filter((item) => {
-    if (pendingFilter && item.status !== "Pending") return false;
-    if (completedFilter && item.status !== "Completed") return false;
-    return true;
-  });
 
   const columns: ColumnDef<TData>[] = [
     {
@@ -88,7 +81,6 @@ export function DataTable<TData extends OrderColumn>({
                 ? Object.fromEntries(data.map((order) => [order.id, true]))
                 : {}
             );
-            setIsAllSelected(checked);
           }}
         />
       ),
@@ -167,7 +159,7 @@ export function DataTable<TData extends OrderColumn>({
           <DialogTrigger asChild>
             <Button>Details</Button>
           </DialogTrigger>
-          <DialogContent className="w-full max-w-4xl mx-auto p-6 rounded-lg shadow-lg overflow-y-auto max-h-[90vh]">
+          <DialogContent className="w-full max-w-4xl  mx-auto p-6 rounded-lg shadow-lg overflow-y-auto max-h-[90vh]">
             <DialogTitle className="text-2xl font-semibold text-gray-900">
               Order Details
             </DialogTitle>
@@ -296,7 +288,7 @@ export function DataTable<TData extends OrderColumn>({
   ];
 
   const table = useReactTable({
-    data: filteredData,
+    data,
     columns,
     state: {
       columnFilters,
@@ -309,6 +301,20 @@ export function DataTable<TData extends OrderColumn>({
   });
 
   const router = useRouter();
+
+  const handleisPendingChange = (checked: boolean | undefined) => {
+    setisPendingFilter(checked);
+    setColumnFilters((prev) => {
+      const updatedFilters = prev.filter((filter) => filter.id !== "status");
+      if (checked !== undefined) {
+        updatedFilters.push({
+          id: "status",
+          value: checked ? "Pending" : undefined,
+        });
+      }
+      return updatedFilters;
+    });
+  };
 
   const handleBulkPrint = () => {
     const selectedOrderIds = Object.keys(selectedOrders).filter(
@@ -357,7 +363,7 @@ export function DataTable<TData extends OrderColumn>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center space-x-4 py-4">
         <Input
           placeholder="Filter order..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
@@ -366,34 +372,29 @@ export function DataTable<TData extends OrderColumn>({
           }
           className="max-w-sm"
         />
+        <div className="flex items-center space-x-2">
+          <label htmlFor="newsletter-filter">Pending</label>
+          <Checkbox
+            id="Pending-filter"
+            checked={!!ispendingFilter}
+            onCheckedChange={(checked) =>
+              handleisPendingChange(checked ? true : undefined)
+            }
+          />
+        </div>
       </div>
-      <div className="flex space-x-2 mb-4">
+      <div className="flex gap-4 mb-2">
         <Button
-          variant={pendingFilter ? "default" : "outline"}
-          onClick={() =>
-            setPendingFilter((prev) => (prev === undefined ? true : undefined))
-          }
+          onClick={handleBulkPrint}
+          disabled={Object.keys(selectedOrders).length === 0}
         >
-          Show Pending Orders
+          Print Selected Invoices
         </Button>
         <Button
-          variant={completedFilter ? "default" : "outline"}
-          onClick={() =>
-            setCompletedFilter((prev) =>
-              prev === undefined ? true : undefined
-            )
-          }
+          onClick={handleBulkDelete}
+          disabled={Object.keys(selectedOrders).length === 0}
         >
-          Show Completed Orders
-        </Button>
-      </div>
-
-      <div className="space-x-4 my-4">
-        <Button onClick={handleBulkPrint} disabled={!isAllSelected}>
-          Bulk Print
-        </Button>
-        <Button onClick={handleBulkDelete} disabled={!isAllSelected}>
-          Bulk Delete
+          Delete Selected Orders
         </Button>
       </div>
 
