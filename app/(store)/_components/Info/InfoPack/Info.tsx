@@ -4,7 +4,7 @@ import { MouseEventHandler, useState } from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import Currency from "@/components/Store/Currency";
-import { Size } from "@/types";
+import { Review, Size } from "@/types";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -209,7 +209,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             Div For Closing Share Popup
           =============================================
       */}
-      {/* Info Pack */}
+      Info Pack
       {(isSharePopupOpen1 || isSharePopupOpen2) && (
         <div
           className="fixed inset-0 bg-transparent bg-opacity-50 z-40"

@@ -64,6 +64,7 @@ model Review {
   product   Product       @relation(fields: [productId], references: [id])
   images    ReviewImage[]
   rating    Int
+  title    String
   comment   String
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
@@ -74,7 +75,7 @@ model Review {
 
 model ReviewImage {
   id       String @id @default(cuid())
-  url      String // URL of the image in Cloudinary
+  url      String? // URL of the image in Cloudinary
   reviewId String // Foreign key to review
   review   Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
 }

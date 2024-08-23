@@ -50,6 +50,7 @@ export interface Product {
   colorNames: colorName[];
   isNew: boolean;
   isColorNameVisible: boolean;
+  reviews: Review[] | null | undefined;
 }
 
 
@@ -111,4 +112,25 @@ export interface ImageBlog {
   id: string;
   blogId: string;
   url: string;
+}
+
+export interface Review {
+  id: string;
+  rating: number;
+  title: string;
+  comment: string;
+  userId: string;
+  user: { 
+    id: string; 
+    name: string | null; 
+    image: string | null; 
+  };
+  images: ReviewImage[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ReviewImage {
+  id: string;
+  url: string | null;
 }

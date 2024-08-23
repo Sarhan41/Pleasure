@@ -8,7 +8,7 @@ import {
   getBillboards,
   getCategories,
   getFeaturedProducts,
-} from "@/actions/Store/GetEverythingHomePage";
+} from "@/actions/Store/Get-EverythingHomePage";
 
 export const revalidate = 1800; // 30 minutes
 
