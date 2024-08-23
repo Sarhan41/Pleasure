@@ -33,6 +33,8 @@ import { MotionSpan } from "@/constant/MotionElements";
 import { calculateDiscountPercentage } from "@/lib/calculateDiscountedPrice";
 import MainExtraDetails from "../ExtraDetails/MainDetails";
 import { getColorHexByName } from "@/lib/getColorHexByName";
+import Review from "../../Review";
+import ProductReviews from "../../Review";
 
 interface InfoProps {
   data: ProductType;
@@ -652,6 +654,12 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
       {/* 
           // ! Reviews Divs Will Be Added Here
 */}
+
+{data.reviews && data.reviews.length > 0 && (
+   <ProductReviews reviews={data.reviews} />
+)  
+}
+
       {/* =============================================
           Div For Add To Cart And Add To Wishlist and Share 2
           =============================================

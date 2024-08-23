@@ -21,7 +21,6 @@ export const getProduct = cache(async (productName: string) => {
           id: true,
         },
       },
-
       reviews: {
         include: {
           images: { select: { url: true, id: true } },
