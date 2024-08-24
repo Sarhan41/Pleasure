@@ -44,33 +44,26 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       return;
     }
 
-    // Prepare data to be sent
-    const data: any = {name, rating, title, comment, images, productId };
+    const data: any = { name, rating, title, comment, images, productId };
 
-    // Add name field only if the user is an admin
     if (role === "ADMIN" && name.trim()) {
       data.username = name;
     }
 
     try {
-      // Submit the review
       await axios.post("/api/dashboard/reviews", data);
 
       if (onClose) {
         onClose();
       }
 
-      // Manually construct the new URL with reload parameter
       const currentUrl = new URL(window.location.href);
       currentUrl.searchParams.set("reload", Date.now().toString());
-
-      // Use router.push to update the URL
       router.push(currentUrl.toString());
 
-      toast.success("Review Posted successfully.");
+      toast.success("Review posted successfully.");
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        // Extract the error message from the response
         setError(
           error.response.data || "Failed to submit review. Please try again."
         );
@@ -116,7 +109,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
           <StarIcon
             key={index}
             className={`h-6 w-6 cursor-pointer ${
-              index < rating ? "text-yellow-500" : "text-gray-300"
+              index < rating ? "text-yellow-300 fill-current" : "text-gray-300"
             }`}
             onClick={() => setRating(index + 1)}
           />
@@ -130,11 +123,12 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         className="mb-4"
       />
 
-      {/* Image Upload Field or Component would go here */}
-
       {error && <p className="text-red-600 mb-4">{error}</p>}
 
-      <Button onClick={handleSubmit} className="mt-4">
+      <Button
+        onClick={handleSubmit}
+        className=" bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white px-8 py-4 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 mt-4"
+      >
         Submit Review
       </Button>
     </div>

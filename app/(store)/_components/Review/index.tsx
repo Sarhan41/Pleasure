@@ -72,8 +72,10 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
 
   return (
     <div className="bg-white p-10 rounded-lg shadow-2xl max-w-5xl mx-auto">
-      <h2 className="text-4xl font-extrabold text-gray-900 mb-10 text-center">Customer Reviews</h2>
-  
+      <h2 className="text-4xl font-extrabold text-gray-900 mb-10 text-center">
+        Customer Reviews
+      </h2>
+
       <div className="text-center mb-12">
         <Button
           onClick={openDialog}
@@ -82,7 +84,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
           Create Review
         </Button>
       </div>
-  
+
       <div className="space-y-10">
         {paginatedReviews?.map((review) => (
           <div
@@ -100,7 +102,9 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
                 ) : (
                   <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center mr-4">
                     <span className="text-gray-600 text-lg font-semibold">
-                      {review.name?.charAt(0) || review.user.name?.charAt(0) || "A"}
+                      {review.name?.charAt(0) ||
+                        review.user.name?.charAt(0) ||
+                        "A"}
                     </span>
                   </div>
                 )}
@@ -118,14 +122,20 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
                   <StarIcon
                     key={index}
                     className={`h-6 w-6 ${
-                      index < review.rating ? "text-yellow-400" : "text-gray-300"
+                      index < review.rating
+                        ? "text-yellow-400"
+                        : "text-gray-300"
                     } fill-current`}
                   />
                 ))}
               </div>
             </div>
-            <h1 className="mt-4 text-2xl font-semibold text-gray-900">{review.title}</h1>
-            <p className="mt-2 text-gray-700 leading-relaxed">{review.comment}</p>
+            <h1 className="mt-4 text-2xl font-semibold text-gray-900">
+              {review.title}
+            </h1>
+            <p className="mt-2 text-gray-700 leading-relaxed">
+              {review.comment}
+            </p>
             {review.images.length > 0 && (
               <div className="mt-6 grid grid-cols-2 gap-4">
                 {review.images.map((image) => (
@@ -160,7 +170,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
             )}
           </div>
         ))}
-  
+
         {/* Conditional Pagination Controls */}
         {reviews && reviews.length > reviewsPerPage && (
           <div className="flex justify-between items-center mt-12">
@@ -198,12 +208,14 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
           </div>
         )}
       </div>
-  
+
       {/* Dialog for creating a review */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="bg-white p-8 rounded-xl shadow-xl max-w-lg mx-auto">
           <DialogHeader className="text-center mb-6">
-            <DialogTitle className="text-2xl font-semibold text-gray-900">Write Review</DialogTitle>
+            <DialogTitle className="text-2xl font-semibold text-gray-900">
+              Write Review
+            </DialogTitle>
             <DialogClose />
           </DialogHeader>
           <ReviewForm productId={productId} onClose={closeDialog} />
