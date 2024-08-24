@@ -37,7 +37,9 @@ export function DataTable<TData, TValue>({
   searchKey,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [newsletterFilter, setNewsletterFilter] = useState<boolean | undefined>(undefined);
+  const [newsletterFilter, setNewsletterFilter] = useState<boolean | undefined>(
+    undefined
+  );
 
   const table = useReactTable({
     data,
@@ -60,7 +62,9 @@ export function DataTable<TData, TValue>({
   const handleNewsletterChange = (checked: boolean | undefined) => {
     setNewsletterFilter(checked);
     setColumnFilters((prev) => {
-      const updatedFilters = prev.filter((filter) => filter.id !== "newsletter");
+      const updatedFilters = prev.filter(
+        (filter) => filter.id !== "newsletter"
+      );
       if (checked !== undefined) {
         updatedFilters.push({ id: "newsletter", value: checked });
       }
@@ -84,7 +88,9 @@ export function DataTable<TData, TValue>({
           <Checkbox
             id="newsletter-filter"
             checked={!!newsletterFilter}
-            onCheckedChange={(checked) => handleNewsletterChange(checked ? true : undefined)}
+            onCheckedChange={(checked) =>
+              handleNewsletterChange(checked ? true : undefined)
+            }
           />
         </div>
       </div>

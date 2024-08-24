@@ -148,6 +148,16 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
               >
                 Offers
               </Link>
+               <Link
+                aria-label="Link"
+                href="/blog"
+                className={cn(
+                  "transition-colors duration-300 text-sm mt-0.5 font-bold hover:text-pink-300  uppercase",
+                  pathname === `/offers` ? "text-pink-300" : "text-red-500"
+                )}
+              >
+                Magazine
+              </Link>
             </div>
           </div>
         </div>

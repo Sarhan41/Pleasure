@@ -29,9 +29,7 @@ import { OrderColumn } from "./order-types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import DownloadPdfButtonAdmin, {
-  generatePdf,
-} from "./DownloadPDFButtonForAdmin";
+import { generatePdf } from "./DownloadPDFButtonForAdmin";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -39,6 +37,18 @@ import { useRouter } from "next/navigation";
 interface DataTableProps<TData> {
   data: TData[];
 }
+
+import dynamic from "next/dynamic";
+import { Checkbox } from "@/components/ui/checkbox";
+import { CellAction } from "./CellAction";
+
+// Dynamically import the component with ssr: false
+const DownloadPdfButtonAdmin = dynamic(
+  () => import("./DownloadPDFButtonForAdmin"),
+  { ssr: false }
+);
+
+export default DownloadPdfButtonAdmin;
 
 export function DataTable<TData extends OrderColumn>({
   data,
@@ -48,6 +58,14 @@ export function DataTable<TData extends OrderColumn>({
     {}
   );
   const [isAllSelected, setIsAllSelected] = useState(false);
+
+  const [ispendingFilter, setisPendingFilter] = useState<boolean | undefined>(
+    undefined
+  );
+
+  const [isCompletedFilter, setisCompletedFilter] = useState<
+    boolean | undefined
+  >(undefined);
 
   useEffect(() => {
     setIsAllSelected(
@@ -262,16 +280,8 @@ export function DataTable<TData extends OrderColumn>({
     },
 
     {
-      id: "Download",
-      header: "Download Invoice",
-      cell: ({ row }) => (
-        <div>
-          <DownloadPdfButtonAdmin
-            order={row.original}
-            userName={row.original.userName}
-          />
-        </div>
-      ),
+      id: "actions",
+      cell: ({ row }) => <CellAction data={row.original} />,
     },
   ];
 
@@ -289,6 +299,36 @@ export function DataTable<TData extends OrderColumn>({
   });
 
   const router = useRouter();
+
+  const handleisPendingChange = (checked: boolean | undefined) => {
+    setisPendingFilter(checked);
+    setisCompletedFilter(undefined);
+    setColumnFilters((prev) => {
+      const updatedFilters = prev.filter((filter) => filter.id !== "status");
+      if (checked !== undefined) {
+        updatedFilters.push({
+          id: "status",
+          value: checked ? "Pending" : undefined,
+        });
+      }
+      return updatedFilters;
+    });
+  };
+
+  const handleisCompletedChange = (checked: boolean | undefined) => {
+    setisCompletedFilter(checked);
+    setisPendingFilter(undefined);
+    setColumnFilters((prev) => {
+      const updatedFilters = prev.filter((filter) => filter.id !== "status");
+      if (checked !== undefined) {
+        updatedFilters.push({
+          id: "status",
+          value: checked ? "Completed" : undefined,
+        });
+      }
+      return updatedFilters;
+    });
+  };
 
   const handleBulkPrint = () => {
     const selectedOrderIds = Object.keys(selectedOrders).filter(
@@ -311,6 +351,15 @@ export function DataTable<TData extends OrderColumn>({
   };
 
   const handleBulkDelete = async () => {
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete all selected orders? This action is irreversible."
+    );
+
+    // If the user doesn't confirm, exit the function
+    if (!isConfirmed) {
+      return;
+    }
+
     const selectedOrderIds = Object.keys(selectedOrders).filter(
       (key) => selectedOrders[key]
     );
@@ -337,7 +386,7 @@ export function DataTable<TData extends OrderColumn>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center space-x-4 py-4">
         <Input
           placeholder="Filter order..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
@@ -346,15 +395,28 @@ export function DataTable<TData extends OrderColumn>({
           }
           className="max-w-sm"
         />
+        <div className="flex items-center space-x-2">
+          <label htmlFor="Pending-filter">Pending</label>
+          <Checkbox
+            id="Pending-filter"
+            checked={!!ispendingFilter}
+            onCheckedChange={(checked) =>
+              handleisPendingChange(checked ? true : undefined)
+            }
+          />
+        </div>
+        <div className="flex items-center space-x-2">
+          <label htmlFor="Completed-filter">Completed</label>
+          <Checkbox
+            id="Completed-filter"
+            checked={!!isCompletedFilter}
+            onCheckedChange={(checked) =>
+              handleisCompletedChange(checked ? true : undefined)
+            }
+          />
+        </div>
       </div>
       <div className="flex gap-4 mb-2">
-        {/* <Button
-          onClick={() => {
-            table.clearColumnFilters();
-          }}
-        >
-          Clear Filters
-        </Button> */}
         <Button
           onClick={handleBulkPrint}
           disabled={Object.keys(selectedOrders).length === 0}
@@ -416,6 +478,24 @@ export function DataTable<TData extends OrderColumn>({
             )}
           </TableBody>
         </Table>
+      </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
       </div>
     </div>
   );

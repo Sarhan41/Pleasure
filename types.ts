@@ -28,7 +28,7 @@ export interface Color {
   toLink?: string | null;
 }
 
-export interface colorName{
+export interface colorName {
   name: string;
 }
 
@@ -50,9 +50,8 @@ export interface Product {
   colorNames: colorName[];
   isNew: boolean;
   isColorNameVisible: boolean;
+  reviews?: Review[];
 }
-
-
 
 export interface OrderItem {
   id: string;
@@ -89,4 +88,47 @@ export interface Billboard {
   title: string;
   subtitle: string;
   link: string;
+}
+
+export interface Blog {
+  id: string;
+  name: string;
+  subname?: string | null;
+  content: string;
+  categoryId: string;
+  category: Category;
+  isFeatured: boolean;
+  isArchived: boolean;
+  isNew: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  imagesBlog: ImageBlog[];
+}
+
+export interface ImageBlog {
+  id: string;
+  blogId: string;
+  url: string;
+}
+
+export interface Review {
+  id: string;
+  name? : string | null;
+  rating: number;
+  title: string;
+  comment: string;
+  userId: string;
+  user: {
+    id: string;
+    name: string | null;
+    image: string | null;
+  };
+  images: ReviewImage[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ReviewImage {
+  id: string;
+  url: string;
 }

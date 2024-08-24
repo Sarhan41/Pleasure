@@ -106,6 +106,17 @@ const SecondRowCategory = ({
           <div className="flex items-center gap-2">Offers</div>
         </Link>
       </div>
+
+      <div className="mt-4">
+        <Link
+          aria-label="Link"
+          href="/blog"
+          onClick={toggleSidebar}
+          className="flex items-center justify-between w-full px-3 py-2 text-base font-medium text-pink-900 rounded-md hover:bg-primary-100 transition-colors duration-200"
+        >
+          <div className="flex items-center gap-2">Magazine</div>
+        </Link>
+      </div>
     </div>
   );
 };

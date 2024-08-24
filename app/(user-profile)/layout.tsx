@@ -14,7 +14,7 @@ const ProtectedLayout = async ({ children }: ProtectedLayoutProps) => {
   if (!user) {
     return (
       <>
-        <CheckoutHeader userId={" "} />
+        <CheckoutHeader  />
         <div className=" flex  h-screen w-screen justify-center items-center ">
           <CardWrapper
             headerLabel="You are Not Logged IN"
@@ -30,7 +30,7 @@ const ProtectedLayout = async ({ children }: ProtectedLayoutProps) => {
 
   return (
     <div className="h-fit w-screen flex flex-col items-center justify-center mb-20">
-      <CheckoutHeader userId={userId} />
+      <CheckoutHeader  />
       <div className="w-full px-4 sm:px-10 md:px-16 mt-4 lg:px-24 xl:px-40">
         <Navbar />
       </div>
