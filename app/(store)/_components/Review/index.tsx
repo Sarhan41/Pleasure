@@ -95,7 +95,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
                 {review.user.image ? (
-                  <img
+                  <Image
                     src={review.user.image}
                     alt=""
                     className="h-10 w-10 rounded-full object-cover mr-4"
