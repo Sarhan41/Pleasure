@@ -1,13 +1,27 @@
-// components/ProductReviews.tsx
 "use client";
 
 import { useState } from "react";
 import { Review } from "@/types";
 import { Button } from "@/components/ui/button";
-import { StarIcon } from "lucide-react";
+import { StarIcon, MoreHorizontal, Trash } from "lucide-react";
 import Image from "next/image";
 import ReviewForm from "./components/ReviewForm";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog"; // Import your dialog components
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { usePathname, useRouter } from "next/navigation";
 
 interface ProductReviewsProps {
   reviews?: Review[];
@@ -18,11 +32,14 @@ interface ProductReviewsProps {
 const ProductReviews: React.FC<ProductReviewsProps> = ({
   reviews,
   currentUserId,
-  productId
+  productId,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to manage dialog visibility
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const reviewsPerPage = 5;
+
+  const router = useRouter();
 
   const openDialog = () => {
     setIsDialogOpen(true);
@@ -31,6 +48,30 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
   const closeDialog = () => {
     setIsDialogOpen(false);
   };
+
+  const pathname = window.location;
+    
+
+  const handleDelete = async (reviewId: string) => {
+    try {
+      await axios.delete(`/api/dashboard/reviews/${reviewId}`);
+      router.refresh();
+  
+      // Manually construct the new URL with reload parameter
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set('reload', Date.now().toString());
+  
+      // Use router.replace to update the URL without adding a new history entry
+      router.replace(currentUrl.toString());
+      
+      toast.success("Review deleted successfully.");
+    
+    } catch (error) {
+      toast.error("Failed to delete the review. Please try again.");
+    }
+  };
+  
+  
 
   const paginatedReviews = reviews?.slice(
     (currentPage - 1) * reviewsPerPage,
@@ -71,6 +112,21 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
                   />
                 ))}
               </div>
+              {currentUserId === review.userId && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-8 p-0">
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem onClick={() => handleDelete(review.id)}>
+                      <Trash className="mr-2 h-4 w-4" />
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
             <p className="mt-4 text-gray-800">{review.comment}</p>
             {review.images.length > 0 && (
@@ -88,30 +144,40 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
           </div>
         ))}
 
-        {/* Pagination Controls */}
-        <div className="flex justify-between items-center mt-6">
-          <Button
-            variant="secondary"
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </Button>
-          <span>
-            Page {currentPage} of {Math.ceil((reviews?.length || 0) / reviewsPerPage)}
-          </span>
-          <Button
-            variant="secondary"
-            onClick={() =>
-              setCurrentPage((prev) =>
-                Math.min(prev + 1, Math.ceil((reviews?.length || 0) / reviewsPerPage))
-              )
-            }
-            disabled={currentPage === Math.ceil((reviews?.length || 0) / reviewsPerPage)}
-          >
-            Next
-          </Button>
-        </div>
+        {/* Conditional Pagination Controls */}
+        {reviews && reviews.length > reviewsPerPage && (
+          <div className="flex justify-between items-center mt-6">
+            <span>
+              Showing {paginatedReviews?.length} of {reviews.length} reviews
+            </span>
+            <div className="flex space-x-2">
+              <Button
+                variant="secondary"
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  setCurrentPage((prev) =>
+                    Math.min(
+                      prev + 1,
+                      Math.ceil((reviews.length || 0) / reviewsPerPage)
+                    )
+                  )
+                }
+                disabled={
+                  currentPage ===
+                  Math.ceil((reviews.length || 0) / reviewsPerPage)
+                }
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Dialog for creating a review */}
@@ -121,7 +187,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
             <DialogTitle>Write Review</DialogTitle>
             <DialogClose />
           </DialogHeader>
-          <ReviewForm productId={productId} onClose={closeDialog} /> {/* You can pass necessary props */}
+          <ReviewForm productId={productId} onClose={closeDialog} />
         </DialogContent>
       </Dialog>
     </div>

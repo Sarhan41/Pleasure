@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { currentUser } from "@/lib/auth";
 
-export default async function POST(req: Request) {
+export async function POST(req: Request) {
   try {
     const user = await currentUser();
 
@@ -18,7 +18,7 @@ export default async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { productId, rating, comment, images , title } = body;
+    const { productId, rating, comment, images, title } = body;
 
     // Basic validation
     if (!productId) {
@@ -33,6 +33,40 @@ export default async function POST(req: Request) {
       return new NextResponse("Comment is required", { status: 400 });
     }
 
+    const existingReview = await db.review.findFirst({
+      where: {
+        productId,
+        userId: user.id,
+      },
+    });
+
+    if (existingReview) {
+      return new NextResponse(
+        "You have already reviewed this product, please delete that review and try again.",
+        { status: 400 }
+      );
+    }
+
+    if (user.role === "USER") {
+      const userOrders = await db.order.findMany({
+        where: {
+          userId: user.id,
+          orderItems: {
+            some: {
+              productId,
+            },
+          },
+        },
+      });
+
+      if (userOrders.length === 0) {
+        return new NextResponse(
+          "You are not a verified buyer of this product, you can't review or rate this.",
+          { status: 403 }
+        );
+      }
+    }
+
     // Creating the review
     const review = await db.review.create({
       data: {
@@ -45,9 +79,7 @@ export default async function POST(req: Request) {
           images && images.length > 0
             ? {
                 createMany: {
-                  data: images.map((image: { url: string }) => ({
-                    url: image.url,
-                  })),
+                  data: images.map((url: string) => ({ url })),
                 },
               }
             : undefined,

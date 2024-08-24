@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { StarIcon } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 interface ReviewFormProps {
   productId: string; // Required to ensure the form is associated with a product
@@ -23,6 +25,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   initialImages = [],
   onClose,
 }) => {
+  const router = useRouter();
   const [rating, setRating] = useState(initialRating);
   const [title, setTitle] = useState(initialTitle);
   const [comment, setComment] = useState(initialComment);
@@ -37,13 +40,19 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
 
     const data = { rating, title, comment, images, productId };
 
-   
-
     try {
       await axios.post("/api/dashboard/reviews", data);
       if (onClose) {
-        onClose(); // Close the dialog after submission
+        onClose();
       }
+      // Manually construct the new URL with reload parameter
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set("reload", Date.now().toString());
+
+      // Use router.replace to update the URL without adding a new history entry
+      router.replace(currentUrl.toString());
+
+      toast.success("Review Posted successfully.");
     } catch (error) {
       console.error("Failed to submit review:", error);
       setError("Failed to submit review. Please try again.");
@@ -53,7 +62,9 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   return (
     <div>
       <div className="mb-4">
-        <label className="block text-lg font-medium text-gray-700">Title:</label>
+        <label className="block text-lg font-medium text-gray-700">
+          Title:
+        </label>
         <input
           type="text"
           value={title}
