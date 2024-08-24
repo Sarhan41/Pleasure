@@ -75,7 +75,7 @@ model Review {
 
 model ReviewImage {
   id       String @id @default(cuid())
-  url      String? // URL of the image in Cloudinary
+  url      String // URL of the image in Cloudinary
   reviewId String // Foreign key to review
   review   Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
 }

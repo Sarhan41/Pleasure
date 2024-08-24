@@ -4,7 +4,7 @@ import { MouseEventHandler, useState } from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import Currency from "@/components/Store/Currency";
-import { Review, Size } from "@/types";
+import { Size } from "@/types";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -33,7 +33,6 @@ import { MotionSpan } from "@/constant/MotionElements";
 import { calculateDiscountPercentage } from "@/lib/calculateDiscountedPrice";
 import MainExtraDetails from "../ExtraDetails/MainDetails";
 import { getColorHexByName } from "@/lib/getColorHexByName";
-import Review from "../../Review";
 import ProductReviews from "../../Review";
 
 interface InfoProps {
@@ -654,12 +653,8 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
       {/* 
           // ! Reviews Divs Will Be Added Here
 */}
-
-{data.reviews && data.reviews.length > 0 && (
-   <ProductReviews reviews={data.reviews} />
-)  
-}
-
+    
+        <ProductReviews currentUserId={userId} reviews={data?.reviews} />
       {/* =============================================
           Div For Add To Cart And Add To Wishlist and Share 2
           =============================================

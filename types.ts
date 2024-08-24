@@ -129,5 +129,5 @@ export interface Review {
 
 export interface ReviewImage {
   id: string;
-  url: string | null;
+  url: string;
 }
