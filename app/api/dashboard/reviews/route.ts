@@ -39,22 +39,22 @@ export async function POST(req: Request) {
     }
 
     // Check if the user has already reviewed this product
-    const existingReview = await db.review.findFirst({
-      where: {
-        productId,
-        userId,
-      },
-    });
-
-    if (existingReview) {
-      return new NextResponse(
-        "You have already reviewed this product, please delete that review and try again.",
-        { status: 400 }
-      );
-    }
-
-    // If the user is a regular user, ensure they have purchased the product
     if (user.role === "USER") {
+      const existingReview = await db.review.findFirst({
+        where: {
+          productId,
+          userId,
+        },
+      });
+
+      if (existingReview) {
+        return new NextResponse(
+          "You have already reviewed this product, please delete that review and try again.",
+          { status: 400 }
+        );
+      }
+
+      // Ensure the user has purchased the product
       const userOrders = await db.order.findMany({
         where: {
           userId,

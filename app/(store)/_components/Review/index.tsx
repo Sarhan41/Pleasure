@@ -49,29 +49,23 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
     setIsDialogOpen(false);
   };
 
-      
-
   const handleDelete = async (reviewId: string) => {
     try {
       await axios.delete(`/api/dashboard/reviews/${reviewId}`);
       router.refresh();
-      
-  
+
       // Manually construct the new URL with reload parameter
       const currentUrl = new URL(window.location.href);
-      currentUrl.searchParams.set('reload', Date.now().toString());
-  
+      currentUrl.searchParams.set("reload", Date.now().toString());
+
       // Use router.replace to update the URL without adding a new history entry
       router.push(currentUrl.toString());
-      
+
       toast.success("Review deleted successfully.");
-    
     } catch (error) {
       toast.error("Failed to delete the review. Please try again.");
     }
   };
-  
-  
 
   const paginatedReviews = reviews?.slice(
     (currentPage - 1) * reviewsPerPage,
@@ -94,9 +88,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-lg font-semibold">
-                  {
-                    review.name? review.name : review.user.name || "Anonymous"
-                  }
+                  {review.name ? review.name : review.user.name || "Anonymous"}
                 </h3>
                 <p className="text-sm text-gray-500">
                   {new Date(review.createdAt).toLocaleDateString()}
@@ -130,7 +122,8 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
                 </DropdownMenu>
               )}
             </div>
-            <p className="mt-4 text-gray-800">{review.comment}</p>
+            <h1 className="mt-4 text-gray-800">{review.title}</h1>
+            <p className="mt-4 text-gray-600">{review.comment}</p>
             {review.images.length > 0 && (
               <div className="mt-4 flex space-x-4">
                 {review.images.map((image) => (
