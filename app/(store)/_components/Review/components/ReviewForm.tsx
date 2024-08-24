@@ -52,15 +52,21 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       const currentUrl = new URL(window.location.href);
       currentUrl.searchParams.set("reload", Date.now().toString());
   
-      // Use router.replace to update the URL without adding a new history entry
+      // Use router.push to update the URL
       router.push(currentUrl.toString());
   
       toast.success("Review Posted successfully.");
     } catch (error) {
-      console.error("Failed to submit review:", error);
-      setError("Failed to submit review. Please try again.");
+      if (axios.isAxiosError(error) && error.response) {
+        // Extract the error message from the response
+        setError(error.response.data || "Failed to submit review. Please try again.");
+      } else {
+        console.error("Failed to submit review:", error);
+        setError("Failed to submit review. Please try again.");
+      }
     }
   };
+  
   
 
   return (
