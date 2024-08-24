@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { Review } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -96,7 +94,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
                 {review.user.image ? (
                   <img
                     src={review.user.image}
-                    alt="User Avatar"
+                    alt=""
                     className="h-10 w-10 rounded-full object-cover mr-4"
                   />
                 ) : (
@@ -115,11 +113,13 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
                   </p>
                 </div>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center space-x-1">
                 {[...Array(5)].map((_, index) => (
                   <StarIcon
                     key={index}
-                    className={`h-6 w-6 ${index < review.rating ? "text-yellow-400" : "text-gray-300"}`}
+                    className={`h-6 w-6 ${
+                      index < review.rating ? "text-yellow-400" : "text-gray-300"
+                    } fill-current`}
                   />
                 ))}
               </div>
@@ -211,7 +211,6 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
       </Dialog>
     </div>
   );
-  
 };
 
 export default ProductReviews;
