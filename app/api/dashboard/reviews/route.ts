@@ -34,9 +34,9 @@ export async function POST(req: Request) {
       return new NextResponse("Title is required", { status: 400 });
     }
 
-    if (!comment || comment.trim().length === 0) {
-      return new NextResponse("Comment is required", { status: 400 });
-    }
+    // if (!comment || comment.trim().length === 0) {
+    //   return new NextResponse("Comment is required", { status: 400 });
+    // }
 
     // Check if the user has already reviewed this product
     if (user.role === "USER") {

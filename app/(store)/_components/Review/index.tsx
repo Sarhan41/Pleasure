@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { Review } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 interface ProductReviewsProps {
   reviews?: Review[];
@@ -130,6 +131,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
                 ))}
               </div>
             </div>
+
             <h1 className="mt-4 text-2xl font-semibold text-gray-900">
               {review.title}
             </h1>
