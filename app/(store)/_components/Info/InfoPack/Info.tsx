@@ -206,11 +206,13 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
 
   return (
     <div>
+      {/* Info Pack */}
+
+      
       {/* =============================================
             Div For Closing Share Popup
           =============================================
       */}
-      Info Pack
       {(isSharePopupOpen1 || isSharePopupOpen2) && (
         <div
           className="fixed inset-0 bg-transparent bg-opacity-50 z-40"
