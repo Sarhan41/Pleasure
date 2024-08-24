@@ -694,7 +694,11 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
           // ! Reviews Divs Will Be Added Here
 
 */}
-      <ProductReviews reviews={data?.reviews} />
+      <ProductReviews
+        currentUserId={userId}
+        reviews={data?.reviews}
+        productId={data?.id}
+      />
       {/* =============================================
           Div For Add To Cart And Add To Wishlist and Share 2
           =============================================

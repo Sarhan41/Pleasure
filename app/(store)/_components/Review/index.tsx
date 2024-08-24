@@ -12,11 +12,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@
 interface ProductReviewsProps {
   reviews?: Review[];
   currentUserId: string | null | undefined;
+  productId: string;
 }
 
 const ProductReviews: React.FC<ProductReviewsProps> = ({
   reviews,
   currentUserId,
+  productId
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to manage dialog visibility
@@ -119,7 +121,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
             <DialogTitle>Write Review</DialogTitle>
             <DialogClose />
           </DialogHeader>
-          <ReviewForm onClose={closeDialog} /> {/* You can pass necessary props */}
+          <ReviewForm productId={productId} onClose={closeDialog} /> {/* You can pass necessary props */}
         </DialogContent>
       </Dialog>
     </div>
