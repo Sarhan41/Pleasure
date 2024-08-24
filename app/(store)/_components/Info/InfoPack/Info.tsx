@@ -80,6 +80,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
     if (selectedSize === null || 0) {
       toast.error("Please select a size");
       setSizeError(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
     if (
@@ -88,6 +89,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         selectedColors.length < maxSelectableColors)
     ) {
       toast.error(`Please select ${maxSelectableColors} colors`);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 

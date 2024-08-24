@@ -21,6 +21,8 @@ import {
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { useCurrentRole } from "@/hooks/auth/use-current-role";
 
 interface ProductReviewsProps {
   reviews?: Review[];
@@ -39,6 +41,8 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
   const reviewsPerPage = 5;
 
   const router = useRouter();
+
+  const role = useCurrentRole();
 
   const openDialog = () => {
     setIsDialogOpen(true);
@@ -92,14 +96,15 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
             key={review.id}
             className="p-8 border border-gray-200 rounded-xl shadow-lg transition duration-300 hover:shadow-2xl flex flex-col"
           >
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center">
-                {review.user.image ? (
-                  <Image
-                    src={review.user.image}
-                    alt=""
-                    className="h-10 w-10 rounded-full object-cover mr-4"
-                  />
+            <div className="flex items-center justify-between mb-4 max-sm:flex-col max-sm:items-start">
+              <div className="flex items-center mb-2 max-sm:mb-0">
+                {review.user.image && !review.name ? (
+                  <Avatar className="mr-4">
+                    <AvatarImage
+                      src={review.user.image || ""}
+                      className="h-10 w-10 rounded-full object-cover "
+                    />
+                  </Avatar>
                 ) : (
                   <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center mr-4">
                     <span className="text-gray-600 text-lg font-semibold">
@@ -110,7 +115,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
                   </div>
                 )}
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-800">
+                  <h3 className="text-xl max-sm:text-base font-semibold text-gray-800">
                     {review.name || review.user.name || "Anonymous"}
                   </h3>
                   <p className="text-sm text-gray-500">
@@ -118,7 +123,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
                   </p>
                 </div>
               </div>
-              <div className="flex items-center space-x-1">
+              <div className="flex items-center space-x-1 max-sm:mt-2">
                 {[...Array(5)].map((_, index) => (
                   <StarIcon
                     key={index}
@@ -150,7 +155,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
                 ))}
               </div>
             )}
-            {currentUserId === review.userId && (
+            {(currentUserId === review.userId || role === "ADMIN") && (
               <div className="flex justify-end mt-4">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

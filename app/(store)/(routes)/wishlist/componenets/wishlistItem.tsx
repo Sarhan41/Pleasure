@@ -21,7 +21,7 @@ const WishListItem: React.FC<WishListItemProps> = ({ data, wishlistId }) => {
   const router = useRouter();
 
   const onProductClick = () => {
-    window.open(`/product/${data.name}`, '_blank');
+    window.open(`/product/${data.name}`, "_blank");
   };
 
   const removeItem = async (id: string) => {
@@ -37,16 +37,14 @@ const WishListItem: React.FC<WishListItemProps> = ({ data, wishlistId }) => {
 
   return (
     <li className="flex py-6 border-b ">
-      <div
-        onClick={onProductClick}
-        className="relative h-24 w-24 rounded-md overflow-hidden sm:h-48 sm:w-48 cursor-pointer"
-      >
+      <div className="relative h-20 w-16 sm:h-24 items-center flex  sm:w-20 rounded-md overflow-hidden cursor-pointer">
         <Image
+          onClick={onProductClick}
+          height={80}
+          width={60}
           src={data.images[0].url}
-          alt=""
-          className="object-cover object-center"
-          width={200}
-          height={200}
+          alt={""}
+          className="object-cover object-top rounded-md"
         />
       </div>
       <div className="relative ml-4 flex flex-1 flex-col justify-between sm:ml-6">
@@ -60,17 +58,18 @@ const WishListItem: React.FC<WishListItemProps> = ({ data, wishlistId }) => {
             </p>
           </div>
           <div className="mt-1 flex text-sm ">
-            {data.colors && data.colors[0].value !== "#111" && ( // Check if color exists before rendering
-              <div>
-                {data.colors.map((color) => (
-                  <div
-                    key={color.name}
-                    className="w-4 h-4 rounded-full mr-1"
-                    style={{ backgroundColor: color.value }}
-                  ></div>
-                ))}
-              </div>
-            )}
+            {data.colors &&
+              data.colors[0].value !== "#111" && ( // Check if color exists before rendering
+                <div>
+                  {data.colors.map((color) => (
+                    <div
+                      key={color.name}
+                      className="w-4 h-4 rounded-full mr-1"
+                      style={{ backgroundColor: color.value }}
+                    ></div>
+                  ))}
+                </div>
+              )}
             {data.sizes && ( // Check if size exists before rendering
               <div className="flex">
                 {data.sizes.map((size) => (
