@@ -56,13 +56,14 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
     try {
       await axios.delete(`/api/dashboard/reviews/${reviewId}`);
       router.refresh();
+      
   
       // Manually construct the new URL with reload parameter
       const currentUrl = new URL(window.location.href);
       currentUrl.searchParams.set('reload', Date.now().toString());
   
       // Use router.replace to update the URL without adding a new history entry
-      router.replace(currentUrl.toString());
+      router.push(currentUrl.toString());
       
       toast.success("Review deleted successfully.");
     

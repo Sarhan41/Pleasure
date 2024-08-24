@@ -6,15 +6,14 @@ export async function POST(req: Request) {
   try {
     const user = await currentUser();
 
-    const userId = user?.id;
-
     if (!user) {
       return new NextResponse("Unauthenticated", { status: 401 });
     }
+
+    const userId = user.id;
+
     if (!userId) {
-      return new NextResponse("You must login for creating Address", {
-        status: 404,
-      });
+      return new NextResponse("User ID is required", { status: 400 });
     }
 
     const body = await req.json();
@@ -24,19 +23,26 @@ export async function POST(req: Request) {
     if (!productId) {
       return new NextResponse("Product ID is required", { status: 400 });
     }
+
     if (typeof rating !== "number" || rating < 1 || rating > 5) {
       return new NextResponse("Rating must be a number between 1 and 5", {
         status: 400,
       });
     }
+
+    if (!title || title.trim().length === 0) {
+      return new NextResponse("Title is required", { status: 400 });
+    }
+
     if (!comment || comment.trim().length === 0) {
       return new NextResponse("Comment is required", { status: 400 });
     }
 
+    // Check if the user has already reviewed this product
     const existingReview = await db.review.findFirst({
       where: {
         productId,
-        userId: user.id,
+        userId,
       },
     });
 
@@ -47,10 +53,11 @@ export async function POST(req: Request) {
       );
     }
 
+    // If the user is a regular user, ensure they have purchased the product
     if (user.role === "USER") {
       const userOrders = await db.order.findMany({
         where: {
-          userId: user.id,
+          userId,
           orderItems: {
             some: {
               productId,
@@ -67,7 +74,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // Creating the review
+    // Create the review
     const review = await db.review.create({
       data: {
         productId,
@@ -89,6 +96,6 @@ export async function POST(req: Request) {
     return NextResponse.json(review);
   } catch (error) {
     console.error("[REVIEW_POST]", error);
-    return new NextResponse("Internal error", { status: 500 });
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }
