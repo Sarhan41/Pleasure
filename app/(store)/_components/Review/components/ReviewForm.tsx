@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { useCurrentRole } from "@/hooks/auth/use-current-role";
 
 interface ReviewFormProps {
   productId: string; // Required to ensure the form is associated with a product
@@ -37,40 +38,56 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       setError("Title is required and should contain letters.");
       return;
     }
-  
+
     const data = { rating, title, comment, images, productId };
-  
+
     try {
       // Submit the review
       await axios.post("/api/dashboard/reviews", data);
-  
+
       if (onClose) {
         onClose();
       }
-  
+
       // Manually construct the new URL with reload parameter
       const currentUrl = new URL(window.location.href);
       currentUrl.searchParams.set("reload", Date.now().toString());
-  
+
       // Use router.push to update the URL
       router.push(currentUrl.toString());
-  
+
       toast.success("Review Posted successfully.");
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         // Extract the error message from the response
-        setError(error.response.data || "Failed to submit review. Please try again.");
+        setError(
+          error.response.data || "Failed to submit review. Please try again."
+        );
       } else {
         console.error("Failed to submit review:", error);
         setError("Failed to submit review. Please try again.");
       }
     }
   };
-  
-  
+
+  const role = useCurrentRole();
 
   return (
     <div>
+      {role === "ADMIN" && (
+        <div className="mb-4">
+          <label className="block text-lg font-medium text-gray-700">
+            Name:
+          </label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full px-3 py-2 mt-1 border rounded-md focus:ring focus:ring-opacity-50"
+            placeholder="Title of your review"
+          />
+        </div>
+      )}
       <div className="mb-4">
         <label className="block text-lg font-medium text-gray-700">
           Title:

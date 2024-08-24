@@ -49,8 +49,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
     setIsDialogOpen(false);
   };
 
-  const pathname = window.location;
-    
+      
 
   const handleDelete = async (reviewId: string) => {
     try {
