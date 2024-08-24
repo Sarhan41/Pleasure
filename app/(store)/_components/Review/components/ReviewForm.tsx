@@ -10,11 +10,12 @@ import toast from "react-hot-toast";
 import { useCurrentRole } from "@/hooks/auth/use-current-role";
 
 interface ReviewFormProps {
-  productId: string; // Required to ensure the form is associated with a product
+  productId: string;
   initialRating?: number;
   initialTitle?: string;
   initialComment?: string;
   initialImages?: string[];
+  initialName?: string;
   onClose?: () => void;
 }
 
@@ -24,14 +25,18 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   initialTitle = "",
   initialComment = "",
   initialImages = [],
+  initialName = "",
   onClose,
 }) => {
   const router = useRouter();
   const [rating, setRating] = useState(initialRating);
   const [title, setTitle] = useState(initialTitle);
+  const [name, setName] = useState(initialName);
   const [comment, setComment] = useState(initialComment);
   const [images, setImages] = useState<string[]>(initialImages);
   const [error, setError] = useState<string | null>(null);
+
+  const role = useCurrentRole();
 
   const handleSubmit = async () => {
     if (!title.trim()) {
@@ -39,7 +44,13 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       return;
     }
 
-    const data = { rating, title, comment, images, productId };
+    // Prepare data to be sent
+    const data: any = {name, rating, title, comment, images, productId };
+
+    // Add name field only if the user is an admin
+    if (role === "ADMIN" && name.trim()) {
+      data.username = name;
+    }
 
     try {
       // Submit the review
@@ -70,8 +81,6 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
     }
   };
 
-  const role = useCurrentRole();
-
   return (
     <div>
       {role === "ADMIN" && (
@@ -81,10 +90,10 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
           </label>
           <input
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             className="w-full px-3 py-2 mt-1 border rounded-md focus:ring focus:ring-opacity-50"
-            placeholder="Title of your review"
+            placeholder="Name of User of review"
           />
         </div>
       )}

@@ -94,7 +94,9 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-lg font-semibold">
-                  {review.user.name || "Anonymous"}
+                  {
+                    review.name? review.name : review.user.name || "Anonymous"
+                  }
                 </h3>
                 <p className="text-sm text-gray-500">
                   {new Date(review.createdAt).toLocaleDateString()}

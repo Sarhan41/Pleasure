@@ -113,6 +113,7 @@ export interface ImageBlog {
 
 export interface Review {
   id: string;
+  name? : string;
   rating: number;
   title: string;
   comment: string;

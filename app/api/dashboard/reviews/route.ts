@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { productId, rating, comment, images, title } = body;
+    const { name, productId, rating, comment, images, title } = body;
 
     // Basic validation
     if (!productId) {
@@ -77,6 +77,7 @@ export async function POST(req: Request) {
     // Create the review
     const review = await db.review.create({
       data: {
+        name,
         productId,
         rating,
         comment,
