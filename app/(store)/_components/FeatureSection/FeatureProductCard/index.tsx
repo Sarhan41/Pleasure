@@ -30,7 +30,8 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({
   const handleClick = () => {
     const productName = data?.name.replace(/\s+/g, "-");
     if (!isModalOpen) {
-      window.open(`/product/${productName}`, "_blank");
+      // window.open(`/product/${productName}`, "_blank");
+      router.push(`/product/${productName}`);
     }
   };
 
