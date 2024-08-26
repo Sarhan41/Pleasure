@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getProduct, getSuggestedProducts } from "@/actions/Store/Get-Products";
 import { currentUser } from "@/lib/auth";
+import { db } from "@/lib/db";
 
 interface ProductPageProps {
   params: {
@@ -17,6 +18,14 @@ interface ProductPageProps {
 }
 
 export const revalidate = 1800; // 30 minutes
+
+export async function generateStaticParams() {
+  const products = await db.product.findMany();
+  return products.map((product) => ({
+    productName: product.name.replace(/\s+/g, "-"),
+  }));
+}
+
 
 const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
   const User = await currentUser();
@@ -49,7 +58,6 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
     );
   }
 
-
   const suggestedProducts = await getSuggestedProducts(
     product.categoryId,
     product.id
@@ -67,7 +75,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
             <Gallery images={product.images} />
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0 lg:overflow-y-scroll lg:max-h-[calc(100vh-200px)]">
               {isPackOfProduct ? (
-                <InfoPack data={product}  userId={userId} />
+                <InfoPack data={product} userId={userId} />
               ) : (
                 <InfoSingle data={product} userId={userId} />
               )}
