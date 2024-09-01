@@ -29,8 +29,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   userName,
 }) => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
-  const [isMenuVisible, setIsMenuVisible] = useState(true);
-  const [isCategoriesVisible, setIsCategoriesVisible] = useState(false);
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const [isCategoriesVisible, setIsCategoriesVisible] = useState(true);
 
   useEffect(() => {
     if (isOpen) {

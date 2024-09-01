@@ -25,14 +25,20 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({
   const [isFilterOpen, setIsFilterOpen] = useState(false); // State to control dialog visibility
 
   // Extract unique color names
+  // Extract unique color names
   const colorOptions = useMemo(() => {
-    const allColors = products.flatMap((p) => p.colors);
+    const allColors = products.flatMap((p) => [
+      ...p.colors.filter((c) => c.name !== "None"),
+      ...p.colorNames.filter((colorName) => colorName.name !== "None")
+    ]);
+  
     const uniqueColors = Array.from(new Set(allColors.map((c) => c.name))).map(
       (name) => allColors.find((c) => c.name === name)!
     );
+  
     return uniqueColors;
   }, [products]);
-
+  
   // Extract unique size names
   const sizeOptions = useMemo(() => {
     const allSizes = products.flatMap((p) => p.sizes);
@@ -69,7 +75,12 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
       const matchesColor = selectedColors.length
-        ? product.colors.some((c) => selectedColors.includes(c.name))
+        ? product.colors.some((c) =>
+            selectedColors.includes(c.name)
+          ) ||
+          product.colorNames.some((colorName) =>
+            selectedColors.includes(colorName.name)
+          )
         : true;
 
       const matchesSize = selectedSizes.length

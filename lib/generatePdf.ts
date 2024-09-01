@@ -2,45 +2,56 @@
 import { OrderColumn } from "@/app/(admin)/dashboard/(routes)/orders/_components/order-types";
 import html2pdf from "html2pdf.js";
 
-export const generatePdf = (order: OrderColumn, userName: string | null) => {
+const parseAndFormatDate = (dateString: string | Date) => {
+  if (dateString instanceof Date) {
+    dateString = dateString.toISOString(); // Convert Date to string
+  } else if (typeof dateString !== "string") {
+    throw new Error("Invalid date format");
+  }
+
+  const [datePart] = dateString.split("T");
+  const [year] = datePart.split("-");
+
+  return `${year}`;
+};
+
+export const generatePdf = (order: OrderColumn, userName: string) => {
   const element = document.createElement("div");
+
+  const formattedDate = parseAndFormatDate(order.createdAt);
+
   element.innerHTML = `
     <div style="padding: 20px; font-family: Arial, sans-serif;">
-      <h1 style="text-align: center;">Invoice</h1>
-      <div>
-        <p><strong>Phone:</strong> ${order.phone}</p>
-        <p><strong>Ship To:</strong> ${order.address}</p>
-        <p><strong>Ship From:</strong>30 RayChandnagar Opposite Sukan Mall, Near Visat Circle, Motera, Sabarmati, Ahemdabad, Gujarat, 380005</p>
-        <p><strong>Email:</strong> ${order.email}</p>
+      <div style="display: flex; justify-content: space-between;">
+        <div>
+          <p style="margin-bottom: 0;"><strong>Date:</strong> ${formattedDate}</p>
+        </div>
+        <div>
+          <p style="margin-bottom: 0;"><strong>${
+            order.isPaid ? "PREPAID" : "POSTPAID"
+          }</strong></p>
+        </div>
+      </div>
+      
+      
+      <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+        <div>
+          <p><strong>Ship To:</strong><br>${order.address}</p>
+          <p><strong>Phone:</strong> ${order.phone}</p>
+          <p><strong>Email:</strong> ${order.email}</p>
+        </div>
+        <div style="text-align: right;">
+          <p><strong>Ship From:</strong><br>30 RayChandnagar Opposite Sukan Mall,<br>Near Visat Circle, Motera, Sabarmati,<br>Ahmedabad, Gujarat, 380005</p>
+        </div>
+      </div>
+      
+      <div style="margin-top: 20px;">
         <p><strong>Total Payment:</strong> ₹${order.totalPayment}</p>
         <p><strong>Paid:</strong> ${order.isPaid ? "Yes" : "No"}</p>
         <p><strong>Status:</strong> ${order.status}</p>
       </div>
-      <h2>Products:</h2>
-      <div>
-        ${order.items
-          .map(
-            (item, index) => `
-          <div style="display: flex; margin-bottom: 10px; align-items: center;">
-            <h1>${index + 1}.</h1>
-            <img src="${item.imageUrl}" alt="${
-              item.productName
-            }" style="width: 50px; height: 50px; margin-right: 10px;">
-            <div>
-              <p><strong>${item.productName}</strong></p>
-              <p>Size: ${item.size}</p>
-              <p style="margin-bottom: 10px;">Colors: ${item.color
-                .map((color) => color.name)
-                .join(", ")}</p>
-            
-              <p>Quantity: ${item.quantity}</p>
-              <p>Price: ₹${item.price}</p>
-            </div>
-          </div>
-        `
-          )
-          .join("")}
-      </div>
+      
+     
     </div>
   `;
 

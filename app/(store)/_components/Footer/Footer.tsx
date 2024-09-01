@@ -95,7 +95,7 @@ const Footer: React.FC = () => {
     },
     {
       text: "Instagram",
-      route: "www.instagram.com",
+      route: "https://www.instagram.com/pleasure.fashion_/",
       icon: <Instagram className="h-8 w-8 hover:text-primary" />,
     },
     // Commented out as per request
@@ -160,7 +160,7 @@ const Footer: React.FC = () => {
               <ul className="text-secondary">
                 {QuickLinks.map((link, index) => (
                   <li key={index} className="mb-2 hover:text-primary">
-                    <Link aria-label="Link" href={link.route}>
+                    <Link aria-label="Link"  href={link.route}>
                       {link.text}
                     </Link>
                   </li>
