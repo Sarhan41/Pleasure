@@ -4,6 +4,8 @@ import { db } from "@/lib/db";
 import { unstable_cache as cache } from "next/cache";
 import WishListItem from "./componenets/wishlistItem";
 
+export const revalidate = 15;
+
 // Define cache function
 const getWishlistProducts = cache(async (userId: string) => {
   return await db.wishlist.findMany({

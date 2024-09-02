@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { unstable_cache as cache } from "next/cache";
 
-
+export const revalidate = 15;
 
 const getCartProducts = cache(async (userId: string) => {
   return await db.cartItems.findMany({
