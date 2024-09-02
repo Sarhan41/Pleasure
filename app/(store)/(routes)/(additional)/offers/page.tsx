@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
 import { db } from "@/lib/db";
+import { getCouponData } from "@/actions/Store/get-coupon-data";
 
 interface Coupon {
   id: string;
@@ -14,22 +15,7 @@ interface Coupon {
 }
 
 const OffersPage: React.FC = async () => {
-  const coupons = await db.coupon.findMany({
-    where: {
-      isActive: true,
-      remainingUses: {
-        gt: 0, // Ensure there are remaining uses
-      },
-    },
-    select: {
-      id: true,
-      code: true,
-      discountType: true,
-      discountValue: true,
-      minimumOrderAmount: true,
-      isActive: true,
-    },
-  });
+  const { coupons } = await getCouponData();
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 flex items-center justify-center py-12 px-6">
