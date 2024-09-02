@@ -211,7 +211,6 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
     setIsSharePopupOpen1(false);
   };
 
-
   return (
     <div>
       <h1 className="text-xl md:text-2xl font-bold text-gray-900 border-b-2 pb-4">
@@ -269,8 +268,8 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
               <Heart className="mr-1 sm:mr-2" /> Wishlist
             </Button>
             <Link
-              href={`/product/${data.name.replace(/\s+/g, "-")}`}
               prefetch={true}
+              href={`/product/${data.name.replace(/\s+/g, "-")}`}
               className="w-full sm:w-auto"
             >
               Product
