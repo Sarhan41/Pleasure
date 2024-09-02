@@ -14,7 +14,7 @@ const BecomeAffiliate = () => {
       <p className="text-primary font-serif text-3xl">
         Stay tuned, our affiliate program is coming soon.
       </p>
-      <Link area-label="Link" href="/" className="mt-6">
+      <Link prefetch={true} area-label="Link" href="/" className="mt-6">
         <Button variant={"outline"}   className="border-primary hover:bg-primary hover:text-white z-50 w-full">Go back to home</Button>
       </Link>
     </section>
