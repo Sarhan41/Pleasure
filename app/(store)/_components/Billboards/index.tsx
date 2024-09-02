@@ -45,7 +45,9 @@ const Billboard: React.FC<BillboardProps> = ({ data }) => {
         {data.map((item, index) => (
           <CarouselItem key={index}>
             <div className="p-4 sm:p-6 w-full flex justify-center lg:p-8 overflow-hidden cursor-pointer">
-              <Link area-label="Link"
+              <Link
+                prefetch={true}
+                area-label="Link"
                 href={`/collections/${item.link.replace(/\s+/g, "-")}`}
                 passHref
                 className="w-full h-full"
@@ -54,8 +56,7 @@ const Billboard: React.FC<BillboardProps> = ({ data }) => {
                   <Image
                     src={item.imageUrl}
                     alt={""}
-         fill
-                    
+                    fill
                     priority
                     className="rounded-xl object-cover bg-gradient-to-b from-black/70 via-black/50 to-black/30"
                   />
