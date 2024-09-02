@@ -3,7 +3,8 @@ import NoResults from "@/components/Store/NoResults";
 import { db } from "@/lib/db";
 import BlogHeader from "./components/DetailHeader";
 import BlogContent from "./components/Content";
-import RelatedBlogList from "./components/RelatedBlogList"; // Assuming you have a RelatedBlogList component
+import RelatedBlogList from "./components/RelatedBlogList";
+import { unstable_cache as cache } from "next/cache";
 
 interface BlogPageProps {
   params: {
@@ -11,10 +12,9 @@ interface BlogPageProps {
   };
 }
 
-const BlogPage: React.FC<BlogPageProps> = async ({ params }) => {
-  const blogName = params.blogName.replace(/-/g, " ");
-
-  const blog = await db.blogs.findFirst({
+// Cache fetching individual blog
+const getBlog = cache(async (blogName: string) => {
+  return await db.blogs.findFirst({
     where: {
       name: blogName,
     },
@@ -28,16 +28,15 @@ const BlogPage: React.FC<BlogPageProps> = async ({ params }) => {
       },
     },
   });
+});
 
-  if (!blog) {
-    return <NoResults />;
-  }
-
-  const relatedBlogs = await db.blogs.findMany({
+// Cache fetching related blogs
+const getRelatedBlogs = cache(async (categoryId: string, excludeId: string) => {
+  return await db.blogs.findMany({
     where: {
-      categoryId: blog.category.id,
+      categoryId,
       id: {
-        not: blog.id, // Exclude the current blog
+        not: excludeId, // Exclude the current blog
       },
     },
     take: 3, // Limit to 3 related blogs
@@ -51,6 +50,17 @@ const BlogPage: React.FC<BlogPageProps> = async ({ params }) => {
       },
     },
   });
+});
+
+const BlogPage: React.FC<BlogPageProps> = async ({ params }) => {
+  const blogName = params.blogName.replace(/-/g, " ");
+  const blog = await getBlog(blogName);
+
+  if (!blog) {
+    return <NoResults />;
+  }
+
+  const relatedBlogs = await getRelatedBlogs(blog.category.id, blog.id);
 
   return (
     <section className="container mx-auto px-4 sm:px-8 lg:px-12 py-10">

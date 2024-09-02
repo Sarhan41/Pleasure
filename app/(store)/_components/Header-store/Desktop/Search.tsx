@@ -1,29 +1,28 @@
 import { useState, useEffect, useRef } from "react";
-import { Product } from "@prisma/client";
 import Link from "next/link";
 import { SearchIcon, XIcon, FlameIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface SearchProps {
-  allProducts: Product[];
+  allProducts: { name: string }[]; // Array of objects with only name
 }
 
 const popularSearches = [
   {
     name: "Hot Sport Bra",
-    link: "/Hot Pink White Skin Black Red Maroon Grey Cotton Spandex Stretchable Womens Sports Bra (Pack of 3) Buy Any 3 Pcs",
+    link: "/Hot-Pink-White-Skin-Black-Red-Maroon-Grey-Cotton-Spandex-Stretchable-Womens-Sports-Bra-Pack-of-3-Buy-Any-3-Pcs",
   },
   {
     name: "Hipster Mid Waist Panties",
-    link: "/Hipster Mid Waist Flower Print Panties In Multicolor (Pack Of 3) 100 Cotton SERVIN",
+    link: "/Hipster-Mid-Waist-Flower-Print-Panties-In-Multicolor-Pack-Of-3-100-Cotton-SERVIN",
   },
   {
     name: "Hipster Cotton Spandex Panties",
-    link: "/Hipster Cotton Spandex Skin Dark Pink Baby Pink Panties (Pack of 3) CHARVI",
+    link: "/Hipster-Cotton-Spandex-Skin-Dark-Pink-Baby-Pink-Panties-Pack-of-3-CHARVI",
   },
   {
     name: "Low Rise Bikini Polka Dot Panties",
-    link: "/Low Rise Bikini Polka Dot Panties In Multicolor (Pack Of 3) 100 Cotton SARA",
+    link: "/Low-Rise-Bikini-Polka-Dot-Panties-In-Multicolor-Pack-Of-3-100-Cotton-SARA",
   },
 ];
 
@@ -34,7 +33,7 @@ const formatProductName = (name: string) => {
 const Search = ({ allProducts }: SearchProps) => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const [searchResults, setSearchResults] = useState<string[]>([]);
   const [showResults, setShowResults] = useState<boolean>(false);
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);
@@ -42,11 +41,11 @@ const Search = ({ allProducts }: SearchProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSearch = (term: string) => {
-    const filteredProducts = allProducts.filter((product) =>
-      product.name.toLowerCase().includes(term.toLowerCase())
-    );
-    setSearchResults(filteredProducts);
-    setShowResults(filteredProducts.length > 0 && term.length > 0);
+    const filteredNames = allProducts
+      .map((product) => product.name) // Extract names from product objects
+      .filter((name) => name.toLowerCase().includes(term.toLowerCase()));
+    setSearchResults(filteredNames);
+    setShowResults(filteredNames.length > 0 && term.length > 0);
     setFocusedIndex(-1); // Reset focus index
   };
 
@@ -72,9 +71,7 @@ const Search = ({ allProducts }: SearchProps) => {
         prevIndex > 0 ? prevIndex - 1 : prevIndex
       );
     } else if (e.key === "Enter" && focusedIndex >= 0) {
-      router.push(
-        `/product/${formatProductName(searchResults[focusedIndex].name)}`
-      );
+      router.push(`/product/${formatProductName(searchResults[focusedIndex])}`);
       setShowResults(false);
       setIsSearchOpen(false);
     }
@@ -124,13 +121,13 @@ const Search = ({ allProducts }: SearchProps) => {
                 No results found
               </div>
             ) : (
-              searchResults.map((product, index) => (
-                <Link prefetch={true}
+              searchResults.map((name, index) => (
+                <Link
+                  prefetch={true}
                   area-label="Link"
-                  key={product.id}
-                  href={`/product/${formatProductName(product.name)}`}
+                  key={name}
+                  href={`/product/${formatProductName(name)}`}
                   onClick={() => setShowResults(false)}
-                
                   rel="noopener noreferrer"
                 >
                   <div
@@ -138,7 +135,7 @@ const Search = ({ allProducts }: SearchProps) => {
                       focusedIndex === index ? "bg-gray-200" : ""
                     }`}
                   >
-                    {product.name}
+                    {name}
                   </div>
                 </Link>
               ))
@@ -176,16 +173,16 @@ const Search = ({ allProducts }: SearchProps) => {
                     No results found
                   </div>
                 ) : (
-                  searchResults.map((product, index) => (
-                    <Link prefetch={true}
+                  searchResults.map((name, index) => (
+                    <Link
+                      prefetch={true}
                       area-label="Link"
-                      key={product.id}
-                      href={`/product/${formatProductName(product.name)}`}
+                      key={name}
+                      href={`/product/${formatProductName(name)}`}
                       onClick={() => {
                         setIsSearchOpen(false);
                         setShowResults(false);
                       }}
-                  
                       rel="noopener noreferrer"
                     >
                       <div
@@ -193,7 +190,7 @@ const Search = ({ allProducts }: SearchProps) => {
                           focusedIndex === index ? "bg-gray-200" : ""
                         }`}
                       >
-                        {product.name}
+                        {name}
                       </div>
                     </Link>
                   ))
@@ -207,13 +204,13 @@ const Search = ({ allProducts }: SearchProps) => {
             </h3>
             <div className="space-y-2 flex flex-col overflow-auto max-lg:min-h-96 lg:text-lg lg:py-4 lg:px-6 lg:space-y-4">
               {popularSearches.map((item) => (
-                <Link prefetch={true}
+                <Link
+                  prefetch={true}
                   area-label="Link"
                   key={item.name}
                   href={`/product/${formatProductName(item.link)}`}
                   onClick={() => setIsSearchOpen(false)}
                   className="flex flex-wrap w-full"
-             
                   rel="noopener noreferrer"
                 >
                   <div className="p-2 mb-2 border border-gray-300 rounded-full hover:bg-gray-100 transition-all duration-300 text-primary border-primary hover:text-black hover:border-black bg-gradient-to-r from-pink-500 to-yellow-500 text-white lg:text-xl lg:py-3 w-fit lg:px-5">

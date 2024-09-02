@@ -1,9 +1,10 @@
 import ProductList from "@/app/(store)/_components/ProductList/ProductList";
 import { db } from "@/lib/db";
+import { unstable_cache as cache } from "next/cache";
 
-const NewArrivalPage = async () => {
-  // Fetch the featured products
-  const products = await db.product.findMany({
+// Define cache function
+const getNewArrivalProducts = cache(async () => {
+  return await db.product.findMany({
     where: {
       isNew: true,
     },
@@ -18,9 +19,15 @@ const NewArrivalPage = async () => {
       colors: true,
     },
   });
+});
+
+const NewArrivalPage = async () => {
+  // Fetch the new arrival products using the cache function
+  const products = await getNewArrivalProducts();
+
   return (
     <div className="flex flex-col gap-y-8 px-4 sm:px-6 lg:px-8 w-full">
-      <ProductList title="Featured Products" items={products} />
+      <ProductList title="New Arrivals" items={products} />
     </div>
   );
 };

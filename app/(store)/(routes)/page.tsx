@@ -4,7 +4,7 @@ import Billboard from "../_components/Billboards";
 import BestSellerBillboard from "../_components/BestSellerBillboard";
 import FeatureSection from "../_components/FeatureSection";
 import { currentUser } from "@/lib/auth";
-import { getHomePageData } from "@/actions/Store/Get-EverythingHomePage";
+import { getHomePageData } from "@/actions/Store/get-homepage-data";
 
 export const revalidate = 1800; // 30 minutes
 

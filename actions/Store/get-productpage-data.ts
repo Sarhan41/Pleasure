@@ -1,5 +1,5 @@
 "use server";
-import { cache } from "react";
+import { unstable_cache as cache } from "next/cache";
 import { db } from "@/lib/db";
 
 export const getProduct = cache(async (productName: string) => {

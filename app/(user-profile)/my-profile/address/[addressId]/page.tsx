@@ -1,12 +1,18 @@
 import { db } from "@/lib/db";
 import { AddressForm } from "./components/AddressForm";
+import { unstable_cache as cache } from "next/cache";
 
-const AddressPage = async ({ params }: { params: { addressId: string } }) => {
-  const address = await db.address.findUnique({
+// Define cache function
+const getAddress = cache(async (addressId: string) => {
+  return await db.address.findUnique({
     where: {
-      id: params.addressId,
+      id: addressId,
     },
   });
+});
+
+const AddressPage = async ({ params }: { params: { addressId: string } }) => {
+  const address = await getAddress(params.addressId);
 
   return (
     <div className="flex-col">

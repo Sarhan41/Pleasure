@@ -10,7 +10,11 @@ import BlogHeader from "./Blog";
 
 export interface HeaderProps {
   categories: Category[];
-  allProducts: Product[];
+  allProducts:
+    | {
+        name: string;
+      }[];
+
   UserId: string | undefined;
   UserName: string | undefined | null;
 }
@@ -35,8 +39,6 @@ const Header = ({ categories, allProducts, UserId, UserName }: HeaderProps) => {
   }, []);
 
   // if(isOpen) return null;
-
-
 
   const isCheckOutPage = pathname.includes("/checkout");
   if (isCheckOutPage) return <CheckoutHeader />;
