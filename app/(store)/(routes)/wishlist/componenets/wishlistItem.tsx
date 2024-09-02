@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { toast } from "react-hot-toast";
 import { X } from "lucide-react";
 
@@ -17,12 +18,7 @@ interface WishListItemProps {
 }
 
 const WishListItem: React.FC<WishListItemProps> = ({ data, wishlistId }) => {
-  console.log(wishlistId);
   const router = useRouter();
-
-  const onProductClick = () => {
-    window.open(`/product/${data.name}`, "_blank");
-  };
 
   const removeItem = async (id: string) => {
     try {
@@ -36,41 +32,40 @@ const WishListItem: React.FC<WishListItemProps> = ({ data, wishlistId }) => {
   };
 
   return (
-    <li className="flex py-6 border-b ">
-      <div className="relative h-20 w-16 sm:h-24 items-center flex  sm:w-20 rounded-md overflow-hidden cursor-pointer">
-        <Image
-          onClick={onProductClick}
-          height={80}
-          width={60}
-          src={data.images[0].url}
-          alt={""}
-          className="object-cover object-top rounded-md"
-        />
+    <li className="flex py-6 border-b">
+      <div className="relative h-20 w-16 sm:h-24 items-center flex sm:w-20 rounded-md overflow-hidden cursor-pointer">
+        <Link href={`/product/${data.name.replace(/\s+/g, "-")}`} passHref>
+          <Image
+            height={80}
+            width={60}
+            src={data.images[0].url}
+            alt={data.name}
+            className="object-cover object-top rounded-md"
+          />
+        </Link>
       </div>
       <div className="relative ml-4 flex flex-1 flex-col justify-between sm:ml-6">
-        <div className="relative pr-9  sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-8">
+        <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-8">
           <div className="flex justify-between">
-            <p
-              onClick={onProductClick}
-              className="text-lg cursor-pointer font-semibold text-black"
-            >
-              {data.name}
-            </p>
+            <Link href={`/product/${data.name.replace(/\s+/g, "-")}`} passHref>
+              <p className="text-lg cursor-pointer font-semibold text-black">
+                {data.name}
+              </p>
+            </Link>
           </div>
-          <div className="mt-1 flex text-sm ">
-            {data.colors &&
-              data.colors[0].value !== "#111" && ( // Check if color exists before rendering
-                <div>
-                  {data.colors.map((color) => (
-                    <div
-                      key={color.name}
-                      className="w-4 h-4 rounded-full mr-1"
-                      style={{ backgroundColor: color.value }}
-                    ></div>
-                  ))}
-                </div>
-              )}
-            {data.sizes && ( // Check if size exists before rendering
+          <div className="mt-1 flex text-sm">
+            {data.colors && data.colors[0].value !== "#111" && (
+              <div>
+                {data.colors.map((color) => (
+                  <div
+                    key={color.name}
+                    className="w-4 h-4 rounded-full mr-1"
+                    style={{ backgroundColor: color.value }}
+                  ></div>
+                ))}
+              </div>
+            )}
+            {data.sizes && (
               <div className="flex">
                 {data.sizes.map((size) => (
                   <div key={size.name} className="ml-2 flex">
