@@ -4,11 +4,7 @@ import Billboard from "../_components/Billboards";
 import BestSellerBillboard from "../_components/BestSellerBillboard";
 import FeatureSection from "../_components/FeatureSection";
 import { currentUser } from "@/lib/auth";
-import {
-  getBillboards,
-  getCategories,
-  getFeaturedProducts,
-} from "@/actions/Store/Get-EverythingHomePage";
+import { getHomePageData } from "@/actions/Store/Get-EverythingHomePage";
 
 export const revalidate = 1800; // 30 minutes
 
@@ -22,11 +18,7 @@ const categoryOrder = [
 ];
 
 const HomePage: React.FC = async () => {
-  const [billboards, categories, featuredProducts] = await Promise.all([
-    getBillboards(),
-    getCategories(),
-    getFeaturedProducts(),
-  ]);
+  const { billboards, categories, featuredProducts } = await getHomePageData();
 
   const sortedCategories = categories.sort((a, b) => {
     return categoryOrder.indexOf(a.name) - categoryOrder.indexOf(b.name);
