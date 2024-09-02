@@ -8,7 +8,10 @@ import { RelatedProductList } from "@/app/(store)/_components/RelatedItemsList";
 import Container from "@/components/Store/container";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { unstable_cache as cache } from "next/cache";
+import {
+  getProduct,
+  getSuggestedProducts,
+} from "@/actions/Store/get-productpage-data";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 
@@ -19,58 +22,6 @@ interface ProductPageProps {
 }
 
 export const revalidate = 1800; // 30 minutes
-("use server");
-
-export const getProduct = cache(async (productName: string) => {
-  const product = await db.product.findFirst({
-    where: {
-      name: productName,
-    },
-    include: {
-      category: true,
-      images: { select: { url: true, id: true, productId: true } },
-      colors: { select: { name: true, value: true, toLink: true } },
-      colorNames: { select: { name: true } },
-      sizes: {
-        select: {
-          name: true,
-          SKUvalue: true,
-          price: true,
-          quantity: true,
-          discountedprice: true,
-          id: true,
-        },
-      },
-      reviews: {
-        include: {
-          images: { select: { url: true, id: true } },
-          user: { select: { id: true, name: true, image: true } },
-        },
-      },
-    },
-  });
-  return product;
-});
-
-export const getSuggestedProducts = cache(
-  async (categoryId: string, productId: string) => {
-    const suggestedProducts = await db.product.findMany({
-      where: {
-        categoryId: categoryId,
-        isArchived: false,
-      },
-      include: {
-        category: true,
-        colorNames: true,
-        images: { select: { url: true, id: true, productId: true } },
-        colors: { select: { name: true, value: true, toLink: true } },
-        sizes: true,
-      },
-    });
-
-    return suggestedProducts.filter((product) => product.id !== productId);
-  }
-);
 
 export async function generateStaticParams() {
   const products = await db.product.findMany({
@@ -80,7 +31,7 @@ export async function generateStaticParams() {
   });
 
   return products.map((product) => ({
-    productName: product.name.replace(/ /g, "-"),
+    productName: encodeURIComponent(product.name.replace(/ /g, "-")),
   }));
 }
 
