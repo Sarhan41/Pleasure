@@ -158,63 +158,66 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({
 
   return (
     <div className="relative overflow-hidden bg-white w-full sm:w-80 group cursor-pointer rounded-2xl border border-gray-200 shadow-lg p-3 space-y-2 transition-transform transform hover:scale-105">
-      <Link href={`/product/${productNameSlug}`} passHref>
-        <div
-          className="h-72 sm:h-80 w-full rounded-lg bg-gray-100 relative overflow-hidden"
-          onClick={(e) => {
-            if (isModalOpen) {
-              e.preventDefault(); // Prevents navigation if modal is open
-            }
-          }}
-        >
-          {parseFloat(discountedPercentage) > 0 && (
-            <div
-              className={`absolute top-2 right-2 z-20 text-white text-xs font-semibold px-2 py-1 rounded-lg ${
-                parseFloat(discountedPercentage) < 45
-                  ? "bg-primary"
-                  : parseFloat(discountedPercentage) > 50
-                  ? "bg-red-500"
-                  : "bg-blue-500"
-              }`}
-            >
-              {discountedPercentage}% OFF
-            </div>
-          )}
-
-          <Image
-            alt=""
-            src={`${
-              hovered && data?.images[1]?.url
-                ? data?.images[1]?.url
-                : data?.images[0]?.url
+      <div className="relative h-72 sm:h-80 w-full rounded-lg bg-gray-100 overflow-hidden">
+        {parseFloat(discountedPercentage) > 0 && (
+          <div
+            className={`absolute top-2 right-2 z-20 text-white text-xs font-semibold px-2 py-1 rounded-lg ${
+              parseFloat(discountedPercentage) < 45
+                ? "bg-primary"
+                : parseFloat(discountedPercentage) > 50
+                ? "bg-red-500"
+                : "bg-blue-500"
             }`}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            fill
-            className={`" ${
-              data.category.name == "Sport Bra"
-                ? "object-contain w-full bg-white"
-                : "object-cover"
-            } rounded-lg transition-transform transform group-hover:scale-105"`}
-          />
-          <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute w-full px-4 bottom-4">
-            <div className="flex gap-4 justify-center">
-              <button
-                onClick={onPreview}
-                className="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100"
-              >
-                <Expand size={20} className="text-gray-600" />
-              </button>
-              <button
-                onClick={onAddToWishList}
-                className="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100"
-              >
-                <Heart size={20} className="text-gray-600" />
-              </button>
-            </div>
+          >
+            {discountedPercentage}% OFF
+          </div>
+        )}
+
+        <Link href={`/product/${productNameSlug}`} passHref>
+          <div
+            className="w-full h-full"
+            onClick={(e) => {
+              if (isModalOpen) {
+                e.preventDefault(); // Prevents navigation if modal is open
+              }
+            }}
+          >
+            <Image
+              alt=""
+              src={`${
+                hovered && data?.images[1]?.url
+                  ? data?.images[1]?.url
+                  : data?.images[0]?.url
+              }`}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              fill
+              className={`${
+                data.category.name == "Sport Bra"
+                  ? "object-contain w-full bg-white"
+                  : "object-cover"
+              } rounded-lg transition-transform transform group-hover:scale-105`}
+            />
+          </div>
+        </Link>
+
+        <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute w-full px-4 bottom-4">
+          <div className="flex gap-4 justify-center">
+            <button
+              onClick={onPreview}
+              className="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100 z-20"
+            >
+              <Expand size={20} className="text-gray-600" />
+            </button>
+            <button
+              onClick={onAddToWishList}
+              className="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100"
+            >
+              <Heart size={20} className="text-gray-600" />
+            </button>
           </div>
         </div>
-      </Link>
+      </div>
 
       <div
         className="flex flex-col items-start space-y-1"
