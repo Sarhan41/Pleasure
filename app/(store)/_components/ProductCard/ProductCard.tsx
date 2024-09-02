@@ -11,6 +11,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { calculateDiscountPercentage } from "@/lib/calculateDiscountedPrice";
+import Link from "next/link";
 
 interface ProductCardProps {
   data: ProductType;
@@ -24,11 +25,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
   const previewModal = usePreviewModal();
   const router = useRouter();
 
-  // Div CLick
+  const productNameSlug = data?.name.replace(/\s+/g, "-");
+
+  // Div Click - Navigate to Product Page
   const handleClick = () => {
-    const productName = data?.name.replace(/\s+/g, "-");
     if (!isModalOpen) {
-      router.push(`/product/${productName}`);
+      router.push(`/product/${productNameSlug}`);
     }
   };
 
@@ -96,7 +98,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
     }
   };
 
-  //Add to wishlist
+  // Add to wishlist
   const onAddToWishList: MouseEventHandler<HTMLButtonElement> = async (
     event
   ) => {
@@ -163,12 +165,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
 
   return (
     // Parent Div
-    <div className="relative overflow-hidden bg-white h-auto w-[260px] sm:w-[320px] group cursor-pointer rounded-2xl border border-gray-200 shadow-md p-3 space-y-2 transition-transform transform hover:scale-105">
-      {/* // Image Div and Three Icon and Discount Div */}
-      <div
-        className="h-[280px] sm:h-[320px] w-full rounded-lg bg-gray-100 relative overflow-hidden"
-        onClick={handleClick}
-      >
+    <div className="relative overflow-hidden bg-white w-full sm:w-80 group cursor-pointer rounded-2xl border border-gray-200 shadow-lg p-3 space-y-2 transition-transform transform hover:scale-105">
+      <div className="relative h-72 sm:h-80 w-full rounded-lg bg-gray-100 overflow-hidden">
         {parseFloat(discountedPercentage) > 0 && (
           <div
             className={`absolute top-2 right-2 z-20 text-white text-xs font-semibold px-2 py-1 rounded-lg ${
@@ -183,27 +181,39 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
           </div>
         )}
 
-        <Image
-          alt=""
-          src={`${
-            hovered && data?.images[1]?.url
-              ? data?.images[1]?.url
-              : data?.images[0]?.url
-          }`}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          fill
-          className={`" ${
-            data.category.name == "Sport Bra"
-              ? "object-contain w-full bg-white"
-              : "object-cover"
-          } rounded-lg transition-transform transform group-hover:scale-105"`}
-        />
-        <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute w-full px-4 bottom-4">
+        <Link href={`/product/${productNameSlug}`} prefetch={true} passHref>
+          <div
+            className="w-full h-full mb-2"
+            onClick={(e) => {
+              if (isModalOpen) {
+                e.preventDefault(); // Prevents navigation if modal is open
+              }
+            }}
+          >
+            <Image
+              alt=""
+              src={`${
+                hovered && data?.images[1]?.url
+                  ? data?.images[1]?.url
+                  : data?.images[0]?.url
+              }`}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              fill
+              className={`${
+                data.category.name == "Sport Bra"
+                  ? "object-contain w-full bg-white"
+                  : "object-cover"
+              } rounded-lg transition-transform transform group-hover:scale-105`}
+            />
+          </div>
+        </Link>
+
+        <div className="opacity-0 group-hover:opacity-100  transition-opacity absolute w-full px-4 bottom-4">
           <div className="flex gap-4 justify-center">
             <button
               onClick={onPreview}
-              className="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100"
+              className="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100 z-10"
             >
               <Expand size={20} className="text-gray-600" />
             </button>
@@ -216,28 +226,23 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
           </div>
         </div>
       </div>
-      {/* // Product Name and Category Div */}
-      <div
-        className="flex flex-col items-start space-y-1"
-        onClick={handleClick}
-      >
-        <p className="font-semibold text-xs sm:text-xs text-gray-600">
-          {data.subname && data.subname.length > 0
-            ? data.subname.includes("100")
-              ? data.subname.replace("100", "100%")
-              : data.subname
-            : data.name.includes("100")
-            ? data.name.replace("100", "100%")
-            : data.name}
-        </p>
-        <p className="text-xs text-gray-500">{data.category?.name}</p>
-      </div>
-      {/* // Price and Add to Cart Div */}
+
+      <Link href={`/product/${productNameSlug}`} prefetch={true} passHref>
+        <div className="flex flex-col mt-2 items-start space-y-1">
+          <p className="font-semibold text-xs sm:text-xs text-gray-600">
+            {data.subname && data.subname.length > 0
+              ? data.subname.includes("100")
+                ? data.subname.replace("100", "100%")
+                : data.subname
+              : data.name.includes("100")
+              ? data.name.replace("100", "100%")
+              : data.name}
+          </p>
+          <p className="text-xs text-blue-600">{data.category?.name}</p>
+        </div>
+      </Link>
       <div className="flex justify-between items-center w-full mt-auto">
-        <div
-          className="font-semibold text-sm text-gray-900"
-          onClick={handleClick}
-        >
+        <div className="font-semibold text-sm text-gray-900">
           ₹
           {selectedSize.discountedprice ? (
             <>
@@ -252,14 +257,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
         </div>
         <Button
           onClick={handleAddToCart}
-          className="   rounded-full bg-blue-600 transition hover:bg-primary "
+          className="rounded-full bg-blue-600 text-white px-4 py-2 transition hover:bg-blue-500"
         >
           Add To Cart
         </Button>
       </div>
-      {/* // Modal for Size Selection */}
+
       {isModalOpen && (
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-end transition-opacity duration-300">
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex z-20 justify-center items-end transition-opacity duration-300">
           <div className="bg-white rounded-t-lg p-4 w-full max-w-md">
             <h2 className="text-lg font-semibold mb-4">Select a Size</h2>
             <div className="flex justify-around">

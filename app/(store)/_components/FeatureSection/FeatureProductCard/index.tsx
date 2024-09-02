@@ -173,9 +173,9 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({
           </div>
         )}
 
-        <Link href={`/product/${productNameSlug}`} passHref>
+        <Link href={`/product/${productNameSlug}`} prefetch={true} passHref>
           <div
-            className="w-full h-full"
+            className="w-full h-full mb-2"
             onClick={(e) => {
               if (isModalOpen) {
                 e.preventDefault(); // Prevents navigation if modal is open
@@ -201,11 +201,11 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({
           </div>
         </Link>
 
-        <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute w-full px-4 bottom-4">
+        <div className="opacity-0 group-hover:opacity-100  transition-opacity absolute w-full px-4 bottom-4">
           <div className="flex gap-4 justify-center">
             <button
               onClick={onPreview}
-              className="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100 z-20"
+              className="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100 z-10"
             >
               <Expand size={20} className="text-gray-600" />
             </button>
@@ -219,27 +219,22 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({
         </div>
       </div>
 
-      <div
-        className="flex flex-col items-start space-y-1"
-        onClick={handleAddToCart}
-      >
-        <p className="font-semibold text-xs sm:text-xs text-gray-600">
-          {data.subname && data.subname.length > 0
-            ? data.subname.includes("100")
-              ? data.subname.replace("100", "100%")
-              : data.subname
-            : data.name.includes("100")
-            ? data.name.replace("100", "100%")
-            : data.name}
-        </p>
-        <p className="text-xs text-blue-600">{data.category?.name}</p>
-      </div>
-
+      <Link href={`/product/${productNameSlug}`} prefetch={true} passHref>
+        <div className="flex flex-col mt-2 items-start space-y-1">
+          <p className="font-semibold text-xs sm:text-xs text-gray-600">
+            {data.subname && data.subname.length > 0
+              ? data.subname.includes("100")
+                ? data.subname.replace("100", "100%")
+                : data.subname
+              : data.name.includes("100")
+              ? data.name.replace("100", "100%")
+              : data.name}
+          </p>
+          <p className="text-xs text-blue-600">{data.category?.name}</p>
+        </div>
+      </Link>
       <div className="flex justify-between items-center w-full mt-auto">
-        <div
-          className="font-semibold text-sm text-gray-900"
-          onClick={handleAddToCart}
-        >
+        <div className="font-semibold text-sm text-gray-900">
           ₹
           {selectedSize.discountedprice ? (
             <>
@@ -261,7 +256,7 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({
       </div>
 
       {isModalOpen && (
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-end transition-opacity duration-300">
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex z-20 justify-center items-end transition-opacity duration-300">
           <div className="bg-white rounded-t-lg p-4 w-full max-w-md">
             <h2 className="text-lg font-semibold mb-4">Select a Size</h2>
             <div className="flex justify-around">
