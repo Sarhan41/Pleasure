@@ -181,7 +181,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
           </div>
         )}
 
-        <Link href={`/product/${productNameSlug}`} prefetch={true} passHref>
+        <Link prefetch={true} href={`/product/${productNameSlug}`}  passHref>
           <div
             className="w-full h-full mb-2"
             onClick={(e) => {
@@ -227,7 +227,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, userId }) => {
         </div>
       </div>
 
-      <Link href={`/product/${productNameSlug}`} prefetch={true} passHref>
+      <Link prefetch={true} href={`/product/${productNameSlug}`} passHref>
         <div className="flex flex-col mt-2 items-start space-y-1">
           <p className="font-semibold text-xs sm:text-xs text-gray-600">
             {data.subname && data.subname.length > 0
