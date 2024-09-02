@@ -99,11 +99,12 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
             />
           </Link>
         </div>
+        
         <div className="flex flex-1 flex-col ml-2 sm:ml-3">
           <Link
             href={`/product/${data.product.name.replace(/\s+/g, "-")}`}
-            className="text-[10px] sm:text-sm cursor-pointer font-medium text-black hover:text-primary"
             prefetch={true}
+            className="text-[10px] sm:text-sm cursor-pointer font-medium text-black hover:text-primary"
           >
             {data.product.subname && data.product.subname.length > 0
               ? data.product.subname.includes("100")
