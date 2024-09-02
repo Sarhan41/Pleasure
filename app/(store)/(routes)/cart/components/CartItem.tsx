@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import Currency from "@/components/Store/Currency";
 import IconButton from "@/components/Store/IconButton";
 import axios from "axios";
+import Link from "next/link";
 
 interface CartItemProps {
   data: CartItemWithColors & { product: Product };
@@ -33,12 +34,6 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const onProductClick = () => {
-    const productName = data.product.name.replace(/\s+/g, "-");
-
-    window.open(`/product/${productName}`, "_blank");
   };
 
   const onPlusClick = async () => {
@@ -91,18 +86,24 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
           />
         </div>
         <div className="relative h-20 w-16 sm:h-24 items-center flex  sm:w-20 rounded-md overflow-hidden cursor-pointer">
-          <Image
-            onClick={onProductClick}
-            height={80}
-            width={60}
-            src={data.product.images[0].url}
-            alt={""}
-            className="object-cover object-top rounded-md"
-          />
+          <Link
+            href={`/product/${data.product.name.replace(/\s+/g, "-")}`}
+            prefetch={true}
+          >
+            <Image
+              height={80}
+              width={60}
+              src={data.product.images[0].url}
+              alt={""}
+              className="object-cover object-top rounded-md"
+            />
+          </Link>
         </div>
+        
         <div className="flex flex-1 flex-col ml-2 sm:ml-3">
-          <p
-            onClick={onProductClick}
+          <Link
+            href={`/product/${data.product.name.replace(/\s+/g, "-")}`}
+            prefetch={true}
             className="text-[10px] sm:text-sm cursor-pointer font-medium text-black hover:text-primary"
           >
             {data.product.subname && data.product.subname.length > 0
@@ -112,7 +113,7 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
               : data.product.name.includes("100")
               ? data.product.name.replace("100", "100%")
               : data.product.name}
-          </p>
+          </Link>
           <div className="flex flex-row items-start sm:items-center mt-1 sm:mt-2 space-x-2">
             {data.color.length > 0 && (
               <div className="flex flex-row items-start sm:items-center mt-1 sm:mt-2 space-x-2">

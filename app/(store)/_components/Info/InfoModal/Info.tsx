@@ -20,7 +20,6 @@ import {
   MinusIcon,
   PlusIcon,
   Share2Icon,
-  Link,
 } from "lucide-react";
 import IconButton from "@/components/Store/IconButton";
 import { FaWhatsapp } from "react-icons/fa";
@@ -30,6 +29,7 @@ import { MotionSpan } from "@/constant/MotionElements";
 import { calculateDiscountPercentage } from "@/lib/calculateDiscountedPrice";
 import MainExtraDetails from "../ExtraDetails/MainDetails";
 import usePreviewModal from "@/hooks/store/use-preview-modal";
+import Link from "next/link";
 
 interface InfoProps {
   data: ProductType;
@@ -91,7 +91,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
 
     if (data.name.toLowerCase().includes("pack of")) {
       const productName = data.name.replace(/ /g, "-");
-      window.open(`/product/${productName}`, "_blank");
+      router.push(`/product/${productName}`);
       return;
     }
 
@@ -297,16 +297,13 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
             <Button onClick={onAddToWishList} className="w-full sm:w-auto">
               <Heart className="mr-1 sm:mr-2" /> Wishlist
             </Button>
-            <Button
-              onClick={() => {
-                onClose();
-                const productName = data.name.replace(/ /g, "-");
-               window.open(`/product/${productName}`, "_blank");
-              }}
+            <Link
+              href={`/product/${data.name.replace(/\s+/g, "-")}`}
+              prefetch={true}
               className="w-full sm:w-auto"
             >
               Product
-            </Button>
+            </Link>
           </div>
         </div>
       </div>
