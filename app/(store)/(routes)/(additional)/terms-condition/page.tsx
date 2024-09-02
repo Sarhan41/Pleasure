@@ -170,7 +170,7 @@ export default function TermsConditions() {
           <FaCheck className="inline mr-2" />
           Your Privacy
         </h2>
-        <p>Please read our <Link  className="text-blue-500 hover:border-b hover:border-b-black" href="/privacy-policy" >
+        <p>Please read our <Link prefetch={true}  className="text-blue-500 hover:border-b hover:border-b-black" href="/privacy-policy" >
         
         Privacy Policy.
         </Link> 
