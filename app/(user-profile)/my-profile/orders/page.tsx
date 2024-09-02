@@ -5,17 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import OrderItem from "./components/OrderItem";
+import { unstable_cache as cache } from "next/cache";
 
-const MyProfileOrdersPage = async () => {
-  const user = await currentUser();
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  const orders = await db.order.findMany({
+// Define cache function
+const getUserOrders = cache(async (userId: string | undefined) => {
+  return await db.order.findMany({
     where: {
-      userId: user?.id,
+      userId: userId,
     },
     include: {
       orderItems: {
@@ -46,6 +42,16 @@ const MyProfileOrdersPage = async () => {
       address: true,
     },
   });
+});
+
+const MyProfileOrdersPage = async () => {
+  const user = await currentUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const orders = await getUserOrders(user.id);
 
   const formattedOrders = orders.map((order) => ({
     ...order,
