@@ -14,13 +14,7 @@ import {
   DialogContent,
   DialogOverlay,
 } from "@/components/ui/dialog";
-import {
-  Check,
-  Heart,
-  MinusIcon,
-  PlusIcon,
-  Share2Icon,
-} from "lucide-react";
+import { Check, Heart, MinusIcon, PlusIcon, Share2Icon } from "lucide-react";
 import IconButton from "@/components/Store/IconButton";
 import { FaWhatsapp } from "react-icons/fa";
 import SizeChart from "../SizeChart";
@@ -217,29 +211,6 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
     setIsSharePopupOpen1(false);
   };
 
-  const handleShareViaWhatsApp = () => {
-    const url = window.location.href;
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(url)}`;
-    window.open(whatsappUrl, "_blank");
-  };
-
-  const handleCopyLink = () => {
-    const url = window.location.href;
-    navigator.clipboard.writeText(url).then(
-      () => {
-        toast.success("Link copied to clipboard");
-      },
-      () => {
-        toast.error("Failed to copy link");
-      }
-    );
-    setIsSharePopupOpen1(false);
-    setIsSharePopupOpen2(false);
-  };
-
-  const sizeSku = selectedSize?.SKUvalue;
-
-  // Extracted PriceDisplay component
 
   return (
     <div>

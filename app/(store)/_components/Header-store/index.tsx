@@ -11,6 +11,9 @@ export default async function DesktopHeaderIndex() {
   const categories = await db.category.findMany({
     include: {
       products: {
+        where: {
+          isArchived: false,
+        },
         select: {
           name: true,
           subname: true,
@@ -26,6 +29,11 @@ export default async function DesktopHeaderIndex() {
   const AllProducts = await db.product.findMany({});
 
   return (
-    <Header categories={categories} allProducts={AllProducts} UserId={userId} UserName={UserName} />
+    <Header
+      categories={categories}
+      allProducts={AllProducts}
+      UserId={userId}
+      UserName={UserName}
+    />
   );
 }
