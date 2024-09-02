@@ -87,8 +87,8 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
         </div>
         <div className="relative h-20 w-16 sm:h-24 items-center flex  sm:w-20 rounded-md overflow-hidden cursor-pointer">
           <Link
-            href={`/product/${data.product.name.replace(/\s+/g, "-")}`}
             prefetch={true}
+            href={`/product/${data.product.name.replace(/\s+/g, "-")}`}
           >
             <Image
               height={80}
@@ -99,11 +99,11 @@ const CartItem: React.FC<CartItemProps> = ({ data, cartId }) => {
             />
           </Link>
         </div>
-        
+
         <div className="flex flex-1 flex-col ml-2 sm:ml-3">
           <Link
-            href={`/product/${data.product.name.replace(/\s+/g, "-")}`}
             prefetch={true}
+            href={`/product/${data.product.name.replace(/\s+/g, "-")}`}
             className="text-[10px] sm:text-sm cursor-pointer font-medium text-black hover:text-primary"
           >
             {data.product.subname && data.product.subname.length > 0

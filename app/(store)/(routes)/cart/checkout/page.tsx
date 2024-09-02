@@ -41,12 +41,12 @@ export default async function CartCheckoutPage() {
           Your cart is empty, Please Add Some Products.
         </h1>
         <Button>
-          <Link area-label="Link" href={`/cart?reload=${Date.now()}`}>
+          <Link prefetch={true} area-label="Link" href={`/cart?reload=${Date.now()}`}>
             Go to Cart Page
           </Link>
         </Button>
         <Button>
-          <Link area-label="Link" className="text-white font-semibold" href="/">
+          <Link prefetch={true} area-label="Link" className="text-white font-semibold" href="/">
             Go to Home
           </Link>
         </Button>
@@ -57,7 +57,7 @@ export default async function CartCheckoutPage() {
   return (
     <div className="bg-white w-full  px-10 flex justify-between max-lg:flex-col max-lg:justify-center -mt-16">
       <div className="flex-[0.75]">
-        <Link
+        <Link prefetch={true}
           area-label="Link"
           href="/cart"
           className="text-end w-full flex justify-end

@@ -29,6 +29,7 @@ const SecondRowCategory = ({
       {/* Home Link */}
       <div className="mb-2">
         <Link
+          prefetch={true}
           aria-label="Link"
           href="/"
           onClick={toggleSidebar}
@@ -42,6 +43,7 @@ const SecondRowCategory = ({
         <div key={category.id} className="mb-2">
           <div className="flex items-center justify-between w-full px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-primary-100 transition-colors duration-200">
             <Link
+              prefetch={true}
               aria-label="Link"
               href={`/collections/${category.name.replace(/\s+/g, "-")}`}
               onClick={toggleSidebar}
@@ -66,11 +68,11 @@ const SecondRowCategory = ({
                 <React.Fragment key={product.id}>
                   <div className="flex">
                     <Link
+                      prefetch={true}
                       aria-label="Link"
                       href={`/product/${product.name.replace(/\s+/g, "-")}`}
                       className="block px-3 py-1 text-base font-medium text-gray-600 rounded-md hover:bg-primary-100 transition-colors duration-200"
                       onClick={toggleSidebar}
-                      target="_blank"
                       rel="noopener noreferrer"
                     >
                       <div className="flex gap-2">
@@ -98,6 +100,7 @@ const SecondRowCategory = ({
       {/* Offers Link */}
       <div className="mt-4">
         <Link
+          prefetch={true}
           aria-label="Link"
           href="/offers"
           onClick={toggleSidebar}
@@ -109,6 +112,7 @@ const SecondRowCategory = ({
 
       <div className="mt-4">
         <Link
+          prefetch={true}
           aria-label="Link"
           href="/blog"
           onClick={toggleSidebar}

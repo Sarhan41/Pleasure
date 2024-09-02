@@ -11,7 +11,7 @@ export default function NotFound() {
         </p>
       </div>
       <Button>
-        <Link area-label="Link" className="text-white font-semibold" href="/">
+        <Link prefetch={true} area-label="Link" className="text-white font-semibold" href="/">
           Go to Home
         </Link>
       </Button>

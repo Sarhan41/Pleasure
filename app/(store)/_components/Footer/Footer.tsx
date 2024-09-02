@@ -122,11 +122,10 @@ const Footer: React.FC = () => {
             <ul className="text-secondary">
               {links.map((link, index) => (
                 <li key={index} className="mb-2 hover:text-primary">
-                  <Link
+                  <Link prefetch={true}
                     aria-label="Link"
                     href={`/product/${link.route.replace(/\s+/g, "-")}`}
                     passHref
-                      target="_blank"
   rel="noopener noreferrer"
                   >
                     {link.text}
@@ -139,7 +138,7 @@ const Footer: React.FC = () => {
       </div> */}
 
       <div className="bg-pink-500 w-full overflow-hidden flex justify-center items-center py-4 mt-24 text-center">
-        <Link aria-label="Link" href="/">
+        <Link prefetch={true} aria-label="Link" href="/">
           <Image
             src="/logo-text.jpg"
             height={48}
@@ -160,7 +159,7 @@ const Footer: React.FC = () => {
               <ul className="text-secondary">
                 {QuickLinks.map((link, index) => (
                   <li key={index} className="mb-2 hover:text-primary">
-                    <Link aria-label="Link"  href={link.route}>
+                    <Link prefetch={true} aria-label="Link"  href={link.route}>
                       {link.text}
                     </Link>
                   </li>
@@ -181,9 +180,8 @@ const Footer: React.FC = () => {
                 </p>
                 <div className="flex gap-4 mt-4">
                   {SocialLinks.map((link, index) => (
-                    <Link
+                    <Link prefetch={true}
                       aria-label="Link"
-                      target="_blank"
                       key={`social-${index}`}
                       href={link.route}
                       className="text-white flex gap-6"

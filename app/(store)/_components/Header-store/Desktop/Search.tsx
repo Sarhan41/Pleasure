@@ -125,12 +125,12 @@ const Search = ({ allProducts }: SearchProps) => {
               </div>
             ) : (
               searchResults.map((product, index) => (
-                <Link
+                <Link prefetch={true}
                   area-label="Link"
                   key={product.id}
                   href={`/product/${formatProductName(product.name)}`}
                   onClick={() => setShowResults(false)}
-                  target="_blank"
+                
                   rel="noopener noreferrer"
                 >
                   <div
@@ -177,7 +177,7 @@ const Search = ({ allProducts }: SearchProps) => {
                   </div>
                 ) : (
                   searchResults.map((product, index) => (
-                    <Link
+                    <Link prefetch={true}
                       area-label="Link"
                       key={product.id}
                       href={`/product/${formatProductName(product.name)}`}
@@ -185,7 +185,7 @@ const Search = ({ allProducts }: SearchProps) => {
                         setIsSearchOpen(false);
                         setShowResults(false);
                       }}
-                      target="_blank"
+                  
                       rel="noopener noreferrer"
                     >
                       <div
@@ -207,13 +207,13 @@ const Search = ({ allProducts }: SearchProps) => {
             </h3>
             <div className="space-y-2 flex flex-col overflow-auto max-lg:min-h-96 lg:text-lg lg:py-4 lg:px-6 lg:space-y-4">
               {popularSearches.map((item) => (
-                <Link
+                <Link prefetch={true}
                   area-label="Link"
                   key={item.name}
                   href={`/product/${formatProductName(item.link)}`}
                   onClick={() => setIsSearchOpen(false)}
                   className="flex flex-wrap w-full"
-                  target="_blank"
+             
                   rel="noopener noreferrer"
                 >
                   <div className="p-2 mb-2 border border-gray-300 rounded-full hover:bg-gray-100 transition-all duration-300 text-primary border-primary hover:text-black hover:border-black bg-gradient-to-r from-pink-500 to-yellow-500 text-white lg:text-xl lg:py-3 w-fit lg:px-5">

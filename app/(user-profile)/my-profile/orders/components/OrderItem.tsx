@@ -39,10 +39,9 @@ const OrderItem: React.FC<OrderItemComponentProps> = ({ order, userName }) => {
         {order.items.map((item, index) => {
           const productName = item.productName.replace(/\s+/g, "-");
           return (
-            <Link
+            <Link prefetch={true}
               area-label="Link"
               href={`/product/${productName}`}
-              target="_blank"
               rel="noopener noreferrer"
               key={index}
             >

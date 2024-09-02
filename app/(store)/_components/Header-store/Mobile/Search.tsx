@@ -53,9 +53,9 @@ const Search = ({ allProducts, onSearchOpen, onSearchClose }: SearchProps) => {
             <div className="p-4">No results found</div>
           ) : (
             searchResults.map((product) => (
-              <Link
+              <Link prefetch={true}
                 area-label="Link"
-                target="_blank"
+          
                 rel="noopener noreferrer"
                 key={product.id}
                 href={`/product/${product.name}`}

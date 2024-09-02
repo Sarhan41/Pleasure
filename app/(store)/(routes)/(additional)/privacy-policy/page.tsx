@@ -23,7 +23,7 @@ const PrivacyPolicy = () => {
         </p>
         <p>
           When you visit our website{" "}
-          <Link
+          <Link prefetch={true}
             href="https://pleasure.fashion"
             className="text-blue-500 hover:underline"
           >

@@ -34,7 +34,7 @@ const DesktopHeader = ({
         </div>
         {/* Center */}
         <div className="flex justify-center items-center">
-          <Link area-label="Link" href="/" className="flex items-center gap-4">
+          <Link prefetch={true} area-label="Link" href="/" className="flex items-center gap-4">
             <Image
               src="/logo.jpg"
               height={48}
@@ -55,11 +55,11 @@ const DesktopHeader = ({
         <div className="flex flex-col gap-1">
           {/* <div className="flex text-[10px] font-mono   space-x-4 pl-2 self-start  ">
             <span className="cursor-pointer">
-              <Link area-label="Link" href="/become-affiliate">Become Affiliate</Link>
+              <Link prefetch={true} area-label="Link" href="/become-affiliate">Become Affiliate</Link>
             </span>
             <span className="cursor-pointer">
               {" "}
-              <Link area-label="Link" href="/about-us">Our Story</Link>
+              <Link prefetch={true} area-label="Link" href="/about-us">Our Story</Link>
             </span>
           </div> */}
           {/* Search functionality */}

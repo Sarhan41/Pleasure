@@ -67,6 +67,7 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
           <div className="flex space-x-4">
             <div className="flex gap-4 ">
               <Link
+                prefetch={true}
                 aria-label="Link"
                 href="/"
                 className={cn(
@@ -84,6 +85,7 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
                   onMouseLeave={() => handleCategoryHover("")}
                 >
                   <Link
+                    prefetch={true}
                     aria-label="Link"
                     className={cn(
                       "transition-colors duration-300 text-sm font-bold hover:text-pink-300  uppercase",
@@ -106,8 +108,8 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
                         {category?.products?.map((product, index) => (
                           <React.Fragment key={product.id}>
                             <Link
+                              prefetch={true}
                               aria-label="Link"
-                              target="_blank"
                               rel="noopener noreferrer"
                               href={`/product/${product.name.replace(
                                 /\s+/g,
@@ -138,7 +140,8 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
                   )}
                 </div>
               ))}
-               <Link
+              <Link
+                prefetch={true}
                 aria-label="Link"
                 href="/offers"
                 className={cn(
@@ -148,7 +151,8 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
               >
                 Offers
               </Link>
-               <Link
+              <Link
+                prefetch={true}
                 aria-label="Link"
                 href="/blog"
                 className={cn(
@@ -190,6 +194,7 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
                 onClick={() => handleCategoryClick(category)}
               >
                 <Link
+                  prefetch={true}
                   aria-label="Link"
                   className={cn(
                     "transition-colors duration-300 hover:text-pink-300 font-medium uppercase",

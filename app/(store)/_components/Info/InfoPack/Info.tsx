@@ -80,7 +80,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
     if (selectedSize === null || 0) {
       toast.error("Please select a size");
       setSizeError(true);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
     if (
@@ -89,7 +89,7 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
         selectedColors.length < maxSelectableColors)
     ) {
       toast.error(`Please select ${maxSelectableColors} colors`);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
@@ -210,7 +210,6 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
     <div>
       {/* Info Pack */}
 
-      
       {/* =============================================
             Div For Closing Share Popup
           =============================================
@@ -657,8 +656,12 @@ const Info: React.FC<InfoProps> = ({ data, userId }) => {
       {/* 
           // ! Reviews Divs Will Be Added Here
 */}
-    
-        <ProductReviews currentUserId={userId} reviews={data?.reviews} productId={data?.id} />
+
+      <ProductReviews
+        currentUserId={userId}
+        reviews={data?.reviews}
+        productId={data?.id}
+      />
       {/* =============================================
           Div For Add To Cart And Add To Wishlist and Share 2
           =============================================

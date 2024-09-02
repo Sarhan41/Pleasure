@@ -36,7 +36,7 @@ const FirstRowUser = ({
       <div className="flex flex-col gap-4 mt-4 w-full">
         {userId ? (
           <div className="flex flex-col gap-4 w-full">
-            <Link area-label="Link" href="/my-profile" onClick={toggleSidebar}>
+            <Link prefetch={true} area-label="Link" href="/my-profile" onClick={toggleSidebar}>
               <Button
                 size="lg"
                 variant="outline"
@@ -45,7 +45,7 @@ const FirstRowUser = ({
                 My Profile
               </Button>
             </Link>
-            <Link area-label="Link" href="/wishlist" onClick={toggleSidebar}>
+            <Link prefetch={true} area-label="Link" href="/wishlist" onClick={toggleSidebar}>
               <Button
                 size="lg"
                 variant="outline"
@@ -54,7 +54,7 @@ const FirstRowUser = ({
                 Wishlist
               </Button>
             </Link>
-            <Link
+            <Link prefetch={true}
               area-label="Link"
               href="/my-profile/orders"
               onClick={toggleSidebar}
@@ -67,7 +67,7 @@ const FirstRowUser = ({
                 My Orders
               </Button>
             </Link>
-            <Link
+            <Link prefetch={true}
               area-label="Link"
               href="/order-tracking"
               onClick={toggleSidebar}

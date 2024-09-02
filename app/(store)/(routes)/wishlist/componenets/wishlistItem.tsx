@@ -34,7 +34,7 @@ const WishListItem: React.FC<WishListItemProps> = ({ data, wishlistId }) => {
   return (
     <li className="flex py-6 border-b">
       <div className="relative h-20 w-16 sm:h-24 items-center flex sm:w-20 rounded-md overflow-hidden cursor-pointer">
-        <Link href={`/product/${data.name.replace(/\s+/g, "-")}`} passHref>
+        <Link prefetch={true} href={`/product/${data.name.replace(/\s+/g, "-")}`} passHref>
           <Image
             height={80}
             width={60}
@@ -47,7 +47,7 @@ const WishListItem: React.FC<WishListItemProps> = ({ data, wishlistId }) => {
       <div className="relative ml-4 flex flex-1 flex-col justify-between sm:ml-6">
         <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-8">
           <div className="flex justify-between">
-            <Link href={`/product/${data.name.replace(/\s+/g, "-")}`} passHref>
+            <Link prefetch={true} href={`/product/${data.name.replace(/\s+/g, "-")}`} passHref>
               <p className="text-lg cursor-pointer font-semibold text-black">
                 {data.name}
               </p>
