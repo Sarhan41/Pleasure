@@ -1,3 +1,5 @@
+// app/category/[categoryName]/page.tsx
+
 import { db } from "@/lib/db";
 import CategoryPageClient from "./Client/CategoryPageClient";
 import { currentUser } from "@/lib/auth";
@@ -32,6 +34,21 @@ const getProducts = cache(async (categoryId: string) => {
     },
   });
 });
+
+// Generate static params for categories
+export async function generateStaticParams() {
+  // Fetch all categories from the database
+  const categories = await db.category.findMany({
+    select: {
+      name: true,
+    },
+  });
+
+  // Map categories to params format
+  return categories.map((category) => ({
+    categoryName: category.name.replace(/\s+/g, "-"), // Ensure consistent URL format
+  }));
+}
 
 interface CategoryPageProps {
   params: {

@@ -1,8 +1,9 @@
+// app/product/[productName]/page.tsx
+
 import React from "react";
 import Gallery from "@/app/(store)/_components/Gallery/Gallery-Page";
 import InfoSingle from "@/app/(store)/_components/Info/InfoSingle/Info";
 import InfoPack from "@/app/(store)/_components/Info/InfoPack/Info";
-import ProductList from "@/app/(store)/_components/ProductList/ProductList";
 import { RelatedProductList } from "@/app/(store)/_components/RelatedItemsList";
 import Container from "@/components/Store/container";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ import {
   getSuggestedProducts,
 } from "@/actions/Store/get-productpage-data";
 import { currentUser } from "@/lib/auth";
+import { db } from "@/lib/db";
 
 interface ProductPageProps {
   params: {
@@ -20,6 +22,18 @@ interface ProductPageProps {
 }
 
 export const revalidate = 1800; // 30 minutes
+
+export async function generateStaticParams() {
+  const products = await db.product.findMany({
+    select: {
+      name: true,
+    },
+  });
+
+  return products.map((product) => ({
+    productName: encodeURIComponent(product.name.replace(/ /g, "-")),
+  }));
+}
 
 const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
   const User = await currentUser();
@@ -46,7 +60,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
         <Button>
           <Link
             prefetch={true}
-            area-label="Link"
+            aria-label="Link"
             className="text-white font-semibold"
             href="/"
           >
