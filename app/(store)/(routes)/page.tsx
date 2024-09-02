@@ -1,10 +1,11 @@
+import { unstable_cache as cache } from "next/cache";
 import React from "react";
+import { db } from "@/lib/db";
 import Container from "@/components/Store/container";
 import Billboard from "../_components/Billboards";
 import BestSellerBillboard from "../_components/BestSellerBillboard";
 import FeatureSection from "../_components/FeatureSection";
 import { currentUser } from "@/lib/auth";
-import { getHomePageData } from "@/actions/Store/get-homepage-data";
 
 export const revalidate = 1800; // 30 minutes
 
@@ -17,8 +18,44 @@ const categoryOrder = [
   "Pyjama",
 ];
 
+// Fetch billboards
+const getBillboards = cache(async () => {
+  return await db.billboard.findMany({
+    select: {
+      imageUrl: true,
+      name: true,
+      title: true,
+      subtitle: true,
+      link: true,
+    },
+  });
+});
+
+// Fetch categories
+const getCategories = cache(async () => {
+  return await db.category.findMany({
+    select: { imageUrl: true, name: true },
+  });
+});
+
+// Fetch featured products
+const getFeaturedProducts = cache(async () => {
+  return await db.product.findMany({
+    where: { isFeatured: true },
+    include: {
+      category: true,
+      images: true,
+      sizes: true,
+      colors: true,
+      colorNames: true,
+    },
+  });
+});
+
 const HomePage: React.FC = async () => {
-  const { billboards, categories, featuredProducts } = await getHomePageData();
+  const billboards = await getBillboards();
+  const categories = await getCategories();
+  const featuredProducts = await getFeaturedProducts();
 
   const sortedCategories = categories.sort((a, b) => {
     return categoryOrder.indexOf(a.name) - categoryOrder.indexOf(b.name);
