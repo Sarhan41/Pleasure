@@ -131,7 +131,7 @@ const CartSummary: React.FC<SummaryProps> = ({
 
   return (
     <div className="max-sm:mt-8 rounded-lg max-md:w-fit md:min-w-full  bg-white px-6 py-8 sm:p-8 lg:col-span-5 lg:mt-0 lg:p-10 shadow-lg">
-      <Link href="/cart/checkout">
+      <Link prefetch={true} href="/cart/checkout">
         <Button
           disabled={prices.length === 0}
           className="w-full mb-6 bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:from-indigo-600 hover:to-purple-500 text-base font-semibold py-2 rounded-md shadow-xl transition-all transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-300"
