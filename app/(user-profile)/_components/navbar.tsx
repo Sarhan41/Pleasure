@@ -15,7 +15,7 @@ export const Navbar = () => {
           variant={pathname === "/my-profile" ? "default" : "outline"}
           className="min-w-[80px] md:min-w-[100px] lg:min-w-[120px]"
         >
-          <Link area-label="Link" href="/my-profile">Info</Link>
+          <Link prefetch={true} area-label="Link" href="/my-profile">Info</Link>
         </Button>
 
         <Button
@@ -23,14 +23,14 @@ export const Navbar = () => {
           variant={pathname.includes("/address") ? "default" : "outline"}
           className="min-w-[80px] md:min-w-[100px] lg:min-w-[120px]"
         >
-          <Link area-label="Link" href={`/my-profile/address?reload=${Date.now()}`}>Address</Link>
+          <Link prefetch={true} area-label="Link" href={`/my-profile/address?reload=${Date.now()}`}>Address</Link>
         </Button>
         <Button
           asChild
           variant={pathname.includes("/orders") ? "default" : "outline"}
           className="min-w-[80px] md:min-w-[100px] lg:min-w-[120px]"
         >
-          <Link area-label="Link" href={`/my-profile/orders?reload=${Date.now()}`}>Orders</Link>
+          <Link prefetch={true} area-label="Link" href={`/my-profile/orders?reload=${Date.now()}`}>Orders</Link>
         </Button>
         <Button
           asChild
