@@ -7,7 +7,10 @@ import { RelatedProductList } from "@/app/(store)/_components/RelatedItemsList";
 import Container from "@/components/Store/container";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { getProduct, getSuggestedProducts } from "@/actions/Store/Get-Products";
+import {
+  getProduct,
+  getSuggestedProducts,
+} from "@/actions/Store/get-productpage-data";
 import { currentUser } from "@/lib/auth";
 
 interface ProductPageProps {
@@ -41,14 +44,18 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
           </p>
         </div>
         <Button>
-          <Link prefetch={true} area-label="Link" className="text-white font-semibold" href="/">
+          <Link
+            prefetch={true}
+            area-label="Link"
+            className="text-white font-semibold"
+            href="/"
+          >
             Go to Home
           </Link>
         </Button>
       </section>
     );
   }
-
 
   const suggestedProducts = await getSuggestedProducts(
     product.categoryId,
@@ -67,7 +74,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
             <Gallery images={product.images} />
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0 lg:overflow-y-scroll lg:max-h-[calc(100vh-200px)]">
               {isPackOfProduct ? (
-                <InfoPack data={product}  userId={userId} />
+                <InfoPack data={product} userId={userId} />
               ) : (
                 <InfoSingle data={product} userId={userId} />
               )}
