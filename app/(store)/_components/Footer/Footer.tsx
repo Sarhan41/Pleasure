@@ -126,7 +126,6 @@ const Footer: React.FC = () => {
                     aria-label="Link"
                     href={`/product/${link.route.replace(/\s+/g, "-")}`}
                     passHref
-                      target="_blank"
   rel="noopener noreferrer"
                   >
                     {link.text}
@@ -183,7 +182,6 @@ const Footer: React.FC = () => {
                   {SocialLinks.map((link, index) => (
                     <Link prefetch={true}
                       aria-label="Link"
-                      target="_blank"
                       key={`social-${index}`}
                       href={link.route}
                       className="text-white flex gap-6"

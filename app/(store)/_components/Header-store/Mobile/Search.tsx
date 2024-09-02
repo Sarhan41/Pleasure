@@ -55,7 +55,7 @@ const Search = ({ allProducts, onSearchOpen, onSearchClose }: SearchProps) => {
             searchResults.map((product) => (
               <Link prefetch={true}
                 area-label="Link"
-                target="_blank"
+          
                 rel="noopener noreferrer"
                 key={product.id}
                 href={`/product/${product.name}`}

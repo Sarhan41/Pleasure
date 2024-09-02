@@ -130,7 +130,7 @@ const Search = ({ allProducts }: SearchProps) => {
                   key={product.id}
                   href={`/product/${formatProductName(product.name)}`}
                   onClick={() => setShowResults(false)}
-                  target="_blank"
+                
                   rel="noopener noreferrer"
                 >
                   <div
@@ -185,7 +185,7 @@ const Search = ({ allProducts }: SearchProps) => {
                         setIsSearchOpen(false);
                         setShowResults(false);
                       }}
-                      target="_blank"
+                  
                       rel="noopener noreferrer"
                     >
                       <div
@@ -213,7 +213,7 @@ const Search = ({ allProducts }: SearchProps) => {
                   href={`/product/${formatProductName(item.link)}`}
                   onClick={() => setIsSearchOpen(false)}
                   className="flex flex-wrap w-full"
-                  target="_blank"
+             
                   rel="noopener noreferrer"
                 >
                   <div className="p-2 mb-2 border border-gray-300 rounded-full hover:bg-gray-100 transition-all duration-300 text-primary border-primary hover:text-black hover:border-black bg-gradient-to-r from-pink-500 to-yellow-500 text-white lg:text-xl lg:py-3 w-fit lg:px-5">

@@ -42,7 +42,6 @@ const OrderItem: React.FC<OrderItemComponentProps> = ({ order, userName }) => {
             <Link prefetch={true}
               area-label="Link"
               href={`/product/${productName}`}
-              target="_blank"
               rel="noopener noreferrer"
               key={index}
             >
