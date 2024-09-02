@@ -1,9 +1,10 @@
 import { db } from "@/lib/db";
 import BlogCard from "./components/BlogCard";
 import NoResults from "@/components/Store/NoResults";
+import { unstable_cache as cache } from "next/cache";
 
-const BlogsMainPage = async () => {
-  const blogs = await db.blogs.findMany({
+const getBlogsData = cache(async () => {
+  return await db.blogs.findMany({
     where: {
       isFeatured: true,
       isArchived: false,
@@ -13,6 +14,10 @@ const BlogsMainPage = async () => {
       category: true,
     },
   });
+});
+
+const BlogsMainPage = async () => {
+  const blogs = await getBlogsData();
 
   if (!blogs) {
     return <NoResults />;
