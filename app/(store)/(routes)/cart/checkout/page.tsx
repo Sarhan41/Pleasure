@@ -8,6 +8,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import SummaryCheckout from "./components/SummaryCheckout";
 
+
+export const revalidate = 1800; // 30 minutes
 // Cache function to get address data
 const getAddress = (async (userId: string) => {
   return await db.address.findMany({
