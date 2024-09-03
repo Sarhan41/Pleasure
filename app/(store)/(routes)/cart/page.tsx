@@ -8,7 +8,7 @@ import ClearIcon from "./components/ClearIcon";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-export const revalidate = 15;
+export const revalidate = 1800; // 30 minutes
 
 const getCartProducts = async (userId: string) => {
   return await db.cartItems.findMany({
