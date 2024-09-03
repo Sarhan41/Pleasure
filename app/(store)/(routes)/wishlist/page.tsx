@@ -3,7 +3,7 @@ import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import WishListItem from "./componenets/wishlistItem";
 
-export const revalidate = 15;
+export const revalidate = 1800; // 30 minutes
 
 const getWishlistProducts = async (userId: string) => {
   return await db.wishlist.findMany({

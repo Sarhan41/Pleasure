@@ -12,6 +12,8 @@ interface BlogPageProps {
   };
 }
 
+export const revalidate = 1800; // 30 minutes
+
 // Cache fetching individual blog
 const getBlog = cache(async (blogName: string) => {
   return await db.blogs.findFirst({
