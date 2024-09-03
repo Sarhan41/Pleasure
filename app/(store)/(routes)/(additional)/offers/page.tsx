@@ -13,6 +13,7 @@ interface Coupon {
   minimumOrderAmount?: number;
   isActive: boolean;
 }
+export const revalidate = 1800; // 30 minutes
 
 const OffersPage: React.FC = async () => {
   const { coupons } = await getCouponData();
