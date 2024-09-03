@@ -1,13 +1,11 @@
 import Container from "@/components/Store/container";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { unstable_cache as cache } from "next/cache";
 import WishListItem from "./componenets/wishlistItem";
 
 export const revalidate = 15;
 
-// Define cache function
-const getWishlistProducts = cache(async (userId: string) => {
+const getWishlistProducts = async (userId: string) => {
   return await db.wishlist.findMany({
     where: {
       userId: userId,
@@ -33,7 +31,7 @@ const getWishlistProducts = cache(async (userId: string) => {
       },
     },
   });
-});
+};
 
 export default async function WishPage() {
   const user = await currentUser();
