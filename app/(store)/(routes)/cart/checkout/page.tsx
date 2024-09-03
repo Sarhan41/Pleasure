@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import SummaryCheckout from "./components/SummaryCheckout";
 
 // Cache function to get address data
-const getAddress = cache(async (userId: string) => {
+const getAddress = (async (userId: string) => {
   return await db.address.findMany({
     where: {
       userId: userId,
@@ -18,7 +18,7 @@ const getAddress = cache(async (userId: string) => {
 });
 
 // Cache function to get cart items
-const getCartProducts = cache(async (userId: string) => {
+const getCartProducts = (async (userId: string) => {
   return await db.cartItems.findMany({
     where: {
       userId: userId,

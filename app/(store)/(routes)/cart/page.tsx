@@ -7,11 +7,10 @@ import toast from "react-hot-toast";
 import ClearIcon from "./components/ClearIcon";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { unstable_cache as cache } from "next/cache";
 
 export const revalidate = 15;
 
-const getCartProducts = cache(async (userId: string) => {
+const getCartProducts = async (userId: string) => {
   return await db.cartItems.findMany({
     where: {
       userId,
@@ -37,7 +36,7 @@ const getCartProducts = cache(async (userId: string) => {
       color: true,
     },
   });
-});
+};
 
 export default async function CartPage() {
   const user = await currentUser();
@@ -57,7 +56,12 @@ export default async function CartPage() {
           Your cart is empty. Please add some products.
         </h1>
         <Button className="text-white font-semibold bg-blue-500 hover:bg-blue-600">
-          <Link prefetch={true} aria-label="Link" href="/" className="text-white font-semibold">
+          <Link
+            prefetch={true}
+            aria-label="Link"
+            href="/"
+            className="text-white font-semibold"
+          >
             Go to Home
           </Link>
         </Button>
