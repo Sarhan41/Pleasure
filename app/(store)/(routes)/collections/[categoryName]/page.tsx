@@ -5,6 +5,8 @@ import CategoryPageClient from "./Client/CategoryPageClient";
 import { currentUser } from "@/lib/auth";
 import { unstable_cache as cache } from "next/cache";
 
+
+
 // Define cache functions
 const getCategory = cache(async (categoryName: string) => {
   return await db.category.findFirst({
