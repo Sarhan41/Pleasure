@@ -3,6 +3,8 @@ import BlogCard from "./components/BlogCard";
 import NoResults from "@/components/Store/NoResults";
 import { unstable_cache as cache } from "next/cache";
 
+export const revalidate = 1800; // 30 minutes
+
 const getBlogsData = cache(async () => {
   return await db.blogs.findMany({
     where: {
