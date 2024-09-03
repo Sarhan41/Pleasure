@@ -11,7 +11,7 @@ const ContactUs = () => {
           </h1>
           <div className="mt-8 text-lg space-y-8">
             <p className="leading-relaxed text-gray-700">
-              We're here to help with any questions or concerns you may have. 
+              We&apos;re here to help with any questions or concerns you may have. 
               Feel free to reach out to us via the following methods:
             </p>
             <div className="space-y-6">
