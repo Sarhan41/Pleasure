@@ -1,9 +1,8 @@
 import { db } from "@/lib/db";
 import { AddressForm } from "./components/AddressForm";
-import { unstable_cache as cache } from "next/cache";
 
 // Define cache function
-const getAddress = cache(async (addressId: string) => {
+const getAddress = (async (addressId: string) => {
   return await db.address.findUnique({
     where: {
       id: addressId,
