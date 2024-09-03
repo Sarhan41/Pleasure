@@ -2,6 +2,9 @@ import ProductList from "@/app/(store)/_components/ProductList/ProductList";
 import { db } from "@/lib/db";
 import { unstable_cache as cache } from "next/cache";
 
+
+export const revalidate = 1800; // 30 minutes
+
 // Define cache function
 const getNewArrivalProducts = cache(async () => {
   return await db.product.findMany({
