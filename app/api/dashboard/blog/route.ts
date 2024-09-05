@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { currentRole, currentUser } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function POST(req: Request) {
   try {
@@ -61,6 +62,8 @@ export async function POST(req: Request) {
         },
       },
     });
+    revalidatePath("/blog", "page");
+
 
     return NextResponse.json(blog);
   } catch (error) {

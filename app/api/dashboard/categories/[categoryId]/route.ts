@@ -2,14 +2,13 @@ import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
 import { currentRole, currentUser } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function GET(
   req: Request,
   { params }: { params: { categoryId: string } }
 ) {
   try {
- 
-
     if (!params.categoryId) {
       return new NextResponse("Category Id is required", { status: 400 });
     }
@@ -75,6 +74,8 @@ export async function PATCH(
       },
     });
 
+    revalidatePath("/", "layout");
+
     return NextResponse.json(category);
   } catch (error) {
     console.log("[CATEGORY_PATCH]", error);
@@ -107,6 +108,8 @@ export async function DELETE(
         id: params.categoryId,
       },
     });
+
+    revalidatePath("/", "layout");
 
     return NextResponse.json(category);
   } catch (error) {

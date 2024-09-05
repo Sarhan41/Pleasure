@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { currentUser } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function DELETE(
   req: Request,
@@ -21,6 +22,14 @@ export async function DELETE(
       where: {
         id: params.reviewId,
       },
+      select: {
+        product: {
+          select: {
+            name: true,
+          },
+        },
+        userId: true,
+      },
     });
 
     if (!review) {
@@ -37,6 +46,14 @@ export async function DELETE(
         id: params.reviewId,
       },
     });
+
+    // Format the product name for the URL
+    const formattedProductName = review.product.name.replace(/\s+/g, "-");
+
+    // Revalidate the product page associated with the review
+    if (formattedProductName) {
+      revalidatePath(`/product/${formattedProductName}`, "page");
+    }
 
     return new NextResponse("Review deleted successfully", { status: 200 });
   } catch (error) {

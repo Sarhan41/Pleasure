@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
 import { currentRole, currentUser } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function POST(req: Request) {
   try {
@@ -36,6 +37,8 @@ export async function POST(req: Request) {
         description,
       },
     });
+
+    revalidatePath('/', 'layout');
 
     return NextResponse.json(category);
   } catch (error) {
