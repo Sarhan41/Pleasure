@@ -16,7 +16,6 @@ interface BillboardProps {
   }[];
 }
 
-import { handleImageLoad } from "@/lib/handleImageLoad";
 
 const Billboard: React.FC<BillboardProps> = ({ data }) => {
   const highlightText = (text: string) => {

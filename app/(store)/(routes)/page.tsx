@@ -18,6 +18,8 @@ const categoryOrder = [
   "Pyjama",
 ];
 
+const billboardOrder = ["First", "Second", "Third", "Fourth"];
+
 // Fetch billboards
 const getBillboards = cache(async () => {
   return await db.billboard.findMany({
@@ -63,9 +65,21 @@ const HomePage: React.FC = async () => {
 
   const user = await currentUser();
 
+  const sortedBillboards = billboards.sort((a, b) => {
+    const aIndex = billboardOrder.indexOf(a.name);
+    const bIndex = billboardOrder.indexOf(b.name);
+
+    // Use a default index for billboards not in the order list
+    const defaultIndex = billboardOrder.length;
+    return (
+      (aIndex === -1 ? defaultIndex : aIndex) -
+      (bIndex === -1 ? defaultIndex : bIndex)
+    );
+  });
+
   return (
     <Container>
-      {billboards && <Billboard data={billboards} />}
+      {billboards && <Billboard data={sortedBillboards} />}
       <div>
         <FeatureSection featuredProducts={featuredProducts} userId={user?.id} />
       </div>
