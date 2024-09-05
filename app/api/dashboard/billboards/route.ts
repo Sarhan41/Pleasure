@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
 import { currentRole, currentUser } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function POST(req: Request) {
   try {
@@ -23,8 +24,6 @@ export async function POST(req: Request) {
       return new NextResponse("Name is required ", { status: 400 });
     }
 
-   
-
     if (!imageUrl) {
       return new NextResponse("Image is required", { status: 400 });
     }
@@ -38,6 +37,8 @@ export async function POST(req: Request) {
         link,
       },
     });
+
+    revalidatePath("/");
 
     return NextResponse.json(billboard);
   } catch (error) {

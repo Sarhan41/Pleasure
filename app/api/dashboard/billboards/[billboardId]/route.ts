@@ -2,14 +2,13 @@ import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
 import { currentRole, currentUser } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function GET(
   req: Request,
   { params }: { params: { billboardId: string } }
 ) {
   try {
- 
-
     if (!params.billboardId) {
       return new NextResponse("Billboard Id is required", { status: 400 });
     }
@@ -51,7 +50,6 @@ export async function PATCH(
       return new NextResponse("Name is required", { status: 400 });
     }
 
-
     if (!imageUrl) {
       return new NextResponse("Image is required", { status: 400 });
     }
@@ -72,6 +70,7 @@ export async function PATCH(
         link,
       },
     });
+    revalidatePath("/");
 
     return NextResponse.json(Billboard);
   } catch (error) {
@@ -105,6 +104,8 @@ export async function DELETE(
         id: params.billboardId,
       },
     });
+    
+    revalidatePath("/");
 
     return NextResponse.json(billboard);
   } catch (error) {

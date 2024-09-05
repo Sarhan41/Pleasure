@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
 import { currentRole, currentUser } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function POST(req: Request) {
   try {
@@ -108,6 +109,8 @@ export async function POST(req: Request) {
         isColorNameVisible,
       },
     });
+
+ revalidatePath('/', 'layout');
 
     return NextResponse.json(product);
   } catch (error) {

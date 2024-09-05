@@ -1,4 +1,3 @@
-import { unstable_cache as cache } from "next/cache";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import ThreeAccordion from "./components/ThreeAccordion";

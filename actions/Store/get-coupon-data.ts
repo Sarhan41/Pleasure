@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { unstable_cache as cache } from "next/cache";
 
-export const getCouponData = cache(async () => {
+export const getCouponData = async () => {
   const coupons = await db.coupon.findMany({
     where: {
       isActive: true,
@@ -20,4 +20,4 @@ export const getCouponData = cache(async () => {
   });
 
   return { coupons };
-});
+};

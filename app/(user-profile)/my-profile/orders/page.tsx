@@ -5,10 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import OrderItem from "./components/OrderItem";
-import { unstable_cache as cache } from "next/cache";
+
+export const revalidate = 60;
 
 // Define cache function
-const getUserOrders = cache(async (userId: string | undefined) => {
+const getUserOrders = async (userId: string | undefined) => {
   return await db.order.findMany({
     where: {
       userId: userId,
@@ -42,7 +43,7 @@ const getUserOrders = cache(async (userId: string | undefined) => {
       address: true,
     },
   });
-});
+};
 
 const MyProfileOrdersPage = async () => {
   const user = await currentUser();

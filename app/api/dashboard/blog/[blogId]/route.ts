@@ -1,5 +1,6 @@
 import { currentRole, currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -111,6 +112,8 @@ export async function PATCH(
       },
     });
 
+    revalidatePath("/blog", "page");
+
     return NextResponse.json(blog);
   } catch (error) {
     console.log("[BLOG_PATCH]", error);
@@ -149,6 +152,9 @@ export async function DELETE(
         id: params.blogId,
       },
     });
+
+    revalidatePath("/blog", "page");
+
 
     return NextResponse.json(blog);
   } catch (error) {
